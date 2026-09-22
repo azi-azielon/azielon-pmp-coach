@@ -1,0 +1,1622 @@
+{
+  "schemaVersion": 1,
+  "title": "Azielon PMP Diagram Library v1",
+  "purpose": "Structured diagram inventory for PMP study, future app integration, and later image generation.",
+  "diagramCount": 34,
+  "domainCounts": {
+    "People": 9,
+    "Process": 17,
+    "Business Environment": 8
+  },
+  "diagramStructure": [
+    "whatItIs",
+    "whyItMatters",
+    "howToReadIt",
+    "triggerWords",
+    "commonTrap",
+    "memoryHook",
+    "examApplications",
+    "suggestedQuestionTypes",
+    "imageStatus",
+    "imageFile"
+  ],
+  "items": [
+    {
+      "id": "PD-001",
+      "domain": "People",
+      "title": "Maslow’s Hierarchy of Needs",
+      "category": "motivation",
+      "whatItIs": "A five-level model of human needs moving from physiological and safety needs up to belonging, esteem, and self-actualization.",
+      "whyItMatters": "Useful for people-domain questions about motivation, morale, recognition, safety, and what type of support a team member most needs.",
+      "howToReadIt": "Read it from bottom to top. Lower layers represent foundational needs; upper layers represent growth and fulfillment.",
+      "triggerWords": [
+        "motivation",
+        "morale",
+        "recognition",
+        "team member needs",
+        "safety",
+        "belonging"
+      ],
+      "commonTrap": "Students often jump to recognition or growth when the scenario actually shows a lower-level need such as safety or job security.",
+      "memoryHook": "Maslow = lower needs first, higher growth later.",
+      "examApplications": [
+        "Leadership decisions",
+        "Team support",
+        "Motivation theory comparison"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/maslow_s_hierarchy_study_guide.png"
+    },
+    {
+      "id": "PD-002",
+      "domain": "People",
+      "title": "Tuckman Team Development Ladder",
+      "category": "team development",
+      "whatItIs": "A staged model showing Forming, Storming, Norming, Performing, and Adjourning.",
+      "whyItMatters": "Important for recognizing normal team behavior and selecting the right leadership response for team maturity.",
+      "howToReadIt": "The team progresses through stages, though it can regress after major changes. Storming is conflict; Norming is alignment; Performing is high productivity.",
+      "triggerWords": [
+        "forming",
+        "storming",
+        "norming",
+        "performing",
+        "adjourning",
+        "new team member",
+        "maturity"
+      ],
+      "commonTrap": "Storming is often mistaken for failure when it may simply be a normal development stage.",
+      "memoryHook": "Tuckman = understand the stage before choosing the response.",
+      "examApplications": [
+        "Leadership style",
+        "Coaching",
+        "Team conflict interpretation"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/tuckman_team_development_ladder.png"
+    },
+    {
+      "id": "PD-003",
+      "domain": "People",
+      "title": "Stakeholder Power/Interest Grid",
+      "category": "stakeholder mapping",
+      "whatItIs": "A four-quadrant stakeholder map classifying stakeholders by power and interest: Manage Closely, Keep Satisfied, Keep Informed, and Monitor.",
+      "whyItMatters": "One of the most useful visual tools for stakeholder engagement strategy.",
+      "howToReadIt": "Locate the stakeholder by their power and interest, then apply the matching engagement approach.",
+      "triggerWords": [
+        "power interest",
+        "stakeholder",
+        "manage closely",
+        "keep informed",
+        "keep satisfied",
+        "monitor"
+      ],
+      "commonTrap": "Power is not the same as interest. Learners often classify a stakeholder correctly but choose the wrong engagement strategy.",
+      "memoryHook": "Power + interest = engagement strategy.",
+      "examApplications": [
+        "Stakeholder classification",
+        "Engagement planning",
+        "Communication approach"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/stakeholder_power_interest_grid_infographic.png"
+    },
+    {
+      "id": "PD-004",
+      "domain": "People",
+      "title": "Stakeholder Engagement Assessment Matrix",
+      "category": "engagement",
+      "whatItIs": "A matrix comparing current stakeholder engagement against desired engagement states such as unaware, resistant, neutral, supportive, and leading.",
+      "whyItMatters": "Useful when a PMP question asks how to close engagement gaps rather than just classify stakeholders.",
+      "howToReadIt": "Compare current to desired states and identify which stakeholders need a tailored engagement response.",
+      "triggerWords": [
+        "resistant",
+        "supportive",
+        "leading",
+        "current engagement",
+        "desired engagement"
+      ],
+      "commonTrap": "This is different from the power/interest grid: this one tracks engagement level, not classification by influence.",
+      "memoryHook": "Power/interest tells who they are; engagement matrix tells how they’re behaving now.",
+      "examApplications": [
+        "Stakeholder strategy",
+        "Resistance management",
+        "Communication planning"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "matching",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/stakeholder_engagement_assessment_matrix.png"
+    },
+    {
+      "id": "PD-005",
+      "domain": "People",
+      "title": "Conflict Resolution Modes Map",
+      "category": "conflict",
+      "whatItIs": "A visual comparison of collaborate/problem solve, compromise, smooth/accommodate, force/direct, and withdraw/avoid.",
+      "whyItMatters": "Useful because many tricky PMP questions hinge on which conflict approach is most appropriate.",
+      "howToReadIt": "Read across each mode for intent and typical use. Collaborate aims for win-win; compromise splits the difference; force is urgent/one-sided.",
+      "triggerWords": [
+        "conflict mode",
+        "collaborate",
+        "compromise",
+        "force",
+        "withdraw",
+        "smooth"
+      ],
+      "commonTrap": "Compromise is often mistaken for collaboration.",
+      "memoryHook": "Collaborate solves; compromise settles.",
+      "examApplications": [
+        "Conflict questions",
+        "Leadership",
+        "People scenarios"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "matching",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/conflict_resolution_modes_map.png"
+    },
+    {
+      "id": "PD-006",
+      "domain": "People",
+      "title": "Power Types Map",
+      "category": "leadership influence",
+      "whatItIs": "A comparison chart of expert, referent, legitimate, reward, and coercive power.",
+      "whyItMatters": "Useful in questions about influence, leadership, and stakeholder/team dynamics.",
+      "howToReadIt": "Read each power type by source of influence and likely PMP-favored usage.",
+      "triggerWords": [
+        "expert power",
+        "referent power",
+        "coercive",
+        "legitimate",
+        "reward"
+      ],
+      "commonTrap": "Expert and referent power are often confused because both are personal forms of influence.",
+      "memoryHook": "Expert = what you know; referent = how people regard you.",
+      "examApplications": [
+        "Influence questions",
+        "Leadership style",
+        "Authority scenarios"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "matching",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/power_types_map_infographic.png"
+    },
+    {
+      "id": "PD-007",
+      "domain": "People",
+      "title": "RACI / Responsibility Assignment Matrix",
+      "category": "roles and responsibilities",
+      "whatItIs": "A chart assigning who is Responsible, Accountable, Consulted, and Informed for work items.",
+      "whyItMatters": "Very helpful when a question tests role clarity, escalation, and handoffs.",
+      "howToReadIt": "Read each task row across roles, paying special attention to the difference between Responsible and Accountable.",
+      "triggerWords": [
+        "RACI",
+        "roles",
+        "responsible",
+        "accountable",
+        "consulted",
+        "informed"
+      ],
+      "commonTrap": "Learners often think Responsible and Accountable are interchangeable.",
+      "memoryHook": "Responsible does; Accountable owns.",
+      "examApplications": [
+        "Role clarity",
+        "Governance",
+        "Communication"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "matching",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/raci_responsibility_assignment_matrix.png"
+    },
+    {
+      "id": "PD-008",
+      "domain": "People",
+      "title": "Communication Channels Growth Diagram",
+      "category": "communication",
+      "whatItIs": "A simple formula-based visual showing that channels grow rapidly as team size increases: n(n−1)/2.",
+      "whyItMatters": "Useful for questions about communication complexity and the need for structured communication planning.",
+      "howToReadIt": "Read the relationship between team size and number of channels, not just the formula.",
+      "triggerWords": [
+        "communication channels",
+        "team size",
+        "complexity",
+        "n(n-1)/2"
+      ],
+      "commonTrap": "The formula is easy to memorize but students miss the managerial implication: more people means much higher coordination complexity.",
+      "memoryHook": "More people = many more channels.",
+      "examApplications": [
+        "Communication planning",
+        "Team complexity",
+        "Formula interpretation"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "numeric"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/communication_channels_growth_diagram.png"
+    },
+    {
+      "id": "PD-009",
+      "domain": "People",
+      "title": "Scrum Roles & Ceremonies Flow",
+      "category": "agile roles",
+      "whatItIs": "A process diagram showing Product Owner, Scrum Master, Developers, and the flow through Sprint Planning, Daily Scrum, Sprint Review, and Retrospective.",
+      "whyItMatters": "Useful for distinguishing who owns product value, who facilitates, and what each ceremony is for.",
+      "howToReadIt": "Read the roles first, then the sprint-event flow. Review focuses on product/stakeholders; retrospective focuses on team process.",
+      "triggerWords": [
+        "product owner",
+        "scrum master",
+        "developers",
+        "review",
+        "retrospective",
+        "daily scrum"
+      ],
+      "commonTrap": "Review and Retrospective are commonly confused.",
+      "memoryHook": "Review = product; Retro = process.",
+      "examApplications": [
+        "Agile role questions",
+        "Ceremony questions",
+        "Hybrid/agile scenarios"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "matching",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/scrum_roles_and_sprint_flow_infographic.png"
+    },
+    {
+      "id": "PRD-001",
+      "domain": "Process",
+      "title": "Context Diagram",
+      "category": "requirements / scope",
+      "whatItIs": "A high-level visual showing the system or product in the center and its external users, systems, and interfaces around it.",
+      "whyItMatters": "Excellent for PMP questions about scope boundaries, external interfaces, and stakeholder interactions.",
+      "howToReadIt": "Read from the center outward. The key is identifying what is inside the boundary versus what interacts from outside.",
+      "triggerWords": [
+        "context diagram",
+        "interfaces",
+        "external system",
+        "scope boundary",
+        "environment"
+      ],
+      "commonTrap": "Students confuse it with a process map. A context diagram shows relationships/boundaries, not detailed process sequence.",
+      "memoryHook": "Context = what surrounds and touches the system.",
+      "examApplications": [
+        "Requirements elicitation",
+        "Scope clarification",
+        "Interface understanding"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/context_diagram_scope_and_interfaces.png"
+    },
+    {
+      "id": "PRD-002",
+      "domain": "Process",
+      "title": "Fishbone / Ishikawa Diagram",
+      "category": "quality / root cause",
+      "whatItIs": "A cause-and-effect diagram used to explore possible root causes of a problem.",
+      "whyItMatters": "Commonly used in quality and root-cause analysis questions.",
+      "howToReadIt": "Start at the effect/problem and read the major cause branches to identify likely root causes.",
+      "triggerWords": [
+        "fishbone",
+        "ishikawa",
+        "root cause",
+        "cause and effect",
+        "quality problem"
+      ],
+      "commonTrap": "Learners sometimes treat it like a prioritization tool. It helps explore causes; it does not rank them by itself.",
+      "memoryHook": "Fishbone = why did this happen?",
+      "examApplications": [
+        "Root cause analysis",
+        "Quality improvement",
+        "Defect investigation"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/fishbone_diagram_root_cause_analysis.png"
+    },
+    {
+      "id": "PRD-003",
+      "domain": "Process",
+      "title": "Pareto Chart",
+      "category": "quality prioritization",
+      "whatItIs": "A bar chart ordered from most frequent/significant cause to least, often paired with the 80/20 principle.",
+      "whyItMatters": "Useful when deciding which defect source or issue category to address first.",
+      "howToReadIt": "Read bars from highest to lowest and identify the few causes producing most of the impact.",
+      "triggerWords": [
+        "pareto",
+        "80/20",
+        "most frequent defects",
+        "prioritize causes"
+      ],
+      "commonTrap": "Students may confuse it with a histogram. Pareto orders categories by significance.",
+      "memoryHook": "Pareto = biggest contributors first.",
+      "examApplications": [
+        "Defect prioritization",
+        "Quality control",
+        "Issue analysis"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/pareto_chart_quality_prioritization.png"
+    },
+    {
+      "id": "PRD-004",
+      "domain": "Process",
+      "title": "Control Chart",
+      "category": "quality control",
+      "whatItIs": "A chart that plots process results over time against a center line and upper/lower control limits.",
+      "whyItMatters": "High-value PMP diagram for interpreting stability, special-cause variation, and out-of-control conditions.",
+      "howToReadIt": "Look for points outside the control limits or non-random patterns that suggest the process is unstable.",
+      "triggerWords": [
+        "control chart",
+        "upper control limit",
+        "lower control limit",
+        "special cause",
+        "stable process"
+      ],
+      "commonTrap": "Control limits are often confused with specification limits.",
+      "memoryHook": "Control chart = is the process stable?",
+      "examApplications": [
+        "Quality control",
+        "Variation analysis",
+        "Process behavior interpretation"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/control_chart_quality_guide.png"
+    },
+    {
+      "id": "PRD-005",
+      "domain": "Process",
+      "title": "Histogram",
+      "category": "quality / distribution",
+      "whatItIs": "A frequency-distribution chart showing how often values fall within defined ranges.",
+      "whyItMatters": "Useful for visualizing spread, clustering, and data distribution in quality questions.",
+      "howToReadIt": "Read the height of each bin/bar to understand where observations cluster.",
+      "triggerWords": [
+        "histogram",
+        "distribution",
+        "frequency",
+        "quality data"
+      ],
+      "commonTrap": "Unlike a Pareto chart, the bars are not ordered by importance.",
+      "memoryHook": "Histogram = shape of the data.",
+      "examApplications": [
+        "Quality analysis",
+        "Data interpretation"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/histogram_quality_data_distribution.png"
+    },
+    {
+      "id": "PRD-006",
+      "domain": "Process",
+      "title": "Scatter Diagram",
+      "category": "quality / correlation",
+      "whatItIs": "A plot of two variables used to observe whether a relationship or correlation may exist.",
+      "whyItMatters": "Important when a PMP question asks whether one factor appears related to another.",
+      "howToReadIt": "Look for upward, downward, or no clear pattern among plotted points.",
+      "triggerWords": [
+        "scatter diagram",
+        "correlation",
+        "relationship",
+        "two variables"
+      ],
+      "commonTrap": "Correlation is not proof of causation.",
+      "memoryHook": "Scatter = are these moving together?",
+      "examApplications": [
+        "Quality analysis",
+        "Root-cause exploration"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/scatter_diagram_finding_positive_correlation.png"
+    },
+    {
+      "id": "PRD-007",
+      "domain": "Process",
+      "title": "Probability-Impact Matrix",
+      "category": "risk",
+      "whatItIs": "A risk heat map classifying risks by probability and impact.",
+      "whyItMatters": "Very useful for qualitative risk analysis and prioritization.",
+      "howToReadIt": "Locate each risk on the matrix to see which ones need the greatest attention.",
+      "triggerWords": [
+        "probability impact",
+        "risk matrix",
+        "heat map",
+        "qualitative risk"
+      ],
+      "commonTrap": "This prioritizes risks qualitatively; it is not the same as quantitative modeling or a tornado diagram.",
+      "memoryHook": "Risk matrix = how likely and how big?",
+      "examApplications": [
+        "Risk prioritization",
+        "Qualitative risk analysis"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/probability_impact_risk_matrix.png"
+    },
+    {
+      "id": "PRD-008",
+      "domain": "Process",
+      "title": "Tornado Diagram",
+      "category": "risk / sensitivity",
+      "whatItIs": "A sensitivity-analysis bar chart showing which variables have the greatest effect on an outcome.",
+      "whyItMatters": "Useful in risk and quantitative analysis questions to identify the biggest uncertainty drivers.",
+      "howToReadIt": "The longest bars matter most. Read from top to bottom to see which variable swings the result the most.",
+      "triggerWords": [
+        "tornado diagram",
+        "sensitivity analysis",
+        "uncertainty driver",
+        "biggest impact"
+      ],
+      "commonTrap": "Students confuse it with a risk register or probability-impact matrix. A tornado diagram shows impact sensitivity, not a list of risks.",
+      "memoryHook": "Tornado = what shakes the outcome most.",
+      "examApplications": [
+        "Quantitative risk analysis",
+        "Sensitivity analysis",
+        "Decision support"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/tornado_diagram_sensitivity_study_card.png"
+    },
+    {
+      "id": "PRD-009",
+      "domain": "Process",
+      "title": "Decision Tree",
+      "category": "risk / choices",
+      "whatItIs": "A branching diagram showing decision options, chance outcomes, and expected values.",
+      "whyItMatters": "Useful for EMV and decision-analysis questions.",
+      "howToReadIt": "Read from left to right through decisions and chance events, then compare expected outcomes.",
+      "triggerWords": [
+        "decision tree",
+        "EMV",
+        "expected value",
+        "chance event",
+        "branch"
+      ],
+      "commonTrap": "Students often forget to multiply outcome by probability when interpreting branches.",
+      "memoryHook": "Decision tree = options + uncertainty + value.",
+      "examApplications": [
+        "Risk analysis",
+        "Procurement choices",
+        "Make/buy decisions"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "numeric"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/decision_tree_options_uncertainty_and_value.png"
+    },
+    {
+      "id": "PRD-010",
+      "domain": "Process",
+      "title": "Network Diagram / Critical Path",
+      "category": "schedule",
+      "whatItIs": "A project schedule logic diagram showing activities, dependencies, and the path that determines project duration.",
+      "whyItMatters": "Foundational for critical-path and float questions.",
+      "howToReadIt": "Follow the sequence of dependent activities and identify the longest path.",
+      "triggerWords": [
+        "network diagram",
+        "critical path",
+        "float",
+        "dependency",
+        "schedule logic"
+      ],
+      "commonTrap": "Learners sometimes focus on the visually busiest path rather than the longest duration path.",
+      "memoryHook": "Critical path = longest duration path.",
+      "examApplications": [
+        "Schedule analysis",
+        "Compression decisions",
+        "Dependency logic"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "numeric"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/network_diagram_critical_path_infographic.png"
+    },
+    {
+      "id": "PRD-011",
+      "domain": "Process",
+      "title": "Burndown Chart",
+      "category": "agile tracking",
+      "whatItIs": "A chart showing remaining work declining over time within a sprint or release.",
+      "whyItMatters": "Useful in agile tracking and forecasting questions.",
+      "howToReadIt": "Read whether remaining work is trending down in line with expectations.",
+      "triggerWords": [
+        "burndown",
+        "remaining work",
+        "sprint progress",
+        "agile chart"
+      ],
+      "commonTrap": "Burndown shows remaining work, not value delivered.",
+      "memoryHook": "Burndown = work left.",
+      "examApplications": [
+        "Agile tracking",
+        "Sprint monitoring"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/agile_burndown_chart_cheat_sheet.png"
+    },
+    {
+      "id": "PRD-012",
+      "domain": "Process",
+      "title": "Burnup Chart",
+      "category": "agile tracking",
+      "whatItIs": "A chart showing completed work increasing over time, often against a total-scope line.",
+      "whyItMatters": "Useful when a PMP question asks about progress while total scope may also change.",
+      "howToReadIt": "Read completed work versus total scope, especially if scope expands.",
+      "triggerWords": [
+        "burnup",
+        "completed work",
+        "scope line",
+        "agile progress"
+      ],
+      "commonTrap": "Students confuse burnup with burndown. Burnup highlights completed work and scope changes more clearly.",
+      "memoryHook": "Burnup = work done.",
+      "examApplications": [
+        "Agile tracking",
+        "Scope/progress interpretation"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/burnup_chart_progress_and_scope.png"
+    },
+    {
+      "id": "PRD-013",
+      "domain": "Process",
+      "title": "Cumulative Flow Diagram",
+      "category": "kanban / flow",
+      "whatItIs": "A stacked-flow chart showing work items by state over time.",
+      "whyItMatters": "Useful for seeing bottlenecks, WIP growth, and flow stability in Kanban systems.",
+      "howToReadIt": "Watch the width and spacing between bands; widening bands can signal a bottleneck or growing WIP.",
+      "triggerWords": [
+        "cumulative flow",
+        "WIP",
+        "kanban",
+        "bottleneck",
+        "throughput"
+      ],
+      "commonTrap": "Learners may read it like a burndown chart instead of a flow chart by state.",
+      "memoryHook": "Cumulative flow = where work is getting stuck.",
+      "examApplications": [
+        "Kanban analysis",
+        "Flow management"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/cumulative_flow_diagram_study_guide.png"
+    },
+    {
+      "id": "PRD-014",
+      "domain": "Process",
+      "title": "Kanban Board",
+      "category": "agile / flow",
+      "whatItIs": "A visual board showing work items across columns such as To Do, In Progress, and Done, often with WIP limits.",
+      "whyItMatters": "Helpful for questions about flow, pull, and limiting multitasking.",
+      "howToReadIt": "Read from left to right and pay special attention to blocked work and WIP-limit violations.",
+      "triggerWords": [
+        "kanban board",
+        "WIP limit",
+        "flow",
+        "pull",
+        "blocked work"
+      ],
+      "commonTrap": "A board alone is not enough; WIP limits and flow management are key.",
+      "memoryHook": "Kanban = visualize and limit work in progress.",
+      "examApplications": [
+        "Agile operations",
+        "Flow improvement",
+        "Bottleneck response"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/kanban_board_study_guide.png"
+    },
+    {
+      "id": "PRD-015",
+      "domain": "Process",
+      "title": "Change Control Flow",
+      "category": "change management",
+      "whatItIs": "A flow diagram showing change identified → impact analysis → change request → decision → update/communicate → implement → monitor.",
+      "whyItMatters": "Excellent for one of the most frequently tested PMP decision patterns.",
+      "howToReadIt": "Read the sequence carefully. Impact analysis comes before approval and certainly before implementation.",
+      "triggerWords": [
+        "change request",
+        "CCB",
+        "impact analysis",
+        "baseline change",
+        "approve change"
+      ],
+      "commonTrap": "The biggest trap is implementing first because the sponsor or customer requested it.",
+      "memoryHook": "Change = analyze before approve; approve before implement.",
+      "examApplications": [
+        "Integrated change control",
+        "Governance",
+        "Scenario questions"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "ordering"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/change_control_flow_infographic.png"
+    },
+    {
+      "id": "PRD-016",
+      "domain": "Process",
+      "title": "Risk-to-Issue Flow",
+      "category": "risk / issue management",
+      "whatItIs": "A flow showing uncertain future risk moving through analysis and response, and if it occurs, becoming a current issue requiring issue management.",
+      "whyItMatters": "Useful because learners constantly confuse risks and issues.",
+      "howToReadIt": "Read the point at which future uncertainty becomes a present problem.",
+      "triggerWords": [
+        "risk",
+        "issue",
+        "trigger",
+        "occurred",
+        "issue log",
+        "risk register"
+      ],
+      "commonTrap": "A risk that has occurred should not be managed only as a future risk.",
+      "memoryHook": "Risk may happen; issue has happened.",
+      "examApplications": [
+        "Risk management",
+        "Issue response",
+        "Scenario diagnosis"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "ordering"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/risk_to_issue_flow_infographic.png"
+    },
+    {
+      "id": "PRD-017",
+      "domain": "Process",
+      "title": "Document Map",
+      "category": "documents / artifacts",
+      "whatItIs": "A conceptual map linking Charter, Business Case, Management Plan, Baselines, RTM, WBS Dictionary, Risk Register, Issue Log, Change Log, and Contract.",
+      "whyItMatters": "Useful because many PMP questions test document confusion more than difficult formulas.",
+      "howToReadIt": "Read by function: WHY, AUTHORITY, HOW, APPROVED, TRACE, MAY HAPPEN, HAPPENED, CHANGE STATUS, SELLER.",
+      "triggerWords": [
+        "document confusion",
+        "baseline",
+        "register",
+        "log",
+        "RTM",
+        "charter",
+        "contract"
+      ],
+      "commonTrap": "Students select the wrong artifact because names sound similar.",
+      "memoryHook": "Document map = know what each artifact is for.",
+      "examApplications": [
+        "Artifact identification",
+        "Scenario diagnosis"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "matching",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/project_documents_map_infographic.png"
+    },
+    {
+      "id": "BED-001",
+      "domain": "Business Environment",
+      "title": "Business Need → Business Case → Project → Benefits → Value Chain",
+      "category": "strategy / value",
+      "whatItIs": "A chain showing how an organizational problem or opportunity becomes a business case, then a project, then outcomes, benefits, and ultimately value.",
+      "whyItMatters": "Important because PMP often tests the difference between finishing deliverables and creating real business value.",
+      "howToReadIt": "Read left to right. Delivery is not the end; value realization continues beyond project completion.",
+      "triggerWords": [
+        "business case",
+        "benefits",
+        "value",
+        "outcome",
+        "strategic alignment"
+      ],
+      "commonTrap": "A completed project does not automatically equal realized value.",
+      "memoryHook": "Deliverable is not value; value comes later.",
+      "examApplications": [
+        "Business environment questions",
+        "Benefits realization",
+        "Strategic alignment"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/from_business_need_to_strategic_value.png"
+    },
+    {
+      "id": "BED-002",
+      "domain": "Business Environment",
+      "title": "Governance Escalation Path",
+      "category": "governance",
+      "whatItIs": "A diagram showing issue assessment, authority check, decision owner, action, and escalation path.",
+      "whyItMatters": "Useful for questions about who should decide and when escalation is appropriate.",
+      "howToReadIt": "Read the authority checkpoints: solve at the lowest appropriate level, escalate when authority or governance requires it.",
+      "triggerWords": [
+        "governance",
+        "escalation",
+        "decision owner",
+        "steering committee",
+        "authority"
+      ],
+      "commonTrap": "Escalation is often chosen too early before understanding the issue or checking authority.",
+      "memoryHook": "Governance = know who decides what.",
+      "examApplications": [
+        "Governance questions",
+        "Role authority",
+        "Escalation scenarios"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "ordering"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/governance_escalation_path_infographic.png"
+    },
+    {
+      "id": "BED-003",
+      "domain": "Business Environment",
+      "title": "Organizational Change Adoption Flow",
+      "category": "change adoption",
+      "whatItIs": "A people-centered flow showing understand resistance → engage → communicate → train → reinforce adoption.",
+      "whyItMatters": "Useful when questions concern user adoption, resistance, and benefits realization rather than simple baseline change.",
+      "howToReadIt": "Read the flow as an adoption journey, not as formal change control.",
+      "triggerWords": [
+        "resistance",
+        "adoption",
+        "training",
+        "organizational change",
+        "behavior"
+      ],
+      "commonTrap": "Students often confuse organizational change management with integrated change control.",
+      "memoryHook": "Adoption is a people journey, not just a project form.",
+      "examApplications": [
+        "Adoption questions",
+        "Change management",
+        "Stakeholder engagement"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "ordering"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/organizational_change_adoption_flow.png"
+    },
+    {
+      "id": "BED-004",
+      "domain": "Business Environment",
+      "title": "Compliance Decision Flow",
+      "category": "compliance",
+      "whatItIs": "A flow showing identify compliance issue → assess impact → consult required authority/expert → update/implement → document.",
+      "whyItMatters": "Useful when a scenario involves legal, regulatory, safety, or policy constraints.",
+      "howToReadIt": "Read compliance as mandatory and non-optional, then see how response flows through governance and documentation.",
+      "triggerWords": [
+        "compliance",
+        "regulation",
+        "legal",
+        "policy",
+        "safety",
+        "mandatory"
+      ],
+      "commonTrap": "Learners often trade away compliance for cost or schedule as if it were negotiable.",
+      "memoryHook": "Compliance is mandatory, not a preference.",
+      "examApplications": [
+        "Compliance questions",
+        "Safety/legal scenarios"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "ordering"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/compliance_decision_flow_infographic.png"
+    },
+    {
+      "id": "BED-005",
+      "domain": "Business Environment",
+      "title": "Finance Formula Family Map",
+      "category": "finance",
+      "whatItIs": "A visual grouping of ROI, BCR, NPV, IRR, Payback, Opportunity Cost, Sunk Cost, CAPEX, OPEX, and TCO.",
+      "whyItMatters": "Useful because finance questions are often hard due to concept confusion rather than calculation difficulty.",
+      "howToReadIt": "Read by purpose: profitability, time-to-recovery, value today, rate of return, cost classification, and decision-quality concepts.",
+      "triggerWords": [
+        "ROI",
+        "NPV",
+        "BCR",
+        "IRR",
+        "payback",
+        "sunk cost",
+        "opportunity cost",
+        "TCO"
+      ],
+      "commonTrap": "Students treat all metrics as interchangeable when they answer different questions.",
+      "memoryHook": "Finance map = choose the right metric for the decision.",
+      "examApplications": [
+        "Project selection",
+        "Business case",
+        "Lifecycle cost decisions"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "matching",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/finance_formula_family_map.png"
+    },
+    {
+      "id": "BED-006",
+      "domain": "Business Environment",
+      "title": "AI Decision-Support Flow",
+      "category": "AI / responsible use",
+      "whatItIs": "A flow showing data check → privacy/security check → generate insight → validate output → human decision.",
+      "whyItMatters": "Useful for modern PMP-style governance and responsible AI scenarios.",
+      "howToReadIt": "Read it as decision support. AI can assist, but humans remain accountable.",
+      "triggerWords": [
+        "AI",
+        "privacy",
+        "validate output",
+        "bias",
+        "hallucination",
+        "decision support"
+      ],
+      "commonTrap": "Treating AI output as authoritative without verification is the core trap.",
+      "memoryHook": "AI helps decide; humans own the decision.",
+      "examApplications": [
+        "AI governance",
+        "Modern business environment questions"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "ordering"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/ai_decision_support_flow_infographic.png"
+    },
+    {
+      "id": "BED-007",
+      "domain": "Business Environment",
+      "title": "Sustainability Triple-Bottom-Line Diagram",
+      "category": "sustainability",
+      "whatItIs": "A visual showing environmental, social, and economic considerations balanced together.",
+      "whyItMatters": "Useful for questions that test long-term value and responsible decision making.",
+      "howToReadIt": "Read the overlap and the need to balance lifecycle impact, not merely optimize upfront cost.",
+      "triggerWords": [
+        "sustainability",
+        "environmental",
+        "social",
+        "economic",
+        "long term",
+        "lifecycle"
+      ],
+      "commonTrap": "Learners may choose the cheapest option even when sustainability criteria clearly matter.",
+      "memoryHook": "Sustainability = people + planet + economics.",
+      "examApplications": [
+        "Sustainability questions",
+        "Lifecycle value",
+        "Strategic choices"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/sustainability_triple_bottom_line_guide.png"
+    },
+    {
+      "id": "BED-008",
+      "domain": "Business Environment",
+      "title": "Project vs Program vs Portfolio vs Operations Map",
+      "category": "foundations",
+      "whatItIs": "A comparison visual distinguishing temporary project work, coordinated program benefits, strategic portfolio alignment, and ongoing operations.",
+      "whyItMatters": "Useful for foundational classification questions.",
+      "howToReadIt": "Read each item by its main purpose: outcome, benefits, strategy, or run-the-business continuity.",
+      "triggerWords": [
+        "project",
+        "program",
+        "portfolio",
+        "operations",
+        "strategy",
+        "benefits"
+      ],
+      "commonTrap": "A program is not just a very big project, and a portfolio does not require all work to be directly related.",
+      "memoryHook": "Project = outcome; Program = benefits; Portfolio = strategy; Operations = ongoing work.",
+      "examApplications": [
+        "Foundations",
+        "Classification questions"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/project_management_work_structure_map.png"
+    },
+    {
+      "id": "PD-010",
+      "domain": "People",
+      "title": "Stakeholder Salience Model",
+      "category": "stakeholder prioritization",
+      "whatItIs": "A three-circle stakeholder model using power, legitimacy, and urgency to identify stakeholder salience.",
+      "whyItMatters": "Helps prioritize stakeholder attention when influence, rightful involvement, and time sensitivity differ.",
+      "howToReadIt": "Read the overlap of power, legitimacy, and urgency; stakeholders with all three attributes are definitive and normally require the highest attention.",
+      "triggerWords": [
+        "salience",
+        "power",
+        "legitimacy",
+        "urgency",
+        "definitive stakeholder"
+      ],
+      "commonTrap": "Do not confuse salience with the power/interest grid; salience uses three attributes rather than two.",
+      "memoryHook": "Salience = Power + Legitimacy + Urgency.",
+      "examApplications": [
+        "Stakeholder prioritization",
+        "Engagement strategy"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "matching",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/stakeholder_salience_model_infographic.png"
+    },
+    {
+      "id": "PD-011",
+      "domain": "People",
+      "title": "Organizational Breakdown Structure (OBS)",
+      "category": "organization and resources",
+      "whatItIs": "A hierarchical view of organizational units, departments, or teams responsible for project work.",
+      "whyItMatters": "Helps learners distinguish organization-based responsibility structures from deliverable-based decomposition.",
+      "howToReadIt": "Read from the organization or enterprise down through divisions, departments, and teams.",
+      "triggerWords": [
+        "OBS",
+        "organizational breakdown structure",
+        "departments",
+        "resources"
+      ],
+      "commonTrap": "OBS is organization-based; WBS is deliverable/work based.",
+      "memoryHook": "OBS = who in the organization; WBS = what work.",
+      "examApplications": [
+        "Resource planning",
+        "Responsibility assignment"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/organizational_breakdown_structure_guide.png"
+    },
+    {
+      "id": "PD-012",
+      "domain": "People",
+      "title": "Organizational Structure Comparison",
+      "category": "organization structure",
+      "whatItIs": "A comparison of functional, weak/balanced/strong matrix, and projectized structures.",
+      "whyItMatters": "Shows how project manager authority, resource control, and team alignment change across structures.",
+      "howToReadIt": "Move from functional toward projectized to see project-manager authority generally increase and functional control generally decrease.",
+      "triggerWords": [
+        "functional",
+        "weak matrix",
+        "balanced matrix",
+        "strong matrix",
+        "projectized"
+      ],
+      "commonTrap": "Matrix is not one structure; weak, balanced, and strong matrix give different authority levels.",
+      "memoryHook": "Functional → Matrix → Projectized = generally more PM authority.",
+      "examApplications": [
+        "Authority",
+        "Resource conflicts",
+        "Governance"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "matching",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/organizational_structure_types_infographic.png"
+    },
+    {
+      "id": "PD-013",
+      "domain": "People",
+      "title": "Communication Model",
+      "category": "communication",
+      "whatItIs": "A sender-to-receiver communication model showing encoding, message/channel, decoding, noise, and feedback.",
+      "whyItMatters": "Useful for questions involving misunderstanding, communication barriers, feedback, and channel selection.",
+      "howToReadIt": "Follow sender → encode → message/channel → decode → receiver, then use feedback to confirm understanding while watching for noise.",
+      "triggerWords": [
+        "sender",
+        "receiver",
+        "encode",
+        "decode",
+        "noise",
+        "feedback"
+      ],
+      "commonTrap": "A message being sent does not mean it was understood.",
+      "memoryHook": "Send → Encode → Channel → Decode → Confirm.",
+      "examApplications": [
+        "Communication planning",
+        "Misunderstanding",
+        "Feedback loops"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/communication_model.png"
+    },
+    {
+      "id": "PD-014",
+      "domain": "People",
+      "title": "Motivation Theory Comparison",
+      "category": "motivation",
+      "whatItIs": "A comparison of McGregor Theory X/Y, Herzberg, McClelland, and Vroom motivation concepts.",
+      "whyItMatters": "Helps distinguish different explanations of what drives behavior and how leaders can respond.",
+      "howToReadIt": "Compare each theory by its core assumption, primary motivators, and appropriate leadership application.",
+      "triggerWords": [
+        "Theory X",
+        "Theory Y",
+        "Herzberg",
+        "McClelland",
+        "Vroom",
+        "motivation"
+      ],
+      "commonTrap": "Do not assume one motivator works for every person or every situation.",
+      "memoryHook": "Motivation = diagnose the person and context first.",
+      "examApplications": [
+        "Leadership",
+        "Team motivation",
+        "Coaching"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/motivation_theory_comparison.png"
+    },
+    {
+      "id": "PD-015",
+      "domain": "People",
+      "title": "Situational Leadership",
+      "category": "leadership",
+      "whatItIs": "A situational leadership model comparing directing, coaching, supporting, and delegating based on direction and support needs.",
+      "whyItMatters": "Reinforces that leadership style should change as team capability, confidence, and context change.",
+      "howToReadIt": "Match the team member’s development/readiness needs to the amount of directive and supportive behavior required.",
+      "triggerWords": [
+        "situational leadership",
+        "directing",
+        "coaching",
+        "supporting",
+        "delegating"
+      ],
+      "commonTrap": "There is no universally best leadership style; the appropriate style depends on readiness and context.",
+      "memoryHook": "Adapt the leader to the learner.",
+      "examApplications": [
+        "Leadership style",
+        "Team development",
+        "Coaching"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/situational_leadership.png"
+    },
+    {
+      "id": "PD-016",
+      "domain": "People",
+      "title": "Decision-Making Style Spectrum",
+      "category": "decision making",
+      "whatItIs": "A continuum from leader-decides through consultation and collaboration to delegated team decisions.",
+      "whyItMatters": "Helps select an appropriate decision approach based on urgency, expertise, commitment, reversibility, and authority.",
+      "howToReadIt": "Move from centralized to participative decision making as team involvement increases and direct leader control decreases.",
+      "triggerWords": [
+        "decision style",
+        "consult",
+        "consensus",
+        "delegate",
+        "participation"
+      ],
+      "commonTrap": "Consensus is not automatically best when urgency or authority requires a faster decision.",
+      "memoryHook": "Decision style follows context, authority, urgency, and commitment.",
+      "examApplications": [
+        "Leadership",
+        "Governance",
+        "Team empowerment"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/decision_making_style_spectrum.png"
+    },
+    {
+      "id": "PRD-018",
+      "domain": "Process",
+      "title": "Gantt Chart",
+      "category": "schedule",
+      "whatItIs": "A time-phased bar chart showing tasks, start/finish dates, durations, and often dependencies.",
+      "whyItMatters": "Makes schedule timing, overlap, sequence, and progress visible.",
+      "howToReadIt": "Read activities vertically and time horizontally; each bar shows when an activity occurs and for how long.",
+      "triggerWords": [
+        "Gantt",
+        "timeline",
+        "schedule bar chart",
+        "task duration"
+      ],
+      "commonTrap": "A Gantt chart shows timing; it does not by itself prove which path is critical unless dependency logic is analyzed.",
+      "memoryHook": "Gantt = work across time.",
+      "examApplications": [
+        "Scheduling",
+        "Progress tracking"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/gantt_chart_timeline_planning_guide.png"
+    },
+    {
+      "id": "PRD-019",
+      "domain": "Process",
+      "title": "Crashing vs. Fast-Tracking",
+      "category": "schedule compression",
+      "whatItIs": "A visual comparison of two schedule-compression techniques: adding resources/cost versus overlapping work.",
+      "whyItMatters": "Many schedule questions require selecting the right compression technique and recognizing its trade-offs.",
+      "howToReadIt": "Crashing adds resources to shorten critical-path work; fast-tracking overlaps activities that were planned sequentially.",
+      "triggerWords": [
+        "crashing",
+        "fast tracking",
+        "schedule compression",
+        "add resources",
+        "overlap"
+      ],
+      "commonTrap": "Crashing generally increases cost; fast-tracking generally increases rework/coordination risk.",
+      "memoryHook": "Crash = cost; Fast-track = overlap/risk.",
+      "examApplications": [
+        "Schedule recovery",
+        "Compression decisions"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "matching",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/schedule_compression_study_guide.png"
+    },
+    {
+      "id": "PRD-020",
+      "domain": "Process",
+      "title": "EVM S-Curve",
+      "category": "cost and performance",
+      "whatItIs": "A cumulative performance chart plotting Planned Value (PV), Earned Value (EV), and Actual Cost (AC) over time.",
+      "whyItMatters": "Allows visual interpretation of cost and schedule performance and connects directly to CPI, SPI, forecasts, and variance formulas.",
+      "howToReadIt": "At the status date compare EV with AC for cost performance and EV with PV for schedule performance.",
+      "triggerWords": [
+        "EVM",
+        "S-curve",
+        "PV",
+        "EV",
+        "AC",
+        "CPI",
+        "SPI"
+      ],
+      "commonTrap": "SPI is EV/PV and CPI is EV/AC; do not reverse the denominators.",
+      "memoryHook": "EV vs AC = cost; EV vs PV = schedule.",
+      "examApplications": [
+        "EVM",
+        "Forecasting",
+        "Visual questions"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "hotspot"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/evm_s_curve_pmp_study_guide_infographic.png"
+    },
+    {
+      "id": "PRD-021",
+      "domain": "Process",
+      "title": "Cost Baseline vs. Actual Cost Curve",
+      "category": "cost performance",
+      "whatItIs": "A cumulative-cost comparison between the approved cost baseline and actual spending over time.",
+      "whyItMatters": "Shows whether spending is above or below the planned cost path and supports investigation and forecasting.",
+      "howToReadIt": "Compare the actual-cost curve to the baseline at the same date; then combine with EV when judging full performance.",
+      "triggerWords": [
+        "cost baseline",
+        "actual cost",
+        "BAC",
+        "cost curve"
+      ],
+      "commonTrap": "Actual cost below baseline does not automatically mean good performance if less work was completed; use EV for full analysis.",
+      "memoryHook": "Cost curve shows spend; EV shows value earned.",
+      "examApplications": [
+        "Cost control",
+        "Forecasting"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/cost_baseline_vs_actual_cost_curve.png"
+    },
+    {
+      "id": "PRD-022",
+      "domain": "Process",
+      "title": "Work Breakdown Structure (WBS)",
+      "category": "scope",
+      "whatItIs": "A hierarchical decomposition of total project scope into deliverables and progressively smaller components/work packages.",
+      "whyItMatters": "Supports scope completeness, estimating, planning, ownership, and control.",
+      "howToReadIt": "Read top-down from project/deliverable to lower-level components; the hierarchy represents scope, not schedule order.",
+      "triggerWords": [
+        "WBS",
+        "work package",
+        "decomposition",
+        "100% rule"
+      ],
+      "commonTrap": "WBS hierarchy is not the same as activity sequence.",
+      "memoryHook": "WBS = break the work, not the timeline.",
+      "examApplications": [
+        "Scope planning",
+        "Estimating"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/pmp_work_breakdown_structure_study_guide.png"
+    },
+    {
+      "id": "PRD-023",
+      "domain": "Process",
+      "title": "Risk Register Structure",
+      "category": "risk",
+      "whatItIs": "A structured table for identified risks, causes, impacts, probability, responses, owners, triggers, and status.",
+      "whyItMatters": "Shows how risks are documented, owned, monitored, and updated through the project.",
+      "howToReadIt": "Read each row as one risk with its assessment and planned response; monitor ownership, triggers, and status.",
+      "triggerWords": [
+        "risk register",
+        "risk owner",
+        "probability",
+        "impact",
+        "response strategy",
+        "trigger"
+      ],
+      "commonTrap": "An issue that has already occurred belongs in issue management even if it originated as a risk.",
+      "memoryHook": "Risk register = identify, assess, respond, own, monitor.",
+      "examApplications": [
+        "Risk management",
+        "Risk monitoring"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/risk_register_structure_infographic.png"
+    },
+    {
+      "id": "PRD-024",
+      "domain": "Process",
+      "title": "Flowchart / Process Map",
+      "category": "process mapping",
+      "whatItIs": "A step-by-step visual representation of activities, decisions, branches, and process flow.",
+      "whyItMatters": "Helps learners trace process logic, identify decision points, and understand sequence and rework loops.",
+      "howToReadIt": "Start at the beginning and follow arrows through activities and decision diamonds to the appropriate endpoint.",
+      "triggerWords": [
+        "flowchart",
+        "process map",
+        "decision diamond",
+        "workflow"
+      ],
+      "commonTrap": "A flowchart shows sequence; a context diagram shows system boundaries and external interfaces.",
+      "memoryHook": "Flowchart = what happens next?",
+      "examApplications": [
+        "Process analysis",
+        "Quality",
+        "Change flow"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "hotspot"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/pmp_change_request_flowchart_guide.png"
+    },
+    {
+      "id": "PRD-025",
+      "domain": "Process",
+      "title": "Earned Schedule (ES) & SPI(t)",
+      "category": "schedule performance",
+      "whatItIs": "A time-based schedule performance technique that converts earned progress into the point in planned time when that amount of value was expected.",
+      "whyItMatters": "Adds a time-based schedule view using Earned Schedule and SPI(t), especially useful for interpreting schedule performance in time units.",
+      "howToReadIt": "Find current EV, project it to the PV curve to locate Earned Schedule (ES), then compare ES with actual time/status date (AT). SPI(t)=ES/AT.",
+      "triggerWords": [
+        "earned schedule",
+        "ES",
+        "SPI(t)",
+        "actual time",
+        "schedule performance"
+      ],
+      "commonTrap": "Traditional SPI is EV/PV; SPI(t) is ES/AT.",
+      "memoryHook": "Earned Schedule asks: how far along in planned time have we actually earned?",
+      "examApplications": [
+        "Schedule analysis",
+        "Visual interpretation"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single",
+        "hotspot"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/earned_schedule_es_spi_t.png"
+    },
+    {
+      "id": "PRD-026",
+      "domain": "Process",
+      "title": "Cost of Quality (COQ)",
+      "category": "quality",
+      "whatItIs": "A framework dividing quality costs into conformance costs (prevention/appraisal) and nonconformance costs (internal/external failure).",
+      "whyItMatters": "Shows why investing in prevention and appraisal can reduce expensive failure costs.",
+      "howToReadIt": "Separate doing-it-right costs from failure costs, then distinguish failures found internally from those found by customers.",
+      "triggerWords": [
+        "cost of quality",
+        "COQ",
+        "prevention",
+        "appraisal",
+        "internal failure",
+        "external failure"
+      ],
+      "commonTrap": "Quality cost includes the cost of achieving quality as well as the cost of poor quality.",
+      "memoryHook": "Prevent + Appraise before Internal + External Failure.",
+      "examApplications": [
+        "Quality planning",
+        "Cost trade-offs"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "matching",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/cost_of_quality_coq.png"
+    },
+    {
+      "id": "PRD-027",
+      "domain": "Process",
+      "title": "Velocity Chart",
+      "category": "agile metrics",
+      "whatItIs": "A sprint-by-sprint chart of completed work, commonly story points, used for team planning and forecasting.",
+      "whyItMatters": "Helps a stable team forecast likely future capacity based on its own recent empirical performance.",
+      "howToReadIt": "Compare completed points across sprints and use recent trends/ranges rather than assuming a perfectly constant number.",
+      "triggerWords": [
+        "velocity",
+        "story points",
+        "sprint capacity",
+        "forecast"
+      ],
+      "commonTrap": "Do not compare velocity across teams or use it as an individual productivity score.",
+      "memoryHook": "Velocity forecasts this team, not every team.",
+      "examApplications": [
+        "Agile forecasting",
+        "Release planning"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/velocity_chart.png"
+    },
+    {
+      "id": "PRD-028",
+      "domain": "Process",
+      "title": "Backlog Hierarchy & Prioritization Flow",
+      "category": "agile planning",
+      "whatItIs": "A visual hierarchy from product vision/goal through epics, features/capabilities, backlog items/user stories, and tasks, plus the factors used to order work.",
+      "whyItMatters": "Connects decomposition with continuous value-based reprioritization and progressive refinement.",
+      "howToReadIt": "Move from strategic intent toward smaller implementable items; use value, risk, dependencies, compliance, learning, and effort to order upcoming work.",
+      "triggerWords": [
+        "backlog hierarchy",
+        "epic",
+        "feature",
+        "user story",
+        "prioritization",
+        "refinement"
+      ],
+      "commonTrap": "The backlog is ordered and continuously refined; it is not a frozen scope list.",
+      "memoryHook": "Vision → Epic → Feature → Story → Task; then reorder with learning.",
+      "examApplications": [
+        "Agile planning",
+        "Backlog refinement",
+        "Prioritization"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "matching"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/backlog_hierarchy_prioritization_flow.png"
+    },
+    {
+      "id": "PRD-029",
+      "domain": "Process",
+      "title": "Contract Type Risk Spectrum",
+      "category": "procurement",
+      "whatItIs": "A comparison of common contract types and how cost risk is allocated between buyer and seller.",
+      "whyItMatters": "Supports procurement questions about scope certainty, incentives, flexibility, and who bears financial risk.",
+      "howToReadIt": "Compare fixed-price and cost-reimbursable families by cost-risk allocation; treat T&M as a flexible hybrid arrangement rather than a simple endpoint.",
+      "triggerWords": [
+        "FFP",
+        "FPIF",
+        "CPFF",
+        "CPIF",
+        "CPAF",
+        "T&M",
+        "contract risk"
+      ],
+      "commonTrap": "T&M is not automatically the highest-risk endpoint of a single spectrum; it combines fixed rates with variable quantity/time exposure.",
+      "memoryHook": "Clear scope favors fixed price; uncertainty often shifts more cost risk to the buyer.",
+      "examApplications": [
+        "Procurement",
+        "Contract selection"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "matching",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/contract_type_risk_spectrum.png"
+    },
+    {
+      "id": "PRD-030",
+      "domain": "Process",
+      "title": "Predictive vs. Agile vs. Hybrid",
+      "category": "delivery approach",
+      "whatItIs": "A side-by-side comparison of predictive, adaptive/agile, and hybrid delivery across planning, requirements, change, cadence, stakeholder involvement, and governance.",
+      "whyItMatters": "Reinforces tailoring: different work benefits from different delivery approaches.",
+      "howToReadIt": "Compare uncertainty, planning horizon, delivery cadence, change handling, and stakeholder feedback to choose the best-fit approach.",
+      "triggerWords": [
+        "predictive",
+        "agile",
+        "adaptive",
+        "hybrid",
+        "tailoring"
+      ],
+      "commonTrap": "No approach is universally best; choose based on uncertainty, complexity, risk, governance, and organizational context.",
+      "memoryHook": "Stable → predictive; uncertain → adaptive; mixed → hybrid.",
+      "examApplications": [
+        "Tailoring",
+        "Lifecycle selection"
+      ],
+      "suggestedQuestionTypes": [
+        "diagram",
+        "matching",
+        "single"
+      ],
+      "imageStatus": "ready",
+      "imageFile": "assets/diagrams/predictive_agile_hybrid_comparison.png"
+    }
+  ]
+}

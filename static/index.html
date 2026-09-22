@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Azielon PMP Practice Coach</title>
+<link rel="stylesheet" href="/static/styles.css?v=4.3.5"/>
+</head>
+<body class="landing-active">
+<div id="authGate" class="auth-gate">
+  <div class="build-version-badge">v4.3.5</div>
+  <div class="sales-shell sales-shell-v426">
+    <section class="sales-panel sales-panel-v426">
+      <div class="sales-brand"><img src="/static/assets/azielon-logo.png" alt="Azielon"><span>Azielon PMP Coach</span></div>
+
+      <div class="sales-copy sales-copy-v429">
+        <span class="sales-kicker">PMP prep that teaches you how to think</span>
+        <h1>Master PMP scenario questions.<br><em>Stop second-guessing your answers.</em></h1>
+        <p>Learn the reasoning behind situational questions, see what you need to review, and build confidence before exam day.</p>
+
+        <div class="sales-proof-row" aria-label="Azielon benefits">
+          <span>✓ Reasoning for every answer</span>
+          <span>✓ Targeted weak-area review</span>
+          <span>✓ Mocks + visual practice</span>
+        </div>
+
+        <button id="trialStartBtn" class="sales-cta sales-cta-primary">Create account & unlock 5 free questions <span>→</span></button>
+
+        <a class="live-class-teaser" href="/live-pmp">
+          <span class="live-class-icon">▣</span>
+          <span><b>Live PMP Online Class</b><small>35 hours · $999 · Tue–Fri · 8:00 AM–5:00 PM ET</small></span>
+          <strong>View class →</strong>
+        </a>
+
+        <figure class="testimonial-card testimonial-compact">
+          <div class="testimonial-stars" aria-label="5 stars">★★★★★</div>
+          <blockquote>“Ms. Sonia was an excellent PMP coaching instructor — patient, clear, and always ready to clear my doubts. Her simple, relatable examples made complex concepts easy to understand.”</blockquote>
+          <figcaption><b>Julie J</b><span>Student, PMP Certification Prep</span></figcaption>
+        </figure>
+
+        <div class="founder-line"><span class="founder-mini">SG</span><b>Dr. Sonia Gandham, PMP®, CSM®</b></div>
+      </div>
+    </section>
+
+    <section class="auth-card auth-card-v426">
+      <div class="auth-inner-v426">
+        <div class="signup-trust-badge">▣ &nbsp; CREATE ACCOUNT FREE — NO CARD REQUIRED</div>
+        <h2>Create your learner account</h2>
+        <p class="auth-sub">Create your free learner account to unlock the 5-question starter drill with full explanations.</p>
+
+        <div class="auth-tabs auth-tabs-v426"><button class="active" data-auth-tab="register">Create account</button><button data-auth-tab="login">Sign in</button></div>
+
+        <form id="registerForm" class="auth-form auth-form-v426">
+          <label>Name<input id="regName" placeholder="Full name" required/></label>
+          <label>Email<input id="regEmail" type="email" placeholder="you@email.com" required/></label>
+          <label>Password<input id="regPassword" type="password" minlength="8" placeholder="8+ characters" required/></label>
+          <button class="primary wide signup-primary">Create free account <span>→</span></button>
+          <p class="form-legal">By creating an account you agree to the Terms and Privacy Policy.</p>
+        </form>
+
+        <form id="loginForm" class="auth-form auth-form-v426 hidden">
+          <label>Email<input id="loginEmail" type="email" placeholder="you@email.com" required/></label>
+          <label>Password<input id="loginPassword" type="password" placeholder="Password" required/></label>
+          <button class="primary wide">Sign in</button>
+          <button id="forgotPasswordBtn" class="auth-inline-link" type="button">Forgot password?</button>
+        </form>
+
+        <form id="forgotForm" class="auth-form auth-form-v426 hidden">
+          <p class="auth-help">Enter your account email. We’ll send a reset link.</p>
+          <label>Email<input id="forgotEmail" type="email" placeholder="you@email.com" required/></label>
+          <button class="primary wide">Send reset link</button>
+          <button id="forgotBackBtn" class="auth-inline-link" type="button">← Back to sign in</button>
+        </form>
+
+        <form id="resetForm" class="auth-form auth-form-v426 hidden">
+          <p class="auth-help">Choose a new password.</p>
+          <label>New password<input id="resetPassword" type="password" minlength="8" placeholder="8+ characters" required/></label>
+          <label>Confirm password<input id="resetPassword2" type="password" minlength="8" placeholder="Confirm new password" required/></label>
+          <button class="primary wide">Reset password</button>
+          <button id="resetBackBtn" class="auth-inline-link" type="button">← Back to sign in</button>
+        </form>
+
+        <p class="free-drill-note">✓ Your free 5-question starter drill unlocks after account creation.</p>
+        <div id="authMessage" class="message"></div>
+
+        <div class="auth-trust-strip">
+          <span>♢&nbsp; No card required</span>
+          <span>▤&nbsp; Built around the 2026 PMP Examination Content Outline · Independent PMP prep</span>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div id="publicTrial" class="trial-overlay hidden">
+    <div class="trial-card">
+      <div class="trial-head"><div><span class="sales-kicker">Free preview</span><h2>See how Azielon teaches the reasoning.</h2></div><button id="trialCloseBtn" class="trial-close" type="button">×</button></div>
+      <div class="trial-progress"><span id="trialProgress">Question 1 of 5</span><div class="trial-track"><i id="trialTrackFill"></i></div></div>
+      <div id="trialQuestion" class="trial-question"></div>
+      <div id="trialFeedback" class="trial-feedback hidden"></div>
+      <div class="trial-actions"><button id="trialSubmitBtn" class="primary" type="button">Check answer</button><button id="trialNextBtn" class="sales-cta hidden" type="button">Next question</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="app" class="app-shell hidden">
+  <aside class="sidebar">
+    <div class="brand"><img class="sidebar-logo" src="/static/assets/azielon-logo.png" alt="Azielon"><div><strong>Azielon</strong><span>PMP Practice Coach</span></div></div>
+    <nav id="nav">
+      <button data-view="dashboard" class="active"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 3 9l9 5 9-5-9-5Z"/><path d="M5 10.5V14c0 1.2 2.7 3 7 3s7-1.8 7-3v-3.5"/></svg></span><span>My Learning</span></button>
+      <button data-view="progress"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M7 16V9"/><path d="M12 16V5"/><path d="M17 16v-4"/></svg></span><span>My Progress</span></button>
+      <button data-view="notes"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h8l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M15 3v5h5"/><path d="M9 12h6M9 16h6"/></svg></span><span>Topic Notes</span></button>
+      <button data-view="diagrams" data-feature="diagrams"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 6h7.8M6 8v7.8M18 8v7.8M8 18h7.8"/></svg></span><span>Diagrams & Models</span><em class="premium-lock">Premium</em></button>
+      <button data-view="tricky"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h8"/><path d="M7 19V5"/><path d="M5 11h4"/><path d="m14 8 5 8"/><path d="m19 8-5 8"/></svg></span><span>Tricky Words</span></button>
+      <button data-view="practice"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v4"/><path d="M14 3v4"/><path d="M12 13.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"/><path d="M12 8c-4.1 0-7 2.8-7 6.4 0 3.3 2.5 5.6 7 5.6s7-2.3 7-5.6C19 10.8 16.1 8 12 8Z"/></svg></span><span>Practice</span></button>
+      <button data-view="exams" data-exam-kind="mock"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/><path d="m15.5 16.2 1.5 1.5 2.5-2.8"/></svg></span><span>Full Mock Exams</span></button>
+      <button data-view="exams" data-exam-kind="mastery"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="3"/><path d="M12 2.5v2.5M12 19v2.5M21.5 12H19M5 12H2.5"/></svg></span><span>Concept Mastery Exams</span></button>
+      <button data-view="review"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15.4-6.4"/><path d="M18 3.8v4.6h-4.6"/><path d="M21 12a9 9 0 0 1-15.4 6.4"/><path d="M6 20.2v-4.6h4.6"/></svg></span><span>Concepts to Review</span></button>
+      <button data-view="coach" data-feature="ai_coach"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="6" width="10" height="11" rx="3"/><path d="M12 2.8v2.4M9 17v2h6v-2M9 11h.01M15 11h.01"/><path d="M8.5 8.5H6.8a1.8 1.8 0 0 0 0 3.6h.2M15.5 8.5h1.7a1.8 1.8 0 1 1 0 3.6H17"/></svg></span><span>AI Coach</span><em class="premium-lock">Premium</em></button>
+      <button data-view="billing"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/><path d="M7 15h4"/></svg></span><span>Plans & Billing</span></button>
+      <button data-view="admin" id="adminNav" class="hidden"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.56V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.65 8.4a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.65a1.7 1.7 0 0 0 1.03-1.56V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15.05 4.65a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.56 1.03H21a2 2 0 1 1 0 4h-.09A1.7 1.7 0 0 0 19.4 15Z"/></svg></span><span>Instructor Studio</span></button>
+    </nav>
+    <div class="side-bottom"><span id="userBadge"></span><button id="logoutBtn" class="ghost">Sign out</button></div>
+  </aside>
+
+  <main>
+    <header class="topbar"><div><span class="eyebrow">Reasoning-first PMP preparation</span><h1 id="pageTitle">My Learning</h1></div><div class="top-actions"><span id="healthPill" class="status-pill">Checking…</span><div id="avatar" class="avatar">AZ</div></div></header>
+
+    <section class="view active" id="dashboard">
+      <div class="learning-path-card learning-journey-card">
+        <div class="learning-path-head journey-head"><div><span class="eyebrow">Your learning path</span><h2 id="learningPlanTitle">Learning plan</h2><p>Follow the path at your pace. Each dot represents 20% of that stage.</p></div><div class="learning-overall"><b id="learningOverallPct">0%</b><span>overall</span></div></div>
+        <div id="learningWorkflow" class="learning-journey" aria-label="Your learning path"></div>
+      </div>
+      <div class="continue-strip panel compact-continue"><div><span class="eyebrow">Continue learning</span><h3 id="continueTitle">Finding your next item…</h3><p id="continueMeta" class="small-note"></p></div><button id="continueBtn" class="primary">Continue</button></div>
+      <div class="learning-section-head"><div><span class="eyebrow">What to complete</span><h3>Your learning checklist</h3></div><button class="text-btn" data-jump="review"><span id="learningReviewCount">0</span> concepts to review →</button></div>
+      <div id="learningChecklist" class="learning-checklist-cards"></div>
+    </section>
+
+    
+
+    <section class="view" id="notes">
+      <div class="section-intro compact-intro"><div><span class="eyebrow">Structured learning topics</span><h2>Topic Notes</h2><p>Study one concept at a time, mark your status, and continue with unfinished topics first.</p></div></div>
+      <div class="notes-toolbar">
+        <div class="segmented" id="notesMode"><button class="active" data-note-mode="study">Study View</button><button data-note-mode="all">Browse All</button><button data-note-mode="needs_review">Needs Review</button></div>
+        <div class="notes-toolbar-right"><select id="noteDomainSelect"><option value="">All domains</option><option>People</option><option>Process</option><option>Business Environment</option></select><input id="notesSearch" class="search compact-search" placeholder="Search notes…"/></div>
+      </div>
+      <div id="notesProgressLine" class="notes-progress-line"></div>
+      <div id="notesGrid" class="notes-study-view"></div>
+    </section>
+
+    <section class="view" id="diagrams">
+      <div class="section-intro compact-intro"><div><span class="eyebrow">Visual learning library</span><h2>Diagrams & Models</h2><p>One diagram at a time. Study Mode prioritizes items you have not reviewed or marked Needs Review.</p></div></div>
+      <div class="diagram-toolbar"><div class="segmented"><button class="active" data-diagram-mode="study">Study Mode</button><button data-diagram-mode="all">Browse All</button><button data-diagram-mode="needs_review">Needs Review</button></div><select id="diagramDomainSelect"><option value="">All domains</option><option>People</option><option>Process</option><option>Business Environment</option></select></div>
+      <div id="diagramGrid" class="diagram-single"></div>
+    </section>
+
+    <section class="view" id="tricky">
+      <div class="section-intro compact-intro"><div><span class="eyebrow">High-confusion distinctions</span><h2>Tricky Words</h2><p>Study the distinction, exam trap, and memory hook one pair at a time.</p></div></div>
+      <div class="tricky-toolbar"><div class="segmented tricky-mode"><button class="active" data-tricky-mode="study">Study View</button><button data-tricky-mode="all">Browse All</button><button data-tricky-mode="needs_review">Marked for Review</button><button data-tricky-mode="flashcards">Flashcards</button></div><input id="trickySearch" class="search compact-search" placeholder="Search terms…"/></div><div id="trickyGrid" class="tricky-grid"></div>
+    </section>
+
+    <section class="view practice-compact" id="practice">
+      <div class="practice-head">
+        <div><span class="eyebrow">Practice</span><h2>Build your session</h2><p>Choose what you want to practice. Submitted answers are saved automatically.</p></div>
+        <div id="practiceAvailability" class="practice-availability">Loading available questions…</div>
+      </div>
+      <div class="practice-progress-strip" aria-label="Practice progress">
+        <div class="practice-progress-main"><div class="practice-progress-title"><span>Practice progress</span><strong id="practiceCoverageText">0 / —</strong></div><div class="practice-progress-track"><i id="practiceCoverageBar" style="width:0%"></i></div></div>
+        <div class="practice-mini-stat"><span>Attempts</span><b id="practiceAttempts">0</b></div>
+        <div class="practice-mini-stat"><span>Correct</span><b id="practiceCorrect">0</b></div>
+        <div class="practice-mini-stat"><span>Accuracy</span><b id="practiceAccuracy">—</b></div>
+        <div class="practice-mini-stat"><span>Missed</span><b id="practiceMissed">0</b></div>
+        <button class="practice-progress-link" id="practiceViewProgress">Full report →</button>
+      </div>
+      <div class="builder-grid single"><div class="panel practice-builder-panel"><div class="form-grid"><div><label>Questions</label><input id="pCount" type="number" min="1" max="180" value="5"/></div><div><label>Domain</label><select id="pDomain"><option value="">All domains</option><option>People</option><option>Process</option><option>Business Environment</option></select></div><div><label>Approach</label><select id="pApproach"><option value="">All approaches</option><option>Predictive</option><option>Agile</option><option>Hybrid</option></select></div><div><label>Question type</label><select id="pType"><option value="">All question types</option><option value="single">Single answer</option><option value="multiple">Multiple response</option><option value="matching">Matching</option><option value="ordering">Ordering</option><option value="numeric">Numeric</option></select></div><div><label>Answer feedback</label><select id="pFeedback"><option value="immediate">Show answer after each question</option><option value="end">Show answers at the end</option></select></div><div><label>Optional timer (minutes)</label><input id="pTimer" type="number" min="1" max="240" placeholder="Off"/></div></div><div class="practice-focus-row"><label class="check compact-check"><input type="checkbox" id="pDiagram"/> Diagram/visual items only</label><label class="practice-focus"><span>Review focus</span><select id="pReviewFocus"><option value="">All questions</option><option value="incorrect_now">Incorrect now</option><option value="last_session_incorrect">Incorrect from last session</option><option value="ever_missed">Missed at least once</option><option value="bookmarked">Bookmarked</option></select></label></div><button id="createPractice" class="primary wide">Create practice session</button><div id="practiceMessage" class="message"></div></div></div>
+      <div id="sessionArea" class="session-area hidden"><div class="session-top"><div><span class="eyebrow">Practice session</span><h3 id="sessionProgress">Question 1</h3></div><div id="practiceTimer" class="exam-timer hidden">--:--</div></div><div id="questionCard" class="question-card"></div></div>
+    </section>
+
+    <section class="view" id="exams">
+      <div class="section-intro"><div><span class="eyebrow">Full-length assessment + concept mastery</span><h2>Mock & Mastery Exams</h2><p>Choose a true 180-question mock or a flexible Concept Mastery exam. Real Mock mode hides rules, hints, Coach, and explanations until the exam is submitted.</p></div></div>
+      <div class="panel exam-rules-panel"><span class="eyebrow">PMP exam rules · July 2026</span><h3>What to expect</h3><div class="exam-rules-grid"><div><b>180</b><span>questions</span></div><div><b>240</b><span>minutes</span></div><div><b>33%</b><span>People</span></div><div><b>41%</b><span>Process</span></div><div><b>26%</b><span>Business Environment</span></div></div><p>Approximately 40% of items use predictive approaches; the remaining 60% is divided between adaptive/agile and hybrid approaches. PMI includes two 10-minute breaks. Azielon uses pacing break prompts in its simulator; they are practice aids and not a claim about exact PMI break placement.</p></div>
+      <div id="examCatalog" class="exam-grid"></div>
+      <div id="examSetup" class="panel hidden"></div>
+      <div id="ruleReviewArea" class="panel hidden"></div>
+      <div id="examSessionArea" class="exam-session hidden">
+        <div class="exam-toolbar"><div><span id="examModePill" class="pill"></span><h3 id="examProgress">Question 1 of 180</h3></div><div class="exam-clock-wrap"><div id="examTimer" class="exam-timer">04:00:00</div><button id="examPauseBtn" class="secondary">Pause</button><button id="examBreakBtn" class="secondary hidden">Take 10-minute break</button></div></div>
+        <div id="examNavigator" class="exam-navigator"></div>
+        <div id="examQuestionCard" class="question-card"></div>
+        <div id="examMessage" class="message"></div>
+      </div>
+      <div id="examResults" class="hidden"></div>
+    </section>
+
+    <section class="view" id="review"><div class="section-intro compact-intro"><div><span class="eyebrow">Focused learning</span><h2>Concepts to Review</h2><p>One card per concept. Use the filters to see only items you marked, incorrect concepts, or study content needing review.</p></div></div><div class="review-filter-row segmented" id="conceptReviewFilters"><button class="active" data-review-filter="all">All</button><button data-review-filter="marked">Marked by me</button><button data-review-filter="incorrect">Incorrect</button><button data-review-filter="learning">Learning items</button></div><div id="conceptReviewSummary" class="concept-review-summary"></div><div id="reviewList" class="concept-review-grid"></div></section>
+
+    <section class="view" id="coach"><div class="coach-shell"><span class="eyebrow">Personalized learning support</span><h2>Azielon Coach</h2><p>Ask for an explanation, comparison, or help reasoning through a PMP scenario. The Coach uses the Azielon learning library available on this server.</p><div id="chat" class="chat"><div class="bubble ai"><b>Azielon Coach</b><p>Ask me to explain a concept, compare two terms, or help you reason through a PMP scenario.</p></div></div><form id="coachForm" class="chatbox"><textarea id="coachInput" placeholder="Ask Azielon Coach…"></textarea><button class="primary">Send</button></form></div></section>
+
+    <section class="view" id="progress">
+      <div class="section-intro compact-intro"><div><span class="eyebrow">Learner report card</span><h2>My Progress</h2><p>See what you have practiced, completed, and what to continue next.</p></div></div>
+      <div class="panel progress-plan-card"><div><span class="eyebrow">My current plan</span><h3 id="progressPlanName">Loading…</h3><p id="progressPlanDetail" class="small-note">Checking access dates…</p></div><button class="secondary" id="progressManagePlan">Manage plan</button></div>
+      <div class="progress-summary-strip"><div><span>Practice</span><b id="pPracticeAnswered">0</b><small>attempts</small></div><div><span>Correct</span><b id="pCorrect">0</b><small>all activity</small></div><div><span>Accuracy</span><b id="pAccuracy">—</b><small>overall</small></div><div><span>Concepts to review</span><b id="pReviewCount">0</b><small>current</small></div></div>
+      <div class="report-section-head"><div><span class="eyebrow">Exam report cards</span><h3>Your exams</h3></div><small id="progressBenchmarkNote"></small></div>
+      <div id="examReportCards" class="exam-report-cards"></div>
+      <div class="report-two-col"><div class="panel"><span class="eyebrow">Domain performance</span><div id="domainBars" class="bars"></div></div><div class="panel"><span class="eyebrow">Practice performance</span><div id="progressPracticeReport" class="practice-report-mini"></div></div></div>
+      <div class="panel"><span class="eyebrow">Recent submitted exams</span><div id="examHistory" class="exam-history"><p class="small-note">No completed exams yet.</p></div></div>
+      <span class="hidden" id="pAnswered">0</span><span class="hidden" id="pCompletedExams">0</span><span class="hidden" id="pExamAnswered">0</span><span class="hidden" id="pBookmarks">0</span>
+    </section>
+
+    <section class="view" id="billing">
+      <div class="section-intro"><div><span class="eyebrow">Choose your access plan</span><h2>Plans & Billing</h2><p>Select a plan to unlock Azielon learning content. Local test mode accepts dummy card details; production mode uses secure card checkout.</p></div></div>
+      <div id="billingStatus" class="billing-status panel"><span class="eyebrow">Current access</span><div id="entitlementBox"><p>Loading entitlement…</p></div></div>
+      <div class="provider-strip"><span id="stripeProvider" class="provider-pill">Secure card checkout: checking…</span></div>
+      <div id="billingMessage" class="message"></div>
+      <div id="memberFreeDrill" class="member-free-drill panel">
+        <div>
+          <span class="eyebrow">Included with your free account</span>
+          <h3>5-question starter drill</h3>
+          <p>Try Azielon’s reasoning-first question experience before choosing a paid plan.</p>
+        </div>
+        <button id="memberTrialBtn" class="primary" type="button">Start my 5 questions →</button>
+      </div>
+      <div id="planGrid" class="plan-grid"></div>
+      <div class="panel test-help" id="paymentModeHelp"><span class="eyebrow">Payment environment</span><h3 id="paymentModeTitle">Checking mode…</h3><p id="paymentModeText"></p></div>
+    </section>
+
+    <section class="view" id="admin">
+      <div class="section-intro"><div><span class="eyebrow">Instructor workspace</span><h2>Instructor Studio</h2><p>Create and edit learning content. Every save is written to PostgreSQL and recorded in the audit trail.</p></div><button id="adminAddBtn" class="primary">+ Add Question</button></div>
+      <div class="admin-action-grid" id="adminQuickActions">
+        <button class="admin-action" data-admin-add="questions"><b>+ Add Question</b><span>Create a new practice item</span></button>
+        <button class="admin-action" data-admin-add="notes"><b>+ Add Topic Note</b><span>Create learning notes</span></button>
+        <button class="admin-action" data-admin-add="diagrams"><b>+ Add Diagram</b><span>Add visual learning content</span></button>
+        <button class="admin-action" data-admin-add="tricky"><b>+ Add Tricky Words</b><span>Add a confusion pair</span></button><button class="admin-action" data-admin-open="registrations"><b>Program Registrations</b><span>View learners, dates, and payment status</span></button>
+      </div>
+      <div class="filter-pills admin-tabs" id="adminTabs"><button class="active" data-admin-kind="questions">Questions</button><button data-admin-kind="notes">Topic Notes</button><button data-admin-kind="diagrams">Diagrams</button><button data-admin-kind="tricky">Tricky Words</button><button data-admin-kind="registrations">Program Registrations</button></div>
+      <div class="panel admin-toolbar"><input id="adminSearch" class="search" placeholder="Search…"/><span id="adminMessage" class="message"></span></div>
+      <div id="adminTable" class="admin-table"></div>
+      <div class="panel"><span class="eyebrow">Audit trail</span><div id="auditList" class="queue"></div></div>
+    </section>
+  </main>
+</div>
+
+<div id="zoomModal" class="modal hidden"><div class="modal-backdrop" data-close-modal="zoomModal"></div><div class="modal-card zoom-card"><div class="modal-head"><h3 id="zoomTitle">Diagram</h3><button class="ghost modal-x" data-close-modal="zoomModal">×</button></div><div class="zoom-controls"><button id="zoomOut" class="secondary">−</button><span id="zoomPct">100%</span><button id="zoomIn" class="secondary">+</button><button id="zoomReset" class="secondary">Fit</button><button id="zoomFull" class="secondary">Full screen</button></div><div id="zoomBody" class="zoom-body"></div></div></div>
+<div id="editorModal" class="modal hidden"><div class="modal-backdrop" data-close-modal="editorModal"></div><div class="modal-card editor-card"><div class="modal-head"><h3 id="editorTitle">Edit content</h3><button class="ghost modal-x" data-close-modal="editorModal">×</button></div><form id="editorForm" class="editor-form"></form></div></div>
+
+<div id="testPaymentModal" class="modal hidden">
+  <div class="modal-backdrop" data-close-modal="testPaymentModal"></div>
+  <div class="modal-card payment-card">
+    <div class="modal-head"><h3 id="testPaymentTitle">Test Card Payment</h3><button class="ghost modal-x" data-close-modal="testPaymentModal">×</button></div>
+    <form id="testPaymentForm" class="editor-form">
+      <input type="hidden" id="testPlanCode">
+      <input type="hidden" id="testPaymentMethod" value="card">
+      <div id="testCardFields">
+        <label>Dummy card number<input id="testCardNumber" value="4242 4242 4242 4242" autocomplete="off"></label>
+        <div class="editor-grid">
+          <label>Expiration<input id="testCardExpiry" value="12/30" autocomplete="off"></label>
+          <label>CVV<input id="testCardCvv" value="123" autocomplete="off"></label>
+        </div>
+      </div>
+      <div id="testPaymentMessage" class="message"></div>
+      <div class="editor-actions">
+        <button type="button" class="secondary" data-close-modal="testPaymentModal">Cancel</button>
+        <button type="submit" class="primary">Complete test payment</button>
+      </div>
+    </form>
+  </div>
+</div>
+<script src="/static/app.js?v=4.3.6"></script>
+</body>
+</html>
