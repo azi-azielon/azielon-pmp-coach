@@ -1077,7 +1077,7 @@ async def billing_helcim_complete(request: Request, user: User = Depends(current
     body=await request.json()
     return helcim_complete_checkout(db,user,str(body.get('order_id') or ''),body.get('response') or {})
 
-@app.post('/api/billing/webhook')
+@app.post('/api/billing/helcim/webhook')
 async def billing_helcim_webhook(request: Request, db: Session = Depends(get_db)):
     raw=await request.body()
     try: body=json.loads(raw.decode('utf-8'))
