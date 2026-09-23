@@ -1,4 +1,4 @@
-import os, json, uuid, time, hmac, hashlib
+import os, json, uuid, time, hmac, hashlib, re
 from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import Optional
@@ -16,12 +16,12 @@ def utcnow():
 
 def seed_billing_plans(db: Session):
     plans = [
-        ('full_weekly','full','AI Full Certification','weekly',7,2900),
-        ('full_monthly','full','AI Full Certification','monthly',30,6900),
-        ('full_3month','full','AI Full Certification','3-month',90,14900),
-        ('concept_weekly','concept','AI Concept + Exam Prep','weekly',7,1900),
-        ('concept_monthly','concept','AI Concept + Exam Prep','monthly',30,4500),
-        ('concept_3month','concept','AI Concept + Exam Prep','3-month',90,9900),
+        ('full_weekly','full','Full PMP Prep','weekly',7,2900),
+        ('full_monthly','full','Full PMP Prep','monthly',30,6900),
+        ('full_3month','full','Full PMP Prep','3-month',90,14900),
+        ('concept_weekly','concept','Concept + Exam Prep','weekly',7,1900),
+        ('concept_monthly','concept','Concept + Exam Prep','monthly',30,4500),
+        ('concept_3month','concept','Concept + Exam Prep','3-month',90,9900),
         ('drills_weekly','drills','Exam Drills & Simulator','weekly',7,1200),
         ('drills_monthly','drills','Exam Drills & Simulator','monthly',30,2900),
         ('drills_3month','drills','Exam Drills & Simulator','3-month',90,6900),
@@ -381,3 +381,367 @@ def access_payload(user: User, db: Session):
         'features': sorted(feature_set(user,db)),
         'feature_matrix': {k: sorted(v) for k,v in FEATURE_MATRIX.items()}
     }
+
+
+# --- Autobooks payment-link integration ---
+def autobooks_checkout(db: Session, user: User, plan_code: str):
+    plan=db.get(BillingPlan, plan_code)
+    if not plan or not plan.active:
+        raise HTTPException(404,'Plan not found')
+    payment_url=os.getenv('AUTOBOOKS_PAYMENT_URL','').strip()
+    if not payment_url:
+        raise HTTPException(503,'Autobooks payment link is not configured')
+    order=create_local_order(db,user,plan,'autobooks')
+    reference='PMP-'+order.id.replace('-','')[:8].upper()
+    order.provider_order_id=reference
+    order.raw_json=json.dumps({'payer_name':user.name,'payer_email':user.email,'payment_url':payment_url,'reference':reference})
+    db.commit()
+    return {'order_id':order.id,'reference':reference,'checkout_url':payment_url,'amount_cents':plan.amount_cents,'currency':plan.currency,'plan_name':plan.name,'cadence':plan.cadence,'payer_name':user.name,'payer_email':user.email}
+
+
+def autobooks_order_status(db: Session, user: User, order_id: str):
+    order=db.query(CheckoutOrder).filter(CheckoutOrder.id==order_id,CheckoutOrder.user_id==user.id,CheckoutOrder.provider=='autobooks').first()
+    if not order:
+        raise HTTPException(404,'Autobooks order not found')
+    return {'order_id':order.id,'reference':order.provider_order_id,'status':order.status,'paid':bool(order.entitlement_granted),'entitlement':entitlement_payload(current_entitlement(db,user.id)) if order.entitlement_granted else None}
+
+
+def process_autobooks_confirmation(db: Session, payload: dict, supplied_secret: str):
+    expected=os.getenv('AUTOBOOKS_WEBHOOK_SECRET','').strip()
+    if not expected:
+        raise HTTPException(503,'Autobooks confirmation webhook is not configured')
+    if not supplied_secret or not hmac.compare_digest(str(supplied_secret), expected):
+        raise HTTPException(401,'Unauthorized')
+    event_id=str(payload.get('event_id') or payload.get('message_id') or ('autobooks-'+str(uuid.uuid4()))).strip()
+    existing=db.query(PaymentWebhookEvent).filter(PaymentWebhookEvent.provider=='autobooks',PaymentWebhookEvent.event_id==event_id).first()
+    if existing:
+        return {'received':True,'duplicate':True}
+    reference=str(payload.get('reference') or '').strip().upper()
+    payer_email=str(payload.get('payer_email') or '').strip().lower()
+    payer_name=str(payload.get('payer_name') or '').strip().lower()
+    try: amount_cents=int(payload.get('amount_cents') or 0)
+    except Exception: amount_cents=0
+    status=str(payload.get('status') or 'submitted').strip().lower()
+    rec=PaymentWebhookEvent(provider='autobooks',event_id=event_id,event_type='payment.'+status,payload_json=json.dumps(payload),status='received')
+    db.add(rec); db.commit()
+    order=None
+    if reference:
+        order=db.query(CheckoutOrder).filter(CheckoutOrder.provider=='autobooks',CheckoutOrder.provider_order_id==reference).order_by(CheckoutOrder.created_at.desc()).first()
+    if not order and amount_cents:
+        candidates=db.query(CheckoutOrder).filter(CheckoutOrder.provider=='autobooks',CheckoutOrder.amount_cents==amount_cents,CheckoutOrder.status.in_(['created','pending'])).order_by(CheckoutOrder.created_at.desc()).limit(20).all()
+        for candidate in candidates:
+            try: meta=json.loads(candidate.raw_json or '{}')
+            except Exception: meta={}
+            if (payer_email and str(meta.get('payer_email','')).lower()==payer_email) or (payer_name and str(meta.get('payer_name','')).strip().lower()==payer_name):
+                order=candidate; break
+    if not order:
+        rec.status='unmatched'; rec.processed_at=utcnow(); db.commit()
+        return {'received':True,'matched':False}
+    if status in ('submitted','incoming','paid','deposited','completed','succeeded'):
+        order.status='paid'; order.provider_capture_id=event_id
+        try: prior=json.loads(order.raw_json or '{}')
+        except Exception: prior={}
+        order.raw_json=json.dumps({**prior,'autobooks_confirmation':payload})
+        ent=grant_entitlement(db,order)
+        rec.status='processed'; rec.processed_at=utcnow(); db.commit()
+        return {'received':True,'matched':True,'paid':True,'order_id':order.id,'entitlement':entitlement_payload(ent)}
+    order.status=status or order.status
+    rec.status='processed'; rec.processed_at=utcnow(); db.commit()
+    return {'received':True,'matched':True,'paid':False,'order_id':order.id,'status':order.status}
+
+
+# --- Helcim / HelcimPay.js integration ---
+HELCIM_API_BASE = 'https://api.helcim.com/v2'
+
+
+def _helcim_token():
+    token=os.getenv('HELCIM_API_TOKEN','').strip()
+    if not token:
+        raise HTTPException(503,'Helcim is not configured')
+    return token
+
+
+def _helcim_headers(extra=None):
+    h={'accept':'application/json','content-type':'application/json','api-token':_helcim_token()}
+    if extra: h.update(extra)
+    return h
+
+
+def helcim_ready():
+    return bool(os.getenv('HELCIM_API_TOKEN','').strip())
+
+
+def _helcim_plan_id(plan_code: str):
+    key='HELCIM_PLAN_'+plan_code.upper().replace('-','_')+'_ID'
+    value=os.getenv(key,'').strip()
+    if not value:
+        raise HTTPException(503,f'Helcim recurring plan is not configured for {plan_code}')
+    try: return int(value)
+    except Exception: raise HTTPException(503,f'Invalid {key}')
+
+
+def _order_meta(order: CheckoutOrder):
+    try: return json.loads(order.raw_json or '{}')
+    except Exception: return {}
+
+
+def _save_order_meta(db: Session, order: CheckoutOrder, meta: dict):
+    order.raw_json=json.dumps(meta, separators=(',',':'))
+    db.commit()
+
+
+def _helcim_is_recurring(plan: BillingPlan):
+    return plan.cadence in ('weekly','monthly')
+
+
+def _helcim_payment_method_from_response(data: dict):
+    if data.get('bankToken') or str(data.get('type','')).upper() in ('WITHDRAWAL','ACH'):
+        return 'bank'
+    return 'card'
+
+
+def _helcim_response_accepted(data: dict):
+    status=str(data.get('status') or '').upper()
+    status_auth=str(data.get('statusAuth') or '').upper()
+    status_clearing=str(data.get('statusClearing') or '').upper()
+    if status in ('APPROVED','APPROVAL'):
+        return True
+    # ACH is asynchronous. HelcimPay SUCCESS may initially report PENDING/OPENED.
+    if status_auth in ('APPROVED','PENDING','IN_PROGRESS') and status_clearing not in ('REJECTED','RETURNED'):
+        return True
+    return False
+
+
+def _helcim_validate_checkout_hash(meta: dict, payload: dict):
+    secret=str(meta.get('secret_token') or '')
+    received=str(payload.get('hash') or '')
+    data=payload.get('data') or {}
+    if not secret or not received or not isinstance(data,dict):
+        raise HTTPException(400,'Incomplete Helcim checkout response')
+    # Helcim hashes compact JSON(data) + secretToken with SHA-256.
+    cleaned=json.dumps(data,separators=(',',':'),ensure_ascii=True)
+    calculated=hashlib.sha256((cleaned+secret).encode()).hexdigest()
+    if not hmac.compare_digest(calculated,received):
+        raise HTTPException(400,'Invalid Helcim checkout response')
+    return data
+
+
+def helcim_start_checkout(db: Session, user: User, plan_code: str):
+    plan=db.get(BillingPlan,plan_code)
+    if not plan or not plan.active:
+        raise HTTPException(404,'Plan not found')
+    recurring=_helcim_is_recurring(plan)
+    order=create_local_order(db,user,plan,'helcim')
+    amount=round(plan.amount_cents/100,2)
+    customer_request={'contactName': user.name or user.email}
+    body={
+        'paymentType':'verify' if recurring else 'purchase',
+        'amount':0 if recurring else amount,
+        'currency':plan.currency,
+        'paymentMethod':'cc-ach',
+        'setAsDefaultPaymentMethod':1,
+        'confirmationScreen':True,
+        'displayContactFields':1,
+        'language':'en',
+        'customerRequest':customer_request,
+        'customStyling':{'ctaButtonText':'subscribe' if recurring else 'pay'}
+    }
+    if not recurring and os.getenv('HELCIM_FEE_SAVER','true').strip().lower() in ('1','true','yes','on'):
+        body['hasConvenienceFee']=1
+    try:
+        r=httpx.post(HELCIM_API_BASE+'/helcim-pay/initialize',headers=_helcim_headers(),json=body,timeout=30)
+        if r.status_code>=400:
+            raise RuntimeError(r.text)
+        hp=r.json()
+        checkout_token=hp.get('checkoutToken'); secret_token=hp.get('secretToken')
+        if not checkout_token or not secret_token:
+            raise RuntimeError('Helcim response did not include checkout tokens')
+    except Exception as e:
+        order.status='failed'; order.raw_json=json.dumps({'error':str(e)}); db.commit()
+        raise HTTPException(502,f'Unable to initialize Helcim checkout: {e}')
+    meta={
+        'checkout_token':checkout_token,
+        'secret_token':secret_token,
+        'recurring':recurring,
+        'plan_code':plan.code,
+        'payer_email':user.email,
+        'payer_name':user.name,
+        'amount_cents':plan.amount_cents,
+        'currency':plan.currency,
+    }
+    order.provider_order_id=checkout_token
+    order.status='pending'
+    _save_order_meta(db,order,meta)
+    return {
+        'order_id':order.id,
+        'checkout_token':checkout_token,
+        'recurring':recurring,
+        'plan_code':plan.code,
+        'plan_name':plan.name,
+        'cadence':plan.cadence,
+        'amount_cents':plan.amount_cents,
+        'currency':plan.currency,
+    }
+
+
+def _find_subscription_obj(response):
+    if isinstance(response,dict):
+        for key in ('subscriptions','data','items'):
+            v=response.get(key)
+            if isinstance(v,list) and v and isinstance(v[0],dict): return v[0]
+            if isinstance(v,dict) and ('id' in v or 'subscriptionId' in v): return v
+        if 'id' in response and ('paymentPlanId' in response or 'customerCode' in response): return response
+    if isinstance(response,list) and response and isinstance(response[0],dict): return response[0]
+    return None
+
+
+def _create_helcim_subscription(plan: BillingPlan, customer_code: str, payment_method: str, order_id: str):
+    plan_id=_helcim_plan_id(plan.code)
+    idem=('azi'+re.sub(r'[^A-Za-z0-9]','',order_id))[:25].ljust(25,'0')
+    sub={
+        'paymentPlanId':plan_id,
+        'customerCode':customer_code,
+        'activationDate':utcnow().date().isoformat(),
+        'paymentMethod':payment_method,
+    }
+    r=httpx.post(HELCIM_API_BASE+'/subscriptions',headers=_helcim_headers({'idempotency-key':idem}),json={'subscriptions':[sub]},timeout=30)
+    if r.status_code>=400:
+        raise HTTPException(502,'Unable to create Helcim subscription: '+r.text[:800])
+    return r.json()
+
+
+def _extend_recurring_entitlement(db: Session, order: CheckoutOrder, successful_cycles: int=1):
+    plan=db.get(BillingPlan,order.plan_code)
+    if not plan: return None
+    meta=_order_meta(order)
+    already=max(0,int(meta.get('cycles_granted') or 0))
+    target=max(already,int(successful_cycles or 0))
+    if target<=already:
+        return current_entitlement(db,order.user_id)
+    cycles_to_add=target-already
+    ent=db.query(Entitlement).filter(Entitlement.source_order_id==order.id).first()
+    now=utcnow()
+    if not ent:
+        ent=Entitlement(user_id=order.user_id,tier_code=plan.tier_code,plan_code=plan.code,source_order_id=order.id,provider='helcim',status='active',starts_at=now,ends_at=now+timedelta(days=plan.duration_days*cycles_to_add))
+        db.add(ent)
+    else:
+        base=ent.ends_at if ent.ends_at and ent.ends_at>now else now
+        ent.ends_at=base+timedelta(days=plan.duration_days*cycles_to_add)
+        ent.status='active'
+    order.entitlement_granted=True; order.status='paid'; order.paid_at=order.paid_at or now
+    meta['cycles_granted']=target
+    order.raw_json=json.dumps(meta,separators=(',',':'))
+    db.commit(); db.refresh(ent)
+    return ent
+
+
+def helcim_complete_checkout(db: Session, user: User, order_id: str, response_payload: dict):
+    order=db.query(CheckoutOrder).filter(CheckoutOrder.id==order_id,CheckoutOrder.user_id==user.id,CheckoutOrder.provider=='helcim').first()
+    if not order: raise HTTPException(404,'Helcim order not found')
+    meta=_order_meta(order)
+    data=_helcim_validate_checkout_hash(meta,response_payload)
+    plan=db.get(BillingPlan,order.plan_code)
+    if not plan: raise HTTPException(500,'Billing plan not found')
+    customer_code=str(data.get('customerCode') or '').strip()
+    if not customer_code:
+        raise HTTPException(400,'Helcim did not return a customer code')
+    meta['helcim_customer_code']=customer_code
+    meta['helcim_checkout_response']=data
+    order.provider_capture_id=str(data.get('transactionId') or '') or None
+    if not meta.get('recurring'):
+        try:
+            actual=int(round(float(data.get('amount') or 0)*100))
+        except Exception: actual=0
+        if actual != plan.amount_cents or str(data.get('currency') or '').upper()!=plan.currency.upper():
+            raise HTTPException(400,'Helcim payment amount did not match selected plan')
+        if not _helcim_response_accepted(data):
+            raise HTTPException(402,'Helcim payment was not accepted')
+        _save_order_meta(db,order,meta)
+        ent=grant_entitlement(db,order)
+        return {'paid':True,'recurring':False,'entitlement':entitlement_payload(ent)}
+    payment_method=_helcim_payment_method_from_response(data)
+    sub_response=_create_helcim_subscription(plan,customer_code,payment_method,order.id)
+    sub=_find_subscription_obj(sub_response) or {}
+    sub_id=sub.get('id') or sub.get('subscriptionId')
+    if not sub_id:
+        raise HTTPException(502,'Helcim subscription was created but no subscription id was returned')
+    order.provider_order_id=str(sub_id)
+    meta.update({'subscription_id':sub_id,'payment_method':payment_method,'subscription_response':sub_response})
+    times_billed=int(sub.get('timesBilled') or 0)
+    # Subscription plans are configured to bill on signup. A successful first bill activates access.
+    if times_billed < 1:
+        payments=sub.get('payments') or []
+        approved=[p for p in payments if str(p.get('status','')).lower()=='approved']
+        times_billed=len(approved)
+    _save_order_meta(db,order,meta)
+    ent=_extend_recurring_entitlement(db,order,times_billed) if times_billed else None
+    return {'paid':bool(ent),'recurring':True,'subscription_id':sub_id,'status':sub.get('status','active'),'entitlement':entitlement_payload(ent)}
+
+
+def sync_helcim_subscriptions(db: Session, user: User):
+    if not helcim_ready(): return
+    orders=db.query(CheckoutOrder).filter(CheckoutOrder.user_id==user.id,CheckoutOrder.provider=='helcim').order_by(CheckoutOrder.created_at.desc()).limit(10).all()
+    for order in orders:
+        meta=_order_meta(order)
+        sid=meta.get('subscription_id')
+        if not sid: continue
+        try:
+            r=httpx.get(f'{HELCIM_API_BASE}/subscriptions/{sid}',headers=_helcim_headers(),params={'includeSubObjects':'true'},timeout=12)
+            if r.status_code>=400: continue
+            sub=r.json(); status=str(sub.get('status') or '').lower()
+            times=int(sub.get('timesBilled') or 0)
+            if times: _extend_recurring_entitlement(db,order,times)
+            ent=db.query(Entitlement).filter(Entitlement.source_order_id==order.id).first()
+            if ent and status in ('cancelled','term_ended') and ent.ends_at<=utcnow(): ent.status='expired'; db.commit()
+            meta=_order_meta(order); meta['subscription_status']=status; meta['times_billed_seen']=times; order.raw_json=json.dumps(meta,separators=(',',':')); db.commit()
+        except Exception:
+            continue
+
+
+def _verify_helcim_webhook(request: Request, raw_body: bytes):
+    token=os.getenv('HELCIM_WEBHOOK_VERIFIER_TOKEN','').strip()
+    if not token: raise HTTPException(503,'Helcim webhook verifier token is not configured')
+    wid=request.headers.get('webhook-id',''); ts=request.headers.get('webhook-timestamp',''); sig=request.headers.get('webhook-signature','')
+    if not wid or not ts or not sig: raise HTTPException(400,'Missing Helcim webhook signature headers')
+    try: key=__import__('base64').b64decode(token)
+    except Exception: raise HTTPException(503,'Invalid Helcim webhook verifier token')
+    signed=wid+'.'+ts+'.'+raw_body.decode('utf-8')
+    calc=__import__('base64').b64encode(hmac.new(key,signed.encode(),hashlib.sha256).digest()).decode()
+    candidates=[]
+    for part in sig.split():
+        if ',' in part: candidates.append(part.split(',',1)[1])
+        else: candidates.append(part)
+    if not any(hmac.compare_digest(calc,c) for c in candidates): raise HTTPException(401,'Invalid Helcim webhook signature')
+    return wid
+
+
+def process_helcim_webhook(db: Session, request: Request, raw_body: bytes, body: dict):
+    event_id=_verify_helcim_webhook(request,raw_body)
+    existing=db.query(PaymentWebhookEvent).filter(PaymentWebhookEvent.provider=='helcim',PaymentWebhookEvent.event_id==event_id).first()
+    if existing: return {'received':True,'duplicate':True}
+    rec=PaymentWebhookEvent(provider='helcim',event_id=event_id,event_type=str(body.get('type') or ''),payload_json=raw_body.decode('utf-8'),status='received')
+    db.add(rec); db.commit()
+    # Helcim sends the transaction id; fetch details server-side before changing access.
+    if body.get('type')=='cardTransaction' and body.get('id'):
+        try:
+            r=httpx.get(f"{HELCIM_API_BASE}/card-transactions/{body.get('id')}",headers=_helcim_headers(),timeout=20)
+            if r.status_code<400:
+                tx=r.json(); customer=str(tx.get('customerCode') or '')
+                amount_cents=int(round(float(tx.get('amount') or 0)*100))
+                if str(tx.get('status') or '').upper() in ('APPROVED','APPROVAL') and customer:
+                    orders=db.query(CheckoutOrder).filter(CheckoutOrder.provider=='helcim').order_by(CheckoutOrder.created_at.desc()).limit(100).all()
+                    for order in orders:
+                        meta=_order_meta(order); plan=db.get(BillingPlan,order.plan_code)
+                        if not plan or not meta.get('recurring'): continue
+                        if str(meta.get('helcim_customer_code') or '')==customer and plan.amount_cents==amount_cents:
+                            # Fetch subscription so timesBilled is authoritative and idempotent.
+                            sid=meta.get('subscription_id')
+                            if sid:
+                                sr=httpx.get(f'{HELCIM_API_BASE}/subscriptions/{sid}',headers=_helcim_headers(),params={'includeSubObjects':'true'},timeout=12)
+                                if sr.status_code<400:
+                                    sub=sr.json(); _extend_recurring_entitlement(db,order,int(sub.get('timesBilled') or 0))
+                            break
+        except Exception as e:
+            rec.status='error'; rec.payload_json=json.dumps({'event':body,'error':str(e)}); db.commit(); return {'received':True,'processed':False}
+    rec.status='processed'; rec.processed_at=utcnow(); db.commit()
+    return {'received':True,'processed':True}

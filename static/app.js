@@ -39,7 +39,7 @@ function showView(id){
   if(state.examLock&&id!=='exams'){alert('A Real Mock exam is active. Submit or finish the exam before opening study content.');id='exams'}
   const needed=featureForView(id);
   if(needed&&!hasFeature(needed)){showView('billing');$('#billingMessage').textContent='This feature is not included in your current plan.';return}
-  state.currentView=id;$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));$('#pageTitle').textContent=({dashboard:'My Learning',notes:'Topic Notes',diagrams:'Diagrams & Models',tricky:'Tricky Words',practice:'Practice',review:'Concepts to Review',coach:'AI Coach',progress:'My Progress',billing:'Plans & Billing',admin:'Instructor Studio',exams:(state.examKind==='mock'?'Full Mock Exams':'Concept Mastery Exams')})[id]||'Azielon';updateContentProtection(id);window.scrollTo({top:0,behavior:'smooth'});if(id==='progress'||id==='dashboard')loadProgress();if(id==='review')loadConceptReview();if(id==='billing')loadBilling();if(id==='admin')loadAdmin();if(id==='exams')loadExamCatalog();if(id==='practice'){loadPracticeAvailability();loadProgress()}}
+  state.currentView=id;$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));$('#pageTitle').textContent=({dashboard:'My Learning',notes:'Topic Notes',diagrams:'Diagrams & Models',tricky:'Tricky Words',practice:'Practice',review:'Concepts to Review',coach:'AI Coach',progress:'My Progress',billing:'Plans & Pricing',admin:'Instructor Studio',exams:(state.examKind==='mock'?'Full Mock Exams':'Concept Mastery Exams')})[id]||'Azielon';updateContentProtection(id);window.scrollTo({top:0,behavior:'smooth'});if(id==='progress'||id==='dashboard')loadProgress();if(id==='review')loadConceptReview();if(id==='billing')loadBilling();if(id==='admin')loadAdmin();if(id==='exams')loadExamCatalog();if(id==='practice'){loadPracticeAvailability();loadProgress()}}
 $$('#nav button').forEach(b=>b.onclick=()=>{if(b.dataset.examKind)state.examKind=b.dataset.examKind;showView(b.dataset.view)});$$('[data-jump]').forEach(b=>b.onclick=()=>showView(b.dataset.jump));
 if($('#createPractice'))$('#createPractice').onclick=createPracticeSession;
 bindSmartPracticeBuilder();
@@ -454,26 +454,71 @@ function openEditor(isNew,item){const f=$('#editorForm');$('#editorTitle').textC
 function parseJsonField(fd,name,fallback){const v=fd.get(name);if(v==null||v==='')return fallback;try{return JSON.parse(v)}catch{throw new Error(`${name} must contain valid JSON`)}}
 async function saveEditor(e,isNew,item){e.preventDefault();const fd=new FormData(e.currentTarget);try{let payload,path;if(state.adminKind==='questions'){payload={id:fd.get('id'),stem:fd.get('stem'),type:fd.get('type'),domain:fd.get('domain')||null,delivery_approach:fd.get('delivery_approach')||null,difficulty:fd.get('difficulty')||null,primary_concept:fd.get('primary_concept')||null,options:parseJsonField(fd,'options',[]),left_items:parseJsonField(fd,'left_items',[]),answer:parseJsonField(fd,'answer',{}),explanation:parseJsonField(fd,'explanation',{}),visual:parseJsonField(fd,'visual',null),review_status:fd.get('review_status'),lifecycle_state:fd.get('lifecycle_state'),instructor_approved:fd.get('instructor_approved')==='on'};path=isNew?'/api/admin/questions':`/api/admin/questions/${encodeURIComponent(item.id)}`}else if(state.adminKind==='notes'){payload={id:fd.get('id'),domain:fd.get('domain')||null,title:fd.get('title'),body:parseJsonField(fd,'body',{})};path=isNew?'/api/admin/notes':`/api/admin/notes/${encodeURIComponent(item.id)}`}else if(state.adminKind==='diagrams'){payload={id:fd.get('id'),domain:fd.get('domain')||null,title:fd.get('title'),category:fd.get('category')||null,image_file:fd.get('image_file'),metadata:parseJsonField(fd,'metadata',{})};path=isNew?'/api/admin/diagrams':`/api/admin/diagrams/${encodeURIComponent(item.id)}`}else{payload={id:fd.get('id'),left:fd.get('left'),right:fd.get('right'),tags:parseJsonField(fd,'tags',[]),body:parseJsonField(fd,'body',{})};path=isNew?'/api/admin/tricky':`/api/admin/tricky/${encodeURIComponent(item.id)}`}await api(path,{method:isNew?'POST':'PATCH',body:JSON.stringify(payload)});$('#editorModal').classList.add('hidden');$('#adminMessage').textContent='Saved.';await Promise.all([loadAdmin(),loadNotes(),loadDiagrams(),loadTricky()])}catch(err){$('#editorMessage').textContent=err.message}}
 
-async function loadBilling(prefetched=null){if(!state.token)return;try{const catalog=await api('/api/billing/catalog');const bm=prefetched||await api('/api/billing/me');state.hasAccess=!!bm.has_access;state.paymentMode=bm.payment_mode||'test';state.tierCode=bm.tier_code||bm.entitlement?.tier_code||null;state.features=bm.features||[];applyAccessNavigation();renderBilling(catalog,bm)}catch(err){const m=$('#billingMessage');if(m)m.textContent=err.message}}
-function money(cents,currency='USD'){return new Intl.NumberFormat('en-US',{style:'currency',currency}).format(cents/100)}
-function renderBilling(catalog,bm){
-  const ent=bm.entitlement,test=bm.payment_mode==='test';
-  $('#stripeProvider').textContent=test?'Card: local test mode':'Stripe Checkout: '+(bm.providers.stripe?'available':'not configured');$('#stripeProvider').className='provider-pill '+(test||bm.providers.stripe?'on':'off');
-  $('#paymentModeTitle').textContent=test?'TEST mode — dummy card accepted':'Stripe hosted checkout';
-  $('#paymentModeText').textContent=test?'Use dummy card details for local testing. No external processor is contacted.':'PMP Practice Coach tier payments are completed on Stripe Checkout. Azielon does not store raw card details.';
-  $('#entitlementBox').innerHTML=ent?`<div class="entitlement-active"><div><b>${escapeHtml(ent.tier_code.toUpperCase())} access active</b><p>Plan: ${escapeHtml(ent.plan_code)} · Provider: ${escapeHtml(ent.provider)}</p></div><div><span class="pill">Expires</span><p>${new Date(ent.ends_at).toLocaleString()}</p></div></div>`:'<p>Select a plan below to unlock the learning content.</p>';
-  const groups={};catalog.forEach(p=>(groups[p.tier_code]=groups[p.tier_code]||[]).push(p));const order=['full','concept','drills'];
-  $('#planGrid').innerHTML=order.filter(k=>groups[k]).map(k=>{const plans=groups[k];const base=plans.find(x=>x.cadence==='monthly')||plans[0];return `<article class="plan-card"><span class="eyebrow">${escapeHtml(k)}</span><h3>${escapeHtml(base.name)}</h3><p>Select an access period.</p><ul>${(base.features||[]).map(f=>`<li>${escapeHtml(f)}</li>`).join('')}</ul>${plans.sort((a,b)=>a.duration_days-b.duration_days).map(p=>`<div class="billing-option"><div class="price">${money(p.amount_cents,p.currency)} <small>· ${escapeHtml(p.cadence)}</small></div><div class="billing-actions"><button class="primary stripe-buy" data-plan="${escapeHtml(p.code)}" ${(!test&&!bm.providers.stripe)?'disabled':''}>${test?'Test card payment':'Pay securely with Stripe'}</button></div></div>`).join('')}</article>`}).join('');
-  $$('.stripe-buy').forEach(b=>b.onclick=()=>test?openTestPayment(b.dataset.plan,'card'):startStripe(b.dataset.plan));
+async function loadBilling(prefetched=null){
+  if(!state.token)return;
+  try{
+    const catalog=await api('/api/billing/catalog');
+    const bm=prefetched||await api('/api/billing/me');
+    state.hasAccess=!!bm.has_access;
+    state.paymentMode=bm.payment_mode||'prod';
+    state.tierCode=bm.tier_code||bm.entitlement?.tier_code||null;
+    state.features=bm.features||[];
+    applyAccessNavigation();
+    renderBilling(catalog,bm);
+  }catch(err){const m=$('#billingMessage');if(m)m.textContent=err.message;}
 }
-function openTestPayment(plan,method='card'){$('#testPlanCode').value=plan;$('#testPaymentMethod').value='card';$('#testPaymentTitle').textContent='Test Card Payment';$('#testPaymentMessage').textContent='';$('#testPaymentModal').classList.remove('hidden');$$('#testPaymentModal [data-close-modal]').forEach(b=>b.onclick=()=>$('#testPaymentModal').classList.add('hidden'))}
-$('#testPaymentForm').onsubmit=async e=>{e.preventDefault();const details={card_number:$('#testCardNumber').value,expiry:$('#testCardExpiry').value,cvv:$('#testCardCvv').value};try{$('#testPaymentMessage').textContent='Completing test purchase…';const r=await api('/api/billing/test/checkout',{method:'POST',body:JSON.stringify({plan_code:$('#testPlanCode').value,method:'card',details})});if(r.paid){$('#testPaymentModal').classList.add('hidden');state.hasAccess=true;await loadBilling();applyAccessNavigation();$('#billingMessage').textContent='Test purchase complete. Your learning access is active.';showView('dashboard')}}catch(err){$('#testPaymentMessage').textContent=err.message}}
-async function startStripe(plan){$('#billingMessage').textContent='Creating checkout…';try{const r=await api('/api/billing/stripe/checkout-session',{method:'POST',body:JSON.stringify({plan_code:plan})});location.href=r.checkout_url}catch(err){$('#billingMessage').textContent=err.message}}
-async function handleBillingReturn(){if(!state.token)return;const qs=new URLSearchParams(location.search);const mode=qs.get('billing');if(!mode)return;try{let paid=false;if(mode==='stripe-success'){const sid=qs.get('session_id');if(sid){showView('billing');$('#billingMessage').textContent='Confirming payment…';const r=await api('/api/billing/stripe/confirm?session_id='+encodeURIComponent(sid));paid=!!r.paid;$('#billingMessage').textContent=paid?'Payment confirmed. Access is active.':'Checkout returned, but payment is not marked paid yet.'}}else if(mode==='cancelled'){showView('billing');$('#billingMessage').textContent='Checkout was cancelled.'}if(paid){state.hasAccess=true;await loadBilling();applyAccessNavigation();showView('dashboard')}}catch(err){showView('billing');$('#billingMessage').textContent=err.message}history.replaceState({},'',location.pathname)}
+function money(cents,currency='USD'){return new Intl.NumberFormat('en-US',{style:'currency',currency,maximumFractionDigits:0}).format(cents/100)}
+function cadenceLabel(c){return c==='3-month'?'3-Month Access':c==='weekly'?'Weekly':'Monthly'}
+function renewalLabel(c){return c==='weekly'?'Renews weekly until canceled':c==='monthly'?'Renews monthly until canceled':'One-time · 90 days of access'}
+function renderBilling(catalog,bm){
+  const groups={};catalog.forEach(p=>(groups[p.tier_code]=groups[p.tier_code]||[]).push(p));
+  const order=['full','concept','drills'];const helcimReady=!!bm.providers?.helcim;
+  $('#planGrid').innerHTML=order.filter(k=>groups[k]).map(k=>{
+    const plans=groups[k].slice().sort((a,b)=>a.duration_days-b.duration_days);const base=plans.find(x=>x.cadence==='monthly')||plans[0];
+    return `<article class="plan-card pricing-card"><span class="eyebrow">${escapeHtml(k==='full'?'Complete':k==='concept'?'Concept':'Drills')}</span><h3>${escapeHtml(base.name)}</h3><div class="tier-price-list">${plans.map(p=>`<div class="tier-price-row"><div><span>${escapeHtml(cadenceLabel(p.cadence))}</span><strong>${money(p.amount_cents,p.currency)}</strong><small>${escapeHtml(renewalLabel(p.cadence))}</small></div><button class="primary helcim-buy" data-plan="${escapeHtml(p.code)}" ${helcimReady?'':'disabled'}>${p.cadence==='3-month'?'Buy 3 months':'Subscribe'}</button></div>`).join('')}</div></article>`;
+  }).join('');
+  if(!helcimReady)$('#billingMessage').textContent='Helcim checkout is not configured yet.';
+  else if(bm.entitlement){const end=bm.entitlement.ends_at?new Date(bm.entitlement.ends_at).toLocaleDateString():'';$('#billingMessage').textContent=`Current access: ${bm.entitlement.plan_name||bm.entitlement.tier_code}${end?` through ${end}`:''}.`;}
+  else $('#billingMessage').textContent='';
+  $$('.helcim-buy').forEach(b=>b.onclick=()=>startHelcim(b.dataset.plan,b));
+}
+let helcimCheckout=null;
+async function startHelcim(plan,btn){
+  if(typeof appendHelcimPayIframe!=='function'){ $('#billingMessage').textContent='Secure checkout did not load. Refresh the page and try again.'; return; }
+  if(btn){btn.disabled=true;btn.textContent='Opening…'}
+  $('#billingMessage').textContent='Preparing secure Helcim checkout…';
+  try{
+    const r=await api('/api/billing/helcim/start',{method:'POST',body:JSON.stringify({plan_code:plan})});
+    helcimCheckout={orderId:r.order_id,checkoutToken:r.checkout_token,recurring:r.recurring};
+    watchHelcimCheckout(helcimCheckout);
+    appendHelcimPayIframe(r.checkout_token);
+    $('#billingMessage').textContent=r.recurring?'Save your bank/card securely, then Helcim will start your subscription.':'Complete your one-time payment securely with Helcim.';
+  }catch(err){$('#billingMessage').textContent=err.message;}
+  finally{if(btn){btn.disabled=false;btn.textContent=plan.includes('3month')?'Buy 3 months':'Subscribe'}}
+}
+function watchHelcimCheckout(ctx){
+  const handler=async(event)=>{
+    if(!event?.data||event.data.eventName!=='helcim-pay-js-'+ctx.checkoutToken)return;
+    if(event.data.eventStatus==='ABORTED'){$('#billingMessage').textContent='Payment was not completed. Please try again.';return;}
+    if(event.data.eventStatus!=='SUCCESS')return;
+    try{
+      let response=event.data.eventMessage;
+      if(typeof response==='string')response=JSON.parse(response);
+      if(response?.data?.data&&response?.data?.hash)response=response.data;
+      const done=await api('/api/billing/helcim/complete',{method:'POST',body:JSON.stringify({order_id:ctx.orderId,response})});
+      try{if(typeof removeHelcimPayIframe==='function')removeHelcimPayIframe()}catch(_){}
+      window.removeEventListener('message',handler);
+      if(done.paid){$('#billingMessage').textContent=done.recurring?'Subscription active. Your Azielon access is ready.':'Payment confirmed. Your Azielon access is ready.';await loadBilling();applyAccessNavigation();setTimeout(()=>showView('dashboard'),700)}
+      else{$('#billingMessage').textContent=done.recurring?'Subscription created. Helcim is confirming the first charge; access will activate automatically.':'Payment is processing. Access will activate automatically when confirmed.';await loadBilling();}
+    }catch(err){$('#billingMessage').textContent=err.message;}
+  };
+  window.addEventListener('message',handler);
+}
+async function handleBillingReturn(){return;}
 const _origBootApp=bootApp;bootApp=async function(){await _origBootApp();await handleBillingReturn()};
 boot();
 
-// v3.9.5 password recovery
+// v4.3.10 password recovery
 let passwordResetToken=new URLSearchParams(location.search).get('reset_token')||'';
 function hideAuthForms(){['loginForm','registerForm','forgotForm','resetForm'].forEach(id=>{const el=$('#'+id);if(el)el.classList.add('hidden')})}
 function showForgotPassword(){hideAuthForms();document.querySelectorAll('[data-auth-tab]').forEach(x=>x.classList.remove('active'));$('#forgotForm').classList.remove('hidden');setAuth('')}

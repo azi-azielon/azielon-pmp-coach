@@ -1307,3 +1307,23 @@ body.copy-protected #review img {
 /* v4.3.5 */
 a.live-class-teaser{text-decoration:none}
 .stripe-buy{font-size:11px!important;padding:9px 12px!important}
+
+/* v4.3.9 — simplified Plans & Pricing / Autobooks */
+.pricing-only-grid{margin-top:10px}
+.pricing-card{padding:22px}
+.pricing-card h3{margin:7px 0 18px;font-size:26px}
+.tier-price-list{display:grid;gap:10px}
+.tier-price-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;border-top:1px solid var(--line)}
+.tier-price-row:first-child{border-top:0}
+.tier-price-row>div{display:flex;align-items:baseline;gap:12px}
+.tier-price-row span{color:var(--muted);font-size:12px;min-width:70px}
+.tier-price-row strong{font:600 25px Georgia,serif;color:var(--ink)}
+.tier-price-row .primary{min-width:92px}
+.billing-message{margin:2px 0 12px}
+.autobooks-notice{display:grid;gap:6px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.autobooks-notice b{color:var(--ink)}
+.autobooks-notice span{color:var(--muted);font-size:12px}
+.link-button{border:0;background:transparent;color:#1265a8;text-decoration:underline;cursor:pointer;padding:0 4px;font:inherit}
+@media(max-width:680px){.tier-price-row{align-items:center}.tier-price-row>div{display:grid;gap:2px}.tier-price-row strong{font-size:22px}}
+
+.tier-price-row small{display:block;margin-top:4px;color:var(--muted,#667085);font-size:.78rem;line-height:1.25}.tier-price-row>div{min-width:0}.tier-price-row strong{display:block}

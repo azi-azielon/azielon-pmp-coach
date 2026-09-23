@@ -13,7 +13,7 @@ from .models import User, PasswordResetToken, Question, TopicNote, Diagram, Tric
 from .schemas import RegisterIn, LoginIn, ForgotPasswordIn, ResetPasswordIn, PracticeCreateIn, AttemptIn, QuestionPatchIn, QuestionCreateIn, ContentCreateIn, DiagramCreateIn, TrickyCreateIn, CheckoutIn, ExamStartIn, ExamAttemptIn, ExamMarkIn
 from .security import hash_password, verify_password, create_token, current_user, require_roles, create_password_reset_token, hash_reset_token
 from .seed import seed_all
-from .billing import seed_billing_plans, catalog as billing_catalog, current_entitlement, entitlement_payload, stripe_checkout, confirm_stripe_session, process_stripe_webhook, paypal_create_order, paypal_capture_order, process_paypal_webhook, require_paid_access, payment_mode, test_checkout, require_feature, has_feature, access_payload
+from .billing import seed_billing_plans, catalog as billing_catalog, current_entitlement, entitlement_payload, stripe_checkout, confirm_stripe_session, process_stripe_webhook, paypal_create_order, paypal_capture_order, process_paypal_webhook, require_paid_access, payment_mode, test_checkout, require_feature, has_feature, access_payload, autobooks_checkout, autobooks_order_status, process_autobooks_confirmation, helcim_ready, helcim_start_checkout, helcim_complete_checkout, sync_helcim_subscriptions, process_helcim_webhook
 
 ROOT = Path(__file__).resolve().parents[1]
 STATIC = ROOT / 'static'
@@ -1050,6 +1050,7 @@ def get_billing_catalog(db: Session = Depends(get_db)):
 
 @app.get('/api/billing/me')
 def billing_me(user: User = Depends(current_user), db: Session = Depends(get_db)):
+    sync_helcim_subscriptions(db,user)
     e=current_entitlement(db,user.id)
     ep=entitlement_payload(e)
     if ep and e:
@@ -1061,11 +1062,41 @@ def billing_me(user: User = Depends(current_user), db: Session = Depends(get_db)
             'amount_cents': plan.amount_cents if plan else None,
             'currency': plan.currency if plan else None,
         })
-    return {'entitlement':ep,'has_access': bool(e) or user.role in ('admin','instructor','content_editor','reviewer'), **access_payload(user,db), 'payment_mode': payment_mode(), 'providers':{'stripe':bool(os.getenv('STRIPE_SECRET_KEY')),'paypal':bool(os.getenv('PAYPAL_CLIENT_ID') and os.getenv('PAYPAL_CLIENT_SECRET'))}}
+    return {'entitlement':ep,'has_access': bool(e) or user.role in ('admin','instructor','content_editor','reviewer'), **access_payload(user,db), 'payment_mode': payment_mode(), 'providers':{'stripe':bool(os.getenv('STRIPE_SECRET_KEY')),'paypal':bool(os.getenv('PAYPAL_CLIENT_ID') and os.getenv('PAYPAL_CLIENT_SECRET')),'autobooks':bool(os.getenv('AUTOBOOKS_PAYMENT_URL')),'helcim':helcim_ready()}}
 
 @app.post('/api/billing/test/checkout')
 def billing_test_checkout(payload: dict, user: User = Depends(current_user), db: Session = Depends(get_db)):
     return test_checkout(db,user,str(payload.get('plan_code','')),str(payload.get('method','')),payload.get('details') or {})
+
+@app.post('/api/billing/helcim/start')
+def billing_helcim_start(data: CheckoutIn, user: User = Depends(current_user), db: Session = Depends(get_db)):
+    return helcim_start_checkout(db,user,data.plan_code)
+
+@app.post('/api/billing/helcim/complete')
+async def billing_helcim_complete(request: Request, user: User = Depends(current_user), db: Session = Depends(get_db)):
+    body=await request.json()
+    return helcim_complete_checkout(db,user,str(body.get('order_id') or ''),body.get('response') or {})
+
+@app.post('/api/billing/helcim/webhook')
+async def billing_helcim_webhook(request: Request, db: Session = Depends(get_db)):
+    raw=await request.body()
+    try: body=json.loads(raw.decode('utf-8'))
+    except Exception: raise HTTPException(400,'Invalid JSON')
+    return process_helcim_webhook(db,request,raw,body)
+
+@app.post('/api/billing/autobooks/start')
+def billing_autobooks_start(data: CheckoutIn, user: User = Depends(current_user), db: Session = Depends(get_db)):
+    return autobooks_checkout(db,user,data.plan_code)
+
+@app.get('/api/billing/autobooks/status')
+def billing_autobooks_status(order_id: str, user: User = Depends(current_user), db: Session = Depends(get_db)):
+    return autobooks_order_status(db,user,order_id)
+
+@app.post('/api/billing/autobooks/payment-confirmed')
+async def billing_autobooks_confirmed(request: Request, db: Session = Depends(get_db)):
+    body=await request.json()
+    secret=request.headers.get('x-azielon-payment-secret','') or str(body.get('secret') or '')
+    return process_autobooks_confirmation(db,body,secret)
 
 @app.post('/api/billing/stripe/checkout-session')
 def billing_stripe_checkout(data: CheckoutIn, user: User = Depends(current_user), db: Session = Depends(get_db)):
