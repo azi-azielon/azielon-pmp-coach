@@ -499,7 +499,7 @@ async function startHelcim(plan,btn){
   if(btn){btn.disabled=true;btn.textContent='Opening…'}
   $('#billingMessage').textContent='Preparing secure Helcim checkout…';
   try{
-    const r=await api('/api/billing/helcim/start',{method:'POST',body:JSON.stringify({plan_code:plan})});
+    const r=await api('/api/billing/start',{method:'POST',body:JSON.stringify({plan_code:plan})});
     helcimCheckout={orderId:r.order_id,checkoutToken:r.checkout_token,recurring:r.recurring};
     watchHelcimCheckout(helcimCheckout);
     appendHelcimPayIframe(r.checkout_token);
@@ -516,7 +516,7 @@ function watchHelcimCheckout(ctx){
       let response=event.data.eventMessage;
       if(typeof response==='string')response=JSON.parse(response);
       if(response?.data?.data&&response?.data?.hash)response=response.data;
-      const done=await api('/api/billing/helcim/complete',{method:'POST',body:JSON.stringify({order_id:ctx.orderId,response})});
+      const done=await api('/api/billing/complete',{method:'POST',body:JSON.stringify({order_id:ctx.orderId,response})});
       try{if(typeof removeHelcimPayIframe==='function')removeHelcimPayIframe()}catch(_){}
       window.removeEventListener('message',handler);
       if(done.paid){$('#billingMessage').textContent=done.recurring?'Subscription active. Your Azielon access is ready.':'Payment confirmed. Your Azielon access is ready.';await loadBilling();applyAccessNavigation();setTimeout(()=>showView('dashboard'),700)}

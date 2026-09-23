@@ -39,7 +39,7 @@ Allow the payment method(s) you want available for subscriptions. After each pla
 ## Webhook
 In Helcim → Integrations → Webhooks:
 - Turn Webhooks ON
-- Deliver URL: `https://pmp.azielon.com/api/billing/helcim/webhook`
+- Deliver URL: `https://pmp.azielon.com/api/billing/payment-webhook`
 - Enable **Card Transaction**
 - Copy the Verifier Token into `HELCIM_WEBHOOK_VERIFIER_TOKEN` in Render
 

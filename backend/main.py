@@ -1068,16 +1068,16 @@ def billing_me(user: User = Depends(current_user), db: Session = Depends(get_db)
 def billing_test_checkout(payload: dict, user: User = Depends(current_user), db: Session = Depends(get_db)):
     return test_checkout(db,user,str(payload.get('plan_code','')),str(payload.get('method','')),payload.get('details') or {})
 
-@app.post('/api/billing/helcim/start')
+@app.post('/api/billing/start')
 def billing_helcim_start(data: CheckoutIn, user: User = Depends(current_user), db: Session = Depends(get_db)):
     return helcim_start_checkout(db,user,data.plan_code)
 
-@app.post('/api/billing/helcim/complete')
+@app.post('/api/billing/complete')
 async def billing_helcim_complete(request: Request, user: User = Depends(current_user), db: Session = Depends(get_db)):
     body=await request.json()
     return helcim_complete_checkout(db,user,str(body.get('order_id') or ''),body.get('response') or {})
 
-@app.post('/api/billing/helcim/webhook')
+@app.post('/api/billing/payment-webhook')
 async def billing_helcim_webhook(request: Request, db: Session = Depends(get_db)):
     raw=await request.body()
     try: body=json.loads(raw.decode('utf-8'))
