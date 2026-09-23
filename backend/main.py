@@ -23,103 +23,80 @@ PROTECTED_DIAGRAMS = ROOT / 'protected_assets' / 'diagrams'
 def _password_reset_mode():
     return os.getenv('PASSWORD_RESET_MODE', 'test').strip().lower()
 
+
+def _email_status():
+    url = os.getenv('GOOGLE_APPS_SCRIPT_MAIL_URL', '').strip()
+    secret = os.getenv('GOOGLE_APPS_SCRIPT_MAIL_SECRET', '').strip()
+    return {
+        'configured': bool(url and secret),
+        'transport': 'google_apps_script',
+        'apps_script_url_configured': bool(url),
+        'apps_script_secret_configured': bool(secret),
+        'notify_email': os.getenv('PROGRAM_REGISTRATION_NOTIFY_EMAIL', 'azi@azielon.com').strip(),
+    }
+
+
+def _send_email_via_apps_script(to_email: str, subject: str, body: str):
+    url = os.getenv('GOOGLE_APPS_SCRIPT_MAIL_URL', '').strip()
+    secret = os.getenv('GOOGLE_APPS_SCRIPT_MAIL_SECRET', '').strip()
+    if not url:
+        raise RuntimeError('GOOGLE_APPS_SCRIPT_MAIL_URL is not configured')
+    if not secret:
+        raise RuntimeError('GOOGLE_APPS_SCRIPT_MAIL_SECRET is not configured')
+
+    payload = {
+        'secret': secret,
+        'to': to_email,
+        'subject': subject,
+        'body': body,
+    }
+    with httpx.Client(timeout=20.0, follow_redirects=True) as client:
+        response = client.post(url, json=payload)
+    response.raise_for_status()
+    try:
+        result = response.json()
+    except Exception as exc:
+        raise RuntimeError(f'Apps Script returned a non-JSON response: {response.text[:200]}') from exc
+    if not result.get('ok'):
+        raise RuntimeError(f"Apps Script mail failed: {result.get('error', 'unknown error')}")
+
+
 def _send_password_reset_email(to_email: str, reset_url: str):
-    import smtplib
-    from email.message import EmailMessage
-    host = os.getenv('SMTP_HOST', '').strip()
-    port = int(os.getenv('SMTP_PORT', '587'))
-    username = os.getenv('SMTP_USERNAME', '').strip()
-    password = os.getenv('SMTP_PASSWORD', '')
-    sender = os.getenv('SMTP_FROM', username or 'no-reply@azielon.com').strip()
-    use_tls = os.getenv('SMTP_USE_TLS', 'true').strip().lower() not in {'0','false','no'}
-    if not host:
-        raise RuntimeError('SMTP_HOST is not configured')
-    msg = EmailMessage()
-    msg['Subject'] = 'Reset your Azielon PMP Practice Coach password'
-    msg['From'] = sender
-    msg['To'] = to_email
-    msg.set_content(
+    subject = 'Reset your Azielon PMP Practice Coach password'
+    body = (
         'A password reset was requested for your Azielon PMP Practice Coach account.\n\n'
         f'Reset your password here:\n{reset_url}\n\n'
         'This link expires in 30 minutes. If you did not request this reset, you can ignore this email.'
     )
-    with smtplib.SMTP(host, port, timeout=20) as server:
-        if use_tls:
-            server.starttls()
-        if username:
-            server.login(username, password)
-        server.send_message(msg)
+    _send_email_via_apps_script(to_email, subject, body)
 
-
-
-def _smtp_status():
-    host=os.getenv('SMTP_HOST','').strip()
-    username=os.getenv('SMTP_USERNAME','').strip()
-    sender=os.getenv('SMTP_FROM', username or '').strip()
-    return {
-        'configured': bool(host and sender),
-        'host_configured': bool(host),
-        'username_configured': bool(username),
-        'from_configured': bool(sender),
-        'notify_email': os.getenv('PROGRAM_REGISTRATION_NOTIFY_EMAIL','azi@azielon.com').strip()
-    }
 
 def _send_registration_pending_email(registration):
-    import smtplib
-    from email.message import EmailMessage
-    host=os.getenv('SMTP_HOST','').strip()
-    port=int(os.getenv('SMTP_PORT','587'))
-    username=os.getenv('SMTP_USERNAME','').strip()
-    password=os.getenv('SMTP_PASSWORD','')
-    sender=os.getenv('SMTP_FROM',username or 'no-reply@azielon.com').strip()
-    recipient=os.getenv('PROGRAM_REGISTRATION_NOTIFY_EMAIL','azi@azielon.com').strip()
-    use_tls=os.getenv('SMTP_USE_TLS','true').strip().lower() not in {'0','false','no'}
-    if not host:
-        raise RuntimeError('SMTP_HOST is not configured')
-    dt=registration.preferred_date
-    date_text=dt.strftime('%A, %B %d, %Y') if dt else 'Not selected'
-    msg=EmailMessage()
-    msg['Subject']=f'PMP Class Registration Started — {registration.name}'
-    msg['From']=sender
-    msg['To']=recipient
-    msg.set_content(
-        'A learner selected a PMP Online Class date and was sent to secure payment.\\n\\n'
-        f'Learner: {registration.name}\\n'
-        f'Email: {registration.email}\\n'
-        f'Class start date: {date_text}\\n'
-        'Schedule: Tuesday–Friday, 8:00 AM–5:00 PM ET\\n'
-        'Program: PMP Certification Prep\\n'
-        'Price: $999\\n'
-        'Payment status: PENDING\\n'
-        f'Registration ID: {registration.id}\\n\\n'
-        'When Autobooks confirms payment, open Instructor Studio → Program Registrations and click Mark paid + email.'
-    )
-    with smtplib.SMTP(host,port,timeout=20) as server:
-        if use_tls:
-            server.starttls()
-        if username:
-            server.login(username,password)
-        server.send_message(msg)
-
-def _send_program_registration_email(registration, payment_status: str = 'paid'):
-    import smtplib
-    from email.message import EmailMessage
-    host = os.getenv('SMTP_HOST', '').strip()
-    port = int(os.getenv('SMTP_PORT', '587'))
-    username = os.getenv('SMTP_USERNAME', '').strip()
-    password = os.getenv('SMTP_PASSWORD', '')
-    sender = os.getenv('SMTP_FROM', username or 'no-reply@azielon.com').strip()
     recipient = os.getenv('PROGRAM_REGISTRATION_NOTIFY_EMAIL', 'azi@azielon.com').strip()
-    use_tls = os.getenv('SMTP_USE_TLS', 'true').strip().lower() not in {'0','false','no'}
-    if not host:
-        raise RuntimeError('SMTP_HOST is not configured')
     dt = registration.preferred_date
     date_text = dt.strftime('%A, %B %d, %Y') if dt else 'Not selected'
-    msg = EmailMessage()
-    msg['Subject'] = f'PMP Online Class Registration — {registration.name}'
-    msg['From'] = sender
-    msg['To'] = recipient
-    msg.set_content(
+    subject = f'PMP Class Registration Started — {registration.name}'
+    body = (
+        'A learner selected a PMP Online Class date and was sent to secure payment.\n\n'
+        f'Learner: {registration.name}\n'
+        f'Email: {registration.email}\n'
+        f'Class start date: {date_text}\n'
+        'Schedule: Tuesday–Friday, 8:00 AM–5:00 PM ET\n'
+        'Program: PMP Certification Prep\n'
+        'Price: $999\n'
+        'Payment status: PENDING\n'
+        f'Registration ID: {registration.id}\n\n'
+        'When Autobooks confirms payment, open Instructor Studio → Program Registrations and click Mark paid + email.'
+    )
+    _send_email_via_apps_script(recipient, subject, body)
+
+
+def _send_program_registration_email(registration, payment_status: str = 'paid'):
+    recipient = os.getenv('PROGRAM_REGISTRATION_NOTIFY_EMAIL', 'azi@azielon.com').strip()
+    dt = registration.preferred_date
+    date_text = dt.strftime('%A, %B %d, %Y') if dt else 'Not selected'
+    subject = f'PMP Online Class Registration — {registration.name}'
+    body = (
         'A learner has registered for the Azielon PMP Certification Prep program.\n\n'
         f'Learner: {registration.name}\n'
         f'Email: {registration.email}\n'
@@ -131,32 +108,14 @@ def _send_program_registration_email(registration, payment_status: str = 'paid')
         f'Registration ID: {registration.id}\n\n'
         'View the registration in Instructor Studio → Program Registrations.'
     )
-    with smtplib.SMTP(host, port, timeout=20) as server:
-        if use_tls:
-            server.starttls()
-        if username:
-            server.login(username, password)
-        server.send_message(msg)
+    _send_email_via_apps_script(recipient, subject, body)
 
 
 def _send_program_registration_confirmation_to_learner(registration):
-    import smtplib
-    from email.message import EmailMessage
-    host = os.getenv('SMTP_HOST', '').strip()
-    port = int(os.getenv('SMTP_PORT', '587'))
-    username = os.getenv('SMTP_USERNAME', '').strip()
-    password = os.getenv('SMTP_PASSWORD', '')
-    sender = os.getenv('SMTP_FROM', username or 'no-reply@azielon.com').strip()
-    use_tls = os.getenv('SMTP_USE_TLS', 'true').strip().lower() not in {'0','false','no'}
-    if not host:
-        raise RuntimeError('SMTP_HOST is not configured')
     dt = registration.preferred_date
     date_text = dt.strftime('%A, %B %d, %Y') if dt else 'Not selected'
-    msg = EmailMessage()
-    msg['Subject'] = 'Azielon PMP Online Class — Registration Confirmed'
-    msg['From'] = sender
-    msg['To'] = registration.email
-    msg.set_content(
+    subject = 'Azielon PMP Online Class — Registration Confirmed'
+    body = (
         f'Hello {registration.name},\n\n'
         'Your payment has been confirmed and your Azielon PMP Certification Prep registration is complete.\n\n'
         f'Class start date: {date_text}\n'
@@ -166,12 +125,7 @@ def _send_program_registration_confirmation_to_learner(registration):
         'We will send your class access details separately.\n\n'
         'Azielon PMP Coach'
     )
-    with smtplib.SMTP(host, port, timeout=20) as server:
-        if use_tls:
-            server.starttls()
-        if username:
-            server.login(username, password)
-        server.send_message(msg)
+    _send_email_via_apps_script(registration.email, subject, body)
 
 
 def _load_source_question_map():
@@ -1156,39 +1110,29 @@ def protected_diagram(filename: str, user: User = Depends(current_user), db: Ses
 def admin_email_status(
     user: User = Depends(require_roles('admin','instructor'))
 ):
-    return _smtp_status()
+    return _email_status()
+
 
 @app.post('/api/admin/email-test')
 def admin_email_test(
     user: User = Depends(require_roles('admin','instructor'))
 ):
-    import smtplib
-    from email.message import EmailMessage
-    status=_smtp_status()
+    status = _email_status()
     if not status['configured']:
-        raise HTTPException(400,'SMTP is not configured. Set SMTP_HOST, SMTP_USERNAME, SMTP_PASSWORD, and SMTP_FROM in .env.')
-    host=os.getenv('SMTP_HOST','').strip()
-    port=int(os.getenv('SMTP_PORT','587'))
-    username=os.getenv('SMTP_USERNAME','').strip()
-    password=os.getenv('SMTP_PASSWORD','')
-    sender=os.getenv('SMTP_FROM',username or 'no-reply@azielon.com').strip()
-    recipient=status['notify_email']
-    use_tls=os.getenv('SMTP_USE_TLS','true').strip().lower() not in {'0','false','no'}
-    msg=EmailMessage()
-    msg['Subject']='Azielon PMP Coach — Email Test'
-    msg['From']=sender
-    msg['To']=recipient
-    msg.set_content('This is a test email from Azielon PMP Coach. SMTP email is configured correctly.')
+        raise HTTPException(
+            400,
+            'Google Apps Script mail is not configured. Set GOOGLE_APPS_SCRIPT_MAIL_URL and GOOGLE_APPS_SCRIPT_MAIL_SECRET.'
+        )
+    recipient = status['notify_email']
     try:
-        with smtplib.SMTP(host,port,timeout=20) as server:
-            if use_tls:
-                server.starttls()
-            if username:
-                server.login(username,password)
-            server.send_message(msg)
+        _send_email_via_apps_script(
+            recipient,
+            'Azielon PMP Coach — Email Test',
+            'This is a test email from Azielon PMP Coach. Google Apps Script email delivery is configured correctly.'
+        )
     except Exception as exc:
-        raise HTTPException(500,f'Email test failed: {str(exc)[:300]}')
-    return {'ok':True,'sent_to':recipient}
+        raise HTTPException(500, f'Email test failed: {str(exc)[:300]}')
+    return {'ok': True, 'sent_to': recipient, 'transport': 'google_apps_script'}
 
 @app.get('/api/admin/program-registrations')
 def admin_program_registrations(
