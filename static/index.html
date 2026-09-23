@@ -4,12 +4,12 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Azielon PMP Practice Coach</title>
-<link rel="stylesheet" href="/static/styles.css?v=4.3.10"/>
+<link rel="stylesheet" href="/static/styles.css?v=4.3.12"/>
 <script type="text/javascript" src="https://secure.helcim.app/helcim-pay/services/start.js"></script>
 </head>
 <body class="landing-active">
 <div id="authGate" class="auth-gate">
-  <div class="build-version-badge">v4.3.10</div>
+  <div class="build-version-badge">v4.3.12</div>
   <div class="sales-shell sales-shell-v426">
     <section class="sales-panel sales-panel-v426">
       <div class="sales-brand"><img src="/static/assets/azielon-logo.png" alt="Azielon"><span>Azielon PMP Coach</span></div>
@@ -206,7 +206,14 @@
     </section>
 
     <section class="view" id="billing">
-      <div class="section-intro compact-intro"><div><span class="eyebrow">Choose your access</span><h2>Plans & Pricing</h2><p>Choose a tier and access period. Pay securely by bank (ACH) or card through Helcim.</p></div></div>
+      <div class="billing-head">
+        <div>
+          <span class="eyebrow">Choose your access</span>
+          <h2>Plans & Pricing</h2>
+          <p>Choose a plan. Pay securely by bank (ACH) or card through Helcim.</p>
+        </div>
+        <button id="billingFreeTrialBtn" class="secondary billing-free-trial">Try 5 free questions <span>→</span></button>
+      </div>
       <div id="billingMessage" class="message billing-message"></div>
       <div id="planGrid" class="plan-grid pricing-only-grid"></div>
     </section>

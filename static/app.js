@@ -469,13 +469,13 @@ async function loadBilling(prefetched=null){
 }
 function money(cents,currency='USD'){return new Intl.NumberFormat('en-US',{style:'currency',currency,maximumFractionDigits:0}).format(cents/100)}
 function cadenceLabel(c){return c==='3-month'?'3-Month Access':c==='weekly'?'Weekly':'Monthly'}
-function renewalLabel(c){return c==='weekly'?'Renews weekly until canceled':c==='monthly'?'Renews monthly until canceled':'One-time · 90 days of access'}
+function renewalLabel(c){return c==='weekly'?'Auto-renews weekly':c==='monthly'?'Auto-renews monthly':'One-time · 90 days'}
 function renderBilling(catalog,bm){
   const groups={};catalog.forEach(p=>(groups[p.tier_code]=groups[p.tier_code]||[]).push(p));
   const order=['full','concept','drills'];const helcimReady=!!bm.providers?.helcim;
   $('#planGrid').innerHTML=order.filter(k=>groups[k]).map(k=>{
     const plans=groups[k].slice().sort((a,b)=>a.duration_days-b.duration_days);const base=plans.find(x=>x.cadence==='monthly')||plans[0];
-    return `<article class="plan-card pricing-card"><span class="eyebrow">${escapeHtml(k==='full'?'Complete':k==='concept'?'Concept':'Drills')}</span><h3>${escapeHtml(base.name)}</h3><div class="tier-price-list">${plans.map(p=>`<div class="tier-price-row"><div><span>${escapeHtml(cadenceLabel(p.cadence))}</span><strong>${money(p.amount_cents,p.currency)}</strong><small>${escapeHtml(renewalLabel(p.cadence))}</small></div><button class="primary helcim-buy" data-plan="${escapeHtml(p.code)}" ${helcimReady?'':'disabled'}>${p.cadence==='3-month'?'Buy 3 months':'Subscribe'}</button></div>`).join('')}</div></article>`;
+    return `<article class="plan-card pricing-card"><div class="pricing-card-head"><span class="eyebrow">${escapeHtml(k==='full'?'Complete':k==='concept'?'Concept':'Drills')}</span><h3>${escapeHtml(base.name)}</h3></div><div class="tier-price-list">${plans.map(p=>`<div class="tier-price-row"><div class="tier-price-info"><span class="tier-cadence">${escapeHtml(cadenceLabel(p.cadence))}</span><div class="tier-price-line"><strong>${money(p.amount_cents,p.currency)}</strong><small>${escapeHtml(renewalLabel(p.cadence))}</small></div></div><button class="primary helcim-buy" data-plan="${escapeHtml(p.code)}" ${helcimReady?'':'disabled'}>${p.cadence==='3-month'?'Buy access':'Choose'}</button></div>`).join('')}</div></article>`;
   }).join('');
   if(!helcimReady)$('#billingMessage').textContent='Helcim checkout is not configured yet.';
   else if(bm.entitlement){const end=bm.entitlement.ends_at?new Date(bm.entitlement.ends_at).toLocaleDateString():'';$('#billingMessage').textContent=`Current access: ${bm.entitlement.plan_name||bm.entitlement.tier_code}${end?` through ${end}`:''}.`;}
@@ -556,6 +556,7 @@ function requestFreeDrillSignup(){
   document.querySelector('.auth-card')?.scrollIntoView({behavior:'smooth',block:'center'});
 }
 $('#trialStartBtn').onclick=requestFreeDrillSignup;
+const billingFreeTrialBtn=$('#billingFreeTrialBtn'); if(billingFreeTrialBtn)billingFreeTrialBtn.onclick=()=>openPublicTrial();
 
 function thanksgivingDate(year){
   const d=new Date(year,10,1,12); // November 1
