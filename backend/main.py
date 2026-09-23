@@ -206,6 +206,37 @@ def _exam_question_payload(q, include_answer=False):
 app = FastAPI(title='Azielon PMP Practice Coach', version='4.2.1')
 app.mount('/static', StaticFiles(directory=STATIC), name='static')
 
+def _ensure_admin_from_env(db: Session):
+    """Create or update the production admin account from Render env vars.
+
+    This is intentionally idempotent so it is safe to run on every deploy.
+    Keep ADMIN_PASSWORD only in Render Environment variables, never in GitHub.
+    """
+    email = os.getenv('ADMIN_EMAIL', '').strip().lower()
+    password = os.getenv('ADMIN_PASSWORD', '')
+    if not email or not password:
+        print('[startup] ADMIN_EMAIL/ADMIN_PASSWORD not set; admin bootstrap skipped', flush=True)
+        return
+
+    user = db.query(User).filter(User.email == email).first()
+    if user:
+        user.role = 'admin'
+        user.is_active = True
+        user.password_hash = hash_password(password)
+        print(f'[startup] Admin account updated: {email}', flush=True)
+    else:
+        user = User(
+            email=email,
+            name='Azielon Admin',
+            password_hash=hash_password(password),
+            role='admin',
+            is_active=True,
+        )
+        db.add(user)
+        print(f'[startup] Admin account created: {email}', flush=True)
+    db.commit()
+
+
 @app.on_event('startup')
 def startup():
     Base.metadata.create_all(bind=engine)
@@ -213,6 +244,7 @@ def startup():
     try:
         seed_all(db)
         seed_billing_plans(db)
+        _ensure_admin_from_env(db)
     finally:
         db.close()
 
@@ -354,8 +386,15 @@ def forgot_password(data: ForgotPasswordIn, request: Request, db: Session = Depe
     else:
         try:
             _send_password_reset_email(user.email, reset_url)
-        except Exception:
-            pass
+            print(f'[password-reset] Reset email sent to {user.email}', flush=True)
+        except Exception as exc:
+            # Keep the public response generic to prevent account enumeration,
+            # but expose the real SMTP failure in Render logs for diagnosis.
+            print(
+                f'[password-reset] Email send FAILED for {user.email}: '
+                f'{type(exc).__name__}: {exc}',
+                flush=True,
+            )
     return response
 
 @app.post('/api/auth/reset-password')
