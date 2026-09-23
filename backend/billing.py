@@ -15,43 +15,47 @@ def utcnow():
 
 
 def seed_billing_plans(db: Session):
+    # Launch catalog: three simple choices only.
+    # All three launch plans recur: Starter monthly, Standard monthly, Premium every 3 months.
     plans = [
-        ('full_weekly','full','Full PMP Prep','weekly',7,2900),
-        ('full_monthly','full','Full PMP Prep','monthly',30,6900),
-        ('full_3month','full','Full PMP Prep','3-month',90,14900),
-        ('concept_weekly','concept','Concept + Exam Prep','weekly',7,1900),
-        ('concept_monthly','concept','Concept + Exam Prep','monthly',30,4500),
-        ('concept_3month','concept','Concept + Exam Prep','3-month',90,9900),
-        ('drills_weekly','drills','Exam Drills & Simulator','weekly',7,1200),
-        ('drills_monthly','drills','Exam Drills & Simulator','monthly',30,2900),
-        ('drills_3month','drills','Exam Drills & Simulator','3-month',90,6900),
+        ('drills_monthly','drills','Starter','monthly',30,2900),
+        ('concept_monthly','concept','Standard','monthly',30,6900),
+        ('full_3month','full','Premium','3-month',90,14900),
     ]
     features = {
-        'full':[
-            'All practice modes','Full Mock Exams 1–2','Concept Mastery Exams 3–5',
-            'Rule-review modes','All diagrams & visual exhibits','AI Coach',
-            'Topic notes','Tricky words','Review queue','Progress analytics'
-        ],
-        'concept':[
-            'Standard practice','Topic notes','Tricky words','PMP decision rules',
-            'Concept Mastery Exams 3–5','10 Rules → 10 Questions',
-            'Review All Rules First','Rules Review Only','Review queue','Progress analytics'
-        ],
         'drills':[
             'Standard practice','Timed practice','Full Mock Exams 1–2',
             'Review queue','Bookmarks','Progress analytics'
+        ],
+        'concept':[
+            'Standard practice','Timed practice','Full Mock Exams 1–2',
+            'Review queue','Bookmarks','Progress analytics',
+            'Topic notes','Tricky words','PMP decision rules',
+            'Concept Mastery Exams 3–5','10 Rules → 10 Questions',
+            'Review All Rules First','Rules Review Only'
+        ],
+        'full':[
+            'Standard practice','Timed practice','Full Mock Exams 1–2',
+            'Review queue','Bookmarks','Progress analytics',
+            'Topic notes','Tricky words','PMP decision rules',
+            'Concept Mastery Exams 3–5','10 Rules → 10 Questions',
+            'Review All Rules First','Rules Review Only',
+            'All practice modes','All diagrams & visual exhibits','AI Coach'
         ]
     }
-    changed=False
+    active_codes={code for code, *_ in plans}
+    # Retire legacy price/cadence variants so the API and UI expose only three plans.
+    for row in db.query(BillingPlan).all():
+        if row.code not in active_codes and row.active:
+            row.active=False
     for code,tier,name,cadence,duration,amount in plans:
         row=db.get(BillingPlan, code)
         if not row:
             row=BillingPlan(code=code,tier_code=tier,name=name,cadence=cadence,duration_days=duration,amount_cents=amount,currency='USD',features_json=json.dumps(features[tier]),active=True)
-            db.add(row); changed=True
+            db.add(row)
         else:
             row.tier_code=tier; row.name=name; row.cadence=cadence; row.duration_days=duration; row.amount_cents=amount; row.currency='USD'; row.features_json=json.dumps(features[tier]); row.active=True
-            changed=True
-    if changed: db.commit()
+    db.commit()
 
 
 def catalog(db: Session):
@@ -491,7 +495,7 @@ def _save_order_meta(db: Session, order: CheckoutOrder, meta: dict):
 
 
 def _helcim_is_recurring(plan: BillingPlan):
-    return plan.cadence in ('weekly','monthly')
+    return plan.cadence in ('weekly','monthly','3-month')
 
 
 def _helcim_payment_method_from_response(data: dict):

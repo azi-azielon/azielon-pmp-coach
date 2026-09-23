@@ -468,20 +468,31 @@ async function loadBilling(prefetched=null){
   }catch(err){const m=$('#billingMessage');if(m)m.textContent=err.message;}
 }
 function money(cents,currency='USD'){return new Intl.NumberFormat('en-US',{style:'currency',currency,maximumFractionDigits:0}).format(cents/100)}
-function cadenceLabel(c){return c==='3-month'?'3-Month Access':c==='weekly'?'Weekly':'Monthly'}
-function renewalLabel(c){return c==='weekly'?'Auto-renews weekly':c==='monthly'?'Auto-renews monthly':'One-time · 90 days'}
 function renderBilling(catalog,bm){
-  const groups={};catalog.forEach(p=>(groups[p.tier_code]=groups[p.tier_code]||[]).push(p));
-  const order=['full','concept','drills'];const helcimReady=!!bm.providers?.helcim;
-  $('#planGrid').innerHTML=order.filter(k=>groups[k]).map(k=>{
-    const plans=groups[k].slice().sort((a,b)=>a.duration_days-b.duration_days);const base=plans.find(x=>x.cadence==='monthly')||plans[0];
-    return `<article class="plan-card pricing-card"><div class="pricing-card-head"><span class="eyebrow">${escapeHtml(k==='full'?'Complete':k==='concept'?'Concept':'Drills')}</span><h3>${escapeHtml(base.name)}</h3></div><div class="tier-price-list">${plans.map(p=>`<div class="tier-price-row"><div class="tier-price-info"><span class="tier-cadence">${escapeHtml(cadenceLabel(p.cadence))}</span><div class="tier-price-line"><strong>${money(p.amount_cents,p.currency)}</strong><small>${escapeHtml(renewalLabel(p.cadence))}</small></div></div><button class="primary helcim-buy" data-plan="${escapeHtml(p.code)}" ${helcimReady?'':'disabled'}>${p.cadence==='3-month'?'Buy access':'Choose'}</button></div>`).join('')}</div></article>`;
+  const helcimReady=!!bm.providers?.helcim;
+  const byCode=Object.fromEntries(catalog.map(p=>[p.code,p]));
+  const cards=[
+    {code:'drills_monthly',label:'Starter',tag:'Practice essentials',priceNote:'/ month',cta:'Choose Starter',featured:false,features:['Exam drills & simulator','Full mock exams','Detailed explanations','Progress tracking']},
+    {code:'concept_monthly',label:'Standard',tag:'Most popular',priceNote:'/ month',cta:'Choose Standard',featured:true,features:['Everything in Starter','Concept lessons & decision rules','Tricky Words review','Concept mastery exams']},
+    {code:'full_3month',label:'Premium',tag:'Complete preparation',priceNote:'/ 3 months',cta:'Choose Premium',featured:false,features:['Everything in Standard','Diagrams & visual models','AI Coach + topic notes','Complete PMP prep','Renews every 3 months · cancel anytime']}
+  ];
+  $('#planGrid').innerHTML=cards.map(card=>{
+    const p=byCode[card.code]; if(!p)return '';
+    return `<article class="simple-price-card${card.featured?' featured':''}">
+      <div class="simple-price-top">
+        <div><span class="simple-plan-kicker">${escapeHtml(card.tag)}</span><h3>${escapeHtml(card.label)}</h3></div>
+        <div class="simple-price-badge"><strong>${money(p.amount_cents,p.currency)}</strong><span>${escapeHtml(card.priceNote)}</span></div>
+      </div>
+      <ul class="simple-feature-list">${card.features.map(f=>`<li><span class="feature-check">✓</span><span>${escapeHtml(f)}</span></li>`).join('')}</ul>
+      <button class="primary helcim-buy simple-plan-button" data-plan="${escapeHtml(p.code)}" ${helcimReady?'':'disabled'}>${escapeHtml(card.cta)}</button>
+    </article>`;
   }).join('');
-  if(!helcimReady)$('#billingMessage').textContent='Helcim checkout is not configured yet.';
+  if(!helcimReady)$('#billingMessage').textContent='Secure checkout is being configured. You can still try 5 free questions.';
   else if(bm.entitlement){const end=bm.entitlement.ends_at?new Date(bm.entitlement.ends_at).toLocaleDateString():'';$('#billingMessage').textContent=`Current access: ${bm.entitlement.plan_name||bm.entitlement.tier_code}${end?` through ${end}`:''}.`;}
   else $('#billingMessage').textContent='';
   $$('.helcim-buy').forEach(b=>b.onclick=()=>startHelcim(b.dataset.plan,b));
 }
+
 let helcimCheckout=null;
 async function startHelcim(plan,btn){
   if(typeof appendHelcimPayIframe!=='function'){ $('#billingMessage').textContent='Secure checkout did not load. Refresh the page and try again.'; return; }
@@ -492,9 +503,9 @@ async function startHelcim(plan,btn){
     helcimCheckout={orderId:r.order_id,checkoutToken:r.checkout_token,recurring:r.recurring};
     watchHelcimCheckout(helcimCheckout);
     appendHelcimPayIframe(r.checkout_token);
-    $('#billingMessage').textContent=r.recurring?'Save your bank/card securely, then Helcim will start your subscription.':'Complete your one-time payment securely with Helcim.';
+    $('#billingMessage').textContent=r.recurring?'Save your bank/card securely, then Helcim will start your recurring subscription.':'Complete your payment securely with Helcim.';
   }catch(err){$('#billingMessage').textContent=err.message;}
-  finally{if(btn){btn.disabled=false;btn.textContent=plan.includes('3month')?'Buy 3 months':'Subscribe'}}
+  finally{if(btn){btn.disabled=false;btn.textContent=plan==='drills_monthly'?'Choose Starter':plan==='concept_monthly'?'Choose Standard':'Choose Premium'}}
 }
 function watchHelcimCheckout(ctx){
   const handler=async(event)=>{

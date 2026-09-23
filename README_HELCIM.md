@@ -3,9 +3,9 @@
 This build replaces the customer-facing Autobooks flow with HelcimPay.js.
 
 ## Pricing behavior
-- Weekly plans: recurring subscriptions
-- Monthly plans: recurring subscriptions
-- 3-month plans: one-time payment / 90 days of access
+- Starter: $29/month recurring subscription
+- Standard: $69/month recurring subscription
+- Premium: $149 every 3 months recurring subscription
 - Checkout offers ACH + card. One-time purchases use Fee Saver when `HELCIM_FEE_SAVER=true`.
 
 ## Render environment variables
@@ -15,12 +15,9 @@ Set these in Render, never GitHub:
 HELCIM_API_TOKEN=<Helcim API token>
 HELCIM_WEBHOOK_VERIFIER_TOKEN=<Helcim webhook verifier token>
 HELCIM_FEE_SAVER=true
-HELCIM_PLAN_FULL_WEEKLY_ID=<numeric Helcim recurring plan ID>
-HELCIM_PLAN_FULL_MONTHLY_ID=<numeric Helcim recurring plan ID>
-HELCIM_PLAN_CONCEPT_WEEKLY_ID=<numeric Helcim recurring plan ID>
-HELCIM_PLAN_CONCEPT_MONTHLY_ID=<numeric Helcim recurring plan ID>
-HELCIM_PLAN_DRILLS_WEEKLY_ID=<numeric Helcim recurring plan ID>
-HELCIM_PLAN_DRILLS_MONTHLY_ID=<numeric Helcim recurring plan ID>
+HELCIM_PLAN_DRILLS_MONTHLY_ID=<Starter recurring plan ID>
+HELCIM_PLAN_CONCEPT_MONTHLY_ID=<Standard recurring plan ID>
+HELCIM_PLAN_FULL_3MONTH_ID=<Premium recurring plan ID>
 ```
 
 Keep the existing Apps Script mail variables and `APP_BASE_URL=https://pmp.azielon.com`.
@@ -61,3 +58,11 @@ Render should redeploy automatically.
 
 ## Important
 The backend initializes HelcimPay.js; the API token never goes to the browser. HelcimPay.js collects card/bank information, so Azielon does not store raw payment credentials.
+
+
+## v4.3.13 launch pricing
+Only three plans are active:
+- Starter: $29/month, recurring. Helcim env: `HELCIM_PLAN_DRILLS_MONTHLY_ID`.
+- Standard: $69/month, recurring. Helcim env: `HELCIM_PLAN_CONCEPT_MONTHLY_ID`.
+- Premium: $149 every 3 months, recurring. Helcim env: `HELCIM_PLAN_FULL_3MONTH_ID`.
+Legacy weekly and alternate 3-month plan rows are automatically marked inactive at startup.
