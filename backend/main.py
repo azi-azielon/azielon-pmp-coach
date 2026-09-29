@@ -539,9 +539,20 @@ def _public_trial_items(db: Session):
     base = db.query(Question).filter(
         Question.instructor_approved == True,
         Question.lifecycle_state.in_(['Published','published','Instructor-Approved','Instructor Approved','instructor_approved']),
-        Question.type.in_(['single','single_select','single-answer','single_answer']),
-        Question.visual_json.in_(['null','',None])
+        Question.type.in_(['single','single_select','single-answer','single_answer'])
     ).order_by(Question.id.asc()).all()
+    # Prefer questions that do not require a visual. Treat SQL NULL and the
+    # serialized empty forms consistently so the free preview does not vanish
+    # just because visual_json is stored differently in PostgreSQL.
+    non_visual=[]
+    visual_fallback=[]
+    for q in base:
+        raw=(q.visual_json or '').strip().lower()
+        if raw in {'','null','none','{}','[]'}:
+            non_visual.append(q)
+        else:
+            visual_fallback.append(q)
+    base=non_visual or visual_fallback
     if not base:
         return []
     # Prefer domain variety, then fill to five.

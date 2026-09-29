@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Azielon PMP Practice Coach</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="/static/styles.css?v=5.14.12"/>
+<link rel="stylesheet" href="/static/styles.css?v=5.14.14"/>
 </head>
 <body class="landing-active">
 <div id="authGate" class="auth-gate">
-  <div class="build-version-badge">v5.14.12</div>
+  <div class="build-version-badge">v5.14.14</div>
   <div class="sales-shell sales-shell-v426">
     <section class="sales-panel sales-panel-v426">
       <div class="sales-brand"><img src="/static/assets/azielon-logo.png" alt="Azielon"><span>Azielon PMP Coach</span></div>
@@ -138,8 +138,9 @@
   </aside>
 
   <main>
-    <header class="topbar"><div><span class="eyebrow">Reasoning-first PMP preparation</span><h1 id="pageTitle">My Learning</h1></div><div class="top-actions"><span id="healthPill" class="status-pill">Checking…</span><div id="avatar" class="avatar">AZ</div></div></header>
+    <header class="topbar"><div><span class="eyebrow">Reasoning-first PMP preparation</span><h1 id="pageTitle">My Learning</h1></div><div class="top-actions"><span id="healthPill" class="status-pill">Checking…</span><div class="user-menu-wrap"><button id="avatar" class="avatar avatar-button" type="button" aria-haspopup="menu" aria-expanded="false">AZ</button><div id="userMenu" class="user-menu hidden" role="menu"><div class="user-menu-identity"><b id="userMenuName">Learner</b><span id="userMenuEmail"></span></div><button id="userMenuProgress" type="button" role="menuitem">My Progress</button><button id="userMenuSignout" type="button" role="menuitem" class="user-menu-signout">Sign out</button></div></div></div></header>
     <div id="globalStudyNav" class="global-study-nav" aria-label="PMP study workspace"></div>
+    <div id="learnerJourney" class="learner-journey hidden" aria-label="Your PMP learner journey"></div>
 
     <section class="view active" id="dashboard">
       <div class="pmp-home-shell">
@@ -217,7 +218,24 @@
 
     <section class="view" id="review"><div class="section-intro compact-intro"><div><span class="eyebrow">Focused learning</span><h2>Concepts to Review</h2><p>One card per concept. Use the filters to see only items you marked, incorrect concepts, or study content needing review.</p></div></div><div class="review-filter-row segmented" id="conceptReviewFilters"><button class="active" data-review-filter="all">All</button><button data-review-filter="marked">Marked by me</button><button data-review-filter="incorrect">Incorrect</button><button data-review-filter="learning">Learning items</button></div><div id="conceptReviewSummary" class="concept-review-summary"></div><div id="reviewList" class="concept-review-grid"></div></section>
 
-    <section class="view" id="coach"><div class="coach-shell"><span class="eyebrow">Personalized learning support</span><h2>PMP Coach</h2><p>Ask for an explanation, comparison, or help reasoning through a PMP scenario. It draws on the Azielon PMP learning library.</p><div id="chat" class="chat"><div class="bubble ai"><b>PMP Coach</b><p>Ask me to explain a concept, compare two terms, or help you reason through a PMP scenario.</p></div></div><form id="coachForm" class="chatbox"><textarea id="coachInput" placeholder="Ask the PMP Coach…"></textarea><button class="primary">Send</button></form></div></section>
+    <section class="view" id="coach">
+      <div class="coach-shell coach-shell-v2">
+        <div class="coach-intro-row">
+          <div><span class="eyebrow">Personalized learning support</span><h2>PMP Coach</h2><p>Ask why an answer is right, compare confusing concepts, or work through a PMP scenario.</p></div>
+          <span class="coach-source-pill">Uses your Azielon learning library</span>
+        </div>
+        <div class="coach-prompt-row" aria-label="Suggested PMP Coach prompts">
+          <button type="button" data-coach-prompt="Explain why the PM should assess before escalating in a PMP scenario.">Assess before escalating</button>
+          <button type="button" data-coach-prompt="Compare risk and issue and tell me how to distinguish them on the PMP exam.">Risk vs Issue</button>
+          <button type="button" data-coach-prompt="Compare change management and change control with an exam memory hook.">Change Management vs Control</button>
+          <button type="button" data-coach-prompt="Give me a short FIRST/NEXT/BEST decision rule for PMP scenario questions.">FIRST / NEXT / BEST</button>
+        </div>
+        <div class="coach-conversation-card">
+          <div id="chat" class="chat coach-chat-v2"><div class="bubble ai"><b>PMP Coach</b><p>What are you trying to understand? Pick a prompt above or ask your own question.</p></div></div>
+          <form id="coachForm" class="chatbox coach-composer"><textarea id="coachInput" rows="2" placeholder="Ask a PMP question…"></textarea><button class="primary" type="submit">Ask Coach →</button></form>
+        </div>
+      </div>
+    </section>
 
     <section class="view" id="live">
       <div class="live-view">
@@ -378,7 +396,7 @@
 <div id="zoomModal" class="modal hidden"><div class="modal-backdrop" data-close-modal="zoomModal"></div><div class="modal-card zoom-card"><div class="modal-head"><h3 id="zoomTitle">Diagram</h3><button class="ghost modal-x" data-close-modal="zoomModal">×</button></div><div class="zoom-controls"><button id="zoomOut" class="secondary">−</button><span id="zoomPct">100%</span><button id="zoomIn" class="secondary">+</button><button id="zoomReset" class="secondary">Fit</button><button id="zoomFull" class="secondary">Full screen</button></div><div id="zoomBody" class="zoom-body"></div></div></div>
 <div id="editorModal" class="modal hidden"><div class="modal-backdrop" data-close-modal="editorModal"></div><div class="modal-card editor-card"><div class="modal-head"><h3 id="editorTitle">Edit content</h3><button class="ghost modal-x" data-close-modal="editorModal">×</button></div><form id="editorForm" class="editor-form"></form></div></div>
 
-<script src="/static/app.js?v=5.14.12"></script>
+<script src="/static/app.js?v=5.14.14"></script>
 <script src="/static/live-form.js?v=5.13.0"></script>
 </body>
 </html>

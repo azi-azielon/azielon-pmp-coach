@@ -2459,3 +2459,112 @@ body{
   .progress-readiness-hero{grid-template-columns:1fr}
   .progress-main-grid .panel{padding:14px!important}
 }
+
+/* ===== v5.14.13 UX fixes: coach, mobile account menu, pricing CTA, trial, nav state ===== */
+/* Account menu from avatar */
+.user-menu-wrap{position:relative;display:flex;align-items:center}
+.avatar-button{border:1px solid var(--gold-soft)!important;cursor:pointer;padding:0;font:inherit}
+.user-menu{position:absolute;right:0;top:calc(100% + 8px);z-index:10050;width:220px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 48px rgba(20,33,61,.16);padding:8px;display:grid;gap:3px}
+.user-menu-identity{padding:9px 10px 10px;border-bottom:1px solid var(--line-soft);margin-bottom:3px;min-width:0}
+.user-menu-identity b,.user-menu-identity span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-menu-identity b{font-size:12px;color:var(--navy)}
+.user-menu-identity span{font-size:10px;color:var(--muted);margin-top:2px}
+.user-menu>button{border:0;background:transparent;color:var(--ink);padding:9px 10px;border-radius:9px;text-align:left;cursor:pointer;font-size:11px}
+.user-menu>button:hover{background:var(--ivory);color:var(--navy)}
+.user-menu .user-menu-signout{color:#8d4f43}
+
+/* Coach: compact guided workspace instead of a full-page empty chat canvas */
+body .coach-shell.coach-shell-v2{max-width:1100px!important;height:auto!important;min-height:0!important;display:grid!important;gap:12px}
+body .coach-shell-v2>.coach-intro-row{display:flex;justify-content:space-between;align-items:flex-end;gap:18px}
+body .coach-shell-v2 .coach-intro-row .eyebrow,body .coach-shell-v2 .coach-intro-row h2{display:none!important}
+body .coach-shell-v2 .coach-intro-row p{margin:0!important;font-size:13px!important;color:var(--muted)!important}
+.coach-source-pill{display:inline-flex;align-items:center;border:1px solid var(--line);background:#fff;padding:6px 10px;border-radius:999px;color:var(--muted);font-size:9.5px;white-space:nowrap}
+.coach-prompt-row{display:flex;gap:6px;flex-wrap:wrap}
+.coach-prompt-row button{appearance:none;border:1px solid rgba(217,164,111,.45);background:rgba(255,246,232,.72);color:var(--navy);border-radius:999px;padding:7px 11px;font-size:10px;cursor:pointer}
+.coach-prompt-row button:hover{border-color:var(--gold);background:#fff}
+.coach-conversation-card{border:1px solid var(--line);border-radius:16px;background:#fff;padding:12px;box-shadow:0 8px 24px rgba(20,33,61,.04)}
+body .coach-chat-v2{min-height:250px!important;height:min(48vh,430px)!important;max-height:430px!important;overflow:auto!important;border:0!important;background:linear-gradient(180deg,#fff,#fffaf4)!important;padding:8px!important}
+body .coach-chat-v2 .bubble{max-width:min(76%,760px)!important}
+body .coach-composer{margin-top:8px!important;padding-top:10px;border-top:1px solid var(--line-soft);grid-template-columns:minmax(0,1fr) auto!important}
+body .coach-composer textarea{min-height:48px!important;max-height:100px!important;resize:vertical}
+body .coach-composer .primary{align-self:end!important;white-space:nowrap}
+.workspace-coach-v2{display:grid;gap:9px}
+.dashboard-coach-prompts{margin-bottom:1px}
+.workspace-coach-answer.compact{min-height:0!important;padding:10px 12px!important}
+.workspace-coach-answer.compact p{margin:3px 0 0!important}
+
+/* The free preview button should always read as an actionable control */
+body .billing-free-trial{cursor:pointer;position:relative;z-index:1}
+body .billing-free-trial:disabled{opacity:.72;cursor:wait}
+
+/* Only the selected exam-kind navigation item is active. */
+body #nav button[data-view="exams"].active{background:rgba(255,255,255,.09)!important;color:#fff!important}
+body #nav button[data-view="exams"]:not(.active){background:transparent!important;color:#a9bbc6!important}
+
+@media(max-width:820px){
+  /* Fixed bottom navigation must never cover a plan purchase CTA. */
+  body #billing{padding-bottom:calc(118px + env(safe-area-inset-bottom))!important}
+  body .simple-price-card:last-child{margin-bottom:14px!important}
+  body .simple-plan-button{min-height:46px!important;margin-bottom:4px!important}
+  body .user-menu{position:fixed;top:60px;right:10px;width:min(260px,calc(100vw - 20px));z-index:10050}
+  body .coach-shell.coach-shell-v2{gap:9px}
+  body .coach-shell-v2>.coach-intro-row{align-items:flex-start;flex-direction:column;gap:6px}
+  body .coach-source-pill{display:none}
+  body .coach-prompt-row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  body .coach-prompt-row::-webkit-scrollbar{display:none}
+  body .coach-prompt-row button{flex:0 0 auto;padding:7px 10px}
+  body .coach-conversation-card{padding:9px;border-radius:13px}
+  body .coach-chat-v2{height:calc(100vh - 300px)!important;min-height:220px!important;max-height:420px!important}
+  body .coach-chat-v2 .bubble{max-width:92%!important}
+  body .coach-composer{grid-template-columns:1fr!important}
+  body .coach-composer .primary{width:100%!important;height:42px!important}
+  body #coach.view{padding-bottom:calc(96px + env(safe-area-inset-bottom))!important}
+  body .trial-overlay{padding:10px 10px calc(84px + env(safe-area-inset-bottom))!important;align-items:center}
+  body .trial-card{max-height:calc(100vh - 110px)!important;padding:18px!important;border-radius:16px!important}
+}
+/* Keep completion colors in the status dot without making a second tab look selected. */
+body .global-study-tab.status-progress:not(.active),body .global-study-tab.status-done:not(.active){color:var(--muted)!important;background:transparent!important;border-color:transparent!important}
+
+/* ===== v5.14.14 persistent learner journey ===== */
+.learner-journey{padding:0 32px 10px;background:#fbf8f1;border-bottom:1px solid rgba(74,59,52,.10)}
+.learner-journey-inner{max-width:1480px;margin:0 auto;border:1px solid rgba(74,59,52,.12);border-radius:16px;background:#fff;overflow:hidden}
+.journey-stage-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-bottom:1px solid rgba(74,59,52,.09)}
+.journey-stage{appearance:none;border:0;border-right:1px solid rgba(74,59,52,.08);background:#fff;padding:10px 12px;display:flex;align-items:center;gap:9px;text-align:left;cursor:pointer;color:var(--muted);min-width:0}
+.journey-stage:last-child{border-right:0}
+.journey-stage:hover{background:#fffaf3}
+.journey-stage-dot{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;flex:0 0 26px;background:#f0eee9;color:#7f8790;font-size:10px;font-weight:800;border:1px solid #e4e0d8}
+.journey-stage-copy{min-width:0}
+.journey-stage-copy b{display:block;font-size:12px;line-height:1.15;color:var(--navy)}
+.journey-stage-copy small{display:block;margin-top:2px;font-size:9px;line-height:1.2;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.journey-stage.done{background:#f4fbf8}
+.journey-stage.done .journey-stage-dot{background:#2f7a68;border-color:#2f7a68;color:#fff}
+.journey-stage.current{background:#f5faff;box-shadow:inset 0 -3px 0 #2f6f94}
+.journey-stage.current .journey-stage-dot{background:#2f6f94;border-color:#2f6f94;color:#fff}
+.journey-stage.current .journey-stage-copy b{color:#245f84}
+.journey-stage.future .journey-stage-dot{background:#f3f1ed;color:#9a9fa5}
+.journey-answer-row{display:grid;grid-template-columns:.65fr 1.45fr 1.2fr;gap:0;background:linear-gradient(90deg,rgba(255,246,232,.72),rgba(231,211,177,.18))}
+.journey-answer-row>div{padding:10px 14px;border-right:1px solid rgba(74,59,52,.08);min-width:0}
+.journey-answer-row>div:last-child{border-right:0}
+.journey-answer-row span{display:block;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-deep);font-weight:700;margin-bottom:3px}
+.journey-answer-row b{display:block;font-size:11.5px;line-height:1.35;color:var(--cocoa-900,#4A3B34);font-weight:600}
+.journey-finish b{color:var(--navy)}
+@media(max-width:1000px){
+  .learner-journey{padding:0 16px 8px}
+  .journey-stage-row{display:flex;overflow-x:auto;scrollbar-width:none}
+  .journey-stage-row::-webkit-scrollbar{display:none}
+  .journey-stage{min-width:155px}
+  .journey-answer-row{grid-template-columns:1fr 1.5fr}
+  .journey-answer-row>div:last-child{grid-column:1/-1;border-top:1px solid rgba(74,59,52,.08);border-right:0}
+}
+@media(max-width:820px){
+  .learner-journey{padding:0 10px 7px}
+  .learner-journey-inner{border-radius:12px}
+  .journey-stage{min-width:132px;padding:8px 9px;gap:7px}
+  .journey-stage-dot{width:22px;height:22px;flex-basis:22px;font-size:9px}
+  .journey-stage-copy b{font-size:11px}
+  .journey-stage-copy small{font-size:8px}
+  .journey-answer-row{grid-template-columns:1fr}
+  .journey-answer-row>div,.journey-answer-row>div:last-child{grid-column:auto;border-right:0;border-top:1px solid rgba(74,59,52,.07);padding:8px 10px}
+  .journey-answer-row>div:first-child{border-top:0}
+  .journey-answer-row b{font-size:10.5px}
+}
