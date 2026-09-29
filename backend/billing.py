@@ -69,14 +69,29 @@ def catalog(db: Session):
 
 def current_entitlement(db: Session, user_id: int):
     now=utcnow()
-    rows=db.query(Entitlement).filter(Entitlement.user_id==user_id,Entitlement.status=='active').order_by(Entitlement.ends_at.desc()).all()
+    rows=db.query(Entitlement).filter(
+        Entitlement.user_id==user_id,
+        Entitlement.status=='active'
+    ).order_by(Entitlement.created_at.desc(), Entitlement.id.desc()).all()
+
+    current=None
+    changed=False
     for e in rows:
-        if e.ends_at and e.ends_at > now:
-            return e
         if e.ends_at and e.ends_at <= now:
             e.status='expired'
-    db.commit()
-    return None
+            changed=True
+            continue
+        if current is None:
+            current=e
+        else:
+            # Older still-valid rows are historical access and should no longer
+            # compete with the learner's newest purchased plan.
+            e.status='superseded'
+            changed=True
+
+    if changed:
+        db.commit()
+    return current
 
 
 def entitlement_payload(e: Optional[Entitlement]):
@@ -87,13 +102,40 @@ def entitlement_payload(e: Optional[Entitlement]):
 def grant_entitlement(db: Session, order: CheckoutOrder):
     if order.entitlement_granted:
         return current_entitlement(db, order.user_id)
+
     plan=db.get(BillingPlan, order.plan_code)
-    if not plan: raise HTTPException(500,'Billing plan not found')
+    if not plan:
+        raise HTTPException(500,'Billing plan not found')
+
     now=utcnow()
     current=current_entitlement(db, order.user_id)
-    start = current.ends_at if current and current.ends_at and current.ends_at > now and current.tier_code==plan.tier_code else now
-    end = start + timedelta(days=plan.duration_days)
-    ent=Entitlement(user_id=order.user_id,tier_code=plan.tier_code,plan_code=plan.code,source_order_id=order.id,provider=order.provider,status='active',starts_at=start,ends_at=end)
+
+    # Same-tier repurchase extends the current term. A different tier takes
+    # effect immediately and supersedes the previous plan.
+    start=now
+    if current and current.tier_code==plan.tier_code and current.ends_at and current.ends_at>now:
+        start=current.ends_at
+
+    if current and current.status=='active':
+        current.status='superseded'
+
+    # Defensive cleanup in case legacy data contains more than one active row.
+    db.query(Entitlement).filter(
+        Entitlement.user_id==order.user_id,
+        Entitlement.status=='active'
+    ).update({'status':'superseded'}, synchronize_session=False)
+
+    end=start+timedelta(days=plan.duration_days)
+    ent=Entitlement(
+        user_id=order.user_id,
+        tier_code=plan.tier_code,
+        plan_code=plan.code,
+        source_order_id=order.id,
+        provider=order.provider,
+        status='active',
+        starts_at=start,
+        ends_at=end
+    )
     db.add(ent)
     order.entitlement_granted=True
     order.paid_at=order.paid_at or now
