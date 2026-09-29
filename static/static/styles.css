@@ -1379,3 +1379,149 @@ a.live-class-teaser{text-decoration:none}
 @media(max-width:1100px){.pricing-only-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}.simple-price-card{padding:20px 17px;min-height:410px}.simple-price-card h3{font-size:24px!important}.simple-price-badge strong{font-size:31px}}
 @media(max-width:900px){.pricing-only-grid{grid-template-columns:1fr!important}.simple-price-card{min-height:0}.simple-price-card.featured{transform:none}.simple-feature-list{margin-bottom:16px!important}}
 @media(max-width:680px){.billing-head{gap:12px}.billing-free-trial{width:100%}.simple-price-card{padding:19px 17px;border-radius:20px 7px 20px 7px}.simple-price-badge strong{font-size:30px}}
+
+
+/* =====================================================================
+   AZIELON — ELEGANT THEME (v5.0)
+   Ivory + deep navy + muted gold · Cormorant Garamond display + Jost text
+   Appended last so it overrides earlier versioned rules.
+   ===================================================================== */
+:root{
+  --navy:#14213D;--navy2:#1D2D4F;--ink:#1F2733;--muted:#626878;
+  --gold:#B8862F;--gold-deep:#8F6219;--gold-soft:#D9B56A;--gold-wash:#F6EEDC;
+  --ivory:#FBF8F1;--paper:#FFFFFF;--line:#E7DFCD;--line-soft:#F0EAD9;
+  --blue:#8F6219;--sky:#F6EEDC;--cream:#FBF8F1;
+  --green:#2F6B55;--red:#9B3B45;--amber:#8F6219;
+  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --sans:'Jost',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+  --shadow:0 1px 2px rgba(20,33,61,.04),0 8px 24px rgba(20,33,61,.05);
+}
+html body{font-family:var(--sans)!important;color:var(--ink);background:var(--ivory)!important;-webkit-font-smoothing:antialiased;font-variant-numeric:lining-nums}
+body button,body input,body select,body textarea{font-family:var(--sans)}
+body h1,body h2,body h3{font-family:var(--serif)!important;font-weight:600!important;color:var(--navy);letter-spacing:-.005em}
+body h2{font-size:clamp(28px,2.6vw,38px)!important;line-height:1.08!important}
+body h3{font-size:21px!important;line-height:1.2!important}
+body p{color:var(--muted)}
+body .eyebrow,body .sales-kicker{font-family:var(--sans)!important;font-size:10px!important;font-weight:600!important;letter-spacing:.2em!important;text-transform:uppercase;color:var(--gold-deep)!important}
+
+/* ---------- Buttons ---------- */
+body .primary,body button.primary{background:var(--navy)!important;color:#F3E3BD!important;border:1px solid var(--navy)!important;border-radius:999px!important;font-weight:500!important;letter-spacing:.06em;box-shadow:none!important;transition:background .2s,border-color .2s,color .2s}
+body .primary:hover{background:var(--gold-deep)!important;border-color:var(--gold-deep)!important;color:#fff!important}
+body .secondary,body button.secondary{background:#fff!important;color:var(--navy)!important;border:1px solid var(--line)!important;border-radius:999px!important;font-weight:500!important;box-shadow:none!important}
+body .secondary:hover{border-color:var(--gold)!important;color:var(--gold-deep)!important}
+body .text-btn,body .auth-inline-link,body .practice-progress-link{color:var(--gold-deep)!important;font-weight:500!important;background:none!important;border:0!important}
+body .text-btn:hover,body .auth-inline-link:hover{text-decoration:underline;text-underline-offset:3px}
+
+/* ---------- Form fields ---------- */
+body input:not([type=checkbox]):not([type=radio]),body select,body textarea{background:#fff!important;border:1px solid var(--line)!important;border-radius:10px!important;color:var(--ink)!important;box-shadow:none!important}
+body input:focus,body select:focus,body textarea:focus{outline:none!important;border-color:var(--navy)!important;box-shadow:0 0 0 3px rgba(20,33,61,.08)!important}
+body label{color:var(--navy)}
+body input::placeholder,body textarea::placeholder{color:#A09A8C}
+body input[type=checkbox],body input[type=radio]{accent-color:var(--navy)}
+
+/* =====================================================================
+   LANDING (sign-up / sales)
+   ===================================================================== */
+body .auth-gate,body .sales-shell,body .sales-shell-v426{background:var(--navy)!important}
+body .sales-panel,body .sales-panel-v426{background:var(--navy)!important;color:#fff}
+body .sales-panel:before,body .sales-panel:after,body .sales-panel-v426:before,body .sales-panel-v426:after{display:none!important}
+body .sales-panel-v426{border-right:1px solid rgba(217,181,106,.22)}
+body .sales-brand span{font-family:var(--serif)!important;font-size:24px!important;font-weight:600!important;letter-spacing:.02em;color:#fff}
+body .sales-brand img{border-radius:8px}
+body .sales-panel .sales-kicker{color:var(--gold-soft)!important}
+body .sales-copy h1{font-family:var(--serif)!important;font-weight:600!important;color:#fff!important;font-size:clamp(38px,3.6vw,54px)!important;line-height:1.04!important;letter-spacing:-.01em!important}
+body .sales-copy h1 em{font-style:italic;font-weight:500;color:var(--gold-soft)}
+body .sales-copy>p{color:#C9D0DD!important;font-size:16px!important;line-height:1.6!important;max-width:600px}
+body .sales-proof-row span{color:#E7E1D2!important;font-weight:400!important;letter-spacing:.02em}
+body .sales-cta,body .sales-cta-primary{background:var(--gold-soft)!important;color:var(--navy)!important;border:1px solid var(--gold-soft)!important;border-radius:999px!important;font-weight:600!important;letter-spacing:.08em!important;text-transform:uppercase;font-size:11.5px!important;box-shadow:none!important;transition:background .2s,color .2s}
+body .sales-cta:hover,body .sales-cta-primary:hover{background:#F3E3BD!important;border-color:#F3E3BD!important}
+body .live-class-teaser{background:transparent!important;border:1px solid rgba(217,181,106,.35)!important;border-radius:12px!important;transition:border-color .2s,background .2s}
+body .live-class-teaser:hover{background:rgba(217,181,106,.06)!important;border-color:var(--gold-soft)!important}
+body .live-class-teaser b{font-family:var(--serif);font-size:18px;font-weight:600;color:#fff}
+body .live-class-teaser small{color:#B9C1D0!important}
+body .live-class-teaser strong{color:var(--gold-soft)!important;font-weight:500!important;letter-spacing:.04em}
+body .live-class-icon{background:transparent!important;border:1px solid rgba(217,181,106,.4)!important;color:var(--gold-soft)!important;border-radius:50%!important}
+body .testimonial-card{background:transparent!important;border:0!important;border-left:0!important;border-top:1px solid rgba(217,181,106,.25)!important;border-radius:0!important;padding:16px 0 0!important}
+body .testimonial-card blockquote{font-family:var(--serif)!important;font-style:italic;font-size:17px!important;line-height:1.45!important;color:#EDE7DA!important}
+body .testimonial-stars{color:var(--gold-soft)!important;letter-spacing:.2em}
+body .testimonial-card figcaption b{color:#fff}
+body .testimonial-card figcaption span{color:#9FA8BA!important}
+body .founder-line b{font-family:var(--sans);font-weight:500;letter-spacing:.04em;color:#E7E1D2}
+body .founder-mini,body .founder-avatar{background:transparent!important;border:1px solid var(--gold-soft)!important;color:var(--gold-soft)!important;font-weight:600!important}
+
+body .auth-card,body .auth-card-v426{background:var(--ivory)!important}
+body .auth-card h2{font-size:clamp(30px,2.6vw,40px)!important}
+body .auth-sub{color:var(--muted)!important}
+body .signup-trust-badge{background:transparent!important;border:1px solid var(--gold)!important;color:var(--gold-deep)!important;border-radius:999px!important;letter-spacing:.16em!important;font-weight:600!important}
+body .auth-tabs-v426{border-bottom:1px solid var(--line)!important}
+body .auth-tabs-v426 button{color:var(--muted)!important;font-weight:500!important;letter-spacing:.04em}
+body .auth-tabs-v426 button.active{color:var(--navy)!important;box-shadow:inset 0 -2px 0 var(--gold)!important;border-color:var(--gold)!important}
+body .auth-card .signup-primary,body .auth-form .primary{background:var(--navy)!important;color:#F3E3BD!important;border-color:var(--navy)!important;box-shadow:none!important;text-transform:uppercase;letter-spacing:.12em!important;font-size:11.5px!important}
+body .auth-card .signup-primary:hover,body .auth-form .primary:hover{background:var(--gold-deep)!important;border-color:var(--gold-deep)!important;color:#fff!important}
+body .free-drill-note{color:var(--green)!important}
+body .auth-trust-strip{border-top:1px solid var(--line)!important;color:var(--muted)!important}
+body .build-version-badge{color:#B5AE9F!important}
+body .form-legal{color:#9A9486!important}
+
+/* Free trial overlay */
+body .trial-overlay{background:rgba(20,33,61,.55)!important;backdrop-filter:blur(3px)}
+body .trial-card{background:var(--ivory)!important;border:1px solid var(--line);border-radius:16px!important}
+body .trial-track{background:var(--line-soft)!important}
+body .trial-track i{background:var(--gold)!important}
+
+/* =====================================================================
+   APP SHELL
+   ===================================================================== */
+body .app-shell,body .app-shell>main{background:var(--ivory)!important}
+body .sidebar{background:var(--navy)!important;border-right:1px solid rgba(217,181,106,.18)}
+body .sidebar .brand strong{font-family:var(--serif)!important;font-size:22px!important;font-weight:600!important;color:#fff;letter-spacing:.02em}
+body .sidebar .brand span{color:var(--gold-soft)!important;letter-spacing:.18em!important;font-size:8.5px!important}
+body .sidebar nav button{color:#B7BFCE!important;background:transparent!important;border-radius:8px!important;font-weight:400!important;letter-spacing:.02em;position:relative;transition:color .2s,background .2s}
+body .sidebar nav button:hover{color:#fff!important;background:rgba(255,255,255,.04)!important}
+body .sidebar nav button.active{color:#F3E3BD!important;background:rgba(217,181,106,.10)!important;font-weight:500!important}
+body .sidebar nav button.active:before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:2px;border-radius:2px;background:var(--gold-soft)}
+body .sidebar nav button .nav-icon{color:inherit;opacity:.85}
+body .premium-lock{background:transparent!important;border:1px solid rgba(217,181,106,.45)!important;color:var(--gold-soft)!important;font-weight:500!important;letter-spacing:.08em}
+body .side-bottom{border-top:1px solid rgba(217,181,106,.18)!important;color:#B7BFCE}
+body .side-bottom .ghost{border:1px solid rgba(217,181,106,.35)!important;color:#E7E1D2!important;border-radius:999px!important;text-align:center!important}
+body .side-bottom .ghost:hover{background:rgba(217,181,106,.10)!important}
+
+body .topbar{background:rgba(251,248,241,.92)!important;border-bottom:1px solid var(--line)!important;backdrop-filter:blur(10px)}
+body .topbar h1{font-family:var(--serif)!important;font-size:30px!important;font-weight:600!important;color:var(--navy)}
+body .status-pill{background:transparent!important;border:1px solid var(--line)!important;color:var(--green)!important;letter-spacing:.06em;font-size:10px!important}
+body .avatar{background:var(--navy)!important;color:var(--gold-soft)!important;font-weight:600;letter-spacing:.06em;border:1px solid var(--gold-soft)}
+
+/* Cards & panels */
+body .panel,body .learning-path-card,body .question-card,body .plan-card,body .exam-card,body .mode-card,body .stats article,body .admingrid article,body .practice-progress-strip,body .exam-rules-panel{background:#fff!important;border:1px solid var(--line)!important;border-radius:14px!important;box-shadow:var(--shadow)!important}
+body .learning-overall b,body .practice-mini-stat b,body .progress-summary-strip b,body .exam-rules-grid b{font-family:var(--serif)!important;font-weight:600!important;color:var(--navy)!important}
+body .practice-progress-track,body .bars .track{background:var(--line-soft)!important}
+body .practice-progress-track i{background:var(--gold)!important}
+body .segmented{background:transparent!important;border:1px solid var(--line)!important;border-radius:999px!important;padding:3px!important}
+body .segmented button{border-radius:999px!important;color:var(--muted)!important;background:transparent!important;font-weight:500!important}
+body .segmented button.active{background:var(--navy)!important;color:#F3E3BD!important;box-shadow:none!important}
+body .filter-pills button,body .review-filter-row button{border-radius:999px!important}
+body .filter-pills button.active{background:var(--navy)!important;color:#F3E3BD!important;border-color:var(--navy)!important}
+body .pill{background:var(--gold-wash)!important;color:var(--gold-deep)!important;letter-spacing:.1em}
+body .option{border:1px solid var(--line)!important;border-radius:10px!important;background:#fff!important;transition:border-color .15s,background .15s}
+body .option:hover{border-color:var(--gold)!important;background:var(--ivory)!important}
+body .option.correct{border-color:#8DB5A2!important;background:#EEF5F0!important}
+body .option.wrong{border-color:#D2A1A7!important;background:#F8EEEF!important}
+body .exam-timer{font-family:var(--serif)!important;color:var(--navy)!important;font-weight:600!important}
+body .plan-card .price{font-family:var(--serif)!important;color:var(--navy)}
+body .modal-card{border-radius:14px!important;border:1px solid var(--line);background:var(--ivory)!important}
+body .bubble.ai{background:#fff!important;border:1px solid var(--line)!important}
+body .bubble.user,body .bubble.me{background:var(--navy)!important;color:#F3E3BD!important}
+body .message{color:var(--gold-deep)}
+
+@media(max-width:900px){
+  body .sales-panel-v426{border-right:0;border-bottom:1px solid rgba(217,181,106,.22)}
+  body .sales-copy h1{font-size:34px!important}
+}
+body .sales-panel-v426{justify-content:center!important}
+@media(max-width:700px){
+  body .testimonial-card{margin-left:0!important;margin-right:0!important;padding-left:0!important;padding-right:0!important;width:100%!important}
+  body .founder-line{display:flex!important;align-items:center!important;gap:10px!important}
+  body .founder-mini{width:28px!important;height:28px!important;min-width:28px!important;flex:0 0 28px!important;border-radius:50%!important;font-size:9px!important;display:grid!important;place-items:center!important;line-height:1!important;padding:0!important}
+  body .sales-cta,body .sales-cta-primary{letter-spacing:.05em!important;font-size:11px!important;padding:14px 16px!important}
+  body .testimonial-card figcaption{display:flex;gap:6px;flex-wrap:wrap}
+}

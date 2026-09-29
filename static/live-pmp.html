@@ -5,48 +5,60 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Live PMP Online Class | Azielon</title>
   <meta name="description" content="35-hour live PMP Certification Prep with Dr. Sonia Gandham. Tuesday–Friday, 8:00 AM–5:00 PM ET.">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --navy:#0d2b43;--navy2:#173f60;--gold:#f5b335;--ink:#182633;--muted:#677886;
-      --line:#dce5ea;--soft:#f5f8fa;--green:#11855f;--white:#fff;
+      --navy:#14213D;--ink:#1F2733;--muted:#626878;--gold:#B8862F;--gold-deep:#8F6219;--gold-soft:#D9B56A;
+      --ivory:#FBF8F1;--line:#E7DFCD;--line-soft:#F0EAD9;--green:#2F6B55;--red:#9B3B45;
+      --serif:'Cormorant Garamond',Georgia,serif;--sans:'Jost',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:var(--ink);background:#f4f7f9}
-    .page{min-height:100vh;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(430px,.95fr)}
-    .hero{background:linear-gradient(145deg,var(--navy),var(--navy2));color:white;padding:42px 54px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
-    .hero:after{content:"";position:absolute;width:520px;height:520px;border:1px solid rgba(255,255,255,.09);border-radius:50%;right:-160px;top:-170px;box-shadow:0 0 0 90px rgba(255,255,255,.025),0 0 0 180px rgba(255,255,255,.02)}
-    .brand{display:flex;align-items:center;gap:12px;font-family:Georgia,serif;font-size:21px;font-weight:700;position:relative;z-index:1}
-    .brand img{width:46px;height:46px;border-radius:10px}
-    .eyebrow{text-transform:uppercase;letter-spacing:.14em;color:#f8c257;font-size:11px;font-weight:800;margin:34px 0 8px;position:relative;z-index:1}
-    h1{font-family:Georgia,serif;font-size:44px;line-height:1.02;margin:0 0 14px;max-width:680px;position:relative;z-index:1}
-    .lead{font-size:16px;line-height:1.55;color:#dce9ef;max-width:670px;position:relative;z-index:1}
-    .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:24px 0 16px;max-width:720px;position:relative;z-index:1}
-    .fact{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);border-radius:14px;padding:14px}
-    .fact b{display:block;font-size:19px}.fact span{font-size:11px;color:#bcd0db}
-    .bullets{display:grid;gap:8px;font-size:13px;color:#e5eef3;position:relative;z-index:1}
-    .quote{margin-top:22px;padding:15px 16px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);font-size:12px;line-height:1.5;max-width:720px;position:relative;z-index:1}
-    .quote b{display:block;margin-top:8px}
-    .form-side{background:white;padding:40px 48px;display:flex;align-items:center}
-    .card{width:min(100%,620px);margin:auto}
-    .back{font-size:11px;text-decoration:none;color:var(--muted)}
-    .form-side h2{font-family:Georgia,serif;font-size:29px;line-height:1.05;margin:16px 0 7px;color:var(--navy)}
-    .sub{font-size:13px;line-height:1.45;color:var(--muted);margin:0 0 18px}
-    .summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
-    .summary div{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:11px}
-    .summary b{display:block;color:var(--navy);font-size:14px}.summary span{font-size:10px;color:var(--muted)}
-    form{display:grid;gap:10px}
-    label{font-size:11px;font-weight:700;color:var(--navy)}
-    input,select{width:100%;margin-top:5px;border:1px solid var(--line);border-radius:10px;padding:11px 12px;font-size:13px;background:white}
-    .help{font-size:10px;color:var(--muted);margin:0}
-    .secure{font-size:11px;color:var(--green);font-weight:800;margin:2px 0}
-    .message{font-size:11px;min-height:16px;color:#b42318}
-    button{border:0;border-radius:11px;background:var(--gold);color:var(--navy);font-weight:800;font-size:12px;padding:12px 15px;cursor:pointer}
+    body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--ivory);-webkit-font-smoothing:antialiased;font-variant-numeric:lining-nums}
+    .page{min-height:100vh;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(440px,.95fr)}
+    .hero{background:var(--navy);color:#fff;padding:48px clamp(32px,5vw,72px);display:flex;flex-direction:column;justify-content:center;border-right:1px solid rgba(217,181,106,.22)}
+    .brand{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-size:24px;font-weight:600;letter-spacing:.02em}
+    .brand img{width:42px;height:42px;border-radius:8px}
+    .eyebrow{text-transform:uppercase;letter-spacing:.22em;color:var(--gold-soft);font-size:10.5px;font-weight:600;margin:36px 0 12px}
+    h1{font-family:var(--serif);font-weight:600;font-size:clamp(36px,3.4vw,52px);line-height:1.05;letter-spacing:-.01em;margin:0 0 16px;max-width:640px}
+    h1 em{font-style:italic;font-weight:500;color:var(--gold-soft)}
+    .lead{font-size:16px;line-height:1.65;color:#C9D0DD;max-width:600px;margin:0}
+    .facts{display:grid;grid-template-columns:repeat(3,1fr);margin:30px 0 22px;max-width:620px;border-top:1px solid rgba(217,181,106,.28);border-bottom:1px solid rgba(217,181,106,.28)}
+    .fact{padding:16px 18px 14px 0}
+    .fact+.fact{padding-left:18px;border-left:1px solid rgba(217,181,106,.2)}
+    .fact b{display:block;font-family:var(--serif);font-size:28px;font-weight:600;color:#fff;line-height:1.05}
+    .fact span{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#AAB3C4}
+    .bullets{display:grid;gap:9px;font-size:14px;color:#E7E1D2;list-style:none;margin:0;padding:0}
+    .bullets span{display:flex;gap:10px;align-items:baseline}
+    .quote{margin-top:28px;padding-top:18px;border-top:1px solid rgba(217,181,106,.25);max-width:620px;font-family:var(--serif);font-style:italic;font-size:18px;line-height:1.45;color:#EDE7DA}
+    .quote b{display:block;margin-top:10px;font-family:var(--sans);font-style:normal;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft)}
+    .form-side{background:var(--ivory);padding:48px clamp(24px,4vw,64px);display:flex;align-items:center}
+    .card{width:min(100%,560px);margin:auto}
+    .back{font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--gold-deep);font-weight:500}
+    .back:hover{text-decoration:underline;text-underline-offset:3px}
+    .form-side h2{font-family:var(--serif);font-weight:600;font-size:clamp(30px,2.6vw,40px);line-height:1.06;margin:18px 0 8px;color:var(--navy)}
+    .sub{font-size:14px;line-height:1.55;color:var(--muted);margin:0 0 22px}
+    .summary{display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:22px;background:#fff;border:1px solid var(--line);border-radius:12px}
+    .summary div{padding:12px 16px}
+    .summary div+div{border-left:1px solid var(--line)}
+    .summary b{display:block;font-family:var(--serif);font-size:22px;font-weight:600;color:var(--navy);line-height:1.1}
+    .summary span{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+    form{display:grid;gap:14px}
+    label{font-size:12px;font-weight:500;letter-spacing:.02em;color:var(--navy)}
+    input,select{width:100%;margin-top:6px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font:inherit;font-size:14px;color:var(--ink);background:#fff}
+    input:focus,select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(20,33,61,.08)}
+    input::placeholder{color:#A09A8C}
+    .help{font-size:11.5px;color:var(--muted);margin:-4px 0 0}
+    .secure{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);font-weight:500;margin:4px 0 0}
+    .message{font-size:12px;min-height:16px;color:var(--red)}
+    button{border:1px solid var(--navy);border-radius:999px;background:var(--navy);color:#F3E3BD;font:inherit;font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:15px 18px;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+    button:hover{background:var(--gold-deep);border-color:var(--gold-deep);color:#fff}
     button:disabled{opacity:.55;cursor:not-allowed}
-    .legal{font-size:9.5px;color:var(--muted);text-align:center;margin:0}
+    .legal{font-size:11px;color:#9A9486;text-align:center;margin:0;line-height:1.5}
     @media(max-width:900px){
-      .page{grid-template-columns:1fr}.hero{padding:30px 26px}.form-side{padding:28px 22px}h1{font-size:36px}.facts{grid-template-columns:1fr 1fr 1fr}
+      .page{grid-template-columns:1fr}.hero{padding:36px 26px;border-right:0;border-bottom:1px solid rgba(217,181,106,.22)}.form-side{padding:32px 22px}
     }
-    @media(max-width:560px){.facts,.summary{grid-template-columns:1fr}.hero{padding:24px 20px}.form-side{padding:24px 18px}h1{font-size:32px}}
+    @media(max-width:560px){.facts,.summary{grid-template-columns:1fr}.fact+.fact{border-left:0;padding-left:0;border-top:1px solid rgba(217,181,106,.2)}.summary div+div{border-left:0;border-top:1px solid var(--line)}.hero{padding:28px 20px}h1{font-size:34px}}
   </style>
 </head>
 <body>
@@ -54,7 +66,7 @@
   <section class="hero">
     <div class="brand"><img src="/static/assets/azielon-logo.png" alt="Azielon">Azielon PMP Coach</div>
     <div class="eyebrow">Live PMP Certification Prep</div>
-    <h1>Prepare for the PMP exam with live, focused instruction.</h1>
+    <h1>Prepare for the PMP exam with <em>live, focused instruction.</em></h1>
     <p class="lead">A 35-hour live online class designed to help working professionals understand PMP concepts, scenario reasoning, Agile/Hybrid decisions, and exam traps.</p>
     <div class="facts">
       <div class="fact"><b>$999</b><span>Total program price</span></div>
@@ -127,11 +139,11 @@ $('#livePmpForm').onsubmit=async e=>{
     const r=await fetch('/api/public/pmp-class/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:$('#name').value,email:$('#email').value,preferred_date:$('#classDate').value})});
     const data=await r.json();
     if(!r.ok)throw new Error(data.detail||'Unable to save registration');
-    $('#message').style.color='#11855f';
+    $('#message').style.color='#2F6B55';
     $('#message').textContent='✓ Registration saved. Opening secure Autobooks payment…';
     setTimeout(()=>window.location.href=data.payment_url,400);
   }catch(err){
-    $('#message').style.color='#b42318';$('#message').textContent=err.message;
+    $('#message').style.color='#9B3B45';$('#message').textContent=err.message;
     btn.disabled=false;btn.textContent='Continue to Secure Online Payment →';
   }
 };
