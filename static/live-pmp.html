@@ -114,7 +114,6 @@
       <form id="livePmpForm">
         <label>Name<input id="name" required autocomplete="name" placeholder="Full name"></label>
         <label>Email<input id="email" type="email" required autocomplete="email" placeholder="you@email.com"></label>
-        <label>Phone <span class="opt">(optional)</span><input id="phone" type="tel" autocomplete="tel" placeholder="(555) 555-5555"></label>
         <label>Class start date (Tuesday)
           <select id="classDate" required><option value="">Choose an available Tuesday</option></select>
         </label>
@@ -157,15 +156,17 @@ populate();
 $('#livePmpForm').onsubmit=async e=>{
   e.preventDefault();
   const btn=$('#payBtn');btn.disabled=true;btn.textContent='Saving your registration…';$('#message').textContent='';
+  const payload={name:$('#name').value.trim(),email:$('#email').value.trim(),preferred_date:$('#classDate').value};
   try{
-    const r=await fetch('/api/public/pmp-class/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:$('#name').value,email:$('#email').value,phone:$('#phone').value,preferred_date:$('#classDate').value})});
-    const data=await r.json();
-    if(!r.ok)throw new Error(data.detail||'Unable to save registration');
+    const r=await fetch('/api/public/pmp-class/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const text=await r.text(); let data={}; try{data=JSON.parse(text)}catch(_){}
+    if(!r.ok) throw new Error((data&&data.detail&&(typeof data.detail==='string'?data.detail:'Please check your details and try again.'))||'We could not save your registration right now.');
     $('#message').style.color='#2F6B55';
     $('#message').textContent='✓ Registration saved. Opening secure Autobooks payment…';
     setTimeout(()=>window.location.href=CHECKOUT_URL,500);
   }catch(err){
-    $('#message').style.color='#9B3B45';$('#message').textContent=err.message;
+    $('#message').style.color='#9B3B45';
+    $('#message').textContent=(err&&err.message&&!/JSON|token|fetch/i.test(err.message)?err.message:'We could not save your registration right now.')+' You can still continue to payment below, and we will match your payment by name.';
     btn.disabled=false;btn.textContent='Continue to Secure Online Payment →';$('#fallback').hidden=false;
   }
 };
