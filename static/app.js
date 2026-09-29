@@ -580,25 +580,58 @@ function dashboardNextTricky(){return state.tricky.find(t=>['not_started','needs
 function dashboardNextDiagram(){return state.diagrams.find(d=>['not_started','needs_review'].includes(d.studyStatus||'not_started'))||state.diagrams[0]||null}
 function dashboardWorkspaceHeader(title,sub,badge=''){return `<div class="workspace-head"><div><h3>${escapeHtml(title)}</h3><p>${escapeHtml(sub)}</p></div>${badge?`<span class="workspace-badge">${escapeHtml(badge)}</span>`:''}</div>`}
 
-function todayDateKey(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
-function todayPlanStorageKey(){const userKey=(state.user?.email||state.user?.id||'learner').toString().toLowerCase();return `az_today_plan:${userKey}:${todayDateKey()}`}
-function getTodayPlanState(){try{return JSON.parse(localStorage.getItem(todayPlanStorageKey())||'{}')||{}}catch{return {}}}
-function saveTodayPlanState(v){localStorage.setItem(todayPlanStorageKey(),JSON.stringify(v||{}))}
+function todayDateKey(offsetDays=0){const d=new Date();d.setDate(d.getDate()+offsetDays);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function planUserKey(){return (state.user?.email||state.user?.id||'learner').toString().toLowerCase()}
+function todayPlanStorageKey(dateKey=todayDateKey()){return `az_today_plan:${planUserKey()}:${dateKey}`}
+function todayPlanSnapshotKey(dateKey=todayDateKey()){return `az_today_plan_tasks:${planUserKey()}:${dateKey}`}
+function getTodayPlanState(dateKey=todayDateKey()){try{return JSON.parse(localStorage.getItem(todayPlanStorageKey(dateKey))||'{}')||{}}catch{return {}}}
+function saveTodayPlanState(v,dateKey=todayDateKey()){localStorage.setItem(todayPlanStorageKey(dateKey),JSON.stringify(v||{}))}
+function getPlanSnapshot(dateKey=todayDateKey()){try{return JSON.parse(localStorage.getItem(todayPlanSnapshotKey(dateKey))||'[]')||[]}catch{return []}}
+function savePlanSnapshot(tasks,dateKey=todayDateKey()){const safe=(tasks||[]).map(t=>({id:t.id,type:t.type,label:t.label,title:t.title,detail:t.detail||'',view:t.view||'',count:t.count||null,focus:t.focus||'',domain:t.domain||'',examKind:t.examKind||'',itemId:t.item?.id||t.itemId||null,dateKey:t.dateKey||dateKey,carriedFrom:t.carriedFrom||null}));localStorage.setItem(todayPlanSnapshotKey(dateKey),JSON.stringify(safe))}
 function taskNativeDone(task){const x=task.item;if(!x)return false;const st=x.studyStatus||'not_started';return st==='reviewed'||st==='mastered'}
 function taskState(task){if(taskNativeDone(task))return 'done';const saved=getTodayPlanState()[task.id];return saved==='done'?'done':saved==='in_progress'?'in_progress':'not_started'}
 function taskStateLabel(s){return s==='done'?'Done':s==='in_progress'?'In progress':'Need to study'}
-function todayTaskRow(task){const st=taskState(task),disabled=st==='done';return `<article class="today-plan-task state-${st}" data-today-task="${escapeHtml(task.id)}"><span class="today-task-state">${st==='done'?'✓':st==='in_progress'?'●':'○'}</span><div class="today-task-main"><div class="today-task-title-row"><span class="workspace-kicker">${escapeHtml(task.label)}</span><span class="today-task-status">${escapeHtml(taskStateLabel(st))}</span></div><h4>${escapeHtml(task.title)}</h4><p>${escapeHtml(task.detail||'')}</p></div><div class="today-task-actions"><button class="text-btn" type="button" data-today-open="${escapeHtml(task.id)}">${st==='done'?'Review':'Open'} →</button><button class="secondary today-done-btn ${st==='done'?'is-complete':''}" type="button" data-today-done="${escapeHtml(task.id)}" ${disabled?'disabled':''}>${st==='done'?'✓ Done':'Done'}</button></div></article>`}
+function hydrateStoredTask(t){if(!t)return null;let item=null;if(t.type==='note')item=state.notes.find(x=>String(x.id)===String(t.itemId||String(t.id).replace(/^note:/,'')))||null;if(t.type==='tricky')item=state.tricky.find(x=>String(x.id)===String(t.itemId||String(t.id).replace(/^tricky:/,'')))||null;if(t.type==='diagram')item=state.diagrams.find(x=>String(x.id)===String(t.itemId||String(t.id).replace(/^diagram:/,'')))||null;return {...t,item,carriedFrom:t.carriedFrom||t.dateKey||null}}
+function priorUnfinishedTasks(maxDays=7){
+  const out=[];
+  for(let offset=1;offset<=maxDays;offset++){
+    const dateKey=todayDateKey(-offset),stateForDay=getTodayPlanState(dateKey),snapshot=getPlanSnapshot(dateKey);
+    for(const raw of snapshot){
+      const t=hydrateStoredTask({...raw,dateKey});if(!t)continue;
+      const saved=stateForDay[t.id]||'not_started';
+      const nativeDone=taskNativeDone(t);
+      if(saved==='done'||nativeDone)continue;
+      if(out.some(x=>x.id===t.id))continue;
+      out.push({...t,carriedFrom:dateKey,rolloverStatus:saved});
+    }
+  }
+  return out;
+}
+function todayTaskRow(task){const st=taskState(task),disabled=st==='done',carry=task.carriedFrom?`<span class="today-carryover">Carried over</span>`:'';return `<article class="today-plan-task state-${st} ${task.carriedFrom?'is-carryover':''}" data-today-task="${escapeHtml(task.id)}"><span class="today-task-state">${st==='done'?'✓':st==='in_progress'?'●':'○'}</span><div class="today-task-main"><div class="today-task-title-row"><span class="workspace-kicker">${escapeHtml(task.label)}</span>${carry}<span class="today-task-status">${escapeHtml(taskStateLabel(st))}</span></div><h4>${escapeHtml(task.title)}</h4><p>${escapeHtml(task.detail||'')}</p></div><div class="today-task-actions"><button class="text-btn" type="button" data-today-open="${escapeHtml(task.id)}">${st==='done'?'Review':'Open'} →</button><button class="secondary today-done-btn ${st==='done'?'is-complete':''}" type="button" data-today-done="${escapeHtml(task.id)}" ${disabled?'disabled':''}>${st==='done'?'✓ Done':'Done'}</button></div></article>`}
+function prioritizedNextItem(rows,weakDomain){if(!rows?.length)return null;const candidates=rows.filter(x=>['not_started','needs_review'].includes(x.studyStatus||'not_started'));if(!candidates.length)return rows[0]||null;if(weakDomain){const hit=candidates.find(x=>String(x.domain||'').toLowerCase()===String(weakDomain).toLowerCase());if(hit)return hit}return candidates[0]}
 function buildTodayTasks(p){
-  const tasks=[],nextNote=dashboardNextNote(),nextTricky=dashboardNextTricky(),nextDiagram=dashboardNextDiagram();
-  const daysLeft=Number(p?.adaptive_plan?.days_until_exam||0),tier=state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'full';
+  const plan=p?.adaptive_plan||{},weakDomain=plan?.weak_domains?.[0]?.domain||'';
+  const nextNote=prioritizedNextItem(state.notes,weakDomain),nextTricky=prioritizedNextItem(state.tricky,weakDomain),nextDiagram=prioritizedNextItem(state.diagrams,weakDomain);
+  const daysLeft=Number(plan.days_until_exam||0),tier=state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'full';
   const practiceCount=daysLeft>0&&daysLeft<=10?25:daysLeft>0&&daysLeft<=20?20:15;
-  if(nextNote)tasks.push({id:`note:${nextNote.id}`,type:'note',item:nextNote,label:'Read',title:nextNote.title,detail:(nextNote.keyRules||[])[0]||nextNote.summary||'Learn the rule PMI expects you to recognize.',view:'notes'});
-  if(nextTricky)tasks.push({id:`tricky:${nextTricky.id}`,type:'tricky',item:nextTricky,label:'Compare',title:`${nextTricky.left} vs ${nextTricky.right}`,detail:trickyDecisionText(nextTricky),view:'tricky'});
-  if((tier==='full'||String(tier).startsWith('full'))&&nextDiagram)tasks.push({id:`diagram:${nextDiagram.id}`,type:'diagram',item:nextDiagram,label:'Visualize',title:nextDiagram.title,detail:nextDiagram.whyItMatters||nextDiagram.whatItIs||'Use the model to connect the decision flow.',view:'diagrams'});
-  tasks.push({id:`practice:${todayDateKey()}`,type:'practice',label:'Practice',title:`${practiceCount} targeted questions`,detail:(p?.practice_unique_missed||0)>0?'Start with missed questions, then continue with mixed practice.':'Use mixed questions to turn today’s reading into exam decisions.',view:'practice',count:practiceCount,focus:(p?.practice_unique_missed||0)>0?'ever_missed':''});
+  const fresh=[];
+  if(nextNote)fresh.push({id:`note:${nextNote.id}`,type:'note',item:nextNote,label:'Read',title:nextNote.title,detail:(nextNote.keyRules||[])[0]||nextNote.summary||'Learn the rule PMI expects you to recognize.',view:'notes'});
+  if(nextTricky)fresh.push({id:`tricky:${nextTricky.id}`,type:'tricky',item:nextTricky,label:'Compare',title:`${nextTricky.left} vs ${nextTricky.right}`,detail:trickyDecisionText(nextTricky),view:'tricky'});
+  if((tier==='full'||String(tier).startsWith('full'))&&nextDiagram)fresh.push({id:`diagram:${nextDiagram.id}`,type:'diagram',item:nextDiagram,label:'Visualize',title:nextDiagram.title,detail:nextDiagram.whyItMatters||nextDiagram.whatItIs||'Use the model to connect the decision flow.',view:'diagrams'});
+  const practiceDetail=weakDomain?`Focus first on ${weakDomain}${(p?.practice_unique_missed||0)>0?' and retry missed questions.':'. Then continue with mixed practice.'}`:((p?.practice_unique_missed||0)>0?'Start with missed questions, then continue with mixed practice.':'Use mixed questions to turn today’s reading into exam decisions.');
+  fresh.push({id:`practice:${todayDateKey()}`,type:'practice',label:'Practice',title:`${practiceCount} targeted questions`,detail:practiceDetail,view:'practice',count:practiceCount,focus:(p?.practice_unique_missed||0)>0?'ever_missed':'',domain:weakDomain});
   const activeExam=(p?.exam_cards||[]).filter(x=>x.kind==='mock').find(x=>x.status==='active'||x.status==='paused');
-  if(daysLeft>0&&daysLeft<=10&&activeExam)tasks.push({id:`exam:${activeExam.exam_code}`,type:'exam',label:'Exam stamina',title:`Resume ${activeExam.exam_name||'mock exam'}`,detail:`${activeExam.answered||0}/${activeExam.total||180} answered`,view:'exams',examKind:'mock'});
-  return tasks.slice(0,4);
+  if(daysLeft>0&&daysLeft<=10&&activeExam)fresh.push({id:`exam:${activeExam.exam_code}`,type:'exam',label:'Exam stamina',title:`Resume ${activeExam.exam_name||'mock exam'}`,detail:`${activeExam.answered||0}/${activeExam.total||180} answered`,view:'exams',examKind:'mock'});
+
+  const carried=priorUnfinishedTasks(7).slice(0,2);
+  const tasks=[];
+  for(const t of [...carried,...fresh]){if(!tasks.some(x=>x.id===t.id))tasks.push(t);if(tasks.length>=4)break}
+  const todayState=getTodayPlanState();
+  let changed=false;
+  for(const t of tasks){if(t.carriedFrom&&!todayState[t.id]&&t.rolloverStatus==='in_progress'){todayState[t.id]='in_progress';changed=true}}
+  if(changed)saveTodayPlanState(todayState);
+  savePlanSnapshot(tasks);
+  return tasks;
 }
 async function markTodayTaskDone(task){
   if(task.item&&['note','tricky','diagram'].includes(task.type))await setStudyStatus(task.type,task.item.id,'reviewed');
@@ -606,7 +639,7 @@ async function markTodayTaskDone(task){
 }
 function openTodayTask(task){
   const s=getTodayPlanState();if(s[task.id]!=='done'){s[task.id]='in_progress';saveTodayPlanState(s)}
-  if(task.type==='practice'){showView('practice');setTimeout(()=>{if($('#pCount'))$('#pCount').value=task.count||15;if($('#pReviewFocus'))$('#pReviewFocus').value=task.focus||'';createPracticeSession()},50);return}
+  if(task.type==='practice'){showView('practice');setTimeout(()=>{if($('#pCount'))$('#pCount').value=task.count||15;if($('#pReviewFocus'))$('#pReviewFocus').value=task.focus||'';if($('#pDomain'))$('#pDomain').value=task.domain||'';createPracticeSession()},50);return}
   if(task.type==='exam'){state.examKind=task.examKind||'mock';showView('exams');return}
   if(task.type==='note'){state.noteMode='all';showView('notes');setTimeout(()=>{const i=state.notes.findIndex(x=>x.id===task.item.id);if(i>=0){state.noteIndex=i;renderNotes()}},60);return}
   if(task.type==='tricky'){state.trickyMode='all';showView('tricky');setTimeout(()=>{const rows=trickyRows();const i=rows.findIndex(x=>x.id===task.item.id);if(i>=0){state.flashIndex=i;renderTricky()}},60);return}
@@ -625,9 +658,10 @@ function bindDashboardWorkspaceActions(){
 function renderDashboardWorkspace(kind,p){
   const host=$('#dashboardWorkspace');if(!host)return;const next=state.studySummary?.next_item||null,overview=learningOverview(p),reviewCount=(p?.review_queue||[]).length||0;
   if(kind==='today'){
-    const plan=p?.adaptive_plan||{},daysLeft=Number(plan.days_until_exam||0),tasks=buildTodayTasks(p),done=tasks.filter(t=>taskState(t)==='done').length;
+    const plan=p?.adaptive_plan||{},daysLeft=Number(plan.days_until_exam||0),tasks=buildTodayTasks(p),done=tasks.filter(t=>taskState(t)==='done').length,carried=tasks.filter(t=>t.carriedFrom).length;
     const badge=daysLeft>0?`${daysLeft} day${daysLeft===1?'':'s'} to exam`:`${done}/${tasks.length} done`;
-    host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','Open each item, complete it, then mark it Done. Unfinished work stays visible and is prioritized next.',badge)}<div class="today-plan-summary"><div><span class="workspace-kicker">Today</span><b>${done}/${tasks.length} completed</b></div><div class="today-plan-progress"><i style="width:${tasks.length?Math.round(done/tasks.length*100):0}%"></i></div><small>${escapeHtml(plan.guidance||'Focus on the highest-value work first; the plan adjusts as your results change.')}</small></div><div class="today-plan-list">${tasks.map(todayTaskRow).join('')}</div>`;
+    const rolloverNote=carried?`${carried} unfinished item${carried===1?' was':'s were'} carried forward first. `:'';
+    host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','Open each item, complete it, then mark it Done. Unfinished work automatically moves to your next study day.',badge)}<div class="today-plan-summary"><div><span class="workspace-kicker">Today</span><b>${done}/${tasks.length} completed</b></div><div class="today-plan-progress"><i style="width:${tasks.length?Math.round(done/tasks.length*100):0}%"></i></div><small>${escapeHtml(rolloverNote+(plan.guidance||'The remaining slots are selected from your exam timeline and weakest areas.'))}</small></div><div class="today-plan-list">${tasks.map(todayTaskRow).join('')}</div>`;
   }else if(kind==='notes'){
     const n=dashboardNextNote(),g=state.studySummary?.groups?.notes||{};
     host.innerHTML=`${dashboardWorkspaceHeader('Topic Notes','Learn the concepts PMI expects you to recognize before you practice them.',`${g.complete||0}/${g.total||0} complete`)}${n?`<div class="workspace-two-col"><div class="workspace-primary"><span class="workspace-kicker">Next topic</span><h4>${escapeHtml(n.title)}</h4><p>${escapeHtml(n.summary||'Review the concept, decision rules, and exam traps.')}</p><button class="primary" data-dash-open="notes">Study this topic →</button></div><div class="workspace-detail-grid"><div><span>Key rule</span><p>${escapeHtml((n.keyRules||[])[0]||n.doFirst||'Focus on the decision rule the scenario is testing.')}</p></div><div><span>Trigger words</span><p>${escapeHtml((n.triggerWords||[]).slice(0,5).join(' · ')||'Open the topic to see the trigger words.')}</p></div><div><span>Memory</span><p>${escapeHtml(n.flowOrMemory||'Use the memory cue to retrieve the rule quickly on exam day.')}</p></div></div></div>`:'<div class="workspace-empty">No topic notes are available yet.</div>'}`;

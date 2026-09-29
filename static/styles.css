@@ -2337,3 +2337,9 @@ body .tricky-side-memory{padding-bottom:0!important}
 .today-plan-task.state-in_progress .today-task-state{background:#eaf4fb;border-color:#9cc8e2;color:#1d6690}.today-plan-task.state-in_progress .today-task-status{background:#eaf4fb;color:#1d6690}.today-plan-task.state-in_progress{background:linear-gradient(90deg,rgba(234,244,251,.45),transparent 58%)}
 .today-plan-task.state-done .today-task-state{background:#e8f5ec;border-color:#a9d6b6;color:#2b7650}.today-plan-task.state-done .today-task-status{background:#e8f5ec;color:#2b7650}.today-plan-task.state-done .today-task-main h4{text-decoration:line-through;text-decoration-color:#b7b2a8;text-decoration-thickness:1px;color:#68706e!important}.today-plan-task.state-done .today-task-main p{opacity:.7}
 @media(max-width:760px){.today-plan-summary{grid-template-columns:1fr}.today-plan-summary small{grid-column:auto}.today-plan-task{grid-template-columns:28px minmax(0,1fr)}.today-task-actions{grid-column:2;justify-content:flex-start;margin-top:2px}}
+
+/* ===== v5.14.9 daily-plan rollover ===== */
+.today-carryover{font-size:9px;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:3px 7px;background:#fff4df;color:#9a6411;border:1px solid #ead4a5}
+.today-plan-task.is-carryover{box-shadow:inset 3px 0 0 #d7a449}
+.today-plan-task.is-carryover.state-in_progress{box-shadow:inset 3px 0 0 #2f6f94}
+.today-plan-task.is-carryover.state-done{box-shadow:inset 3px 0 0 #2f7a55}
