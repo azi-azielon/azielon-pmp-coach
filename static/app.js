@@ -1557,7 +1557,7 @@ function requestFreeDrillSignup(){
 
   activateAuthTab('register');
 
-  setAuth('Create your free account, or choose Sign in if you already have one, to unlock the 5-question drill.');
+  setAuth('Enter your name to get started.');
 
   const name=$('#regName'); if(name)name.focus({preventScroll:true});
 

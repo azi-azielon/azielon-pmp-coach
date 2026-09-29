@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Azielon PMP Practice Coach</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="/static/styles.css?v=5.6.0"/>
+<link rel="stylesheet" href="/static/styles.css?v=5.8.0"/>
 </head>
 <body class="landing-active">
 <div id="authGate" class="auth-gate">
@@ -16,16 +16,17 @@
 
       <div class="sales-copy sales-copy-v429">
         <span class="sales-kicker">PMP prep that teaches you how to think</span>
-        <h1>Master PMP scenario questions.<br><em>Stop second-guessing your answers on exam day.</em></h1>
+        <h1>Master PMP scenario questions.<br><em>Stop second-guessing. Start thinking like PMI.</em></h1>
+        <p class="sales-lede">Learn the reasoning behind situational questions, identify weak areas, and build confidence before exam day.</p>
 
         <ul class="sales-value-list" aria-label="What you get">
-          <li><b>PMP Mindset Breakdown</b><span>Learn the exact reasoning behind situational questions.</span></li>
-          <li><b>Targeted Review</b><span>Instantly identify and fix weak areas.</span></li>
-          <li><b>Exam-Day Confidence</b><span>Full mock exams with clear visual answer explanations.</span></li>
+          <li><b>PMP Mindset Breakdown</b><span>Learn how PMI expects you to reason through situational questions.</span></li>
+          <li><b>Targeted Review</b><span>See exactly which concepts are costing you points and what to review next.</span></li>
+          <li><b>Exam-Day Confidence</b><span>Practice with realistic questions, mock exams, and visual explanations.</span></li>
         </ul>
 
         <div class="sales-cta-row">
-          <button id="trialStartBtn" class="sales-cta sales-cta-primary">Create account &amp; try 5 free questions <span>→</span></button>
+          <button id="trialStartBtn" class="sales-cta sales-cta-primary">Create account <span>→</span></button>
         </div>
 
         <figure class="testimonial-card testimonial-compact">
@@ -39,16 +40,16 @@
             <span>Taught by <b>Dr. Sonia Gandham, PMP®, CSM®</b></span>
             <span>Live class: 35 hours · $999 · Tue–Fri · 8 AM–5 PM ET</span>
           </div>
-          <a class="sales-cta-secondary" href="/live-pmp">PMP Live Classes <span>→</span></a>
+          <a class="sales-cta-secondary" href="/live-pmp">View Live PMP Class <span>→</span></a>
         </div>
       </div>
     </section>
 
     <section class="auth-card auth-card-v426">
       <div class="auth-inner-v426">
-        <div class="signup-trust-badge">▣ &nbsp; CREATE ACCOUNT FREE — NO CARD REQUIRED</div>
-        <h2>Create your Azielon PMP Coach account</h2>
-        <p class="auth-sub">Unlock the 5-question starter drill with full explanations.</p>
+        <div class="signup-trust-badge">Create account free — no card required</div>
+        <h2>Create PMP Coach Account</h2>
+        <p class="auth-sub">Start with 5 free PMP questions and see the reasoning behind every answer.</p>
 
         <div class="auth-tabs auth-tabs-v426"><button class="active" data-auth-tab="register">Create account</button><button data-auth-tab="login">Sign in</button></div>
 
@@ -56,8 +57,9 @@
           <label>Name<input id="regName" placeholder="Full name" required/></label>
           <label>Email<input id="regEmail" type="email" placeholder="you@email.com" required/></label>
           <label>Password<input id="regPassword" type="password" minlength="8" placeholder="8+ characters" required/></label>
-          <button class="primary wide signup-primary">Create free account <span>→</span></button>
-          <p class="form-legal">By creating an account you agree to the Terms and Privacy Policy.</p>
+          <button class="primary wide signup-primary">Create account <span>→</span></button>
+          <p class="form-legal">By creating an account, you agree to the Terms and Privacy Policy.</p>
+          <p class="form-perks">✓ 5 free questions · Full explanations · No credit card required</p>
         </form>
 
         <form id="loginForm" class="auth-form auth-form-v426 hidden">
@@ -82,13 +84,8 @@
           <button id="resetBackBtn" class="auth-inline-link" type="button">← Back to sign in</button>
         </form>
 
-        <p class="free-drill-note">✓ Your free 5-question starter drill unlocks after account creation.</p>
         <div id="authMessage" class="message"></div>
 
-        <div class="auth-trust-strip">
-          <span>♢&nbsp; No card required</span>
-          <span>▤&nbsp; Built around the 2026 PMP Examination Content Outline · Independent PMP prep</span>
-        </div>
       </div>
     </section>
   </div>
@@ -239,6 +236,6 @@
 <div id="zoomModal" class="modal hidden"><div class="modal-backdrop" data-close-modal="zoomModal"></div><div class="modal-card zoom-card"><div class="modal-head"><h3 id="zoomTitle">Diagram</h3><button class="ghost modal-x" data-close-modal="zoomModal">×</button></div><div class="zoom-controls"><button id="zoomOut" class="secondary">−</button><span id="zoomPct">100%</span><button id="zoomIn" class="secondary">+</button><button id="zoomReset" class="secondary">Fit</button><button id="zoomFull" class="secondary">Full screen</button></div><div id="zoomBody" class="zoom-body"></div></div></div>
 <div id="editorModal" class="modal hidden"><div class="modal-backdrop" data-close-modal="editorModal"></div><div class="modal-card editor-card"><div class="modal-head"><h3 id="editorTitle">Edit content</h3><button class="ghost modal-x" data-close-modal="editorModal">×</button></div><form id="editorForm" class="editor-form"></form></div></div>
 
-<script src="/static/app.js?v=5.6.0"></script>
+<script src="/static/app.js?v=5.8.0"></script>
 </body>
 </html>

@@ -1823,4 +1823,25 @@ body .sales-footnote{display:flex!important;align-items:center!important;justify
 body .sales-footnote-text{display:flex;flex-direction:column;gap:3px}
 body .sales-footnote .sales-cta-secondary{padding:8px 16px;font-size:10.5px;white-space:nowrap}
 
+/* v5.7 — buttons in normal case; capitals only for small gold labels */
+body .sales-cta,body .sales-cta-primary,body .sales-cta-secondary,
+body .auth-card .signup-primary,body .auth-form .primary,
+body .simple-plan-button,body .exam-card .primary,body #createPractice,
+body .learning-check-card .text-btn{text-transform:none!important;letter-spacing:.02em!important}
+body .sales-cta,body .sales-cta-primary{font-size:14.5px!important}
+body .auth-card .signup-primary,body .auth-form .primary{font-size:14.5px!important}
+body .sales-cta-secondary{font-size:13px!important}
+body .simple-plan-button,body #createPractice{font-size:13.5px!important}
+body .exam-card .primary{font-size:13px!important}
+body .sales-proof{margin:10px 0 0!important;font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:.02em;color:var(--gold-soft);opacity:.92}
+body .signup-trust-badge{text-transform:none!important;letter-spacing:.04em!important;font-size:12px!important}
+@media (max-height:680px){body .sales-proof{margin-top:6px!important;font-size:12px}}
+body .sales-copy .sales-cta-primary{font-size:14px!important;letter-spacing:.02em!important;padding:11px 24px!important}
+body .sales-copy .sales-cta-secondary{font-size:13px!important;letter-spacing:.02em!important}
+body .sales-copy p.sales-proof{margin:8px 0 12px!important;font-size:12.5px!important;line-height:1.4!important;letter-spacing:.01em!important;color:rgba(var(--gold-soft-rgb),.95)!important;max-width:none!important}
+@media (max-height:760px){body .sales-copy p.sales-proof{margin:5px 0 8px!important;font-size:12px!important}}
+body .sales-copy .testimonial-card,body .sales-copy .testimonial-card blockquote{max-width:640px!important}
+body .sales-copy p.sales-proof{margin:10px 0 14px!important;font-size:13px!important}
+@media (max-height:760px){body .sales-copy p.sales-proof{margin:6px 0 10px!important;font-size:12.5px!important}}
+
 
