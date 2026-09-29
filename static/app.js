@@ -586,7 +586,7 @@ function dashboardProgressSummary(p,kind){
 function dashboardNextNote(){return state.notes.find(n=>['not_started','needs_review'].includes(n.studyStatus||'not_started'))||state.notes[0]||null}
 function dashboardNextTricky(){return state.tricky.find(t=>['not_started','needs_review'].includes(t.studyStatus||'not_started'))||state.tricky[0]||null}
 function dashboardNextDiagram(){return state.diagrams.find(d=>['not_started','needs_review'].includes(d.studyStatus||'not_started'))||state.diagrams[0]||null}
-function dashboardWorkspaceHeader(title,sub,badge=''){return `<div class="workspace-head"><div><h3>${escapeHtml(title)}</h3><p>${escapeHtml(sub)}</p></div>${badge?`<span class="workspace-badge">${escapeHtml(badge)}</span>`:''}</div>`}
+function dashboardWorkspaceHeader(title,sub,badge=''){return `<div class="workspace-head"><div><h3>${escapeHtml(title)}</h3>${sub?`<p>${escapeHtml(sub)}</p>`:''}</div>${badge?`<span class="workspace-badge">${escapeHtml(badge)}</span>`:''}</div>`}
 
 function todayDateKey(offsetDays=0){const d=new Date();d.setDate(d.getDate()+offsetDays);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function planUserKey(){return (state.user?.email||state.user?.id||'learner').toString().toLowerCase()}
@@ -631,12 +631,12 @@ function renderTodayPlanFromDb(p,tasks){
   const host=$('#dashboardWorkspace');if(!host)return;const plan=p?.adaptive_plan||{},daysLeft=Number(plan.days_until_exam||0),done=tasks.filter(t=>taskState(t)==='done').length,carried=tasks.filter(t=>t.carriedFrom).length;
   const badge=daysLeft>0?`${daysLeft} day${daysLeft===1?'':'s'} to exam`:`${done}/${tasks.length} done`;
   const rolloverNote=carried?`${carried} unfinished item${carried===1?' was':'s were'} carried forward first. `:'';
-  host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','Open each item, complete it, then mark it Done. Your progress is saved to your account.',badge)}<div class="today-plan-summary"><div><span class="workspace-kicker">Today</span><b>${done}/${tasks.length} completed</b></div><div class="today-plan-progress"><i style="width:${tasks.length?Math.round(done/tasks.length*100):0}%"></i></div><small>${escapeHtml(rolloverNote+(plan.guidance||'The remaining slots are selected from your exam timeline and weakest areas.'))}</small></div><div class="today-plan-list">${tasks.length?tasks.map(todayTaskRow).join(''):'<div class="workspace-empty"><b>You are caught up for today.</b><p>Complete practice or review your readiness while Azielon prepares the next study day.</p></div>'}</div>`;
+  host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','',badge)}<div class="today-plan-summary"><div><span class="workspace-kicker">Today</span><b>${done}/${tasks.length} completed</b></div><div class="today-plan-progress"><i style="width:${tasks.length?Math.round(done/tasks.length*100):0}%"></i></div><small>${escapeHtml(rolloverNote+(plan.guidance||'The remaining slots are selected from your exam timeline and weakest areas.'))}</small></div><div class="today-plan-list">${tasks.length?tasks.map(todayTaskRow).join(''):'<div class="workspace-empty"><b>You are caught up for today.</b><p>Complete practice or review your readiness while Azielon prepares the next study day.</p></div>'}</div>`;
   bindDashboardWorkspaceActions();
 }
 async function loadAndRenderTodayPlan(p){
-  const host=$('#dashboardWorkspace');if(host)host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','Building today’s account-synced study list…')}<div class="workspace-empty"><p>Loading your plan…</p></div>`;
-  try{await syncDatabaseTodayPlan(p);renderTodayPlanFromDb(p,state.todayPlan||[])}catch(err){if(host)host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','Your daily plan could not be loaded.')}<div class="workspace-empty"><b>Unable to sync your study plan.</b><p>${escapeHtml(err.message||'Please try again.')}</p></div>`}
+  const host=$('#dashboardWorkspace');if(host)host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','')}<div class="workspace-empty"><p>Loading your plan…</p></div>`;
+  try{await syncDatabaseTodayPlan(p);renderTodayPlanFromDb(p,state.todayPlan||[])}catch(err){if(host)host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','')}<div class="workspace-empty"><b>Unable to sync your study plan.</b><p>${escapeHtml(err.message||'Please try again.')}</p></div>`}
 }
 async function setDailyTaskStatus(task,status){
   if(!task?.db_id)throw new Error('This task has not been saved to your account yet.');
@@ -763,20 +763,42 @@ function learnerJourneyState(p){
   return {index,stages,finish,next,score,overview};
 }
 
+function journeyStageTooltip(j,s,i){
+  if(i===j.index){
+    const nextTitle=j.stages[i+1]?.title||'Exam day';
+    const unfinished=(state.todayPlan||[]).filter(t=>taskState(t)!=='done');
+    if(s.key==='learn'){
+      const items=unfinished.filter(t=>['note','tricky','diagram'].includes(t.type)).slice(0,3).map(t=>t.title);
+      if(items.length)return `To reach ${nextTitle}:\n${items.map((x,n)=>`${n+1}. ${x}`).join('\n')}`;
+    }
+    if(s.key==='apply'){
+      const t=unfinished.find(x=>x.type==='practice');
+      if(t)return `To reach ${nextTitle}:\n1. ${t.title}\n2. Review every missed explanation\n3. Correct the rule before moving on`;
+    }
+    if(s.key==='repair')return `To reach ${nextTitle}:\n1. Clear current review concepts\n2. Retry missed questions\n3. Correct your top reasoning pattern`;
+    if(s.key==='prove')return `To reach ${nextTitle}:\n1. Complete a full mock\n2. Review the diagnostic\n3. Close the weakest remaining gap`;
+    return `Current stage: ${s.title}.\n${j.finish}`;
+  }
+  if(i<j.index)return `${s.title} complete.`;
+  return `${s.title}: ${s.sub}`;
+}
+
 function renderLearnerJourney(p){
   const host=$('#learnerJourney');if(!host)return;
   const current=state.currentView||'dashboard';
   if(isStaff()||['billing','admin','live'].includes(current)){host.classList.add('hidden');host.innerHTML='';return}
-  const j=learnerJourneyState(p||{}),stage=j.stages[j.index];
+  const j=learnerJourneyState(p||{});
   host.classList.remove('hidden');
-  host.innerHTML=`<div class="learner-journey-inner"><div class="journey-stage-row" role="list" aria-label="PMP learner journey">${j.stages.map((s,i)=>`<button type="button" role="listitem" class="journey-stage ${i<j.index?'done':i===j.index?'current':'future'}" data-journey-stage="${s.key}" data-journey-target="${s.target}" aria-current="${i===j.index?'step':'false'}"><span class="journey-stage-dot">${i<j.index?'✓':i+1}</span><span class="journey-stage-copy"><b>${escapeHtml(s.title)}</b><small>${escapeHtml(s.sub)}</small></span></button>`).join('')}</div><div class="journey-answer-row"><div><span>Where am I?</span><b>${escapeHtml(stage.title)}</b></div><div class="journey-finish"><span>Finish this stage</span><b>${escapeHtml(j.finish)}</b></div><div><span>What happens next?</span><b>${escapeHtml(j.next)}</b></div></div></div>`;
+  host.innerHTML=`<div class="learner-journey-inner"><div class="journey-stage-row" role="list" aria-label="PMP learner journey">${j.stages.map((s,i)=>{const tip=journeyStageTooltip(j,s,i);return `<button type="button" role="listitem" class="journey-stage ${i<j.index?'done':i===j.index?'current':'future'}" data-journey-stage="${s.key}" data-journey-target="${s.target}" data-journey-tip="${escapeHtml(tip)}" aria-current="${i===j.index?'step':'false'}"><span class="journey-stage-copy"><b>${escapeHtml(s.title)}</b></span></button>`}).join('')}</div></div>`;
   $$('[data-journey-stage]').forEach(btn=>btn.onclick=()=>{const key=btn.dataset.journeyStage,target=btn.dataset.journeyTarget;if(key==='prove'){state.examKind='mock';showView('exams')}else if(key==='ready')showView('progress');else showView(target)});
 }
 
 function renderGlobalStudyNav(p){
   const host=$('#globalStudyNav');if(!host)return;
   const current=state.currentView||'dashboard';
-  if(['billing','admin','live'].includes(current)){host.classList.add('hidden');host.innerHTML='';renderLearnerJourney(p||{});return}
+  const studyContext=!['billing','admin','live'].includes(current);
+  document.body.classList.toggle('study-context-active',studyContext&&!isStaff());
+  if(!studyContext){host.classList.add('hidden');host.innerHTML='';renderLearnerJourney(p||{});return}
   host.classList.remove('hidden');
   const overview=learningOverview(p||{});
   const tabs=[['today','Today'],['notes','Topic Notes'],['tricky','Tricky Words'],['diagrams','Diagrams'],['practice','Practice'],['mistakes','Fix Mistakes'],['exams','Mock Exams'],['readiness','Readiness + Plan'],['coach','PMP Coach']];
