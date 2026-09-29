@@ -118,6 +118,19 @@ class StudyItemState(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     __table_args__ = (UniqueConstraint('user_id','content_type','content_id', name='uq_study_state_user_item'),)
 
+
+class StudyPlanProfile(Base):
+    __tablename__ = 'study_plan_profiles'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'), unique=True, index=True, nullable=False)
+    exam_date = Column(DateTime)
+    weekly_hours = Column(Float, default=7.0, nullable=False)
+    study_days_per_week = Column(Integer, default=5, nullable=False)
+    session_minutes = Column(Integer, default=45, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    user = relationship('User')
+
 class AuditLog(Base):
     __tablename__ = 'audit_logs'
     id = Column(Integer, primary_key=True)

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Azielon PMP Practice Coach</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="/static/styles.css?v=5.13.4"/>
+<link rel="stylesheet" href="/static/styles.css?v=5.14.0"/>
 </head>
 <body class="landing-active">
 <div id="authGate" class="auth-gate">
@@ -238,6 +238,37 @@
       <div class="section-intro compact-intro"><div><span class="eyebrow">Learner report card</span><h2>My Progress</h2><p>See what you have practiced, completed, and what to continue next.</p></div></div>
       <div class="panel progress-plan-card"><div><span class="eyebrow">My current plan</span><h3 id="progressPlanName">Loading…</h3><p id="progressPlanDetail" class="small-note">Checking access dates…</p></div><button class="secondary" id="progressManagePlan">Manage plan</button></div>
       <div class="progress-summary-strip"><div><span>Practice</span><b id="pPracticeAnswered">0</b><small>attempts</small></div><div><span>Correct</span><b id="pCorrect">0</b><small>all activity</small></div><div><span>Accuracy</span><b id="pAccuracy">—</b><small>overall</small></div><div><span>Concepts to review</span><b id="pReviewCount">0</b><small>current</small></div></div>
+
+      <div class="coach-intelligence-grid">
+        <section class="panel readiness-card">
+          <div class="coach-card-head"><div><span class="eyebrow">Azielon readiness</span><h3>Your Readiness Score</h3></div><div class="readiness-ring" id="readinessRing"><b id="readinessScore">0</b><span>/100</span></div></div>
+          <div class="readiness-track"><i id="readinessFill" style="width:0%"></i></div>
+          <div class="readiness-status"><b id="readinessLabel">Building baseline</b><span id="readinessEvidence">Developing evidence</span></div>
+          <p id="readinessNote" class="small-note">Complete practice and mock exams to strengthen the signal.</p>
+          <div id="readinessMetrics" class="readiness-metrics"></div>
+        </section>
+
+        <section class="panel adaptive-plan-card">
+          <div class="coach-card-head"><div><span class="eyebrow">Adaptive study plan</span><h3 id="adaptivePhase">Your weekly plan</h3></div><button id="editStudyPlanBtn" class="text-btn" type="button">Edit plan</button></div>
+          <p id="adaptiveGuidance" class="small-note">Your plan will adapt to your performance.</p>
+          <div id="adaptiveStats" class="adaptive-stats"></div>
+          <div id="adaptiveSessions" class="adaptive-sessions"></div>
+          <form id="studyPlanForm" class="study-plan-form hidden">
+            <label>Exam date<input id="coachExamDate" type="date"></label>
+            <label>Hours / week<input id="coachWeeklyHours" type="number" min="1" max="40" step="0.5" value="7"></label>
+            <label>Study days / week<input id="coachStudyDays" type="number" min="1" max="7" value="5"></label>
+            <label>Minutes / session<input id="coachSessionMinutes" type="number" min="20" max="180" step="5" value="45"></label>
+            <div class="study-plan-actions"><button class="primary" type="submit">Save plan</button><button class="secondary" id="cancelStudyPlanBtn" type="button">Cancel</button></div>
+            <div id="studyPlanMessage" class="message"></div>
+          </form>
+        </section>
+      </div>
+
+      <section class="panel mistake-engine-card">
+        <div class="coach-card-head"><div><span class="eyebrow">Mistake Pattern Engine</span><h3>How your reasoning is breaking down</h3><p class="small-note">Patterns are inferred from incorrect practice and completed exam answers.</p></div></div>
+        <div id="mistakePatterns" class="mistake-patterns"><p class="small-note">Complete more questions to identify recurring patterns.</p></div>
+      </section>
+
       <div class="report-section-head"><div><span class="eyebrow">Exam report cards</span><h3>Your exams</h3></div><small id="progressBenchmarkNote"></small></div>
       <div id="examReportCards" class="exam-report-cards"></div>
       <div class="report-two-col"><div class="panel"><span class="eyebrow">Domain performance</span><div id="domainBars" class="bars"></div></div><div class="panel"><span class="eyebrow">Practice performance</span><div id="progressPracticeReport" class="practice-report-mini"></div></div></div>
@@ -278,7 +309,7 @@
 <div id="zoomModal" class="modal hidden"><div class="modal-backdrop" data-close-modal="zoomModal"></div><div class="modal-card zoom-card"><div class="modal-head"><h3 id="zoomTitle">Diagram</h3><button class="ghost modal-x" data-close-modal="zoomModal">×</button></div><div class="zoom-controls"><button id="zoomOut" class="secondary">−</button><span id="zoomPct">100%</span><button id="zoomIn" class="secondary">+</button><button id="zoomReset" class="secondary">Fit</button><button id="zoomFull" class="secondary">Full screen</button></div><div id="zoomBody" class="zoom-body"></div></div></div>
 <div id="editorModal" class="modal hidden"><div class="modal-backdrop" data-close-modal="editorModal"></div><div class="modal-card editor-card"><div class="modal-head"><h3 id="editorTitle">Edit content</h3><button class="ghost modal-x" data-close-modal="editorModal">×</button></div><form id="editorForm" class="editor-form"></form></div></div>
 
-<script src="/static/app.js?v=5.13.4"></script>
+<script src="/static/app.js?v=5.14.0"></script>
 <script src="/static/live-form.js?v=5.13.0"></script>
 </body>
 </html>

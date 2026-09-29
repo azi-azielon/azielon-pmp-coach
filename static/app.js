@@ -688,7 +688,43 @@ async function openExamFromProgress(code,sessionId,status){state.examKind=String
 
 window.openExamFromProgress=openExamFromProgress;
 
-async function loadProgress(){if(!state.token)return;const [p,bm]=await Promise.all([api('/api/progress'),state.billing?Promise.resolve(state.billing):api('/api/billing/me')]);state.lastProgress=p;state.billing=bm;renderProgressPlan(bm);renderPracticeProgress(p);state.studySummary=p.study_summary||state.studySummary;renderContinueLearning();renderLearningDashboard(p);
+function renderCoachIntelligence(p){
+  const r=p.readiness||{};
+  const score=Math.max(0,Math.min(100,Number(r.score||0)));
+  const scoreEl=$('#readinessScore');if(scoreEl)scoreEl.textContent=Math.round(score);
+  const fill=$('#readinessFill');if(fill)fill.style.width=score+'%';
+  const ring=$('#readinessRing');if(ring)ring.style.setProperty('--readiness',score);
+  if($('#readinessLabel'))$('#readinessLabel').textContent=r.label||'Building baseline';
+  if($('#readinessEvidence'))$('#readinessEvidence').textContent=`${String(r.evidence_level||'developing').replace(/^./,c=>c.toUpperCase())} evidence`;
+  if($('#readinessNote'))$('#readinessNote').textContent=r.note||'';
+  if($('#readinessMetrics'))$('#readinessMetrics').innerHTML=[
+    ['Practice accuracy',r.practice_accuracy==null?'—':r.practice_accuracy+'%'],
+    ['Practice coverage',r.practice_coverage==null?'—':r.practice_coverage+'%'],
+    ['Exam average',r.exam_average==null?'Not yet':r.exam_average+'%'],
+    ['Review items',r.review_items??0]
+  ].map(([k,v])=>`<div><span>${escapeHtml(k)}</span><b>${escapeHtml(String(v))}</b></div>`).join('');
+
+  const patterns=p.mistake_patterns||[];
+  if($('#mistakePatterns'))$('#mistakePatterns').innerHTML=patterns.length?patterns.map((x,i)=>`<article class="mistake-pattern-row"><div class="pattern-rank">${i+1}</div><div class="pattern-copy"><div class="pattern-title"><h4>${escapeHtml(x.title)}</h4><span>${x.count} miss${x.count===1?'':'es'}</span></div><p>${escapeHtml(x.tip||'')}</p><small>Most visible in ${escapeHtml(x.top_domain||'PMP')} · ${escapeHtml(x.top_concept||'General PMP reasoning')}</small></div></article>`).join(''):'<div class="coach-empty"><b>No recurring mistake pattern yet.</b><p>Complete more practice questions or a mock exam and the coach will begin identifying how your reasoning breaks down.</p></div>';
+
+  const plan=p.adaptive_plan||{};
+  if($('#adaptivePhase'))$('#adaptivePhase').textContent=plan.phase?`${plan.phase} plan`:'Your weekly plan';
+  if($('#adaptiveGuidance'))$('#adaptiveGuidance').textContent=plan.guidance||'Your plan will adapt to your performance.';
+  if($('#adaptiveStats'))$('#adaptiveStats').innerHTML=[
+    ['Exam',plan.days_until_exam==null?'Set date':(plan.days_until_exam>=0?`${plan.days_until_exam} days`:'Date passed')],
+    ['Weekly target',`${plan.target_questions_per_week||0} questions`],
+    ['Schedule',`${plan.study_days_per_week||0} days × ${plan.session_minutes||0} min`]
+  ].map(([k,v])=>`<div><span>${escapeHtml(k)}</span><b>${escapeHtml(String(v))}</b></div>`).join('');
+  if($('#adaptiveSessions'))$('#adaptiveSessions').innerHTML=(plan.sessions||[]).map(x=>`<div class="adaptive-session"><span>Day ${x.day}</span><div><b>${escapeHtml(x.title)}</b><small>${escapeHtml(x.detail)}</small></div><em>${x.minutes} min</em></div>`).join('');
+
+  const profile=p.study_profile||{};
+  if($('#coachExamDate'))$('#coachExamDate').value=profile.exam_date||'';
+  if($('#coachWeeklyHours'))$('#coachWeeklyHours').value=profile.weekly_hours||7;
+  if($('#coachStudyDays'))$('#coachStudyDays').value=profile.study_days_per_week||5;
+  if($('#coachSessionMinutes'))$('#coachSessionMinutes').value=profile.session_minutes||45;
+}
+
+async function loadProgress(){if(!state.token)return;const [p,bm]=await Promise.all([api('/api/progress'),state.billing?Promise.resolve(state.billing):api('/api/billing/me')]);state.lastProgress=p;state.billing=bm;renderProgressPlan(bm);renderPracticeProgress(p);state.studySummary=p.study_summary||state.studySummary;renderContinueLearning();renderLearningDashboard(p);renderCoachIntelligence(p);
 
 const set=(id,val)=>{const el=$(id);if(el)el.textContent=val};
 
@@ -1865,6 +1901,11 @@ document.addEventListener('click',e=>{
 },true);
 
  
+
+
+if($('#editStudyPlanBtn'))$('#editStudyPlanBtn').onclick=()=>{$('#studyPlanForm')?.classList.remove('hidden');$('#editStudyPlanBtn').classList.add('hidden')};
+if($('#cancelStudyPlanBtn'))$('#cancelStudyPlanBtn').onclick=()=>{$('#studyPlanForm')?.classList.add('hidden');$('#editStudyPlanBtn')?.classList.remove('hidden')};
+if($('#studyPlanForm'))$('#studyPlanForm').onsubmit=async e=>{e.preventDefault();const msg=$('#studyPlanMessage');if(msg)msg.textContent='Saving…';try{await api('/api/coach/profile',{method:'PUT',body:JSON.stringify({exam_date:$('#coachExamDate')?.value||'',weekly_hours:Number($('#coachWeeklyHours')?.value||7),study_days_per_week:Number($('#coachStudyDays')?.value||5),session_minutes:Number($('#coachSessionMinutes')?.value||45)})});if(msg)msg.textContent='Plan updated.';$('#studyPlanForm').classList.add('hidden');$('#editStudyPlanBtn')?.classList.remove('hidden');await loadProgress()}catch(err){if(msg)msg.textContent=err.message||'Unable to save plan.'}};
 
 $('#progressManagePlan').onclick=()=>showView('billing');
 
