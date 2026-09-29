@@ -108,24 +108,34 @@ def grant_entitlement(db: Session, order: CheckoutOrder):
         raise HTTPException(500,'Billing plan not found')
 
     now=utcnow()
-    current=current_entitlement(db, order.user_id)
 
-    # Same-tier repurchase extends the current term. A different tier takes
-    # effect immediately and supersedes the previous plan.
-    start=now
-    if current and current.tier_code==plan.tier_code and current.ends_at and current.ends_at>now:
-        start=current.ends_at
-
-    if current and current.status=='active':
-        current.status='superseded'
-
-    # Defensive cleanup in case legacy data contains more than one active row.
-    db.query(Entitlement).filter(
+    # Read all active rows so we can safely collapse any legacy duplicates.
+    active_rows=db.query(Entitlement).filter(
         Entitlement.user_id==order.user_id,
         Entitlement.status=='active'
-    ).update({'status':'superseded'}, synchronize_session=False)
+    ).order_by(Entitlement.created_at.desc(), Entitlement.id.desc()).all()
+
+    same_tier_current=None
+
+    for existing in active_rows:
+        if existing.ends_at and existing.ends_at <= now:
+            existing.status='expired'
+            continue
+
+        if same_tier_current is None and existing.tier_code==plan.tier_code:
+            same_tier_current=existing
+
+        # A new purchase becomes the learner's only active paid plan.
+        existing.status='superseded'
+
+    # Same-tier repurchase extends from the prior end date.
+    # A tier change starts immediately.
+    start=now
+    if same_tier_current and same_tier_current.ends_at and same_tier_current.ends_at > now:
+        start=same_tier_current.ends_at
 
     end=start+timedelta(days=plan.duration_days)
+
     ent=Entitlement(
         user_id=order.user_id,
         tier_code=plan.tier_code,
@@ -137,10 +147,13 @@ def grant_entitlement(db: Session, order: CheckoutOrder):
         ends_at=end
     )
     db.add(ent)
+
     order.entitlement_granted=True
     order.paid_at=order.paid_at or now
     order.status='paid'
-    db.commit(); db.refresh(ent)
+
+    db.commit()
+    db.refresh(ent)
     return ent
 
 
