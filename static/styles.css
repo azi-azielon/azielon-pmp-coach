@@ -1769,5 +1769,45 @@ body .note-nav,body .diagram-nav{padding:10px 18px!important}
   body .note-section-grid section p,body .note-section-grid section li,body .tricky-guide-sections p{font-size:12.5px!important;line-height:1.5!important}
   body .notes-toolbar,body .tricky-toolbar,body .diagram-toolbar{margin-bottom:8px!important}
 }
+/* never clip content: center only when it fits, otherwise allow scrolling */
+body .sales-panel-v426,body .auth-card-v426{justify-content:safe center!important;overflow-y:auto!important}
+@media(max-height:680px) and (min-width:901px){
+  body .sales-panel-v426{padding-top:18px!important;padding-bottom:18px!important}
+  body .sales-brand{margin-bottom:12px!important}
+  body .sales-brand span{font-size:20px!important}
+  body .sales-brand img{width:34px!important;height:34px!important}
+  body .sales-kicker{margin-bottom:6px!important}
+  body .sales-copy h1{font-size:clamp(28px,5.2vh,38px)!important;margin-bottom:12px!important}
+  body .sales-value-list{gap:6px;margin-bottom:14px}
+  body .sales-value-list li{font-size:14px}
+  body .sales-value-list span{font-size:12.5px}
+  body .sales-copy .sales-cta-primary{padding:12px 24px!important}
+  body .testimonial-card.testimonial-compact{margin-top:14px!important;padding-top:10px!important}
+  body .testimonial-card blockquote{font-size:16px!important;margin:2px 0 4px!important}
+  body .testimonial-stars{display:none}
+  body .sales-footnote{margin-top:10px;padding-top:10px}
+  body .auth-inner-v426{padding-top:14px!important;padding-bottom:14px!important}
+  body .signup-trust-badge{margin-bottom:8px!important}
+  body .auth-card h2{font-size:28px!important;margin:4px 0!important}
+  body .auth-sub{margin:0 0 8px!important;font-size:13px!important}
+  body .auth-form-v426{gap:6px!important}
+  body .auth-form-v426 input{height:38px!important;padding:6px 12px!important}
+  body .auth-trust-strip{display:none!important}
+}
+/* very short app screens */
+@media(max-height:660px){
+  body .topbar{height:52px!important}
+  body .topbar h1{font-size:23px!important}
+  body .journey-dots{display:none!important}
+  body .journey-label{margin:8px 0 2px!important}
+  body .journey-head h2,body #learningPlanTitle{font-size:22px!important}
+  body #dashboard .continue-strip{padding:10px 18px!important}
+  body .continue-strip h3,body #continueTitle{font-size:18px!important}
+  body .learning-section-head h3{font-size:19px!important}
+  body .sidebar .brand{padding-bottom:6px!important}
+  body .sidebar nav button{padding:6px 12px!important}
+  body .note-section-grid section p,body .note-section-grid section li,body .tricky-guide-sections p{font-size:12px!important}
+  body .tricky-guide-sections section{padding:8px 12px!important}
+}
 
 
