@@ -271,9 +271,61 @@ async function rateFlashcard(id,rating){const labels={again:'Added to review aga
 
 function trickyRows(){const q=($('#trickySearch')?.value||'').toLowerCase();let rows=state.tricky.filter(t=>!q||JSON.stringify(t).toLowerCase().includes(q));if(state.trickyMode==='study')rows=rows.filter(t=>['not_started','needs_review'].includes(t.studyStatus||'not_started'));if(state.trickyMode==='needs_review')rows=rows.filter(t=>(t.studyStatus||'')==='needs_review');return rows}
 
-function trickyGuideHtml(t){return `<div class="tricky-guide-sections"><section class="tricky-what"><h4>What it is</h4><div class="tricky-definition-grid"><div><b>${escapeHtml(t.left)}</b><p>${escapeHtml(t.leftMeaning||'')}</p></div><div><b>${escapeHtml(t.right)}</b><p>${escapeHtml(t.rightMeaning||'')}</p></div></div></section><section><h4>Why it matters</h4><p>${escapeHtml(t.hook||'')}</p></section><section><h4>How to read it</h4><p>Identify which side of the distinction the scenario describes, then use the definitions above to eliminate the look-alike answer.</p></section><section class="tricky-trap"><h4>Common exam trap</h4><p>${escapeHtml(t.trap||'')}</p></section><section class="tricky-memory"><h4>Memory hook</h4><p><b>${escapeHtml(t.memory||'')}</b></p></section></div>`}
+function trickyValue(t,keys){
+  for(const k of keys){
+    const direct=t?.[k];
+    if(typeof direct==='string'&&direct.trim())return direct.trim();
+    const body=t?.body?.[k];
+    if(typeof body==='string'&&body.trim())return body.trim();
+  }
+  return '';
+}
+function trickyObjectValue(t,keys){
+  for(const k of keys){
+    const direct=t?.[k];
+    if(direct&&typeof direct==='object')return direct;
+    const body=t?.body?.[k];
+    if(body&&typeof body==='object')return body;
+  }
+  return null;
+}
+function escapeRegex(text){return String(text).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+function trickyLabelMemory(text,label){
+  if(!text||!label)return '';
+  const cleaned=String(text).replace(/\n/g,' | ');
+  const safe=escapeRegex(label);
+  const match=cleaned.match(new RegExp(`${safe}\\s*[:\\-–]\\s*([^|]+)`,'i'));
+  return match?match[1].trim():'';
+}
+function trickySideMeaning(t,side){return trickyValue(t,[`${side}Meaning`,`${side}_meaning`])}
+function trickySideCue(t,side){
+  const cue=trickyValue(t,[`${side}ScenarioCue`,`${side}Cue`,`${side}Clue`,`${side}Signal`,`${side}TriggerWords`,`${side}Action`,`${side}Use`,`${side}_scenario_cue`,`${side}_cue`,`${side}_signal`,`${side}_trigger_words`,`${side}_action`]);
+  if(cue)return cue;
+  const meaning=trickySideMeaning(t,side);
+  return meaning?`When the scenario is really describing ${meaning.charAt(0).toLowerCase()+meaning.slice(1)}`:'Use this side when the scenario clearly fits this term.';
+}
+function trickySideMemory(t,side){
+  const direct=trickyValue(t,[`${side}Memory`,`${side}_memory`]);
+  if(direct)return direct;
+  const keyed=trickyObjectValue(t,['memoryHooks','memory_hooks']);
+  if(keyed&&(keyed[side]||keyed[side==='left'?'left':'right']))return keyed[side]||keyed[side==='left'?'left':'right'];
+  const generic=trickyValue(t,['memory']);
+  const label=side==='left'?t.left:t.right;
+  return trickyLabelMemory(generic,label)||generic||'Create a simple mental shortcut for this term.';
+}
+function trickyDecisionText(t){return trickyValue(t,['hook','decidingDifference','difference','summary'])||'Ask yourself which term the scenario is truly describing, then eliminate the look-alike choice.'}
+function trickyTrapText(t){return trickyValue(t,['trap','examTrap'])||'Watch for answer choices that sound similar but describe different stages, actions, or meanings.'}
+function trickyGuideHtml(t){
+  const leftMeaning=trickySideMeaning(t,'left')||'—';
+  const rightMeaning=trickySideMeaning(t,'right')||'—';
+  const leftCue=trickySideCue(t,'left');
+  const rightCue=trickySideCue(t,'right');
+  const leftMemory=trickySideMemory(t,'left');
+  const rightMemory=trickySideMemory(t,'right');
+  return `<div class="tricky-compare-shell"><div class="tricky-compare-two"><section class="tricky-side-card"><div class="tricky-side-head"><h4>${escapeHtml(t.left)}</h4><span class="pill subtle">Term A</span></div><div class="tricky-side-row"><span>Meaning</span><p>${escapeHtml(leftMeaning)}</p></div><div class="tricky-side-row"><span>Use when</span><p>${escapeHtml(leftCue)}</p></div><div class="tricky-side-row tricky-side-memory"><span>Memory hook</span><p><b>${escapeHtml(leftMemory)}</b></p></div></section><section class="tricky-side-card"><div class="tricky-side-head"><h4>${escapeHtml(t.right)}</h4><span class="pill subtle">Term B</span></div><div class="tricky-side-row"><span>Meaning</span><p>${escapeHtml(rightMeaning)}</p></div><div class="tricky-side-row"><span>Use when</span><p>${escapeHtml(rightCue)}</p></div><div class="tricky-side-row tricky-side-memory"><span>Memory hook</span><p><b>${escapeHtml(rightMemory)}</b></p></div></section></div><div class="tricky-decision-strip"><section class="tricky-decision-card"><h4>Deciding difference</h4><p>${escapeHtml(trickyDecisionText(t))}</p></section><section class="tricky-decision-card tricky-trap"><h4>Exam trap</h4><p>${escapeHtml(trickyTrapText(t))}</p></section></div></div>`}
 
-function renderTricky(){let rows=trickyRows();if(state.trickyMode==='flashcards'){rows=flashcardRows();if(!rows.length){$('#trickyGrid').innerHTML='<p>No flashcards available.</p>';return}state.flashIndex=Math.min(state.flashIndex,rows.length-1);const t=rows[state.flashIndex];$('#trickyGrid').className='tricky-grid';$('#trickyGrid').innerHTML=`<article class="flashcard"><div class="flash-top"><span class="eyebrow">Card ${state.flashIndex+1} of ${rows.length}</span>${studyStatusBadge(t.studyStatus||'not_started')}</div><div class="flash-front"><h3>${escapeHtml(t.left)} <span>vs.</span> ${escapeHtml(t.right)}</h3><p>${escapeHtml(t.hook||'')}</p><button id="revealFlash" class="primary">Reveal answer</button></div><div id="flashBack" class="flash-back hidden"><div class="flash-compare"><div><b>${escapeHtml(t.left)}</b><p>${escapeHtml(t.leftMeaning||'')}</p></div><div><b>${escapeHtml(t.right)}</b><p>${escapeHtml(t.rightMeaning||'')}</p></div></div><div class="trap"><b>Exam trap:</b> ${escapeHtml(t.trap||'')}</div><div class="memory"><b>${escapeHtml(t.memory||'')}</b></div><div class="flash-ratings"><button data-rating="again" class="secondary">Review Again</button><button data-rating="hard" class="secondary">Needs Review</button><button data-rating="got_it" class="primary">Know It</button></div><div id="flashRatingMsg" class="flash-rating-msg"></div></div><div class="diagram-nav"><button id="flashPrev" class="secondary">‹ Previous</button><button id="flashNext" class="secondary">Next ›</button></div></article>`;$('#revealFlash').onclick=()=>$('#flashBack').classList.remove('hidden');$$('[data-rating]').forEach(b=>b.onclick=()=>rateFlashcard(t.id,b.dataset.rating));$('#flashPrev').onclick=()=>{state.flashIndex=(state.flashIndex-1+rows.length)%rows.length;renderTricky()};$('#flashNext').onclick=()=>{state.flashIndex=(state.flashIndex+1)%rows.length;renderTricky()};return}if(state.trickyMode==='all'){$('#trickyGrid').className='tricky-grid';$('#trickyGrid').innerHTML=rows.length?rows.map(t=>`<article class="tricky-card study-guide-card"><div class="card-topline">${studyStatusBadge(t.studyStatus||'not_started')}</div><div class="vs"><div class="term">${escapeHtml(t.left)}</div><div class="vsmark">VS</div><div class="term">${escapeHtml(t.right)}</div></div>${trickyGuideHtml(t)}</article>`).join(''):'<p>No matching terms.</p>';return}if(!rows.length){$('#trickyGrid').innerHTML='<div class="panel empty-state"><h3>Nothing in this view.</h3><p>Switch to Browse All, Study View, or Flashcards.</p></div>';return}state.flashIndex=Math.min(state.flashIndex,rows.length-1);const t=rows[state.flashIndex],status=t.studyStatus||'not_started';$('#trickyGrid').className='notes-study-view';$('#trickyGrid').innerHTML=`<article class="note-viewer tricky-study-viewer"><div class="note-view-head"><div><span class="eyebrow">Pair ${state.flashIndex+1} of ${rows.length}</span><h3>${escapeHtml(t.left)} <span class="vs-inline">vs.</span> ${escapeHtml(t.right)}</h3></div>${studyStatusBadge(status)}</div>${trickyGuideHtml(t)}<div class="note-nav"><button id="trickyPrev" class="secondary">‹ Previous</button>${reviewToggleButton('trickyNeeds',status)}<button id="trickyReviewed" class="secondary ${status==='reviewed'||status==='mastered'?'is-complete':''}">${status==='reviewed'||status==='mastered'?'✓ Reviewed':'Mark Reviewed'}</button><button id="trickyNext" class="secondary">Next ›</button></div></article>`;$('#trickyPrev').onclick=()=>{state.flashIndex=(state.flashIndex-1+rows.length)%rows.length;renderTricky()};$('#trickyNext').onclick=()=>{state.flashIndex=(state.flashIndex+1)%rows.length;renderTricky()};$('#trickyNeeds').onclick=()=>toggleReviewMark('tricky',t.id,status);$('#trickyReviewed').onclick=()=>setStudyStatus('tricky',t.id,'reviewed')}
+
+function renderTricky(){let rows=trickyRows();if(state.trickyMode==='flashcards'){rows=flashcardRows();if(!rows.length){$('#trickyGrid').innerHTML='<p>No flashcards available.</p>';return}state.flashIndex=Math.min(state.flashIndex,rows.length-1);const t=rows[state.flashIndex];$('#trickyGrid').className='tricky-grid';$('#trickyGrid').innerHTML=`<article class="flashcard"><div class="flash-top"><span class="eyebrow">Card ${state.flashIndex+1} of ${rows.length}</span>${studyStatusBadge(t.studyStatus||'not_started')}</div><div class="flash-front"><h3>${escapeHtml(t.left)} <span>vs.</span> ${escapeHtml(t.right)}</h3><p>${escapeHtml(t.hook||'')}</p><button id="revealFlash" class="primary">Reveal answer</button></div><div id="flashBack" class="flash-back hidden">${trickyGuideHtml(t)}<div class="flash-ratings"><button data-rating="again" class="secondary">Review Again</button><button data-rating="hard" class="secondary">Needs Review</button><button data-rating="got_it" class="primary">Know It</button></div><div id="flashRatingMsg" class="flash-rating-msg"></div></div><div class="diagram-nav"><button id="flashPrev" class="secondary">‹ Previous</button><button id="flashNext" class="secondary">Next ›</button></div></article>`;$('#revealFlash').onclick=()=>$('#flashBack').classList.remove('hidden');$$('[data-rating]').forEach(b=>b.onclick=()=>rateFlashcard(t.id,b.dataset.rating));$('#flashPrev').onclick=()=>{state.flashIndex=(state.flashIndex-1+rows.length)%rows.length;renderTricky()};$('#flashNext').onclick=()=>{state.flashIndex=(state.flashIndex+1)%rows.length;renderTricky()};return}if(state.trickyMode==='all'){$('#trickyGrid').className='tricky-grid';$('#trickyGrid').innerHTML=rows.length?rows.map(t=>`<article class="tricky-card study-guide-card"><div class="card-topline">${studyStatusBadge(t.studyStatus||'not_started')}</div><div class="vs"><div class="term">${escapeHtml(t.left)}</div><div class="vsmark">VS</div><div class="term">${escapeHtml(t.right)}</div></div>${trickyGuideHtml(t)}</article>`).join(''):'<p>No matching terms.</p>';return}if(!rows.length){$('#trickyGrid').innerHTML='<div class="panel empty-state"><h3>Nothing in this view.</h3><p>Switch to Browse All, Study View, or Flashcards.</p></div>';return}state.flashIndex=Math.min(state.flashIndex,rows.length-1);const t=rows[state.flashIndex],status=t.studyStatus||'not_started';$('#trickyGrid').className='notes-study-view';$('#trickyGrid').innerHTML=`<article class="note-viewer tricky-study-viewer"><div class="note-view-head"><div><span class="eyebrow">Pair ${state.flashIndex+1} of ${rows.length}</span><h3>${escapeHtml(t.left)} <span class="vs-inline">vs.</span> ${escapeHtml(t.right)}</h3></div>${studyStatusBadge(status)}</div>${trickyGuideHtml(t)}<div class="note-nav"><button id="trickyPrev" class="secondary">‹ Previous</button>${reviewToggleButton('trickyNeeds',status)}<button id="trickyReviewed" class="secondary ${status==='reviewed'||status==='mastered'?'is-complete':''}">${status==='reviewed'||status==='mastered'?'✓ Reviewed':'Mark Reviewed'}</button><button id="trickyNext" class="secondary">Next ›</button></div></article>`;$('#trickyPrev').onclick=()=>{state.flashIndex=(state.flashIndex-1+rows.length)%rows.length;renderTricky()};$('#trickyNext').onclick=()=>{state.flashIndex=(state.flashIndex+1)%rows.length;renderTricky()};$('#trickyNeeds').onclick=()=>toggleReviewMark('tricky',t.id,status);$('#trickyReviewed').onclick=()=>setStudyStatus('tricky',t.id,'reviewed')}
 
 $('#trickySearch').oninput=()=>{state.flashIndex=0;renderTricky()};$$('[data-tricky-mode]').forEach(b=>b.onclick=()=>{$$('[data-tricky-mode]').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.trickyMode=b.dataset.trickyMode;state.flashIndex=0;renderTricky()});
 
@@ -509,6 +561,91 @@ function groupRow(label,key,action){const g=state.studySummary?.groups?.[key]||{
 
 function pctText(x){return `${Math.round(x||0)}%`}
 
+function launchpadIcon(kind){
+  const icons={
+    continue:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>',
+    readiness:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3"/><path d="M5.6 5.6 7.7 7.7"/><path d="M3 12h3"/><path d="M5.6 18.4 7.7 16.3"/><path d="M12 21v-3"/><path d="M18.4 18.4 16.3 16.3"/><path d="M21 12h-3"/><path d="M18.4 5.6 16.3 7.7"/><path d="M12 8v5l3 2"/></svg>',
+    adaptive:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h7"/><path d="m17 11 3 3-3 3"/></svg>',
+    mistakes:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6"/><path d="m15 9-6 6"/></svg>',
+    practice:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4.5L15.5 5a2.1 2.1 0 0 1 3 3L8 18.5 4 20Z"/><path d="m14 6.5 3.5 3.5"/></svg>',
+    exams:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M8.5 10h7M8.5 13.5h4"/><path d="m13 17.5 1.5 1.5 3-3"/></svg>'
+  };
+  return icons[kind]||icons.practice;
+}
+
+function computeLearningOverview(progress){
+  const g=state.studySummary?.groups||{};
+  const tier=state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'full';
+  const p=progress||state.lastProgress||{};
+  const practice={total:p.practice_bank_total||0,complete:p.practice_unique_attempted||0,pct:p.practice_coverage||0};
+  const cards=p.exam_cards||[];
+  const mockRows=cards.filter(x=>x.kind==='mock'), masteryRows=cards.filter(x=>x.kind==='mastery');
+  const mock={total:mockRows.length,complete:mockRows.filter(x=>x.completed).length}; mock.pct=mock.total?Math.round(mock.complete/mock.total*100):0;
+  const mastery={total:masteryRows.length,complete:masteryRows.filter(x=>x.completed).length}; mastery.pct=mastery.total?Math.round(mastery.complete/mastery.total*100):0;
+  const defs={notes:['Topic Notes','notes',g.notes||{}],diagrams:['Diagrams & Models','diagrams',g.diagrams||{}],tricky:['Tricky Words','tricky',g.tricky||{}],practice:['Practice Questions','practice',practice],mock:['Full Mock Exams','exams',mock],mastery:['Concept Mastery Exams','exams',mastery]};
+  let keys=tier==='drills'?['practice','mock']:tier==='concept'?['notes','tricky','practice','mock']:['notes','diagrams','tricky','practice','mock','mastery'];
+  keys=keys.filter(k=>(defs[k][2].total||0)>0);
+  const avg=keys.length?Math.round(keys.reduce((a,k)=>a+(defs[k][2].pct||0),0)/keys.length):0;
+  return {defs,keys,avg};
+}
+
+function renderFeatureLaunchpad(progress){
+  const host=$('#featureLaunchpad');
+  if(!host)return;
+  const p=progress||state.lastProgress||{};
+  const next=state.studySummary?.next_item||null;
+  const overview=computeLearningOverview(p);
+  const reviewCount=(p.review_queue||[]).length||0;
+  const readinessRaw=p.practice_accuracy==null?p.accuracy:p.practice_accuracy;
+  const readiness=readinessRaw==null?null:Math.max(0,Math.min(100,Math.round(Number(readinessRaw)||0)));
+  const readinessLabel=readiness==null?'Build your score':(readiness>=80?'Strong momentum':readiness>=65?'Building confidence':'Needs reinforcement');
+  const missed=Number(p.practice_unique_missed||0);
+  const attempts=Number(p.practice_answered||0);
+  const completedExams=Number(p.completed_exams||0);
+  const cards=[
+    {
+      key:'continue', eyebrow:'Recommended next', title:'Continue Learning',
+      stat:next?`Next ${String(next.content_type||'item').replace(/_/g,' ')}`:'Ready when you are',
+      meta:next?next.title:'You are caught up. Start a fresh practice session.',
+      action:next?'Continue':'Practice now',
+      target: next ? (next.content_type==='diagram'?'diagrams':next.content_type==='tricky'?'tricky':'notes') : 'practice',
+      kind:'continue'
+    },
+    {
+      key:'readiness', eyebrow:'New feature', title:'Readiness Score',
+      stat:readiness==null?'—':`${readiness}/100`,
+      meta:readiness==null?'Generate your score from practice and exam activity.':readinessLabel,
+      action:'View score', target:'progress', kind:'readiness'
+    },
+    {
+      key:'adaptive', eyebrow:'New feature', title:'Adaptive Study Plan',
+      stat:`${overview.avg||0}% complete`,
+      meta:reviewCount?`${reviewCount} concept${reviewCount===1?'':'s'} currently need review.`:'Your plan adapts as you learn.',
+      action:'Open plan', target:'progress', kind:'adaptive'
+    },
+    {
+      key:'mistakes', eyebrow:'New feature', title:'Mistake Patterns',
+      stat:missed?`${missed} missed`:'No patterns yet',
+      meta:reviewCount?`${reviewCount} follow-up item${reviewCount===1?'':'s'} surfaced from your answers.`:'We will detect recurring reasoning mistakes here.',
+      action:'See patterns', target:'progress', kind:'mistakes'
+    },
+    {
+      key:'practice', eyebrow:'Fast action', title:'Practice Builder',
+      stat:attempts?`${attempts} attempts`:'Ready to start',
+      meta:'Build a focused question set by domain, approach, or review need.',
+      action:'Start practice', target:'practice', kind:'practice'
+    },
+    {
+      key:'exams', eyebrow:'Assessment', title:'Mock & Mastery Exams',
+      stat:completedExams?`${completedExams} completed`:'Not started',
+      meta:'Jump into a full mock or a concept mastery exam.',
+      action:'Open exams', target:'exams', kind:'exams'
+    }
+  ];
+  host.innerHTML=cards.map(card=>`<article class="feature-launch-card" data-launch-view="${card.target}" data-launch-kind="${card.key}"><div class="feature-launch-top"><span class="eyebrow">${escapeHtml(card.eyebrow)}</span><span class="feature-launch-icon" aria-hidden="true">${launchpadIcon(card.kind)}</span></div><div class="feature-launch-copy"><h3>${escapeHtml(card.title)}</h3><b class="feature-launch-stat">${escapeHtml(card.stat)}</b><p>${escapeHtml(card.meta)}</p></div><button class="secondary feature-launch-btn" type="button">${escapeHtml(card.action)} →</button></article>`).join('');
+  $$('[data-launch-view]').forEach(btn=>btn.onclick=e=>{const view=e.currentTarget.dataset.launchView;const kind=e.currentTarget.dataset.launchKind;if(kind==='continue'&&next){if(next.content_type==='diagram'){state.diagramMode='study';state.diagramIndex=0}else if(next.content_type==='tricky'){state.trickyMode='study'}else{state.noteMode='study'}}if(view==='exams'){state.examKind='mock'}showView(view)});
+}
+
 function learningCard(title,key,view,summary,extra=''){
 
   const x=summary||{total:0,complete:0,pct:0};
@@ -562,31 +699,9 @@ function renderLearningDashboard(p){
 
   if(!$('#learningWorkflow')||!state.studySummary)return;
 
-  const g=state.studySummary.groups||{}; p=p||state.lastProgress||{};
-
-  const tier=state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'full';
-
-  const practice={total:p.practice_bank_total||0,complete:p.practice_unique_attempted||0,pct:p.practice_coverage||0};
-
-  const cards=p.exam_cards||[];
-
-  const mockRows=cards.filter(x=>x.kind==='mock'), masteryRows=cards.filter(x=>x.kind==='mastery');
-
-  const mock={total:mockRows.length,complete:mockRows.filter(x=>x.completed).length}; mock.pct=mock.total?Math.round(mock.complete/mock.total*100):0;
-
-  const mastery={total:masteryRows.length,complete:masteryRows.filter(x=>x.completed).length}; mastery.pct=mastery.total?Math.round(mastery.complete/mastery.total*100):0;
-
-  const defs={
-
-    notes:['Topic Notes','notes',g.notes||{}],diagrams:['Diagrams & Models','diagrams',g.diagrams||{}],tricky:['Tricky Words','tricky',g.tricky||{}],practice:['Practice Questions','practice',practice],mock:['Full Mock Exams','exams',mock],mastery:['Concept Mastery Exams','exams',mastery]
-
-  };
-
-  let keys=tier==='drills'?['practice','mock']:tier==='concept'?['notes','tricky','practice','mock']:['notes','diagrams','tricky','practice','mock','mastery'];
-
-  keys=keys.filter(k=>(defs[k][2].total||0)>0);
-
-  const avg=keys.length?Math.round(keys.reduce((a,k)=>a+(defs[k][2].pct||0),0)/keys.length):0;
+  p=p||state.lastProgress||{};
+  const overview=computeLearningOverview(p);
+  const defs=overview.defs,keys=overview.keys,avg=overview.avg;
 
   $('#learningOverallPct').textContent=avg+'%';
 
@@ -597,6 +712,8 @@ function renderLearningDashboard(p){
   $('#learningChecklist').innerHTML=keys.map(k=>learningCard(defs[k][0],k,defs[k][1],defs[k][2])).join('');
 
   $$('[data-learning-jump]').forEach(b=>b.onclick=()=>{const v=b.dataset.learningJump;if(v==='exams'){const key=b.dataset.learningKey||b.closest('.learning-check-card')?.dataset.learningKey||'';state.examKind=key==='mastery'||b.textContent.includes('Concept')?'mastery':'mock'}showView(v)});
+
+  renderFeatureLaunchpad(p);
 
 }
 
@@ -688,43 +805,7 @@ async function openExamFromProgress(code,sessionId,status){state.examKind=String
 
 window.openExamFromProgress=openExamFromProgress;
 
-function renderCoachIntelligence(p){
-  const r=p.readiness||{};
-  const score=Math.max(0,Math.min(100,Number(r.score||0)));
-  const scoreEl=$('#readinessScore');if(scoreEl)scoreEl.textContent=Math.round(score);
-  const fill=$('#readinessFill');if(fill)fill.style.width=score+'%';
-  const ring=$('#readinessRing');if(ring)ring.style.setProperty('--readiness',score);
-  if($('#readinessLabel'))$('#readinessLabel').textContent=r.label||'Building baseline';
-  if($('#readinessEvidence'))$('#readinessEvidence').textContent=`${String(r.evidence_level||'developing').replace(/^./,c=>c.toUpperCase())} evidence`;
-  if($('#readinessNote'))$('#readinessNote').textContent=r.note||'';
-  if($('#readinessMetrics'))$('#readinessMetrics').innerHTML=[
-    ['Practice accuracy',r.practice_accuracy==null?'—':r.practice_accuracy+'%'],
-    ['Practice coverage',r.practice_coverage==null?'—':r.practice_coverage+'%'],
-    ['Exam average',r.exam_average==null?'Not yet':r.exam_average+'%'],
-    ['Review items',r.review_items??0]
-  ].map(([k,v])=>`<div><span>${escapeHtml(k)}</span><b>${escapeHtml(String(v))}</b></div>`).join('');
-
-  const patterns=p.mistake_patterns||[];
-  if($('#mistakePatterns'))$('#mistakePatterns').innerHTML=patterns.length?patterns.map((x,i)=>`<article class="mistake-pattern-row"><div class="pattern-rank">${i+1}</div><div class="pattern-copy"><div class="pattern-title"><h4>${escapeHtml(x.title)}</h4><span>${x.count} miss${x.count===1?'':'es'}</span></div><p>${escapeHtml(x.tip||'')}</p><small>Most visible in ${escapeHtml(x.top_domain||'PMP')} · ${escapeHtml(x.top_concept||'General PMP reasoning')}</small></div></article>`).join(''):'<div class="coach-empty"><b>No recurring mistake pattern yet.</b><p>Complete more practice questions or a mock exam and the coach will begin identifying how your reasoning breaks down.</p></div>';
-
-  const plan=p.adaptive_plan||{};
-  if($('#adaptivePhase'))$('#adaptivePhase').textContent=plan.phase?`${plan.phase} plan`:'Your weekly plan';
-  if($('#adaptiveGuidance'))$('#adaptiveGuidance').textContent=plan.guidance||'Your plan will adapt to your performance.';
-  if($('#adaptiveStats'))$('#adaptiveStats').innerHTML=[
-    ['Exam',plan.days_until_exam==null?'Set date':(plan.days_until_exam>=0?`${plan.days_until_exam} days`:'Date passed')],
-    ['Weekly target',`${plan.target_questions_per_week||0} questions`],
-    ['Schedule',`${plan.study_days_per_week||0} days × ${plan.session_minutes||0} min`]
-  ].map(([k,v])=>`<div><span>${escapeHtml(k)}</span><b>${escapeHtml(String(v))}</b></div>`).join('');
-  if($('#adaptiveSessions'))$('#adaptiveSessions').innerHTML=(plan.sessions||[]).map(x=>`<div class="adaptive-session"><span>Day ${x.day}</span><div><b>${escapeHtml(x.title)}</b><small>${escapeHtml(x.detail)}</small></div><em>${x.minutes} min</em></div>`).join('');
-
-  const profile=p.study_profile||{};
-  if($('#coachExamDate'))$('#coachExamDate').value=profile.exam_date||'';
-  if($('#coachWeeklyHours'))$('#coachWeeklyHours').value=profile.weekly_hours||7;
-  if($('#coachStudyDays'))$('#coachStudyDays').value=profile.study_days_per_week||5;
-  if($('#coachSessionMinutes'))$('#coachSessionMinutes').value=profile.session_minutes||45;
-}
-
-async function loadProgress(){if(!state.token)return;const [p,bm]=await Promise.all([api('/api/progress'),state.billing?Promise.resolve(state.billing):api('/api/billing/me')]);state.lastProgress=p;state.billing=bm;renderProgressPlan(bm);renderPracticeProgress(p);state.studySummary=p.study_summary||state.studySummary;renderContinueLearning();renderLearningDashboard(p);renderCoachIntelligence(p);
+async function loadProgress(){if(!state.token)return;const [p,bm]=await Promise.all([api('/api/progress'),state.billing?Promise.resolve(state.billing):api('/api/billing/me')]);state.lastProgress=p;state.billing=bm;renderProgressPlan(bm);renderPracticeProgress(p);state.studySummary=p.study_summary||state.studySummary;renderContinueLearning();renderLearningDashboard(p);
 
 const set=(id,val)=>{const el=$(id);if(el)el.textContent=val};
 
@@ -1901,11 +1982,6 @@ document.addEventListener('click',e=>{
 },true);
 
  
-
-
-if($('#editStudyPlanBtn'))$('#editStudyPlanBtn').onclick=()=>{$('#studyPlanForm')?.classList.remove('hidden');$('#editStudyPlanBtn').classList.add('hidden')};
-if($('#cancelStudyPlanBtn'))$('#cancelStudyPlanBtn').onclick=()=>{$('#studyPlanForm')?.classList.add('hidden');$('#editStudyPlanBtn')?.classList.remove('hidden')};
-if($('#studyPlanForm'))$('#studyPlanForm').onsubmit=async e=>{e.preventDefault();const msg=$('#studyPlanMessage');if(msg)msg.textContent='Saving…';try{await api('/api/coach/profile',{method:'PUT',body:JSON.stringify({exam_date:$('#coachExamDate')?.value||'',weekly_hours:Number($('#coachWeeklyHours')?.value||7),study_days_per_week:Number($('#coachStudyDays')?.value||5),session_minutes:Number($('#coachSessionMinutes')?.value||45)})});if(msg)msg.textContent='Plan updated.';$('#studyPlanForm').classList.add('hidden');$('#editStudyPlanBtn')?.classList.remove('hidden');await loadProgress()}catch(err){if(msg)msg.textContent=err.message||'Unable to save plan.'}};
 
 $('#progressManagePlan').onclick=()=>showView('billing');
 

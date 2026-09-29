@@ -191,6 +191,7 @@ def _ensure_admin_from_env(db: Session):
     db.commit()
 
 
+
 def _ensure_qa_accounts_from_env(db: Session):
     """Create/update dedicated learner QA accounts for Starter, Standard, and Premium.
 
