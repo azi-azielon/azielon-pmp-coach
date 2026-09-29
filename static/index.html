@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Azielon PMP Practice Coach</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="/static/styles.css?v=5.14.11"/>
+<link rel="stylesheet" href="/static/styles.css?v=5.14.12"/>
 </head>
 <body class="landing-active">
 <div id="authGate" class="auth-gate">
-  <div class="build-version-badge">v5.14.11</div>
+  <div class="build-version-badge">v5.14.12</div>
   <div class="sales-shell sales-shell-v426">
     <section class="sales-panel sales-panel-v426">
       <div class="sales-brand"><img src="/static/assets/azielon-logo.png" alt="Azielon"><span>Azielon PMP Coach</span></div>
@@ -244,45 +244,105 @@
       </div>
     </section>
     <section class="view" id="progress">
-      <div class="section-intro compact-intro"><div><span class="eyebrow">Learner report card</span><h2>My Progress</h2><p>See what you have practiced, completed, and what to continue next.</p></div></div>
-      <div class="panel progress-plan-card"><div><span class="eyebrow">My current plan</span><h3 id="progressPlanName">Loading…</h3><p id="progressPlanDetail" class="small-note">Checking access dates…</p></div><button class="secondary" id="progressManagePlan">Manage plan</button></div>
-      <div class="progress-summary-strip"><div><span>Practice</span><b id="pPracticeAnswered">0</b><small>attempts</small></div><div><span>Correct</span><b id="pCorrect">0</b><small>all activity</small></div><div><span>Accuracy</span><b id="pAccuracy">—</b><small>overall</small></div><div><span>Concepts to review</span><b id="pReviewCount">0</b><small>current</small></div></div>
+      <div class="section-intro compact-intro"><div><span class="eyebrow">Compact decision dashboard</span><h2>My Progress</h2><p>Where am I, what is weak, and what do I do next?</p></div></div>
 
-      <div class="coach-intelligence-grid">
-        <section class="panel readiness-card">
-          <div class="coach-card-head"><div><span class="eyebrow">Azielon readiness</span><h3>Your Readiness Score</h3></div><div class="readiness-ring" id="readinessRing"><b id="readinessScore">0</b><span>/100</span></div></div>
-          <div class="readiness-track"><i id="readinessFill" style="width:0%"></i></div>
-          <div class="readiness-status"><b id="readinessLabel">Building baseline</b><span id="readinessEvidence">Developing evidence</span></div>
-          <p id="readinessNote" class="small-note">Complete practice and mock exams to strengthen the signal.</p>
-          <div id="readinessMetrics" class="readiness-metrics"></div>
+      <section class="panel progress-overview-panel">
+        <div class="progress-overview-head">
+          <div>
+            <span class="eyebrow">My current plan</span>
+            <h3 id="progressPlanName">Loading…</h3>
+            <p id="progressPlanDetail" class="small-note">Checking access dates…</p>
+          </div>
+          <div class="progress-overview-actions">
+            <button class="secondary" id="progressManagePlan">Plans &amp; pricing</button>
+            <button id="editStudyPlanBtn" class="text-btn" type="button">Edit plan</button>
+          </div>
+        </div>
+        <div class="progress-chip-strip">
+          <article><span>Readiness</span><b id="progressChipReadiness">0</b><small>/100</small></article>
+          <article><span>Days to exam</span><b id="progressDaysToExam">Set date</b><small id="progressPlanPhase">Foundation plan</small></article>
+          <article><span>Today done</span><b id="progressTodayDone">0/0</b><small id="progressTodayCarry">No carryover</small></article>
+          <article><span>Weakest domain</span><b id="progressWeakDomain">—</b><small id="readinessEvidence">Developing evidence</small></article>
+          <article><span>Practice</span><b id="pPracticeAnswered">0</b><small id="progressWeeklyTarget">0 questions / week</small></article>
+        </div>
+        <form id="studyPlanForm" class="study-plan-form compact-study-plan hidden">
+          <label>Exam date<input id="coachExamDate" type="date"></label>
+          <label>Hours / week<input id="coachWeeklyHours" type="number" min="1" max="40" step="0.5" value="7"></label>
+          <label>Study days / week<input id="coachStudyDays" type="number" min="1" max="7" value="5"></label>
+          <label>Minutes / session<input id="coachSessionMinutes" type="number" min="20" max="180" step="5" value="45"></label>
+          <div class="study-plan-actions"><button class="primary" type="submit">Save plan</button><button class="secondary" id="cancelStudyPlanBtn" type="button">Cancel</button></div>
+          <div id="studyPlanMessage" class="message"></div>
+        </form>
+      </section>
+
+      <div class="progress-main-grid">
+        <section class="panel progress-performance-panel">
+          <div class="mini-panel-head"><div><span class="eyebrow">Performance</span><h3>Readiness &amp; weak areas</h3></div></div>
+          <div class="progress-readiness-hero">
+            <div class="readiness-ring compact" id="readinessRing"><b id="readinessScore">0</b><span>/100</span></div>
+            <div class="progress-readiness-copy">
+              <div class="progress-title-row"><strong id="readinessLabel">Building baseline</strong><span class="progress-label-pill" id="progressEvidencePill">Developing evidence</span></div>
+              <div class="readiness-track compact"><i id="readinessFill" style="width:0%"></i></div>
+              <p id="readinessNote" class="small-note">Complete practice and mock exams to strengthen the signal.</p>
+            </div>
+          </div>
+          <div id="readinessMetrics" class="readiness-metrics compact"></div>
+          <div class="progress-panel-block">
+            <div class="progress-block-head"><span class="eyebrow">Domain performance</span></div>
+            <div id="domainBars" class="progress-domain-bars"></div>
+          </div>
+          <div class="progress-panel-block">
+            <div class="progress-block-head"><span class="eyebrow">Reasoning to fix</span></div>
+            <div id="mistakePatterns" class="compact-pattern-list"><p class="small-note">Complete more questions to identify recurring patterns.</p></div>
+          </div>
         </section>
 
-        <section class="panel adaptive-plan-card">
-          <div class="coach-card-head"><div><span class="eyebrow">Adaptive study plan</span><h3 id="adaptivePhase">Your weekly plan</h3></div><button id="editStudyPlanBtn" class="text-btn" type="button">Edit plan</button></div>
-          <p id="adaptiveGuidance" class="small-note">Your plan will adapt to your performance.</p>
-          <div id="adaptiveStats" class="adaptive-stats"></div>
-          <div id="adaptiveSessions" class="adaptive-sessions"></div>
-          <form id="studyPlanForm" class="study-plan-form hidden">
-            <label>Exam date<input id="coachExamDate" type="date"></label>
-            <label>Hours / week<input id="coachWeeklyHours" type="number" min="1" max="40" step="0.5" value="7"></label>
-            <label>Study days / week<input id="coachStudyDays" type="number" min="1" max="7" value="5"></label>
-            <label>Minutes / session<input id="coachSessionMinutes" type="number" min="20" max="180" step="5" value="45"></label>
-            <div class="study-plan-actions"><button class="primary" type="submit">Save plan</button><button class="secondary" id="cancelStudyPlanBtn" type="button">Cancel</button></div>
-            <div id="studyPlanMessage" class="message"></div>
-          </form>
+        <section class="panel progress-action-panel">
+          <div class="mini-panel-head"><div><span class="eyebrow">What do I do next?</span><h3>Today’s plan</h3></div><span class="progress-label-pill accent" id="progressTodayBadge">Loading…</span></div>
+          <p id="progressTodayGuide" class="small-note">Azielon carries unfinished work forward first, then adds the highest-value next step.</p>
+          <div id="progressTodayList" class="progress-task-list"><p class="small-note">Loading today’s plan…</p></div>
+          <div class="progress-tomorrow-preview">
+            <span class="eyebrow">Tomorrow</span>
+            <p id="progressTomorrowPreview">We will generate the next study day from your exam timeline and weak areas.</p>
+          </div>
+        </section>
+
+        <section class="panel progress-momentum-panel">
+          <div class="mini-panel-head"><div><span class="eyebrow">Momentum</span><h3>This week at a glance</h3></div></div>
+          <div class="progress-mini-grid">
+            <article><span>Practice accuracy</span><b id="pAccuracy">—</b><small>overall</small></article>
+            <article><span>Coverage</span><b id="progressCoverage">—</b><small>question bank</small></article>
+            <article><span>Review queue</span><b id="pReviewCount">0</b><small>concepts</small></article>
+            <article><span>Exams</span><b id="pCompletedExams">0</b><small>completed</small></article>
+          </div>
+          <div id="progressPracticeReport" class="progress-practice-report"></div>
+          <div class="progress-quick-actions">
+            <button class="secondary" type="button" data-dash-open="practice">Open practice →</button>
+            <button class="secondary" type="button" data-dash-open="review">Review concepts →</button>
+            <button class="secondary" type="button" data-dash-open="exams">Open exams →</button>
+          </div>
+          <div class="progress-plan-snapshot">
+            <div class="progress-block-head"><span class="eyebrow">Adaptive study plan</span><button id="progressViewFullPlan" class="text-btn" type="button" data-dash-open="dashboard">View in dashboard</button></div>
+            <h4 id="adaptivePhase">Your weekly plan</h4>
+            <p id="adaptiveGuidance" class="small-note">Your plan will adapt to your performance.</p>
+            <div id="adaptiveStats" class="progress-mini-stats"></div>
+            <div id="adaptiveSessions" class="compact-session-list"></div>
+          </div>
         </section>
       </div>
 
-      <section class="panel mistake-engine-card">
-        <div class="coach-card-head"><div><span class="eyebrow">Mistake Pattern Engine</span><h3>How your reasoning is breaking down</h3><p class="small-note">Patterns are inferred from incorrect practice and completed exam answers.</p></div></div>
-        <div id="mistakePatterns" class="mistake-patterns"><p class="small-note">Complete more questions to identify recurring patterns.</p></div>
-      </section>
+      <details class="progress-deep-dive">
+        <summary>See detailed reports</summary>
+        <div class="progress-deep-grid">
+          <div>
+            <div class="report-section-head"><div><span class="eyebrow">Exam report cards</span><h3>Your exams</h3></div><small id="progressBenchmarkNote"></small></div>
+            <div id="examReportCards" class="exam-report-cards"></div>
+          </div>
+          <div class="panel"><span class="eyebrow">Recent submitted exams</span><div id="examHistory" class="exam-history"><p class="small-note">No completed exams yet.</p></div></div>
+        </div>
+      </details>
 
-      <div class="report-section-head"><div><span class="eyebrow">Exam report cards</span><h3>Your exams</h3></div><small id="progressBenchmarkNote"></small></div>
-      <div id="examReportCards" class="exam-report-cards"></div>
-      <div class="report-two-col"><div class="panel"><span class="eyebrow">Domain performance</span><div id="domainBars" class="bars"></div></div><div class="panel"><span class="eyebrow">Practice performance</span><div id="progressPracticeReport" class="practice-report-mini"></div></div></div>
-      <div class="panel"><span class="eyebrow">Recent submitted exams</span><div id="examHistory" class="exam-history"><p class="small-note">No completed exams yet.</p></div></div>
-      <span class="hidden" id="pAnswered">0</span><span class="hidden" id="pCompletedExams">0</span><span class="hidden" id="pExamAnswered">0</span><span class="hidden" id="pBookmarks">0</span>
+      <span class="hidden" id="pAnswered">0</span><span class="hidden" id="pCorrect">0</span><span class="hidden" id="pExamAnswered">0</span><span class="hidden" id="pBookmarks">0</span>
     </section>
 
     <section class="view" id="billing">
@@ -318,7 +378,7 @@
 <div id="zoomModal" class="modal hidden"><div class="modal-backdrop" data-close-modal="zoomModal"></div><div class="modal-card zoom-card"><div class="modal-head"><h3 id="zoomTitle">Diagram</h3><button class="ghost modal-x" data-close-modal="zoomModal">×</button></div><div class="zoom-controls"><button id="zoomOut" class="secondary">−</button><span id="zoomPct">100%</span><button id="zoomIn" class="secondary">+</button><button id="zoomReset" class="secondary">Fit</button><button id="zoomFull" class="secondary">Full screen</button></div><div id="zoomBody" class="zoom-body"></div></div></div>
 <div id="editorModal" class="modal hidden"><div class="modal-backdrop" data-close-modal="editorModal"></div><div class="modal-card editor-card"><div class="modal-head"><h3 id="editorTitle">Edit content</h3><button class="ghost modal-x" data-close-modal="editorModal">×</button></div><form id="editorForm" class="editor-form"></form></div></div>
 
-<script src="/static/app.js?v=5.14.11"></script>
+<script src="/static/app.js?v=5.14.12"></script>
 <script src="/static/live-form.js?v=5.13.0"></script>
 </body>
 </html>

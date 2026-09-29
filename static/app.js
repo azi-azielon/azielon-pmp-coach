@@ -879,6 +879,7 @@ function renderCoachIntelligence(p){
   const ring=$('#readinessRing');if(ring)ring.style.setProperty('--readiness',score);
   if($('#readinessLabel'))$('#readinessLabel').textContent=r.label||'Building baseline';
   if($('#readinessEvidence'))$('#readinessEvidence').textContent=`${String(r.evidence_level||'developing').replace(/^./,c=>c.toUpperCase())} evidence`;
+  if($('#progressEvidencePill'))$('#progressEvidencePill').textContent=`${String(r.evidence_level||'developing').replace(/^./,c=>c.toUpperCase())} evidence`;
   if($('#readinessNote'))$('#readinessNote').textContent=r.note||'';
   if($('#readinessMetrics'))$('#readinessMetrics').innerHTML=[
     ['Practice accuracy',r.practice_accuracy==null?'—':r.practice_accuracy+'%'],
@@ -898,7 +899,7 @@ function renderCoachIntelligence(p){
     ['Weekly target',`${plan.target_questions_per_week||0} questions`],
     ['Schedule',`${plan.study_days_per_week||0} days × ${plan.session_minutes||0} min`]
   ].map(([k,v])=>`<div><span>${escapeHtml(k)}</span><b>${escapeHtml(String(v))}</b></div>`).join('');
-  if($('#adaptiveSessions'))$('#adaptiveSessions').innerHTML=(plan.sessions||[]).map(x=>`<div class="adaptive-session"><span>Day ${x.day}</span><div><b>${escapeHtml(x.title)}</b><small>${escapeHtml(x.detail)}</small></div><em>${x.minutes} min</em></div>`).join('');
+  if($('#adaptiveSessions'))$('#adaptiveSessions').innerHTML=(plan.sessions||[]).slice(0,3).map(x=>`<div class="adaptive-session"><span>Day ${x.day}</span><div><b>${escapeHtml(x.title)}</b><small>${escapeHtml(x.detail)}</small></div><em>${x.minutes} min</em></div>`).join('');
 
   const profile=p.study_profile||{};
   if($('#coachExamDate'))$('#coachExamDate').value=profile.exam_date||'';
@@ -907,7 +908,41 @@ function renderCoachIntelligence(p){
   if($('#coachSessionMinutes'))$('#coachSessionMinutes').value=profile.session_minutes||45;
 }
 
+function weakestDomainFromProgress(p){
+  const planWeak=p?.adaptive_plan?.weak_domains?.[0]?.domain;
+  if(planWeak)return planWeak;
+  const entries=['People','Process','Business Environment'].map(name=>{const row=p?.domains?.[name]||{answered:0,correct:0};const pct=row.answered?row.correct/row.answered:-1;return {name,pct,answered:row.answered||0};}).filter(x=>x.answered>0);
+  if(!entries.length)return 'Not enough data';
+  entries.sort((a,b)=>a.pct-b.pct);
+  return entries[0].name;
+}
+
+function progressTaskRow(task){
+  const st=taskState(task),carry=task.carriedFrom?'<span class="progress-task-chip carry">Carryover</span>':'',disabled=st==='done';
+  return `<article class="progress-task-row state-${st}"><div class="progress-task-copy"><div class="progress-task-top"><span class="progress-task-label">${escapeHtml(task.label)}</span>${carry}<span class="progress-task-chip state">${escapeHtml(taskStateLabel(st))}</span></div><h4>${escapeHtml(task.title)}</h4><p>${escapeHtml(task.detail||'')}</p></div><div class="progress-task-actions"><button class="text-btn" type="button" data-today-open="${escapeHtml(task.id)}">${st==='done'?'Review':'Open'} →</button><button class="secondary progress-task-done ${st==='done'?'is-complete':''}" type="button" data-today-done="${escapeHtml(task.id)}" ${disabled?'disabled':''}>${st==='done'?'✓ Done':'Done'}</button></div></article>`;
+}
+
+function renderCompactProgressDashboard(p){
+  const plan=p?.adaptive_plan||{},tasks=state.todayPlan||[],done=tasks.filter(t=>taskState(t)==='done').length,carried=tasks.filter(t=>t.carriedFrom).length;
+  const days=plan.days_until_exam;
+  if($('#progressChipReadiness'))$('#progressChipReadiness').textContent=p?.readiness?.score==null?'0':String(Math.round(Number(p.readiness.score)||0));
+  if($('#progressDaysToExam'))$('#progressDaysToExam').textContent=days==null?'Set date':(days>=0?`${days} days`:'Date passed');
+  if($('#progressPlanPhase'))$('#progressPlanPhase').textContent=plan.phase?`${plan.phase} plan`:'Foundation plan';
+  if($('#progressTodayDone'))$('#progressTodayDone').textContent=`${done}/${tasks.length}`;
+  if($('#progressTodayCarry'))$('#progressTodayCarry').textContent=carried?`${carried} carried forward`:'No carryover';
+  if($('#progressWeakDomain'))$('#progressWeakDomain').textContent=weakestDomainFromProgress(p);
+  if($('#progressWeeklyTarget'))$('#progressWeeklyTarget').textContent=`${plan.target_questions_per_week||0} questions / week`;
+  if($('#progressTodayBadge'))$('#progressTodayBadge').textContent=days>0?`${days} day${days===1?'':'s'} left`:`${done}/${tasks.length} done`;
+  if($('#progressTodayGuide'))$('#progressTodayGuide').textContent=(carried?`${carried} unfinished item${carried===1?' was':'s were'} carried forward first. `:'') + (plan.guidance||'Azielon is prioritizing the highest-value next step for your plan.');
+  const todayList=$('#progressTodayList');
+  if(todayList)todayList.innerHTML=tasks.length?tasks.map(progressTaskRow).join(''):'<div class="compact-empty"><b>You are caught up for today.</b><p>Open practice or review your weakest concept while Azielon prepares the next study day.</p></div>';
+  const tomorrow=(plan.sessions||[])[1]||(plan.sessions||[])[0]||null;
+  if($('#progressTomorrowPreview'))$('#progressTomorrowPreview').textContent=tomorrow?`Day ${tomorrow.day}: ${tomorrow.title} — ${tomorrow.detail||`${tomorrow.minutes||0} min`}`:'We will generate tomorrow from your exam timeline, weak areas, and unfinished work.';
+  bindDashboardWorkspaceActions();
+}
+
 async function loadProgress(){if(!state.token)return;const [p,bm]=await Promise.all([api('/api/progress'),state.billing?Promise.resolve(state.billing):api('/api/billing/me')]);state.lastProgress=p;state.billing=bm;renderProgressPlan(bm);renderPracticeProgress(p);state.studySummary=p.study_summary||state.studySummary;renderContinueLearning();renderLearningDashboard(p);renderCoachIntelligence(p);
+try{await syncDatabaseTodayPlan(p)}catch(e){}
 
 const set=(id,val)=>{const el=$(id);if(el)el.textContent=val};
 
