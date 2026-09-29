@@ -1603,5 +1603,171 @@ body .exam-nav-q.current,body .exam-nav-q.active{background:var(--navy)!importan
 body .exam-option.selected,body .option.selected{border-color:var(--navy)!important;background:var(--ivory)!important;box-shadow:inset 3px 0 0 var(--gold)!important}
 body .note-section-grid section p,body .note-section-grid section li,body .tricky-guide-sections p,body .note-summary{font-size:13.5px!important;line-height:1.6!important;color:var(--ink)!important}
 body .note-summary{font-size:15px!important;color:var(--muted)!important}
+/* ---------- Decluttered hero ---------- */
+body .sales-copy h1{margin-bottom:22px!important}
+body .sales-copy h1 em{display:inline-block;margin-top:4px}
+body .sales-value-list{list-style:none;margin:0 0 26px;padding:0;display:grid;gap:12px;max-width:560px}
+body .sales-value-list li{display:grid;grid-template-columns:18px 1fr;column-gap:12px;align-items:baseline;color:#C9D0DD;font-size:15px;line-height:1.5}
+body .sales-value-list li:before{content:"";width:7px;height:7px;border:1px solid var(--gold-soft);transform:rotate(45deg) translateY(-2px);grid-row:span 2;justify-self:center}
+body .sales-value-list b{font-weight:500;color:#fff;letter-spacing:.02em}
+body .sales-value-list span{grid-column:2;color:#AEB7C7;font-size:14px}
+body .sales-copy .sales-cta-primary{width:auto!important;display:inline-flex!important;padding:15px 30px!important}
+body .testimonial-card.testimonial-compact{margin-top:26px!important;max-width:520px}
+body .testimonial-card blockquote{font-size:18px!important;margin:6px 0 8px!important}
+body .testimonial-card figcaption b{font-weight:500;letter-spacing:.06em;font-size:12px;color:var(--gold-soft)!important}
+body .sales-footnote{margin-top:22px;padding-top:16px;border-top:1px solid rgba(var(--gold-soft-rgb),.18);display:flex;flex-wrap:wrap;gap:8px 24px;font-size:12.5px;color:#9FA8BA;max-width:560px}
+body .sales-footnote b{color:#E7E1D2;font-weight:500}
+body .sales-footnote a{color:#C9D0DD;text-decoration:none}
+body .sales-footnote a u{text-decoration:none;color:var(--gold-soft);border-bottom:1px solid rgba(var(--gold-soft-rgb),.5)}
+body .sales-footnote a:hover u{border-color:var(--gold-soft)}
+/* keep landing on one screen */
+body .sales-brand{margin-bottom:clamp(18px,4vh,40px)!important}
+@media(max-height:820px) and (min-width:901px){
+  body .sales-copy h1{font-size:clamp(34px,3.2vw,46px)!important;margin-bottom:16px!important}
+  body .sales-value-list{gap:8px;margin-bottom:18px}
+  body .testimonial-card.testimonial-compact{margin-top:18px!important}
+  body .sales-footnote{margin-top:14px;padding-top:12px}
+  body .auth-card h2{font-size:30px!important}
+}
+/* ---------- Compact dashboard: fit on one screen ---------- */
+body .learning-journey-card{padding:20px 26px 18px!important;margin-bottom:12px!important}
+body .journey-head{margin-bottom:8px!important}
+body .journey-node{width:50px!important;height:50px!important}
+body .journey-label{margin:10px 0 8px!important;min-height:0!important}
+body .journey-dots{height:auto!important;gap:5px!important}
+body .journey-percent{font-size:15px!important;margin-top:6px!important}
+body #dashboard .continue-strip{padding:14px 20px!important;margin:0 0 12px!important}
+body .learning-section-head{margin:4px 0 10px!important}
+body .learning-check-card{padding:14px 18px!important}
+body .learning-check-card .mini-track{margin:10px 0 8px!important}
+body .view{padding-top:20px!important}
+body .topbar{height:68px!important;padding-top:8px!important;padding-bottom:8px!important} body .topbar h1{font-size:28px!important}
+body .learning-checklist-cards{gap:10px!important} body .learning-check-top p{margin:0!important} body .learning-check-card .text-btn{margin-top:0!important} body .learning-journey-card{padding-bottom:14px!important}
+body .view{padding-top:14px!important;padding-bottom:16px!important}
+
+/* =====================================================================
+   v5.3 — COMPACT, ONE-SCREEN LAYOUT (sleek spacing everywhere)
+   ===================================================================== */
+/* Title lives in the top bar once — hide duplicated in-page headings */
+body .billing-head>div>.eyebrow,body .billing-head>div>h2,
+body .section-intro .eyebrow,body .section-intro h2,
+body .practice-head>div>.eyebrow,body .practice-head>div>h2,
+body .coach-shell>.eyebrow,body .coach-shell>h2{display:none!important}
+body .section-intro,body .billing-head,body .practice-head{margin:0 0 12px!important;padding:0!important;align-items:center!important;gap:16px!important}
+body .section-intro p,body .billing-head p,body .practice-head p,body .coach-shell>p{margin:0!important;font-size:13.5px!important;color:var(--muted)!important;max-width:none!important}
+body .topbar{height:60px!important}
+body .topbar .eyebrow{display:none!important}
+body .topbar h1{font-size:26px!important;margin:0!important}
+body .view{padding:16px 28px 18px!important;max-width:1320px!important}
+body .panel{padding:16px 20px!important}
+
+/* ---- Plans & Pricing ---- */
+body .billing-message{margin:0 0 12px!important;font-size:13px!important}
+body .plan-grid,body .pricing-only-grid{gap:16px!important;margin:0!important;align-items:stretch}
+body .simple-price-card{background:#fff!important;border:1px solid var(--line)!important;border-radius:14px!important;padding:20px 22px!important;box-shadow:var(--shadow)!important;display:flex;flex-direction:column;position:relative}
+body .simple-price-card.featured{border-color:var(--navy)!important;box-shadow:0 0 0 1px var(--navy),var(--shadow)!important}
+body .simple-price-card.featured:before{content:"Most popular";position:absolute;top:-10px;right:18px;background:var(--navy);color:var(--on-dark);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;padding:4px 10px;border-radius:999px}
+body .simple-price-card:after{display:none!important}
+body .simple-price-top{display:block!important;padding:0 0 12px!important;margin:0 0 10px!important;border-bottom:1px solid var(--line-soft)!important}
+body .simple-plan-kicker{font-size:9.5px!important;letter-spacing:.18em!important;font-weight:600!important;color:var(--gold-deep)!important;text-transform:uppercase}
+body .simple-price-top h3{font-size:24px!important;margin:2px 0 6px!important}
+body .simple-price-badge{display:flex!important;align-items:baseline!important;gap:8px!important;background:none!important;border:0!important;padding:0!important}
+body .simple-price-badge strong{font-family:var(--serif)!important;font-size:34px!important;font-weight:600!important;color:var(--navy)!important;line-height:1!important}
+body .simple-price-badge span{font-size:12px!important;color:var(--muted)!important}
+body .simple-feature-list{list-style:none;margin:0 0 16px!important;padding:0!important;display:grid;gap:0!important;flex:1}
+body .simple-feature-list li{display:flex!important;gap:10px!important;align-items:baseline!important;padding:6px 0!important;border:0!important;font-size:13.5px!important;color:var(--ink)!important;min-height:0!important}
+body .feature-check{background:none!important;border:0!important;width:auto!important;height:auto!important;color:var(--gold)!important;font-size:12px!important}
+body .simple-plan-button{width:100%;padding:11px 16px!important;font-size:11.5px!important;letter-spacing:.12em!important;text-transform:uppercase}
+body .simple-price-card:not(.featured) .simple-plan-button{background:#fff!important;color:var(--navy)!important;border:1px solid var(--navy)!important}
+body .simple-price-card:not(.featured) .simple-plan-button:hover{background:var(--navy)!important;color:var(--on-dark)!important}
+body .billing-free-trial{padding:9px 16px!important;font-size:12px!important}
+
+/* ---- AI Coach ---- */
+body .coach-shell{max-width:980px!important;display:flex;flex-direction:column;height:calc(100vh - 60px - 34px)}
+body .coach-shell>p{margin-bottom:12px!important}
+body .chat{flex:1;min-height:180px!important;overflow:auto;border-radius:14px!important;border:1px solid var(--line)!important;padding:16px!important}
+body .bubble{border-radius:12px!important;padding:12px 14px!important;max-width:78%}
+body .bubble b{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--navy)}
+body .bubble p{font-size:13.5px!important;margin:4px 0 0!important}
+body .chatbox{grid-template-columns:1fr auto!important;gap:10px!important;margin-top:10px!important;align-items:end}
+body .chatbox textarea{min-height:46px!important;max-height:120px;padding:12px 14px!important;border-radius:12px!important;resize:vertical}
+body .chatbox .primary{height:46px!important;padding:0 26px!important;border-radius:999px!important;width:auto!important;min-width:0!important}
+
+/* ---- Exams ---- */
+body .exam-rules-panel{padding:14px 20px!important;margin-bottom:14px!important}
+body .exam-rules-panel .eyebrow{display:inline-block!important}
+body .exam-rules-panel h3{display:none!important}
+body .exam-rules-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:0!important;margin:10px 0 8px!important;border:1px solid var(--line-soft);border-radius:10px;overflow:hidden}
+body .exam-rules-grid>div{background:#fff!important;border:0!important;border-radius:0!important;padding:8px 10px!important;text-align:center}
+body .exam-rules-grid>div+div{border-left:1px solid var(--line-soft)!important}
+body .exam-rules-grid b{font-size:22px!important;line-height:1.1!important}
+body .exam-rules-grid span{font-size:10.5px!important;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)!important}
+body .exam-rules-panel>p{font-size:12.5px!important;line-height:1.55!important;margin:0!important}
+body .exam-grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important;gap:12px!important;margin:0!important}
+body .exam-card{padding:14px 16px!important;display:flex;flex-direction:column;gap:4px}
+body .exam-card h3{font-size:20px!important;margin:6px 0 2px!important}
+body .exam-card p{font-size:12.5px!important;margin:0!important;line-height:1.45!important}
+body .exam-card .primary{margin-top:10px!important;align-self:flex-start;padding:8px 18px!important;font-size:11px!important;letter-spacing:.1em;text-transform:uppercase}
+body .exam-card .pill{align-self:flex-start;font-size:8.5px!important}
+
+/* ---- Practice ---- */
+body .practice-head{display:flex!important;justify-content:space-between!important}
+body .practice-availability{font-size:12px!important;color:var(--muted)!important;text-align:right}
+body .practice-progress-strip{padding:10px 16px!important;margin-bottom:12px!important}
+body .practice-progress-title span{font-size:10px!important;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep)}
+body .practice-mini-stat span{font-size:9.5px!important;letter-spacing:.12em;text-transform:uppercase}
+body .practice-mini-stat b{font-size:20px!important}
+body .practice-builder-panel{padding:16px 20px!important}
+body #practice .form-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px 16px!important;margin:0 0 10px!important}
+body .form-grid label,body .practice-focus span{font-size:11px!important;font-weight:500!important;letter-spacing:.04em;color:var(--navy)!important;margin-bottom:4px!important}
+body .form-grid input,body .form-grid select,body .practice-focus select{height:38px!important;padding:6px 12px!important;font-size:13px!important}
+body .practice-focus-row{display:flex!important;align-items:end!important;justify-content:space-between!important;gap:16px!important;margin:0 0 12px!important}
+body .practice-focus{display:flex!important;align-items:center!important;gap:10px!important}
+body .practice-focus select{min-width:220px;font-size:13px!important;font-weight:400!important}
+body #createPractice{width:auto!important;padding:11px 28px!important;font-size:11.5px!important;letter-spacing:.12em;text-transform:uppercase}
+
+/* ---- Progress ---- */
+body .progress-plan-card{padding:12px 18px!important;margin-bottom:12px!important;display:flex;align-items:center;justify-content:space-between}
+body .progress-plan-card h3{font-size:20px!important;margin:2px 0!important}
+body .progress-summary-strip{gap:0!important;border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden;margin-bottom:12px!important}
+body .progress-summary-strip>div{padding:10px 16px!important;border:0!important;border-radius:0!important;background:#fff!important;box-shadow:none!important}
+body .progress-summary-strip>div+div{border-left:1px solid var(--line-soft)!important}
+body .progress-summary-strip b{font-size:24px!important}
+body .exam-report-cards{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))!important;gap:10px!important}
+body .exam-report-card{padding:12px 14px!important;border-radius:12px!important;border:1px solid var(--line)!important;background:#fff!important;box-shadow:none!important}
+body .exam-report-card h4{font-family:var(--serif);font-size:17px!important;font-weight:600}
+body .report-section-head{margin:4px 0 8px!important}
+
+/* ---- Sidebar: fit without its own scrollbar on short screens ---- */
+body .sidebar{overflow:hidden!important}
+body .sidebar nav{overflow:visible!important;gap:2px!important}
+@media(max-height:760px){
+  body .sidebar .brand{padding-bottom:12px!important}
+  body .sidebar nav button{padding:7px 12px!important;font-size:13px!important}
+  body .side-bottom{padding:10px 8px!important}
+  body .learning-journey-card{padding:14px 20px 10px!important}
+  body .journey-node{width:44px!important;height:44px!important}
+  body .journey-node svg{width:19px!important;height:19px!important}
+  body .journey-head p{display:none}
+  body .journey-dots{gap:4px!important}
+  body .journey-dot{width:5px!important;height:5px!important}
+  body .learning-check-card{padding:10px 14px!important}
+  body .learning-check-top h4{font-size:17px!important}
+}
+body .simple-price-card.featured:before{display:none!important;content:none!important}
+body .exam-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))!important}
+body .exam-card h3{font-size:18px!important}
+body .note-section-grid{gap:8px!important}
+body .note-section-grid section,body .tricky-guide-sections section{padding:10px 14px!important;min-height:0!important}
+body .tricky-guide-sections{gap:8px!important}
+body .note-viewer>*:first-child,body .tricky-card>*:first-child{padding-top:14px!important}
+body .note-study-body{padding:12px 18px!important}
+body .note-nav,body .diagram-nav{padding:10px 18px!important}
+@media(max-height:760px){
+  body .note-viewer h3,body .note-card h3,body .tricky-card h3{font-size:22px!important}
+  body .note-summary{font-size:13.5px!important;margin:0 0 8px!important}
+  body .note-section-grid section p,body .note-section-grid section li,body .tricky-guide-sections p{font-size:12.5px!important;line-height:1.5!important}
+  body .notes-toolbar,body .tricky-toolbar,body .diagram-toolbar{margin-bottom:8px!important}
+}
 
 
