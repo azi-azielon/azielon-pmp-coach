@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Azielon PMP Practice Coach</title>
 <link rel="stylesheet" href="/static/styles.css?v=4.3.15"/>
-<script type="text/javascript" src="https://secure.helcim.app/helcim-pay/services/start.js"></script>
 </head>
 <body class="landing-active">
 <div id="authGate" class="auth-gate">
@@ -237,28 +236,6 @@
 <div id="zoomModal" class="modal hidden"><div class="modal-backdrop" data-close-modal="zoomModal"></div><div class="modal-card zoom-card"><div class="modal-head"><h3 id="zoomTitle">Diagram</h3><button class="ghost modal-x" data-close-modal="zoomModal">×</button></div><div class="zoom-controls"><button id="zoomOut" class="secondary">−</button><span id="zoomPct">100%</span><button id="zoomIn" class="secondary">+</button><button id="zoomReset" class="secondary">Fit</button><button id="zoomFull" class="secondary">Full screen</button></div><div id="zoomBody" class="zoom-body"></div></div></div>
 <div id="editorModal" class="modal hidden"><div class="modal-backdrop" data-close-modal="editorModal"></div><div class="modal-card editor-card"><div class="modal-head"><h3 id="editorTitle">Edit content</h3><button class="ghost modal-x" data-close-modal="editorModal">×</button></div><form id="editorForm" class="editor-form"></form></div></div>
 
-<div id="testPaymentModal" class="modal hidden">
-  <div class="modal-backdrop" data-close-modal="testPaymentModal"></div>
-  <div class="modal-card payment-card">
-    <div class="modal-head"><h3 id="testPaymentTitle">Test Card Payment</h3><button class="ghost modal-x" data-close-modal="testPaymentModal">×</button></div>
-    <form id="testPaymentForm" class="editor-form">
-      <input type="hidden" id="testPlanCode">
-      <input type="hidden" id="testPaymentMethod" value="card">
-      <div id="testCardFields">
-        <label>Dummy card number<input id="testCardNumber" value="4242 4242 4242 4242" autocomplete="off"></label>
-        <div class="editor-grid">
-          <label>Expiration<input id="testCardExpiry" value="12/30" autocomplete="off"></label>
-          <label>CVV<input id="testCardCvv" value="123" autocomplete="off"></label>
-        </div>
-      </div>
-      <div id="testPaymentMessage" class="message"></div>
-      <div class="editor-actions">
-        <button type="button" class="secondary" data-close-modal="testPaymentModal">Cancel</button>
-        <button type="submit" class="primary">Complete test payment</button>
-      </div>
-    </form>
-  </div>
-</div>
 <script src="/static/app.js?v=4.3.15"></script>
 </body>
 </html>

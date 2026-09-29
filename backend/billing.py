@@ -16,11 +16,12 @@ def utcnow():
 
 def seed_billing_plans(db: Session):
     # Launch catalog: three simple choices only.
-    # All three launch plans recur: Starter monthly, Standard monthly, Premium every 3 months.
+    # PayPal launch catalog: one-time purchases that grant time-limited access.
+    # The legacy plan codes are retained so existing frontend/data references keep working.
     plans = [
-        ('drills_monthly','drills','Starter','monthly',30,2900),
-        ('concept_monthly','concept','Standard','monthly',30,6900),
-        ('full_3month','full','Premium','3-month',90,14900),
+        ('drills_monthly','drills','Starter','30-day',30,2900),
+        ('concept_monthly','concept','Standard','30-day',30,6900),
+        ('full_3month','full','Premium','90-day',90,14900),
     ]
     features = {
         'drills':[
@@ -240,91 +241,365 @@ def process_stripe_webhook(db: Session, payload: bytes, sig_header: str):
     return {'received':True}
 
 
+def paypal_ready():
+    return bool(os.getenv('PAYPAL_CLIENT_ID','').strip() and os.getenv('PAYPAL_CLIENT_SECRET','').strip())
+
+
+def _paypal_base_url():
+    # PAYPAL_BASE_URL is an optional explicit override. Otherwise PAYPAL_MODE
+    # controls whether requests go to Sandbox or Live.
+    explicit=os.getenv('PAYPAL_BASE_URL','').strip()
+    if explicit:
+        return explicit.rstrip('/')
+    mode=os.getenv('PAYPAL_MODE','sandbox').strip().lower()
+    if mode in ('live','prod','production'):
+        return 'https://api-m.paypal.com'
+    return 'https://api-m.sandbox.paypal.com'
+
+
+def _paypal_error_message(response, fallback: str):
+    try:
+        data=response.json()
+        detail=data.get('message') or data.get('name')
+        debug=data.get('debug_id')
+        if detail and debug:
+            return f'{fallback}: {detail} (PayPal debug id {debug})'
+        if detail:
+            return f'{fallback}: {detail}'
+    except Exception:
+        pass
+    return fallback
+
+
 async def paypal_access_token():
-    cid=os.getenv('PAYPAL_CLIENT_ID'); secret=os.getenv('PAYPAL_CLIENT_SECRET')
-    if not cid or not secret: raise HTTPException(503,'PayPal is not configured')
-    base=os.getenv('PAYPAL_BASE_URL','https://api-m.sandbox.paypal.com').rstrip('/')
+    cid=os.getenv('PAYPAL_CLIENT_ID','').strip()
+    secret=os.getenv('PAYPAL_CLIENT_SECRET','').strip()
+    if not cid or not secret:
+        raise HTTPException(503,'PayPal is not configured')
+    base=_paypal_base_url()
     async with httpx.AsyncClient(timeout=30) as client:
-        r=await client.post(base+'/v1/oauth2/token',auth=(cid,secret),data={'grant_type':'client_credentials'},headers={'Accept':'application/json'})
-    if r.status_code>=400: raise HTTPException(502,'Unable to authenticate with PayPal')
-    return r.json()['access_token']
+        r=await client.post(
+            base+'/v1/oauth2/token',
+            auth=(cid,secret),
+            data={'grant_type':'client_credentials'},
+            headers={'Accept':'application/json','Accept-Language':'en_US'},
+        )
+    if r.status_code>=400:
+        raise HTTPException(502,_paypal_error_message(r,'Unable to authenticate with PayPal'))
+    data=r.json()
+    token=data.get('access_token')
+    if not token:
+        raise HTTPException(502,'PayPal did not return an access token')
+    return token
 
 
 async def paypal_create_order(db: Session, user: User, plan_code: str):
     plan=db.get(BillingPlan,plan_code)
-    if not plan or not plan.active: raise HTTPException(404,'Plan not found')
+    if not plan or not plan.active:
+        raise HTTPException(404,'Plan not found')
+
     token=await paypal_access_token()
-    base_api=os.getenv('PAYPAL_BASE_URL','https://api-m.sandbox.paypal.com').rstrip('/')
-    base_app=os.getenv('APP_BASE_URL','http://localhost:8000').rstrip('/')
+    base_api=_paypal_base_url()
+    base_app=os.getenv('APP_BASE_URL','http://localhost:8000').strip().rstrip('/')
+    if not base_app:
+        raise HTTPException(503,'APP_BASE_URL is not configured')
+
     order=create_local_order(db,user,plan,'paypal')
     body={
         'intent':'CAPTURE',
-        'purchase_units':[{'reference_id':order.id,'custom_id':order.id,'description':f'{plan.name} — {plan.cadence}','amount':{'currency_code':plan.currency,'value':f'{plan.amount_cents/100:.2f}'}}],
-        'payment_source':{},
-        'application_context':{'brand_name':'Azielon','user_action':'PAY_NOW','return_url':f'{base_app}/?billing=paypal-return','cancel_url':f'{base_app}/?billing=cancelled'}
+        'purchase_units':[{
+            'reference_id':order.id,
+            'custom_id':order.id,
+            'description':f'{plan.name} — {plan.duration_days} days of Azielon PMP access',
+            'amount':{
+                'currency_code':plan.currency.upper(),
+                'value':f'{plan.amount_cents/100:.2f}',
+            },
+        }],
+        'application_context':{
+            'brand_name':'Azielon',
+            'landing_page':'LOGIN',
+            'user_action':'PAY_NOW',
+            'shipping_preference':'NO_SHIPPING',
+            'return_url':f'{base_app}/?billing=paypal-return',
+            'cancel_url':f'{base_app}/?billing=cancelled',
+        },
     }
-    body.pop('payment_source',None)
-    async with httpx.AsyncClient(timeout=30) as client:
-        r=await client.post(base_api+'/v2/checkout/orders',headers={'Authorization':f'Bearer {token}','Content-Type':'application/json','PayPal-Request-Id':order.id},json=body)
+
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            r=await client.post(
+                base_api+'/v2/checkout/orders',
+                headers={
+                    'Authorization':f'Bearer {token}',
+                    'Content-Type':'application/json',
+                    'PayPal-Request-Id':order.id,
+                },
+                json=body,
+            )
+    except httpx.HTTPError as exc:
+        order.status='failed'
+        order.raw_json=json.dumps({'error':str(exc)})
+        db.commit()
+        raise HTTPException(502,'Unable to connect to PayPal')
+
     if r.status_code>=400:
-        order.status='failed'; order.raw_json=r.text; db.commit(); raise HTTPException(502,'Unable to create PayPal order')
-    data=r.json(); order.provider_order_id=data.get('id'); order.raw_json=json.dumps(data); db.commit()
-    approve=next((x.get('href') for x in data.get('links',[]) if x.get('rel')=='approve'),None)
-    if not approve: raise HTTPException(502,'PayPal approval URL missing')
-    return {'order_id':order.id,'provider_order_id':order.provider_order_id,'approval_url':approve}
+        order.status='failed'
+        order.raw_json=r.text
+        db.commit()
+        raise HTTPException(502,_paypal_error_message(r,'Unable to create PayPal order'))
+
+    data=r.json()
+    provider_order_id=str(data.get('id') or '').strip()
+    approve=next((x.get('href') for x in data.get('links',[]) if x.get('rel') in ('approve','payer-action')),None)
+    if not provider_order_id or not approve:
+        order.status='failed'
+        order.raw_json=json.dumps(data)
+        db.commit()
+        raise HTTPException(502,'PayPal did not return a valid approval URL')
+
+    order.provider_order_id=provider_order_id
+    order.status='pending'
+    order.raw_json=json.dumps(data)
+    db.commit()
+
+    return {
+        'order_id':order.id,
+        'provider_order_id':provider_order_id,
+        'approval_url':approve,
+    }
+
+
+def _paypal_capture_rows(data: dict):
+    captures=[]
+    for pu in data.get('purchase_units',[]) or []:
+        payments=pu.get('payments') or {}
+        captures.extend(payments.get('captures') or [])
+    return captures
+
+
+def _validate_paypal_capture(order: CheckoutOrder, data: dict):
+    captures=_paypal_capture_rows(data)
+    if not captures:
+        raise HTTPException(502,'PayPal completed the order without a capture record')
+
+    completed=[c for c in captures if str(c.get('status') or '').upper()=='COMPLETED']
+    if not completed:
+        raise HTTPException(402,'PayPal payment is not completed')
+
+    expected_currency=str(order.currency or 'USD').upper()
+    expected_cents=int(order.amount_cents or 0)
+    total_cents=0
+
+    for capture in completed:
+        amount=capture.get('amount') or {}
+        currency=str(amount.get('currency_code') or '').upper()
+        value=str(amount.get('value') or '0')
+        if currency != expected_currency:
+            raise HTTPException(400,'PayPal payment currency does not match the selected plan')
+        try:
+            cents=int((Decimal(value)*100).quantize(Decimal('1')))
+        except Exception:
+            raise HTTPException(502,'PayPal returned an invalid capture amount')
+        total_cents += cents
+
+    if total_cents != expected_cents:
+        raise HTTPException(400,'PayPal payment amount does not match the selected plan')
+
+    return completed
 
 
 async def paypal_capture_order(db: Session, user: User, provider_order_id: str):
-    order=db.query(CheckoutOrder).filter(CheckoutOrder.provider=='paypal',CheckoutOrder.provider_order_id==provider_order_id,CheckoutOrder.user_id==user.id).first()
-    if not order: raise HTTPException(404,'PayPal order not found')
-    if order.status=='paid': return {'paid':True,'entitlement':entitlement_payload(current_entitlement(db,user.id))}
-    token=await paypal_access_token(); base=os.getenv('PAYPAL_BASE_URL','https://api-m.sandbox.paypal.com').rstrip('/')
-    async with httpx.AsyncClient(timeout=30) as client:
-        r=await client.post(base+f'/v2/checkout/orders/{provider_order_id}/capture',headers={'Authorization':f'Bearer {token}','Content-Type':'application/json','PayPal-Request-Id':f'capture-{order.id}'},json={})
-    if r.status_code>=400: raise HTTPException(502,'Unable to capture PayPal order')
-    data=r.json(); order.raw_json=json.dumps(data)
-    if data.get('status')=='COMPLETED':
-        captures=[]
-        for pu in data.get('purchase_units',[]): captures += pu.get('payments',{}).get('captures',[])
-        if captures: order.provider_capture_id=captures[0].get('id')
+    provider_order_id=str(provider_order_id or '').strip()
+    if not provider_order_id:
+        raise HTTPException(400,'PayPal order id is required')
+
+    order=db.query(CheckoutOrder).filter(
+        CheckoutOrder.provider=='paypal',
+        CheckoutOrder.provider_order_id==provider_order_id,
+        CheckoutOrder.user_id==user.id,
+    ).first()
+    if not order:
+        raise HTTPException(404,'PayPal order not found')
+
+    # Idempotent return for browser refreshes/retries.
+    if order.status=='paid' and order.entitlement_granted:
+        return {
+            'paid':True,
+            'order_id':order.id,
+            'provider_order_id':provider_order_id,
+            'entitlement':entitlement_payload(current_entitlement(db,user.id)),
+        }
+
+    token=await paypal_access_token()
+    base=_paypal_base_url()
+
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            r=await client.post(
+                base+f'/v2/checkout/orders/{provider_order_id}/capture',
+                headers={
+                    'Authorization':f'Bearer {token}',
+                    'Content-Type':'application/json',
+                    'PayPal-Request-Id':f'capture-{order.id}',
+                },
+                json={},
+            )
+    except httpx.HTTPError:
+        raise HTTPException(502,'Unable to connect to PayPal while confirming payment')
+
+    # PayPal may return an already-captured response on a retry. In that case,
+    # fetch the order so we can verify the authoritative completed capture.
+    if r.status_code>=400:
+        try:
+            async with httpx.AsyncClient(timeout=30) as client:
+                lookup=await client.get(
+                    base+f'/v2/checkout/orders/{provider_order_id}',
+                    headers={'Authorization':f'Bearer {token}','Content-Type':'application/json'},
+                )
+            if lookup.status_code<400 and lookup.json().get('status')=='COMPLETED':
+                data=lookup.json()
+            else:
+                raise HTTPException(502,_paypal_error_message(r,'Unable to capture PayPal order'))
+        except HTTPException:
+            raise
+        except Exception:
+            raise HTTPException(502,_paypal_error_message(r,'Unable to capture PayPal order'))
+    else:
+        data=r.json()
+
+    order.raw_json=json.dumps(data)
+
+    if str(data.get('status') or '').upper()=='COMPLETED':
+        captures=_validate_paypal_capture(order,data)
+        order.provider_capture_id=str(captures[0].get('id') or '') or order.provider_capture_id
         ent=grant_entitlement(db,order)
-        return {'paid':True,'entitlement':entitlement_payload(ent)}
-    db.commit(); return {'paid':False,'status':data.get('status')}
+        return {
+            'paid':True,
+            'order_id':order.id,
+            'provider_order_id':provider_order_id,
+            'capture_id':order.provider_capture_id,
+            'entitlement':entitlement_payload(ent),
+        }
+
+    order.status=str(data.get('status') or 'pending').lower()
+    db.commit()
+    return {'paid':False,'status':data.get('status'),'order_id':order.id}
 
 
 async def verify_paypal_webhook(request: Request, body: dict):
-    webhook_id=os.getenv('PAYPAL_WEBHOOK_ID')
-    if not webhook_id: raise HTTPException(503,'PayPal webhook ID not configured')
-    token=await paypal_access_token(); base=os.getenv('PAYPAL_BASE_URL','https://api-m.sandbox.paypal.com').rstrip('/')
-    verify={
+    webhook_id=os.getenv('PAYPAL_WEBHOOK_ID','').strip()
+    if not webhook_id:
+        raise HTTPException(503,'PayPal webhook ID not configured')
+
+    required_headers={
         'transmission_id':request.headers.get('paypal-transmission-id'),
         'transmission_time':request.headers.get('paypal-transmission-time'),
         'cert_url':request.headers.get('paypal-cert-url'),
         'auth_algo':request.headers.get('paypal-auth-algo'),
         'transmission_sig':request.headers.get('paypal-transmission-sig'),
-        'webhook_id':webhook_id,
-        'webhook_event':body,
     }
+    if not all(required_headers.values()):
+        raise HTTPException(400,'Missing PayPal webhook signature headers')
+
+    token=await paypal_access_token()
+    base=_paypal_base_url()
+    verify={**required_headers,'webhook_id':webhook_id,'webhook_event':body}
+
     async with httpx.AsyncClient(timeout=30) as client:
-        r=await client.post(base+'/v1/notifications/verify-webhook-signature',headers={'Authorization':f'Bearer {token}','Content-Type':'application/json'},json=verify)
-    if r.status_code>=400 or r.json().get('verification_status')!='SUCCESS': raise HTTPException(400,'Invalid PayPal webhook signature')
+        r=await client.post(
+            base+'/v1/notifications/verify-webhook-signature',
+            headers={'Authorization':f'Bearer {token}','Content-Type':'application/json'},
+            json=verify,
+        )
+    if r.status_code>=400:
+        raise HTTPException(400,'Unable to verify PayPal webhook signature')
+    try:
+        verified=r.json().get('verification_status')=='SUCCESS'
+    except Exception:
+        verified=False
+    if not verified:
+        raise HTTPException(400,'Invalid PayPal webhook signature')
 
 
 async def process_paypal_webhook(db: Session, request: Request, body: dict):
     await verify_paypal_webhook(request,body)
-    eid=body.get('id','')
-    if db.query(PaymentWebhookEvent).filter(PaymentWebhookEvent.provider=='paypal',PaymentWebhookEvent.event_id==eid).first():
+
+    eid=str(body.get('id') or '').strip()
+    if not eid:
+        raise HTTPException(400,'PayPal webhook event id is missing')
+
+    if db.query(PaymentWebhookEvent).filter(
+        PaymentWebhookEvent.provider=='paypal',
+        PaymentWebhookEvent.event_id==eid,
+    ).first():
         return {'received':True,'duplicate':True}
-    rec=PaymentWebhookEvent(provider='paypal',event_id=eid,event_type=body.get('event_type',''),payload_json=json.dumps(body),status='received')
-    db.add(rec); db.commit()
-    if body.get('event_type')=='PAYMENT.CAPTURE.COMPLETED':
-        res=body.get('resource',{})
-        provider_order_id=((res.get('supplementary_data') or {}).get('related_ids') or {}).get('order_id')
-        order=db.query(CheckoutOrder).filter(CheckoutOrder.provider=='paypal',CheckoutOrder.provider_order_id==provider_order_id).first() if provider_order_id else None
-        if order:
-            order.provider_capture_id=res.get('id'); order.raw_json=json.dumps(body); grant_entitlement(db,order)
-    rec.status='processed'; rec.processed_at=utcnow(); db.commit()
-    return {'received':True}
+
+    event_type=str(body.get('event_type') or '')
+    rec=PaymentWebhookEvent(
+        provider='paypal',
+        event_id=eid,
+        event_type=event_type,
+        payload_json=json.dumps(body),
+        status='received',
+    )
+    db.add(rec)
+    db.commit()
+
+    try:
+        res=body.get('resource') or {}
+        related=((res.get('supplementary_data') or {}).get('related_ids') or {})
+        provider_order_id=str(related.get('order_id') or '').strip()
+        order=db.query(CheckoutOrder).filter(
+            CheckoutOrder.provider=='paypal',
+            CheckoutOrder.provider_order_id==provider_order_id,
+        ).first() if provider_order_id else None
+
+        if event_type=='PAYMENT.CAPTURE.COMPLETED' and order:
+            amount=res.get('amount') or {}
+            currency=str(amount.get('currency_code') or '').upper()
+            try:
+                amount_cents=int((Decimal(str(amount.get('value') or '0'))*100).quantize(Decimal('1')))
+            except Exception:
+                amount_cents=-1
+
+            if currency != str(order.currency or '').upper() or amount_cents != int(order.amount_cents or 0):
+                rec.status='rejected_amount_mismatch'
+                rec.processed_at=utcnow()
+                db.commit()
+                raise HTTPException(400,'PayPal webhook amount does not match the local order')
+
+            order.provider_capture_id=str(res.get('id') or '') or order.provider_capture_id
+            order.raw_json=json.dumps(body)
+            grant_entitlement(db,order)
+
+        elif event_type in ('PAYMENT.CAPTURE.DENIED','PAYMENT.CAPTURE.DECLINED') and order:
+            order.status='failed'
+            order.raw_json=json.dumps(body)
+
+        elif event_type=='PAYMENT.CAPTURE.PENDING' and order:
+            order.status='pending'
+            order.raw_json=json.dumps(body)
+
+        elif event_type in ('PAYMENT.CAPTURE.REFUNDED','PAYMENT.CAPTURE.REVERSED') and order:
+            # Record the payment state. Access is intentionally not revoked here;
+            # refund/access policy can be handled administratively.
+            order.status='refunded'
+            order.raw_json=json.dumps(body)
+
+        rec.status='processed'
+        rec.processed_at=utcnow()
+        db.commit()
+        return {'received':True}
+
+    except HTTPException:
+        raise
+    except Exception as exc:
+        rec.status='error'
+        rec.processed_at=utcnow()
+        rec.payload_json=json.dumps({'event':body,'error':str(exc)})
+        db.commit()
+        raise HTTPException(500,'Unable to process PayPal webhook')
 
 
 def require_paid_access(user: User, db: Session):
