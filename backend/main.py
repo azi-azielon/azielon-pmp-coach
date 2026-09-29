@@ -280,7 +280,7 @@ async def register_pmp_class_interest(request: Request, db: Session = Depends(ge
         'payment_url':'https://app.autobooks.co/pay/azie',
         'pending_email_sent':pending_email_sent,
         'pending_email_error':pending_email_error,
-        'smtp':_smtp_status()
+        'smtp':_email_status()
     }
 
 @app.post('/api/auth/register')

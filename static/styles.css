@@ -1819,5 +1819,8 @@ body .sidebar nav .nav-live-link:hover{color:#fff;background:rgba(255,255,255,.0
 body .sidebar nav .nav-live-link .live-tag{margin-left:auto;font-style:normal;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:999px;border:1px solid rgba(var(--gold-soft-rgb),.45);color:var(--gold-soft)}
 @media(max-height:760px){body .sidebar nav .nav-live-link{padding:7px 12px;font-size:13px}}
 @media(max-height:660px){body .sidebar nav .nav-live-link{padding:6px 12px}}
+body .sales-footnote{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:14px 20px!important;flex-wrap:wrap!important;max-width:620px!important}
+body .sales-footnote-text{display:flex;flex-direction:column;gap:3px}
+body .sales-footnote .sales-cta-secondary{padding:8px 16px;font-size:10.5px;white-space:nowrap}
 
 
