@@ -54,6 +54,8 @@
     button{border:1px solid var(--navy);border-radius:999px;background:var(--navy);color:#F3E3BD;font:inherit;font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:15px 18px;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
     button:hover{background:var(--gold-deep);border-color:var(--gold-deep);color:#fff}
     button:disabled{opacity:.55;cursor:not-allowed}
+    .opt{font-weight:400;color:var(--muted)}
+    .legal a{color:var(--gold-deep)}
     .legal{font-size:11px;color:#9A9486;text-align:center;margin:0;line-height:1.5}
     @media(max-width:900px){
       .page{grid-template-columns:1fr}.hero{padding:36px 26px;border-right:0;border-bottom:1px solid rgba(217,181,106,.22)}.form-side{padding:32px 22px}
@@ -66,6 +68,15 @@
       .bullets{gap:6px;font-size:13.5px}.quote{margin-top:16px;padding-top:12px;font-size:16.5px}
       .form-side h2{margin:12px 0 6px}.sub{margin-bottom:14px}.summary{margin-bottom:14px}.summary div{padding:9px 14px}
       form{gap:10px}input,select{padding:10px 12px}button{padding:13px 18px}
+    }
+    @media(max-height:760px) and (min-width:901px){
+      .help{display:none}.summary{display:none}.sub{margin-bottom:12px}
+    }
+    @media(max-height:680px) and (min-width:901px){
+      .bullets{display:none}.eyebrow{margin:14px 0 8px}.brand{font-size:20px}.brand img{width:34px;height:34px}
+      h1{font-size:clamp(28px,5vh,36px)}.lead{font-size:14px;line-height:1.5}.facts{margin:12px 0 10px}
+      .quote{margin-top:10px;font-size:15.5px}.form-side h2{font-size:28px;margin-top:8px}
+      form{gap:8px}label{font-size:11.5px}input,select{margin-top:4px;padding:8px 12px}.legal{font-size:10.5px}
     }
   </style>
 </head>
@@ -93,8 +104,8 @@
   <section class="form-side">
     <div class="card">
       <a class="back" href="/">← PMP Practice Coach</a>
-      <h2>Choose your class start date</h2>
-      <p class="sub">Classes begin Tuesday and run through Friday. Thanksgiving week and Christmas week are unavailable.</p>
+      <h2>Reserve your seat</h2>
+      <p class="sub">Live PMP Online Class · 35 hours · $999 · Tue–Fri · 8:00 AM–5:00 PM ET. Pick your Tuesday start date, then pay securely.</p>
       <div class="summary">
         <div><b>$999</b><span>Total</span></div>
         <div><b>35 hours</b><span>Live online</span></div>
@@ -103,20 +114,23 @@
       <form id="livePmpForm">
         <label>Name<input id="name" required autocomplete="name" placeholder="Full name"></label>
         <label>Email<input id="email" type="email" required autocomplete="email" placeholder="you@email.com"></label>
+        <label>Phone <span class="opt">(optional)</span><input id="phone" type="tel" autocomplete="tel" placeholder="(555) 555-5555"></label>
         <label>Class start date (Tuesday)
           <select id="classDate" required><option value="">Choose an available Tuesday</option></select>
         </label>
         <p class="help">Only eligible Tuesdays are shown. Thanksgiving week and Christmas week are excluded automatically.</p>
-        <p class="secure">🔒 Secure Online Payment · Autobooks</p>
+        <p class="secure">🔒 Secure online payment · Autobooks · $999</p>
         <div id="message" class="message"></div>
         <button id="payBtn" type="submit">Continue to Secure Online Payment →</button>
-        <p class="legal">Your name, email, and selected class date are saved with Azielon before the secure Autobooks payment page opens.</p>
+        <p class="legal">We save your registration, then open the secure Autobooks checkout. On the checkout page, enter the same name you used here. Your card statement may show Aziel LLC.</p>
+        <p class="legal" id="fallback" hidden>Having trouble? <a href="https://checkout.page/s/kjkWZa38InTkt">Continue to secure payment →</a></p>
       </form>
     </div>
   </section>
 </div>
 <script>
 const $=s=>document.querySelector(s);
+const CHECKOUT_URL='https://checkout.page/s/kjkWZa38InTkt';
 function thanksgiving(year){
   const d=new Date(year,10,1,12); const offset=(4-d.getDay()+7)%7; d.setDate(1+offset+21); return d;
 }
@@ -144,15 +158,15 @@ $('#livePmpForm').onsubmit=async e=>{
   e.preventDefault();
   const btn=$('#payBtn');btn.disabled=true;btn.textContent='Saving your registration…';$('#message').textContent='';
   try{
-    const r=await fetch('/api/public/pmp-class/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:$('#name').value,email:$('#email').value,preferred_date:$('#classDate').value})});
+    const r=await fetch('/api/public/pmp-class/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:$('#name').value,email:$('#email').value,phone:$('#phone').value,preferred_date:$('#classDate').value})});
     const data=await r.json();
     if(!r.ok)throw new Error(data.detail||'Unable to save registration');
     $('#message').style.color='#2F6B55';
     $('#message').textContent='✓ Registration saved. Opening secure Autobooks payment…';
-    setTimeout(()=>window.location.href=data.payment_url,400);
+    setTimeout(()=>window.location.href=CHECKOUT_URL,500);
   }catch(err){
     $('#message').style.color='#9B3B45';$('#message').textContent=err.message;
-    btn.disabled=false;btn.textContent='Continue to Secure Online Payment →';
+    btn.disabled=false;btn.textContent='Continue to Secure Online Payment →';$('#fallback').hidden=false;
   }
 };
 </script>

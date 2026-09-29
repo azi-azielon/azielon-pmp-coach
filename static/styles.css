@@ -1809,5 +1809,15 @@ body .sales-panel-v426,body .auth-card-v426{justify-content:safe center!importan
   body .note-section-grid section p,body .note-section-grid section li,body .tricky-guide-sections p{font-size:12px!important}
   body .tricky-guide-sections section{padding:8px 12px!important}
 }
+/* ---------- v5.5: sleeker CTAs + live class links ---------- */
+body .sales-cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+body .sales-copy .sales-cta-primary{padding:11px 22px!important;font-size:11px!important;letter-spacing:.12em!important;min-height:0!important;height:auto!important;gap:10px!important}
+body .sales-cta-secondary{display:inline-flex;align-items:center;gap:10px;padding:10px 20px;border:1px solid rgba(var(--gold-soft-rgb),.55);border-radius:999px;color:var(--gold-soft);text-decoration:none;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;transition:background .2s,border-color .2s,color .2s}
+body .sales-cta-secondary:hover{background:rgba(var(--gold-soft-rgb),.1);border-color:var(--gold-soft);color:#F3E3BD}
+body .sidebar nav .nav-live-link{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;color:#B7BFCE;text-decoration:none;font-size:13.5px;letter-spacing:.015em;line-height:1.3;transition:color .2s,background .2s}
+body .sidebar nav .nav-live-link:hover{color:#fff;background:rgba(255,255,255,.04)}
+body .sidebar nav .nav-live-link .live-tag{margin-left:auto;font-style:normal;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:999px;border:1px solid rgba(var(--gold-soft-rgb),.45);color:var(--gold-soft)}
+@media(max-height:760px){body .sidebar nav .nav-live-link{padding:7px 12px;font-size:13px}}
+@media(max-height:660px){body .sidebar nav .nav-live-link{padding:6px 12px}}
 
 
