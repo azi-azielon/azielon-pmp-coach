@@ -66,7 +66,40 @@ $('#loginForm').onsubmit=async e=>{e.preventDefault();try{storeAuth(await api('/
 
 $('#registerForm').onsubmit=async e=>{e.preventDefault();try{storeAuth(await api('/api/auth/register',{method:'POST',body:JSON.stringify({name:$('#regName').value,email:$('#regEmail').value,password:$('#regPassword').value})}),{pendingTrial:true})}catch(err){setAuth(err.message)}};
 
-$('#logoutBtn').onclick=()=>{localStorage.removeItem('az_token');location.reload()};
+function signOut(){
+  localStorage.removeItem('az_token');
+  state.token='';
+  state.user=null;
+  location.reload();
+}
+
+const sidebarLogout=$('#logoutBtn');
+if(sidebarLogout)sidebarLogout.onclick=signOut;
+
+function closeAccountMenu(){
+  const menu=$('#accountMenu'),avatar=$('#avatar');
+  if(menu)menu.classList.add('hidden');
+  if(avatar)avatar.setAttribute('aria-expanded','false');
+}
+
+function toggleAccountMenu(e){
+  if(e)e.stopPropagation();
+  const menu=$('#accountMenu'),avatar=$('#avatar');
+  if(!menu||!avatar)return;
+  const opening=menu.classList.contains('hidden');
+  menu.classList.toggle('hidden',!opening);
+  avatar.setAttribute('aria-expanded',opening?'true':'false');
+}
+
+const accountAvatar=$('#avatar');
+if(accountAvatar)accountAvatar.onclick=toggleAccountMenu;
+const accountLogoutBtn=$('#accountLogoutBtn');
+if(accountLogoutBtn)accountLogoutBtn.onclick=signOut;
+const accountBillingBtn=$('#accountBillingBtn');
+if(accountBillingBtn)accountBillingBtn.onclick=()=>{closeAccountMenu();showView('billing')};
+
+document.addEventListener('click',e=>{if(!e.target.closest('.account-menu-wrap'))closeAccountMenu()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAccountMenu()});
 
 function isPremiumTier(){const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return t==='full'||t.startsWith('full')}
 
@@ -164,6 +197,8 @@ async function bootApp(){
   $('#userBadge').textContent=`${state.user.name} · ${state.user.role}`;
 
   $('#avatar').textContent=state.user.name.split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();
+  const accountName=$('#accountName'); if(accountName)accountName.textContent=state.user.name||'Account';
+  const accountEmail=$('#accountEmail'); if(accountEmail)accountEmail.textContent=state.user.email||'';
 
   const bm=await api('/api/billing/me');
 
