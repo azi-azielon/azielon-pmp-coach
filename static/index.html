@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Azielon PMP Practice Coach</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="/static/styles.css?v=5.14.2"/>
+<link rel="stylesheet" href="/static/styles.css?v=5.14.3"/>
 </head>
 <body class="landing-active">
 <div id="authGate" class="auth-gate">
-  <div class="build-version-badge">v5.14.2</div>
+  <div class="build-version-badge">v5.14.3</div>
   <div class="sales-shell sales-shell-v426">
     <section class="sales-panel sales-panel-v426">
       <div class="sales-brand"><img src="/static/assets/azielon-logo.png" alt="Azielon"><span>Azielon PMP Coach</span></div>
@@ -141,28 +141,30 @@
     <header class="topbar"><div><span class="eyebrow">Reasoning-first PMP preparation</span><h1 id="pageTitle">My Learning</h1></div><div class="top-actions"><span id="healthPill" class="status-pill">Checking…</span><div id="avatar" class="avatar">AZ</div></div></header>
 
     <section class="view active" id="dashboard">
-      <div class="dashboard-launchpad panel">
-        <div class="dashboard-launch-head"><div><span class="eyebrow">Your PMP command center</span><h2>Choose what you need right now</h2><p>Everything important is visible here. Open a feature without hunting or scrolling.</p></div><div class="dashboard-launch-summary"><span>Overall path</span><b id="dashboardOverallPct">0%</b></div></div>
-        <div id="featureLaunchpad" class="feature-launchpad-grid"></div>
+      <div class="pmp-home-shell">
+        <div class="pmp-home-head">
+          <div>
+            <span class="eyebrow">Your PMP exam workspace</span>
+            <h2>Everything you need to pass — in one place.</h2>
+            <p>Choose a focus below. The content opens here on your dashboard so you always know where you are.</p>
+          </div>
+          <div class="pmp-home-overall"><span>Learning path</span><b id="dashboardOverallPct">0%</b></div>
+        </div>
+
+        <div id="featureLaunchpad" class="pmp-focus-grid" aria-label="PMP study tools"></div>
+        <section id="dashboardWorkspace" class="dashboard-workspace" aria-live="polite"></section>
       </div>
 
-      <div class="dashboard-lower-grid">
+      <div class="dashboard-legacy-data hidden" aria-hidden="true">
         <div class="learning-path-card learning-journey-card">
-          <div class="learning-path-head journey-head"><div><span class="eyebrow">Your learning path</span><h2 id="learningPlanTitle">Learning plan</h2><p>Follow the path at your pace. Each dot represents 20% of that stage.</p></div><div class="learning-overall"><b id="learningOverallPct">0%</b><span>overall</span></div></div>
-          <div id="learningWorkflow" class="learning-journey" aria-label="Your learning path"></div>
+          <div class="learning-path-head journey-head"><div><span class="eyebrow">Your learning path</span><h2 id="learningPlanTitle">Learning plan</h2></div><div class="learning-overall"><b id="learningOverallPct">0%</b><span>overall</span></div></div>
+          <div id="learningWorkflow" class="learning-journey"></div>
         </div>
-
-        <div class="dashboard-side-stack">
-          <div class="continue-strip panel compact-continue"><div><span class="eyebrow">Continue learning</span><h3 id="continueTitle">Finding your next item…</h3><p id="continueMeta" class="small-note"></p></div><button id="continueBtn" class="primary">Continue</button></div>
-          <div class="panel dashboard-checklist-panel">
-            <div class="learning-section-head"><div><span class="eyebrow">What to complete</span><h3>Your checklist</h3></div><button class="text-btn" data-jump="review"><span id="learningReviewCount">0</span> to review →</button></div>
-            <div id="learningChecklist" class="learning-checklist-cards"></div>
-          </div>
-        </div>
+        <div class="continue-strip"><div><h3 id="continueTitle"></h3><p id="continueMeta"></p></div><button id="continueBtn">Continue</button></div>
+        <span id="learningReviewCount">0</span>
+        <div id="learningChecklist"></div>
       </div>
     </section>
-
-    
 
     <section class="view" id="notes">
       <div class="section-intro compact-intro"><div><span class="eyebrow">Structured learning topics</span><h2>Topic Notes</h2><p>Study one concept at a time, mark your status, and continue with unfinished topics first.</p></div></div>
@@ -320,7 +322,7 @@
 <div id="zoomModal" class="modal hidden"><div class="modal-backdrop" data-close-modal="zoomModal"></div><div class="modal-card zoom-card"><div class="modal-head"><h3 id="zoomTitle">Diagram</h3><button class="ghost modal-x" data-close-modal="zoomModal">×</button></div><div class="zoom-controls"><button id="zoomOut" class="secondary">−</button><span id="zoomPct">100%</span><button id="zoomIn" class="secondary">+</button><button id="zoomReset" class="secondary">Fit</button><button id="zoomFull" class="secondary">Full screen</button></div><div id="zoomBody" class="zoom-body"></div></div></div>
 <div id="editorModal" class="modal hidden"><div class="modal-backdrop" data-close-modal="editorModal"></div><div class="modal-card editor-card"><div class="modal-head"><h3 id="editorTitle">Edit content</h3><button class="ghost modal-x" data-close-modal="editorModal">×</button></div><form id="editorForm" class="editor-form"></form></div></div>
 
-<script src="/static/app.js?v=5.14.2"></script>
+<script src="/static/app.js?v=5.14.3"></script>
 <script src="/static/live-form.js?v=5.13.0"></script>
 </body>
 </html>
