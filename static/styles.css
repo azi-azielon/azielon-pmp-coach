@@ -1567,5 +1567,12 @@ body .learning-check-card .mini-track{margin:14px 0 10px!important}
 body .learning-check-card .text-btn{font-size:11px!important;letter-spacing:.08em;text-transform:uppercase}
 body .continue-strip h3,body #continueTitle{font-size:22px!important}
 body .learning-section-head h3{font-size:24px!important}
+/* Sleeker sidebar typography + matching icon weight */
+body .sidebar nav button{font-size:13.5px!important;font-weight:400!important;letter-spacing:.015em!important;padding:10px 14px!important;line-height:1.3!important;align-items:center!important}
+body .sidebar nav button.active{font-weight:500!important}
+body .sidebar .nav-icon svg,body .journey-node svg{stroke-width:1.4!important}
+body .sidebar .nav-icon{width:18px!important;height:18px!important;display:grid;place-items:center;flex:0 0 18px}
+body .side-bottom{font-size:12px!important;letter-spacing:.02em}
+body .premium-lock{font-size:8.5px!important;padding:2px 7px!important}
 
 
