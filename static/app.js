@@ -68,7 +68,9 @@ $('#registerForm').onsubmit=async e=>{e.preventDefault();try{storeAuth(await api
 
 $('#logoutBtn').onclick=()=>{localStorage.removeItem('az_token');location.reload()};
 
-function hasFeature(name){return isStaff()||state.features.includes(name)}
+function isPremiumTier(){const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return t==='full'||t.startsWith('full')}
+
+function hasFeature(name){if(name==='ai_coach'&&!isStaff()&&!isPremiumTier())return false;return isStaff()||state.features.includes(name)}
 
 function featureForView(id){return ({studyplan:'progress',notes:'notes',diagrams:'diagrams',tricky:'tricky',practice:'practice',review:'review',coach:'ai_coach',progress:'progress'})[id]||null}
 
@@ -80,7 +82,7 @@ function showView(id){
 
   if(needed&&!hasFeature(needed)){showView('billing');const nb=document.querySelector(`#nav button[data-view="${id}"]`),un=$('#upgradeNotice');if(un){const nm=({notes:'Topic Notes',diagrams:'Diagrams & Models',tricky:'Tricky Words',practice:'Practice',review:'Concepts to Review',progress:'My Progress'})[id]||'This feature',pl=nb&&nb.dataset.plan;un.innerHTML=pl?`<b>${nm}</b> is included in the <b>${pl}</b> plan${pl==='Premium'?'':' and above'}. Choose a plan below to unlock it.`:'This feature is not included in your current plan.';un.hidden=false}return}
 
-  state.currentView=id;$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));$('#pageTitle').textContent=({dashboard:'My Learning',notes:'Topic Notes',diagrams:'Diagrams & Models',tricky:'Tricky Words',practice:'Practice',review:'Concepts to Review',coach:'AI Coach',progress:'My Progress',billing:'Plans & Pricing',admin:'Instructor Studio',live:'PMP Live Classes',exams:(state.examKind==='mock'?'Full Mock Exams':'Concept Mastery Exams')})[id]||'Azielon';updateContentProtection(id);window.scrollTo({top:0,behavior:'smooth'});if(id==='progress'||id==='dashboard')loadProgress();if(id==='review')loadConceptReview();if(id==='billing')loadBilling();if(id==='admin')loadAdmin();if(id==='exams')loadExamCatalog();if(id==='practice'){loadPracticeAvailability();loadProgress()}}
+  state.currentView=id;$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));$('#pageTitle').textContent=({dashboard:'My Learning',notes:'Topic Notes',diagrams:'Diagrams & Models',tricky:'Tricky Words',practice:'Practice',review:'Concepts to Review',coach:'PMP Coach',progress:'My Progress',billing:'Plans & Pricing',admin:'Instructor Studio',live:'PMP Live Classes',exams:(state.examKind==='mock'?'Full Mock Exams':'Concept Mastery Exams')})[id]||'Azielon';updateContentProtection(id);window.scrollTo({top:0,behavior:'smooth'});if(id==='progress'||id==='dashboard')loadProgress();if(id==='review')loadConceptReview();if(id==='billing')loadBilling();if(id==='admin')loadAdmin();if(id==='exams')loadExamCatalog();if(id==='practice'){loadPracticeAvailability();loadProgress()}}
 
 $$('#nav button').forEach(b=>b.onclick=()=>{const un=$('#upgradeNotice');if(un)un.hidden=true;if(b.dataset.examKind)state.examKind=b.dataset.examKind;showView(b.dataset.view)});$$('[data-jump]').forEach(b=>b.onclick=()=>showView(b.dataset.jump));
 
@@ -564,7 +566,7 @@ function renderLearningDashboard(p){
 
   };
 
-  let keys=tier==='drills'?['practice','mock']:tier==='concept'?['notes','tricky','mastery']:['notes','diagrams','tricky','practice','mock','mastery'];
+  let keys=tier==='drills'?['practice','mock']:tier==='concept'?['notes','tricky','practice','mock']:['notes','diagrams','tricky','practice','mock','mastery'];
 
   keys=keys.filter(k=>(defs[k][2].total||0)>0);
 
@@ -716,7 +718,7 @@ function startPracticeTimer(){clearPracticeTimer();const el=$('#practiceTimer');
 
 $('#coachForm').onsubmit=async e=>{e.preventDefault();const m=$('#coachInput').value.trim();if(!m)return;appendChat(m,true);$('#coachInput').value='';try{const r=await api('/api/ai/coach',{method:'POST',body:JSON.stringify({message:m})});appendChat(r.text||'No response.')}catch(err){appendChat(err.message)}};
 
-function appendChat(text,user=false){const d=document.createElement('div');d.className='bubble '+(user?'user':'ai');d.innerHTML=`<b>${user?'You':'Azielon Coach'}</b><p>${escapeHtml(text).replace(/\n/g,'<br>')}</p>`;$('#chat').appendChild(d);$('#chat').scrollTop=99999}
+function appendChat(text,user=false){const d=document.createElement('div');d.className='bubble '+(user?'user':'ai');d.innerHTML=`<b>${user?'You':'PMP Coach'}</b><p>${escapeHtml(text).replace(/\n/g,'<br>')}</p>`;$('#chat').appendChild(d);$('#chat').scrollTop=99999}
 
  
 
@@ -956,13 +958,13 @@ function renderBilling(catalog,bm){
 
       features:[
 
-        'Exam drills & simulator',
+        'Practice',
 
-        'Full mock exams',
+        'Full Mock Exams',
 
-        'Detailed explanations',
+        'Concepts to Review',
 
-        'Progress tracking'
+        'My Progress'
 
       ]
 
@@ -986,11 +988,9 @@ function renderBilling(catalog,bm){
 
         'Everything in Starter',
 
-        'Concept lessons & decision rules',
+        'Topic Notes',
 
-        'Tricky Words review',
-
-        'Concept mastery exams'
+        'Tricky Words'
 
       ]
 
@@ -1014,11 +1014,11 @@ function renderBilling(catalog,bm){
 
         'Everything in Standard',
 
-        'Diagrams & visual models',
+        'Concept Mastery Exams',
 
-        'Every feature unlocked',
+        'Diagrams & Models',
 
-        'Complete PMP prep',
+        'PMP Coach',
 
         'One-time payment · no automatic renewal'
 
