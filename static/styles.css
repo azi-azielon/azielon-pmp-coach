@@ -1574,5 +1574,34 @@ body .sidebar .nav-icon svg,body .journey-node svg{stroke-width:1.4!important}
 body .sidebar .nav-icon{width:18px!important;height:18px!important;display:grid;place-items:center;flex:0 0 18px}
 body .side-bottom{font-size:12px!important;letter-spacing:.02em}
 body .premium-lock{font-size:8.5px!important;padding:2px 7px!important}
+/* ---------- Study views: notes, tricky words, diagrams, flashcards ---------- */
+body .note-viewer,body .note-card,body .tricky-card,body .flashcard{background:#fff!important;border:1px solid var(--line)!important;border-radius:14px!important;box-shadow:var(--shadow)!important}
+body .note-viewer h3,body .note-card h3,body .tricky-card h3{font-size:26px!important}
+body .note-section-grid section,body .tricky-guide-sections section{background:var(--ivory)!important;border:1px solid var(--line-soft)!important;border-radius:12px!important;padding:16px 18px!important}
+body .note-do-first,body .note-memory,body .note-traps,body .tricky-guide-sections .tricky-memory,body .tricky-guide-sections .tricky-trap{background:var(--ivory)!important;border-color:var(--line-soft)!important}
+body .note-traps,body .tricky-guide-sections .tricky-trap{border-left:2px solid var(--gold)!important}
+body .note-section-grid h4,body .tricky-guide-sections h4{font-family:var(--sans)!important;font-size:10px!important;font-weight:600!important;letter-spacing:.18em!important;text-transform:uppercase!important;color:var(--gold-deep)!important;margin:0 0 8px!important}
+body .tricky-definition-grid>div,body .flash-compare>div{background:#fff!important;border:1px solid var(--line-soft)!important}
+body .tricky-definition-grid b{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--navy)}
+body .note-detail .do-first,body .tricky-card .memory,body .tricky-card .trap{background:var(--ivory)!important;border-left:2px solid var(--gold)!important}
+body .study-status-badge{background:transparent!important;border:1px solid var(--line)!important;color:var(--muted)!important;font-weight:500!important;letter-spacing:.04em}
+body .study-status-badge.status-reviewed,body .study-status-badge.status-mastered{border-color:var(--navy)!important;color:var(--navy)!important}
+body .study-status-badge.status-needs_review{border-color:var(--gold)!important;color:var(--gold-deep)!important}
+/* Previous / Next: outlined previous, solid next */
+body .note-nav,body .diagram-nav,body .question-actions{gap:10px!important}
+body #noteNext,body #trickyNext,body #diagramNext,body #flashNext{background:var(--navy)!important;border-color:var(--navy)!important;color:var(--on-dark)!important}
+body #noteNext:hover,body #trickyNext:hover,body #diagramNext:hover,body #flashNext:hover{background:var(--gold-deep)!important;border-color:var(--gold-deep)!important;color:#fff!important}
+body #notePrev,body #trickyPrev,body #diagramPrev,body #flashPrev,body #reviewPrev,body #examPrev{background:transparent!important}
+body .note-nav button,body .diagram-nav button,body .question-actions button{padding:9px 18px!important;font-size:12px!important;letter-spacing:.06em!important}
+body .secondary.is-complete{background:var(--navy)!important;color:var(--on-dark)!important;border-color:var(--navy)!important}
+body .review-toggle.is-marked{border-color:var(--gold)!important;color:var(--gold-deep)!important;background:var(--gold-wash)!important}
+body button:disabled{opacity:.45!important;cursor:not-allowed!important}
+/* Exam navigator */
+body .exam-nav-q{border:1px solid var(--line)!important;background:#fff!important;border-radius:8px!important;color:var(--navy)!important}
+body .exam-nav-q.answered{background:var(--gold-wash)!important;border-color:var(--gold-soft)!important}
+body .exam-nav-q.current,body .exam-nav-q.active{background:var(--navy)!important;color:var(--on-dark)!important;border-color:var(--navy)!important}
+body .exam-option.selected,body .option.selected{border-color:var(--navy)!important;background:var(--ivory)!important;box-shadow:inset 3px 0 0 var(--gold)!important}
+body .note-section-grid section p,body .note-section-grid section li,body .tricky-guide-sections p,body .note-summary{font-size:13.5px!important;line-height:1.6!important;color:var(--ink)!important}
+body .note-summary{font-size:15px!important;color:var(--muted)!important}
 
 
