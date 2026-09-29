@@ -221,7 +221,37 @@ function bindStudySelects(){$$('.study-status-select').forEach(x=>x.onchange=()=
 
 function noteRows(){const q=($('#notesSearch')?.value||'').trim().toLowerCase();let rows=state.notes.filter(n=>(!noteDomain||n.domain===noteDomain)&&(!q||JSON.stringify(n).toLowerCase().includes(q)));if(state.noteMode==='study')rows=rows.filter(n=>['not_started','needs_review'].includes(n.studyStatus||'not_started'));if(state.noteMode==='needs_review')rows=rows.filter(n=>(n.studyStatus||'')==='needs_review');return rows}
 
-function noteDetailHtml(n){return `<div class="note-study-body"><p class="note-summary">${escapeHtml(n.summary||'')}</p><div class="note-section-grid"><section><h4>Key rules</h4><ul>${(n.keyRules||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>—</li>'}</ul></section><section><h4>Trigger words</h4><p>${escapeHtml((n.triggerWords||[]).join(' · ')||'—')}</p></section><section class="note-do-first"><h4>What should the PM do first?</h4><p>${escapeHtml(n.doFirst||'—')}</p></section><section><h4>Tricky distinctions</h4><ul>${(n.trickyDistinctions||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>—</li>'}</ul></section><section class="note-traps"><h4>Exam traps</h4><ul>${(n.examTraps||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>—</li>'}</ul></section><section class="note-memory"><h4>Memory / Flow</h4><p><b>${escapeHtml(n.flowOrMemory||'—')}</b></p></section></div></div>`}
+function noteFlowHtml(flow){
+  const steps=String(flow||'').split(/\s*→\s*/).map(x=>x.trim()).filter(Boolean);
+  if(!steps.length)return '<span class="flow-step">—</span>';
+  return steps.map((step,i)=>`${i?'<span class="flow-arrow" aria-hidden="true">→</span>':''}<span class="flow-step">${escapeHtml(step)}</span>`).join('');
+}
+function noteDetailHtml(n){
+  const rules=(n.keyRules||[]).slice(0,3);
+  const traps=n.examTraps||[];
+  const distinctions=n.trickyDistinctions||[];
+  const triggers=n.triggerWords||[];
+  return `<div class="note-study-body exam-note-layout">
+    <p class="note-summary exam-note-summary">${escapeHtml(n.summary||'')}</p>
+    <section class="exam-core-rule">
+      <span class="exam-section-kicker">1 · Core PM Rule</span>
+      <h4>${escapeHtml(n.doFirst||'Know the rule, assess the situation, then act.')}</h4>
+      ${rules.length?`<div class="core-rule-points">${rules.map(x=>`<span>• ${escapeHtml(x)}</span>`).join('')}</div>`:''}
+    </section>
+    <section class="exam-flow-panel">
+      <div class="exam-flow-head"><span class="exam-section-kicker">2 · The Exam Flow</span><small>Follow this sequence before choosing an answer.</small></div>
+      <div class="exam-flow-line">${noteFlowHtml(n.flowOrMemory)}</div>
+    </section>
+    <section class="exam-cheat-sheet">
+      <div class="exam-cheat-head"><span class="exam-section-kicker">3 · Quick Exam Cheat Sheet</span><small>Scan these before moving to the next topic.</small></div>
+      <div class="exam-cheat-grid">
+        <div class="exam-cheat-col exam-traps-col"><h5>Exam Traps</h5><ul>${traps.map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>—</li>'}</ul></div>
+        <div class="exam-cheat-col"><h5>Key Distinctions</h5><ul>${distinctions.map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>—</li>'}</ul></div>
+        <div class="exam-cheat-col exam-trigger-col"><h5>Trigger Words</h5><div class="trigger-chip-wrap">${triggers.map(x=>`<span class="trigger-chip">${escapeHtml(x)}</span>`).join('')||'<span class="trigger-chip">—</span>'}</div></div>
+      </div>
+    </section>
+  </div>`
+}
 
 function renderNotesBrowse(rows){$('#notesGrid').className='notes-grid';$('#notesGrid').innerHTML=rows.length?rows.map((n,i)=>`<article class="note-card browse-note"><div class="card-topline"><span class="pill">${escapeHtml(n.domain)}</span>${studySelect('note',n.id,n.studyStatus||'not_started')}</div><h3>${escapeHtml(n.title)}</h3><p class="summary">${escapeHtml(n.summary||'')}</p><button class="secondary" data-open-note="${i}">Study note</button></article>`).join(''):'<div class="panel empty-state"><h3>No notes match.</h3><p>Try another domain or search term.</p></div>';bindStudySelects();$$('[data-open-note]').forEach(b=>b.onclick=()=>{const n=rows[+b.dataset.openNote];state.noteMode='all';state.noteIndex=Math.max(0,state.notes.findIndex(x=>x.id===n.id));$$('[data-note-mode]').forEach(x=>x.classList.toggle('active',x.dataset.noteMode==='all'));$('#notesSearch').value='';noteDomain='';$('#noteDomainSelect').value='';renderNotesSingle([n],0,true)})}
 
@@ -587,11 +617,12 @@ function renderDashboardWorkspace(kind,p){
 }
 function renderFeatureLaunchpad(p){
   const host=$('#featureLaunchpad');if(!host)return;const overview=learningOverview(p),focus=state.dashboardFocus||'today';
-  const cards=[
-    ['today','Today','Next best action'],['notes','Topic Notes','Learn the rules'],['tricky','Tricky Words','Separate look-alikes'],['diagrams','Diagrams','See the relationships'],['practice','Practice','Apply the concepts'],['mistakes','Fix Mistakes','Correct reasoning'],['exams','Mock Exams','Build exam stamina'],['readiness','Readiness + Plan','Know what to do next'],['coach','PMP Coach','Ask why']
+  const tabs=[
+    ['today','Today'],['notes','Topic Notes'],['tricky','Tricky Words'],['diagrams','Diagrams'],['practice','Practice'],['mistakes','Fix Mistakes'],['exams','Mock Exams'],['readiness','Readiness + Plan'],['coach','PMP Coach']
   ];
-  host.innerHTML=cards.map(([kind,title,desc])=>`<button class="pmp-focus-card ${focus===kind?'active':''}" type="button" data-dashboard-focus="${kind}"><span class="feature-launch-icon" aria-hidden="true">${launchpadIcon(kind)}</span><span class="pmp-focus-copy"><strong>${escapeHtml(title)}</strong><small>${escapeHtml(desc)}</small></span><span class="pmp-focus-status">${escapeHtml(dashboardProgressSummary(p,kind))}</span></button>`).join('');
+  host.innerHTML=tabs.map(([kind,title])=>`<button class="pmp-focus-tab ${focus===kind?'active':''}" type="button" role="tab" aria-selected="${focus===kind?'true':'false'}" data-dashboard-focus="${kind}"><span class="feature-launch-icon" aria-hidden="true">${launchpadIcon(kind)}</span><span>${escapeHtml(title)}</span></button>`).join('');
   const overall=$('#dashboardOverallPct');if(overall)overall.textContent=overview.avg+'%';
+  const title=$('#dashboardFocusTitle');if(title){const current=tabs.find(x=>x[0]===focus);title.textContent=current?current[1]:'Today'}
   $$('[data-dashboard-focus]').forEach(btn=>btn.onclick=()=>{state.dashboardFocus=btn.dataset.dashboardFocus;renderFeatureLaunchpad(p)});
   renderDashboardWorkspace(focus,p);
 }
