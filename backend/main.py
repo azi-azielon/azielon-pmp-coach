@@ -9,7 +9,7 @@ from sqlalchemy import func
 import httpx
 
 from .db import Base, engine, get_db, SessionLocal
-from .models import User, PasswordResetToken, Question, TopicNote, Diagram, TrickyWord, PracticeSession, Attempt, Bookmark, AuditLog, BillingPlan, CheckoutOrder, Entitlement, PaymentWebhookEvent, PmpClassRegistrationLead, PmpClassRegistrationPayment, ExamSession, ExamAttempt, StudyItemState
+from .models import User, PasswordResetToken, Question, TopicNote, Diagram, TrickyWord, PracticeSession, Attempt, Bookmark, AuditLog, BillingPlan, CheckoutOrder, Entitlement, PaymentWebhookEvent, PmpClassRegistrationLead, PmpClassRegistrationPayment, ExamSession, ExamAttempt, StudyItemState, StudyPlanProfile
 from .schemas import RegisterIn, LoginIn, ForgotPasswordIn, ResetPasswordIn, PracticeCreateIn, AttemptIn, QuestionPatchIn, QuestionCreateIn, ContentCreateIn, DiagramCreateIn, TrickyCreateIn, CheckoutIn, ExamStartIn, ExamAttemptIn, ExamMarkIn
 from .security import hash_password, verify_password, create_token, current_user, require_roles, create_password_reset_token, hash_reset_token
 from .seed import seed_all
@@ -191,6 +191,145 @@ def _ensure_admin_from_env(db: Session):
     db.commit()
 
 
+
+def _ensure_qa_accounts_from_env(db: Session):
+    """Create/update dedicated learner QA accounts for Starter, Standard, and Premium.
+
+    QA accounts are disabled unless QA_ACCOUNTS_ENABLED is true and QA_PASSWORD is set.
+    The accounts stay role='learner' so tier restrictions are tested exactly like a customer.
+    """
+    enabled = os.getenv('QA_ACCOUNTS_ENABLED', 'false').strip().lower() in ('1', 'true', 'yes', 'on')
+    password = os.getenv('QA_PASSWORD', '')
+
+    if not enabled:
+        print('[startup] QA accounts disabled; QA bootstrap skipped', flush=True)
+        return
+
+    if not password:
+        print('[startup] QA_ACCOUNTS_ENABLED is true but QA_PASSWORD is not set; QA bootstrap skipped', flush=True)
+        return
+
+    specs = [
+        {
+            'email': os.getenv('QA_STARTER_EMAIL', 'qa-starter@azielon.com').strip().lower(),
+            'name': 'Azielon QA Starter',
+            'tier_code': 'drills',
+            'plan_code': 'drills_monthly',
+            'order_id': 'qa-starter-access',
+        },
+        {
+            'email': os.getenv('QA_STANDARD_EMAIL', 'qa-standard@azielon.com').strip().lower(),
+            'name': 'Azielon QA Standard',
+            'tier_code': 'concept',
+            'plan_code': 'concept_monthly',
+            'order_id': 'qa-standard-access',
+        },
+        {
+            'email': os.getenv('QA_PREMIUM_EMAIL', 'qa-premium@azielon.com').strip().lower(),
+            'name': 'Azielon QA Premium',
+            'tier_code': 'full',
+            'plan_code': 'full_3month',
+            'order_id': 'qa-premium-access',
+        },
+    ]
+
+    now = datetime.utcnow()
+    qa_end = now + timedelta(days=3650)
+
+    for spec in specs:
+        if not spec['email']:
+            continue
+
+        plan = db.get(BillingPlan, spec['plan_code'])
+        if not plan:
+            print(f"[startup] QA plan missing: {spec['plan_code']}", flush=True)
+            continue
+
+        user = db.query(User).filter(User.email == spec['email']).first()
+        if user:
+            user.name = spec['name']
+            user.role = 'learner'
+            user.is_active = True
+            user.password_hash = hash_password(password)
+        else:
+            user = User(
+                email=spec['email'],
+                name=spec['name'],
+                password_hash=hash_password(password),
+                role='learner',
+                is_active=True,
+            )
+            db.add(user)
+            db.flush()
+
+        # Preserve history, but make the assigned QA tier the only active entitlement.
+        db.query(Entitlement).filter(
+            Entitlement.user_id == user.id,
+            Entitlement.status == 'active',
+            Entitlement.source_order_id != spec['order_id'],
+        ).update({'status': 'superseded'}, synchronize_session=False)
+
+        order = db.get(CheckoutOrder, spec['order_id'])
+        if not order:
+            order = CheckoutOrder(
+                id=spec['order_id'],
+                user_id=user.id,
+                plan_code=spec['plan_code'],
+                provider='qa',
+                amount_cents=0,
+                currency='USD',
+                status='paid',
+                provider_order_id=spec['order_id'],
+                provider_capture_id='QA-NO-PAYMENT',
+                entitlement_granted=True,
+                raw_json=json.dumps({'qa_account': True, 'tier_code': spec['tier_code']}),
+                paid_at=now,
+            )
+            db.add(order)
+            db.flush()
+        else:
+            order.user_id = user.id
+            order.plan_code = spec['plan_code']
+            order.provider = 'qa'
+            order.amount_cents = 0
+            order.currency = 'USD'
+            order.status = 'paid'
+            order.provider_order_id = spec['order_id']
+            order.provider_capture_id = 'QA-NO-PAYMENT'
+            order.entitlement_granted = True
+            order.raw_json = json.dumps({'qa_account': True, 'tier_code': spec['tier_code']})
+            order.paid_at = order.paid_at or now
+
+        entitlement = db.query(Entitlement).filter(
+            Entitlement.source_order_id == spec['order_id']
+        ).first()
+
+        if entitlement:
+            entitlement.user_id = user.id
+            entitlement.tier_code = spec['tier_code']
+            entitlement.plan_code = spec['plan_code']
+            entitlement.provider = 'qa'
+            entitlement.status = 'active'
+            entitlement.starts_at = entitlement.starts_at or now
+            entitlement.ends_at = qa_end
+        else:
+            entitlement = Entitlement(
+                user_id=user.id,
+                tier_code=spec['tier_code'],
+                plan_code=spec['plan_code'],
+                source_order_id=spec['order_id'],
+                provider='qa',
+                status='active',
+                starts_at=now,
+                ends_at=qa_end,
+            )
+            db.add(entitlement)
+
+        print(f"[startup] QA account ready: {spec['email']} -> {spec['tier_code']}", flush=True)
+
+    db.commit()
+
+
 @app.on_event('startup')
 def startup():
     Base.metadata.create_all(bind=engine)
@@ -199,6 +338,7 @@ def startup():
         seed_all(db)
         seed_billing_plans(db)
         _ensure_admin_from_env(db)
+        _ensure_qa_accounts_from_env(db)
     finally:
         db.close()
 
@@ -697,6 +837,131 @@ def bookmarks(user: User = Depends(current_user), db: Session = Depends(get_db))
     ids=[qid for (qid,) in db.query(Bookmark.question_id).filter(Bookmark.user_id==user.id).all()]
     return {'question_ids': ids}
 
+
+# ---------- Azielon PMP Coach intelligence: readiness, mistake patterns, adaptive plan ----------
+MISTAKE_PATTERN_DEFS = [
+    {'key':'assess_before_act','title':'Acting before assessing','keywords':['understand','investigat','assess','root cause','clarify','analy','diagnos','before choosing','before acting'],'tip':'Slow down before choosing an action. First understand the situation, identify the cause, and confirm the facts.'},
+    {'key':'early_escalation','title':'Escalating too early','keywords':['escalat','sponsor','senior management','management attention','authority'],'tip':'Use the team, stakeholder conversation, and delegated authority first. Escalate only when the issue truly exceeds your authority or cannot be resolved at the working level.'},
+    {'key':'collaboration','title':'Skipping collaboration','keywords':['collaborat','facilitat','stakeholder','engag','conflict','team discussion','privately','shared criteria','agreement'],'tip':'Look for the answer that engages the right people, surfaces concerns, and builds agreement before imposing a solution.'},
+    {'key':'change_control','title':'Change-control sequencing','keywords':['change request','change control','ccb','baseline','integrated change','impact analysis'],'tip':'Separate identifying a change from approving and implementing it. Analyze impact and follow the appropriate change-control path.'},
+    {'key':'risk_issue','title':'Risk vs. issue reasoning','keywords':['risk','issue','threat','opportunity','risk register','issue log','contingency','response plan'],'tip':'Ask whether the event has happened. Future uncertainty is a risk; a current problem is an issue. Choose the response process accordingly.'},
+    {'key':'agile_servant','title':'Agile / servant-leadership mindset','keywords':['agile','scrum','servant','product owner','backlog','self-organ','retrospective','sprint','iteration'],'tip':'In agile situations, enable the team, protect self-organization, facilitate collaboration, and work through the product owner for product priorities.'},
+    {'key':'value_outcomes','title':'Value and outcome focus','keywords':['business value','benefit','outcome','business case','success criteria','value delivery','measurable outcome'],'tip':'Anchor decisions in the intended business outcome, measurable value, and agreed success criteria rather than activity alone.'},
+    {'key':'process_sequence','title':'First / next sequencing','keywords':[' first ',' next ',' before ','sequence','prior to'],'tip':'For FIRST/NEXT questions, identify the process stage and choose the prerequisite action before jumping to execution.'},
+]
+
+def _safe_json(value, fallback=None):
+    try: return json.loads(value or '')
+    except Exception: return fallback if fallback is not None else {}
+
+def _practice_attempt_context(a):
+    q=a.question
+    if not q: return None
+    explanation=_safe_json(q.explanation_json,{})
+    selected=_safe_json(a.selected_json,{})
+    selected_ids=set(selected.get('selected_option_ids') or []) if isinstance(selected,dict) else set()
+    rationales=[str(x.get('rationale') or '') for x in (explanation.get('optionAnalysis') or []) if str(x.get('optionId')) in selected_ids]
+    return {'question_id':q.id,'domain':q.domain or 'Other','concept':q.primary_concept or q.eco_enabler or q.eco_task or 'General PMP reasoning','approach':q.delivery_approach or '','principle':str(explanation.get('underlyingPrinciple') or ''),'rationale':' '.join(rationales),'explanation':str(explanation.get('plainLanguageRationale') or '')}
+
+def _exam_attempt_context(a):
+    q=EXAM_QUESTIONS.get(a.question_id) or {}
+    if not q: return None
+    return {'question_id':a.question_id,'domain':q.get('domain') or 'Other','concept':q.get('topic') or q.get('rule_id') or 'General PMP reasoning','approach':q.get('approach') or '','principle':str(q.get('explanation') or ''),'rationale':'','explanation':str(q.get('explanation') or '')}
+
+def _classify_mistake(ctx):
+    text=' '.join(str(ctx.get(k) or '') for k in ('concept','approach','principle','rationale','explanation')).lower()
+    ranked=[]
+    for spec in MISTAKE_PATTERN_DEFS:
+        score=sum(1 for kw in spec['keywords'] if kw in text)
+        if score: ranked.append((score,spec))
+    if ranked:
+        ranked.sort(key=lambda x:x[0],reverse=True); return ranked[0][1]
+    return {'key':'concept_gap','title':'Concept knowledge gap','tip':'Review the underlying concept, then retry a few targeted questions before moving on.'}
+
+def _mistake_patterns(user_id:int, db:Session, limit:int=5):
+    contexts=[]
+    for a in db.query(Attempt).filter(Attempt.user_id==user_id,Attempt.is_correct==False).order_by(Attempt.created_at.desc()).limit(200).all():
+        c=_practice_attempt_context(a)
+        if c: contexts.append(c)
+    completed_ids=[sid for (sid,) in db.query(ExamSession.id).filter(ExamSession.user_id==user_id,ExamSession.status.in_(['submitted','expired'])).all()]
+    if completed_ids:
+        for a in db.query(ExamAttempt).filter(ExamAttempt.user_id==user_id,ExamAttempt.exam_session_id.in_(completed_ids),ExamAttempt.is_correct==False).order_by(ExamAttempt.created_at.desc()).limit(200).all():
+            c=_exam_attempt_context(a)
+            if c: contexts.append(c)
+    grouped={}
+    for ctx in contexts:
+        spec=_classify_mistake(ctx)
+        g=grouped.setdefault(spec['key'],{'key':spec['key'],'title':spec['title'],'tip':spec['tip'],'count':0,'domains':{},'concepts':{}})
+        g['count']+=1
+        d=ctx.get('domain') or 'Other'; c=ctx.get('concept') or 'General PMP reasoning'
+        g['domains'][d]=g['domains'].get(d,0)+1; g['concepts'][c]=g['concepts'].get(c,0)+1
+    out=[]
+    for g in grouped.values():
+        g['top_domain']=max(g['domains'],key=g['domains'].get) if g['domains'] else 'PMP'
+        g['top_concept']=max(g['concepts'],key=g['concepts'].get) if g['concepts'] else 'General PMP reasoning'
+        del g['domains']; del g['concepts']; out.append(g)
+    out.sort(key=lambda x:x['count'],reverse=True)
+    return out[:limit]
+
+def _readiness_payload(practice_accuracy, practice_coverage, exam_cards, review_count, total_activity):
+    pa=float(practice_accuracy or 0); pc=float(practice_coverage or 0)
+    completed=[x for x in (exam_cards or []) if x.get('completed') and x.get('accuracy') is not None]
+    exam_avg=sum(float(x['accuracy']) for x in completed)/len(completed) if completed else 0.0
+    a=min(100,pa/75*100) if pa else 0; c=min(100,pc); e=min(100,exam_avg/75*100) if completed else 0; r=max(0,100-min(100,float(review_count or 0)*7.5))
+    score=round(a*.40+c*.20+e*.30+r*.10)
+    if not completed: score=min(score,69)
+    evidence='high' if len(completed)>=2 and total_activity>=150 else ('medium' if completed and total_activity>=60 else 'developing')
+    label='Final polish' if score>=85 else ('Exam conditioning' if score>=70 else ('Building consistency' if score>=50 else 'Foundation building'))
+    return {'score':int(max(0,min(100,score))),'label':label,'evidence_level':evidence,'practice_accuracy':round(pa,1) if practice_accuracy is not None else None,'practice_coverage':round(pc,1) if practice_coverage is not None else None,'exam_average':round(exam_avg,1) if completed else None,'completed_exams':len(completed),'review_items':int(review_count or 0),'note':"Azielon readiness indicator based on your activity; it is not PMI's passing score or an exam-outcome prediction."}
+
+def _get_study_profile(db:Session,user_id:int):
+    row=db.query(StudyPlanProfile).filter(StudyPlanProfile.user_id==user_id).first()
+    if not row:
+        row=StudyPlanProfile(user_id=user_id,weekly_hours=7.0,study_days_per_week=5,session_minutes=45); db.add(row); db.commit(); db.refresh(row)
+    return row
+
+def _study_profile_payload(row):
+    return {'exam_date':row.exam_date.date().isoformat() if row.exam_date else None,'weekly_hours':float(row.weekly_hours or 7),'study_days_per_week':int(row.study_days_per_week or 5),'session_minutes':int(row.session_minutes or 45)}
+
+def _adaptive_plan(profile, readiness, patterns, domains, review_count, feature_names):
+    days_left=(profile.exam_date.date()-datetime.utcnow().date()).days if profile.exam_date else None
+    weekly_hours=max(1.0,min(40.0,float(profile.weekly_hours or 7))); days=max(1,min(7,int(profile.study_days_per_week or 5))); session_minutes=max(20,min(180,int(profile.session_minutes or 45)))
+    target_questions=max(25,min(180,int(round(weekly_hours*12))))
+    weak=[]
+    for domain,x in (domains or {}).items():
+        answered=int(x.get('answered') or 0); correct=int(x.get('correct') or 0)
+        if answered: weak.append((round(correct/answered*100),domain,answered))
+    weak.sort(); weak_domains=[{'domain':d,'accuracy':pct,'answered':ans} for pct,d,ans in weak[:2]]
+    score=readiness.get('score',0)
+    if score<50: phase='Foundation'; guidance='Prioritize concept understanding and short targeted practice before increasing exam volume.'
+    elif score<70: phase='Build consistency'; guidance='Mix targeted weak-area practice with review of recurring reasoning mistakes.'
+    elif score<85: phase='Exam conditioning'; guidance='Increase timed mixed practice and complete full mock exams while repairing the remaining weak patterns.'
+    else: phase='Final polish'; guidance='Protect consistency, review recurring misses, and use mocks to maintain pacing and decision quality.'
+    top_pattern=patterns[0]['title'] if patterns else 'PMP reasoning'; weak_domain=weak_domains[0]['domain'] if weak_domains else 'mixed PMP domains'
+    base=[('Reasoning repair',f'Review {top_pattern} and write down the rule you will apply next time.'),('Targeted practice',f'Complete a focused set in {weak_domain}; review every miss before moving on.'),('Review queue',f'Work through {review_count} current review concept(s) and retry missed questions.'),('Mixed timed set','Complete a timed mixed set and focus on FIRST/NEXT/BEST wording.'),('Weekly checkpoint','Review readiness, top mistake patterns, and domain performance; adjust next week accordingly.')]
+    if any(str(f).startswith('mock') for f in feature_names or []): base[-1]=('Exam checkpoint',"Complete or resume a mock exam, then use the diagnostic report to set next week's focus.")
+    sessions=[{'day':i+1,'minutes':session_minutes,'title':base[i%len(base)][0],'detail':base[i%len(base)][1]} for i in range(days)]
+    return {'phase':phase,'guidance':guidance,'days_until_exam':days_left,'weekly_hours':weekly_hours,'study_days_per_week':days,'session_minutes':session_minutes,'target_questions_per_week':target_questions,'weak_domains':weak_domains,'sessions':sessions}
+
+@app.get('/api/coach/profile')
+def coach_profile(user:User=Depends(current_user),db:Session=Depends(get_db)):
+    require_paid_access(user,db); return _study_profile_payload(_get_study_profile(db,user.id))
+
+@app.put('/api/coach/profile')
+def update_coach_profile(payload:dict,user:User=Depends(current_user),db:Session=Depends(get_db)):
+    require_paid_access(user,db); row=_get_study_profile(db,user.id)
+    raw_date=str(payload.get('exam_date') or '').strip()
+    if raw_date:
+        try: row.exam_date=datetime.strptime(raw_date,'%Y-%m-%d')
+        except Exception: raise HTTPException(400,'Exam date must use YYYY-MM-DD')
+    else: row.exam_date=None
+    try:
+        wh=float(payload.get('weekly_hours',row.weekly_hours or 7)); days=int(payload.get('study_days_per_week',row.study_days_per_week or 5)); mins=int(payload.get('session_minutes',row.session_minutes or 45))
+    except Exception: raise HTTPException(400,'Study-plan settings are invalid')
+    if wh<1 or wh>40 or days<1 or days>7 or mins<20 or mins>180: raise HTTPException(400,'Use 1-40 hours/week, 1-7 study days, and 20-180 minutes/session')
+    row.weekly_hours=wh; row.study_days_per_week=days; row.session_minutes=mins; row.updated_at=datetime.utcnow(); db.commit(); db.refresh(row)
+    return _study_profile_payload(row)
+
 @app.get('/api/progress')
 def progress(user: User = Depends(current_user), db: Session = Depends(get_db)):
     require_paid_access(user, db)
@@ -810,6 +1075,12 @@ def progress(user: User = Depends(current_user), db: Session = Depends(get_db)):
 
     total=practice_total+exam_total
     correct=practice_correct+exam_correct
+    review_count=len(set(incorrect_ids) | {a.question_id for a in exam_attempts if not a.is_correct}) + db.query(StudyItemState).filter(StudyItemState.user_id==user.id,StudyItemState.status=='needs_review').count()
+    mistake_patterns=_mistake_patterns(user.id,db)
+    practice_accuracy=round(practice_correct/practice_total*100,1) if practice_total else None
+    readiness=_readiness_payload(practice_accuracy,practice_coverage,exam_cards,review_count,total)
+    profile=_get_study_profile(db,user.id)
+    adaptive_plan=_adaptive_plan(profile,readiness,mistake_patterns,domains,review_count,accessible)
     return {
         'answered': total,
         'correct': correct,
@@ -834,6 +1105,10 @@ def progress(user: User = Depends(current_user), db: Session = Depends(get_db)):
         'benchmark': AZIELON_PASS_BENCHMARK,
         'benchmark_note':'Azielon practice benchmark only; PMI does not publish a fixed percentage passing score.',
         'review_queue': [{'question_id': qid, 'misses': count} for qid,count in missed],
+        'readiness': readiness,
+        'mistake_patterns': mistake_patterns,
+        'adaptive_plan': adaptive_plan,
+        'study_profile': _study_profile_payload(profile),
         'study_summary': study_summary(user,db)
     }
 

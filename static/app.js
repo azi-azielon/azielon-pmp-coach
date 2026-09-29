@@ -66,40 +66,7 @@ $('#loginForm').onsubmit=async e=>{e.preventDefault();try{storeAuth(await api('/
 
 $('#registerForm').onsubmit=async e=>{e.preventDefault();try{storeAuth(await api('/api/auth/register',{method:'POST',body:JSON.stringify({name:$('#regName').value,email:$('#regEmail').value,password:$('#regPassword').value})}),{pendingTrial:true})}catch(err){setAuth(err.message)}};
 
-function signOut(){
-  localStorage.removeItem('az_token');
-  state.token='';
-  state.user=null;
-  location.reload();
-}
-
-const sidebarLogout=$('#logoutBtn');
-if(sidebarLogout)sidebarLogout.onclick=signOut;
-
-function closeAccountMenu(){
-  const menu=$('#accountMenu'),avatar=$('#avatar');
-  if(menu)menu.classList.add('hidden');
-  if(avatar)avatar.setAttribute('aria-expanded','false');
-}
-
-function toggleAccountMenu(e){
-  if(e)e.stopPropagation();
-  const menu=$('#accountMenu'),avatar=$('#avatar');
-  if(!menu||!avatar)return;
-  const opening=menu.classList.contains('hidden');
-  menu.classList.toggle('hidden',!opening);
-  avatar.setAttribute('aria-expanded',opening?'true':'false');
-}
-
-const accountAvatar=$('#avatar');
-if(accountAvatar)accountAvatar.onclick=toggleAccountMenu;
-const accountLogoutBtn=$('#accountLogoutBtn');
-if(accountLogoutBtn)accountLogoutBtn.onclick=signOut;
-const accountBillingBtn=$('#accountBillingBtn');
-if(accountBillingBtn)accountBillingBtn.onclick=()=>{closeAccountMenu();showView('billing')};
-
-document.addEventListener('click',e=>{if(!e.target.closest('.account-menu-wrap'))closeAccountMenu()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAccountMenu()});
+$('#logoutBtn').onclick=()=>{localStorage.removeItem('az_token');location.reload()};
 
 function isPremiumTier(){const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return t==='full'||t.startsWith('full')}
 
@@ -115,7 +82,23 @@ function showView(id){
 
   if(needed&&!hasFeature(needed)){showView('billing');const nb=document.querySelector(`#nav button[data-view="${id}"]`),un=$('#upgradeNotice');if(un){const nm=({notes:'Topic Notes',diagrams:'Diagrams & Models',tricky:'Tricky Words',practice:'Practice',review:'Concepts to Review',progress:'My Progress'})[id]||'This feature',pl=nb&&nb.dataset.plan;un.innerHTML=pl?`<b>${nm}</b> is included in the <b>${pl}</b> plan${pl==='Premium'?'':' and above'}. Choose a plan below to unlock it.`:'This feature is not included in your current plan.';un.hidden=false}return}
 
-  state.currentView=id;$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));$('#pageTitle').textContent=({dashboard:'My Learning',notes:'Topic Notes',diagrams:'Diagrams & Models',tricky:'Tricky Words',practice:'Practice',review:'Concepts to Review',coach:'PMP Coach',progress:'My Progress',billing:'Plans & Pricing',admin:'Instructor Studio',live:'PMP Live Classes',exams:(state.examKind==='mock'?'Full Mock Exams':'Concept Mastery Exams')})[id]||'Azielon';updateContentProtection(id);window.scrollTo({top:0,behavior:'smooth'});if(id==='progress'||id==='dashboard')loadProgress();if(id==='review')loadConceptReview();if(id==='billing')loadBilling();if(id==='admin')loadAdmin();if(id==='exams')loadExamCatalog();if(id==='practice'){loadPracticeAvailability();loadProgress()}}
+  state.currentView=id;
+  $$('.view').forEach(v=>v.classList.toggle('active',v.id===id));
+  $$('#nav button').forEach(b=>{
+    const sameView=b.dataset.view===id;
+    const sameExamKind=id!=='exams'||!b.dataset.examKind||b.dataset.examKind===state.examKind;
+    b.classList.toggle('active',sameView&&sameExamKind);
+  });
+  $('#pageTitle').textContent=({dashboard:'My Learning',notes:'Topic Notes',diagrams:'Diagrams & Models',tricky:'Tricky Words',practice:'Practice',review:'Concepts to Review',coach:'PMP Coach',progress:'My Progress',billing:'Plans & Pricing',admin:'Instructor Studio',live:'PMP Live Classes',exams:(state.examKind==='mock'?'Full Mock Exams':'Concept Mastery Exams')})[id]||'Azielon';
+  updateContentProtection(id);
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='progress'||id==='dashboard')loadProgress();
+  if(id==='review')loadConceptReview();
+  if(id==='billing')loadBilling();
+  if(id==='admin')loadAdmin();
+  if(id==='exams')loadExamCatalog();
+  if(id==='practice'){loadPracticeAvailability();loadProgress()}
+}
 
 $$('#nav button').forEach(b=>b.onclick=()=>{const un=$('#upgradeNotice');if(un)un.hidden=true;if(b.dataset.examKind)state.examKind=b.dataset.examKind;showView(b.dataset.view)});$$('[data-jump]').forEach(b=>b.onclick=()=>showView(b.dataset.jump));
 
@@ -197,8 +180,6 @@ async function bootApp(){
   $('#userBadge').textContent=`${state.user.name} · ${state.user.role}`;
 
   $('#avatar').textContent=state.user.name.split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();
-  const accountName=$('#accountName'); if(accountName)accountName.textContent=state.user.name||'Account';
-  const accountEmail=$('#accountEmail'); if(accountEmail)accountEmail.textContent=state.user.email||'';
 
   const bm=await api('/api/billing/me');
 
