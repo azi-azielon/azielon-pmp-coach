@@ -131,6 +131,49 @@ class StudyPlanProfile(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     user = relationship('User')
 
+
+class DailyStudyPlan(Base):
+    __tablename__ = 'daily_study_plans'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'), index=True, nullable=False)
+    plan_date = Column(String(10), index=True, nullable=False)
+    exam_date = Column(String(10))
+    days_remaining = Column(Integer)
+    status = Column(String(32), default='active', index=True, nullable=False)
+    generated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    user = relationship('User')
+    __table_args__ = (UniqueConstraint('user_id','plan_date', name='uq_daily_plan_user_date'),)
+
+
+class DailyStudyTask(Base):
+    __tablename__ = 'daily_study_tasks'
+    id = Column(Integer, primary_key=True)
+    plan_id = Column(Integer, ForeignKey('daily_study_plans.id'), index=True, nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), index=True, nullable=False)
+    task_key = Column(String(255), index=True, nullable=False)
+    task_type = Column(String(32), index=True, nullable=False)
+    content_id = Column(String(128), index=True)
+    label = Column(String(64))
+    title = Column(String(500), nullable=False)
+    detail = Column(Text)
+    view = Column(String(64))
+    question_count = Column(Integer)
+    focus = Column(String(128))
+    domain = Column(String(128))
+    exam_kind = Column(String(64))
+    status = Column(String(32), default='not_started', index=True, nullable=False)
+    sort_order = Column(Integer, default=0, nullable=False)
+    source_date = Column(String(10))
+    reason = Column(String(500))
+    started_at = Column(DateTime)
+    completed_at = Column(DateTime)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    plan = relationship('DailyStudyPlan')
+    user = relationship('User')
+    __table_args__ = (UniqueConstraint('plan_id','task_key', name='uq_daily_task_plan_key'),)
+
 class AuditLog(Base):
     __tablename__ = 'audit_logs'
     id = Column(Integer, primary_key=True)

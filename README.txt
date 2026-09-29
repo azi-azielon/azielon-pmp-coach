@@ -1,17 +1,24 @@
-Azielon PMP Coach v5.14.7 - Compact Study Navigation
+Azielon PMP Coach v5.14.10 — Database-Backed Daily Study Plan
 
-Changes in this patch:
-- Persistent PMP study navigator across Topic Notes, Tricky Words, Diagrams, Practice, Review, Exams, Progress and PMP Coach.
-- Tab state indicators: neutral = not started, blue = in progress, green = complete.
-- Dashboard Practice choices changed from large cards to compact action links.
-- Tricky Words layout tightened so Meaning, Scenario Cue and Memory Hook labels sit directly above their content instead of using a separate label column.
-- Dashboard duplicate tab strip removed; one consistent navigator is used throughout learning screens.
-
-Replace:
+Replace these files in the existing project:
   static/index.html
   static/app.js
   static/styles.css
+  backend/main.py
+  backend/models.py
   VERSION.txt
 
+What changed
+- Adds daily_study_plans and daily_study_tasks database tables.
+- Daily task status is now account-backed: not_started -> in_progress -> done.
+- Opening a task saves In progress to the database.
+- Done saves completion to the database.
+- Topic Notes, Tricky Words, and Diagrams also sync to existing study_item_states.
+- The next study day carries unfinished database tasks forward first, then fills remaining slots using the current adaptive plan/weak area recommendations.
+- Existing v5.14.8/v5.14.9 localStorage daily-plan data is imported once when possible.
+- The database is the source of truth after migration; localStorage is only used to discover legacy plan data for import.
 
-v5.14.9: Unfinished daily-plan tasks carry forward automatically. Rollover tasks are prioritized before new work; remaining slots adapt to exam days remaining and weak-domain data.
+Deployment
+- Deploy the files and restart the app/server.
+- This project already calls Base.metadata.create_all(...) at startup, so the two new tables are created automatically on restart.
+- No destructive database migration is required for these additive tables.

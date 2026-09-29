@@ -9,7 +9,7 @@ from sqlalchemy import func
 import httpx
 
 from .db import Base, engine, get_db, SessionLocal
-from .models import User, PasswordResetToken, Question, TopicNote, Diagram, TrickyWord, PracticeSession, Attempt, Bookmark, AuditLog, BillingPlan, CheckoutOrder, Entitlement, PaymentWebhookEvent, PmpClassRegistrationLead, PmpClassRegistrationPayment, ExamSession, ExamAttempt, StudyItemState, StudyPlanProfile
+from .models import User, PasswordResetToken, Question, TopicNote, Diagram, TrickyWord, PracticeSession, Attempt, Bookmark, AuditLog, BillingPlan, CheckoutOrder, Entitlement, PaymentWebhookEvent, PmpClassRegistrationLead, PmpClassRegistrationPayment, ExamSession, ExamAttempt, StudyItemState, StudyPlanProfile, DailyStudyPlan, DailyStudyTask
 from .schemas import RegisterIn, LoginIn, ForgotPasswordIn, ResetPasswordIn, PracticeCreateIn, AttemptIn, QuestionPatchIn, QuestionCreateIn, ContentCreateIn, DiagramCreateIn, TrickyCreateIn, CheckoutIn, ExamStartIn, ExamAttemptIn, ExamMarkIn
 from .security import hash_password, verify_password, create_token, current_user, require_roles, create_password_reset_token, hash_reset_token
 from .seed import seed_all
@@ -1243,6 +1243,169 @@ def flashcard_review(content_id:str,payload:dict,user:User=Depends(current_user)
     if not db.get(TrickyWord,content_id): raise HTTPException(404,'Flashcard not found')
     row=_upsert_study_state(db,user.id,'tricky',content_id,rating=str(payload.get('rating') or ''))
     return _state_payload(row)
+
+
+DAILY_TASK_STATUSES={'not_started','in_progress','done'}
+
+def _daily_task_payload(row,plan_date=None):
+    return {
+        'db_id': row.id,
+        'id': row.task_key,
+        'task_key': row.task_key,
+        'type': row.task_type,
+        'itemId': row.content_id,
+        'label': row.label or '',
+        'title': row.title,
+        'detail': row.detail or '',
+        'view': row.view or '',
+        'count': row.question_count,
+        'focus': row.focus or '',
+        'domain': row.domain or '',
+        'examKind': row.exam_kind or '',
+        'status': row.status or 'not_started',
+        'carriedFrom': row.source_date,
+        'reason': row.reason or '',
+        'planDate': plan_date,
+        'startedAt': row.started_at.isoformat() if row.started_at else None,
+        'completedAt': row.completed_at.isoformat() if row.completed_at else None,
+    }
+
+def _daily_native_done(db: Session,user_id:int,task_type:str,content_id:str|None):
+    if task_type not in {'note','tricky','diagram'} or not content_id:
+        return False
+    row=db.query(StudyItemState).filter(
+        StudyItemState.user_id==user_id,
+        StudyItemState.content_type==task_type,
+        StudyItemState.content_id==str(content_id)
+    ).first()
+    return bool(row and row.status in {'reviewed','mastered'})
+
+def _daily_get_or_create_plan(db: Session,user_id:int,plan_date:str,exam_date:str|None=None,days_remaining:int|None=None):
+    row=db.query(DailyStudyPlan).filter(DailyStudyPlan.user_id==user_id,DailyStudyPlan.plan_date==plan_date).first()
+    if not row:
+        row=DailyStudyPlan(user_id=user_id,plan_date=plan_date,exam_date=exam_date,days_remaining=days_remaining,status='active')
+        db.add(row);db.flush()
+    else:
+        if exam_date is not None: row.exam_date=exam_date
+        if days_remaining is not None: row.days_remaining=days_remaining
+        row.updated_at=datetime.utcnow()
+    return row
+
+def _daily_validate_date(value:str|None,name='plan_date'):
+    raw=(value or date.today().isoformat()).strip()
+    try: datetime.strptime(raw,'%Y-%m-%d')
+    except Exception: raise HTTPException(400,f'{name} must use YYYY-MM-DD')
+    return raw
+
+def _daily_add_task(db:Session,plan:DailyStudyPlan,user_id:int,raw:dict,sort_order:int,source_date:str|None=None,status:str|None=None):
+    key=str(raw.get('id') or raw.get('task_key') or '').strip()[:255]
+    title=str(raw.get('title') or '').strip()[:500]
+    task_type=str(raw.get('type') or raw.get('task_type') or '').strip()[:32]
+    if not key or not title or not task_type: return None
+    existing=db.query(DailyStudyTask).filter(DailyStudyTask.plan_id==plan.id,DailyStudyTask.task_key==key).first()
+    if existing: return existing
+    item_id=raw.get('itemId') if raw.get('itemId') is not None else raw.get('content_id')
+    row=DailyStudyTask(
+        plan_id=plan.id,user_id=user_id,task_key=key,task_type=task_type,
+        content_id=str(item_id)[:128] if item_id is not None else None,
+        label=str(raw.get('label') or '')[:64],title=title,detail=str(raw.get('detail') or ''),
+        view=str(raw.get('view') or '')[:64],question_count=int(raw.get('count')) if raw.get('count') not in (None,'') else None,
+        focus=str(raw.get('focus') or '')[:128],domain=str(raw.get('domain') or '')[:128],exam_kind=str(raw.get('examKind') or raw.get('exam_kind') or '')[:64],
+        status=status if status in DAILY_TASK_STATUSES else 'not_started',sort_order=sort_order,
+        source_date=source_date,reason=str(raw.get('reason') or '')[:500],updated_at=datetime.utcnow()
+    )
+    if row.status in {'in_progress','done'}: row.started_at=datetime.utcnow()
+    if row.status=='done': row.completed_at=datetime.utcnow()
+    db.add(row);db.flush();return row
+
+@app.post('/api/study/daily-plan/import-local')
+def import_local_daily_plan(payload:dict,user:User=Depends(current_user),db:Session=Depends(get_db)):
+    require_paid_access(user,db)
+    imported=0
+    for p in (payload.get('plans') or [])[:14]:
+        plan_date=_daily_validate_date(str(p.get('plan_date') or ''),'plan_date')
+        plan=_daily_get_or_create_plan(db,user.id,plan_date)
+        for i,raw in enumerate((p.get('tasks') or [])[:12]):
+            status=str(raw.get('status') or 'not_started')
+            before=db.query(DailyStudyTask).filter(DailyStudyTask.plan_id==plan.id,DailyStudyTask.task_key==str(raw.get('id') or '')).first()
+            row=_daily_add_task(db,plan,user.id,raw,i,source_date=raw.get('carriedFrom'),status=status)
+            if row and not before: imported+=1
+    db.commit()
+    return {'ok':True,'imported':imported}
+
+@app.post('/api/study/daily-plan/sync')
+def sync_daily_plan(payload:dict,user:User=Depends(current_user),db:Session=Depends(get_db)):
+    require_paid_access(user,db)
+    plan_date=_daily_validate_date(str(payload.get('plan_date') or date.today().isoformat()))
+    exam_date=str(payload.get('exam_date') or '').strip() or None
+    profile=_get_study_profile(db,user.id)
+    if not exam_date and profile.exam_date: exam_date=profile.exam_date.date().isoformat()
+    if exam_date: _daily_validate_date(exam_date,'exam_date')
+    try: days_remaining=int(payload.get('days_remaining')) if payload.get('days_remaining') not in (None,'') else None
+    except Exception: days_remaining=None
+    if days_remaining is None and profile.exam_date: days_remaining=(profile.exam_date.date()-datetime.utcnow().date()).days
+    plan=_daily_get_or_create_plan(db,user.id,plan_date,exam_date,days_remaining)
+    existing=db.query(DailyStudyTask).filter(DailyStudyTask.plan_id==plan.id).order_by(DailyStudyTask.sort_order,DailyStudyTask.id).all()
+    if not existing:
+        cutoff=(datetime.strptime(plan_date,'%Y-%m-%d').date()-timedelta(days=7)).isoformat()
+        prior=(db.query(DailyStudyTask,DailyStudyPlan)
+            .join(DailyStudyPlan,DailyStudyTask.plan_id==DailyStudyPlan.id)
+            .filter(DailyStudyTask.user_id==user.id,DailyStudyPlan.plan_date<plan_date,DailyStudyPlan.plan_date>=cutoff,DailyStudyTask.status!='done')
+            .order_by(DailyStudyPlan.plan_date.desc(),DailyStudyTask.sort_order.asc(),DailyStudyTask.id.asc()).all())
+        keys=set();order=0
+        for old,old_plan in prior:
+            if len(keys)>=2: break
+            if old.task_key in keys or _daily_native_done(db,user.id,old.task_type,old.content_id): continue
+            raw={'id':old.task_key,'type':old.task_type,'itemId':old.content_id,'label':old.label,'title':old.title,'detail':old.detail,'view':old.view,'count':old.question_count,'focus':old.focus,'domain':old.domain,'examKind':old.exam_kind,'reason':old.reason}
+            _daily_add_task(db,plan,user.id,raw,order,source_date=old_plan.plan_date,status=old.status)
+            keys.add(old.task_key);order+=1
+        for raw in (payload.get('tasks') or [])[:12]:
+            key=str(raw.get('id') or raw.get('task_key') or '').strip()
+            if not key or key in keys: continue
+            task_type=str(raw.get('type') or '')
+            item_id=raw.get('itemId')
+            if _daily_native_done(db,user.id,task_type,str(item_id) if item_id is not None else None): continue
+            _daily_add_task(db,plan,user.id,raw,order,source_date=None,status='not_started')
+            keys.add(key);order+=1
+            if order>=4: break
+        db.commit()
+        existing=db.query(DailyStudyTask).filter(DailyStudyTask.plan_id==plan.id).order_by(DailyStudyTask.sort_order,DailyStudyTask.id).all()
+    else:
+        db.commit()
+    # Honor existing content completion even if it happened outside the daily plan.
+    changed=False
+    for row in existing:
+        if row.status!='done' and _daily_native_done(db,user.id,row.task_type,row.content_id):
+            row.status='done';row.completed_at=row.completed_at or datetime.utcnow();row.updated_at=datetime.utcnow();changed=True
+    if changed: db.commit()
+    return {'plan':{'id':plan.id,'plan_date':plan.plan_date,'exam_date':plan.exam_date,'days_remaining':plan.days_remaining,'status':plan.status},'tasks':[_daily_task_payload(x,plan.plan_date) for x in existing]}
+
+@app.get('/api/study/daily-plan')
+def get_daily_plan(plan_date:str|None=None,user:User=Depends(current_user),db:Session=Depends(get_db)):
+    require_paid_access(user,db)
+    day=_daily_validate_date(plan_date or date.today().isoformat())
+    plan=db.query(DailyStudyPlan).filter(DailyStudyPlan.user_id==user.id,DailyStudyPlan.plan_date==day).first()
+    if not plan: return {'plan':None,'tasks':[]}
+    tasks=db.query(DailyStudyTask).filter(DailyStudyTask.plan_id==plan.id).order_by(DailyStudyTask.sort_order,DailyStudyTask.id).all()
+    return {'plan':{'id':plan.id,'plan_date':plan.plan_date,'exam_date':plan.exam_date,'days_remaining':plan.days_remaining,'status':plan.status},'tasks':[_daily_task_payload(x,plan.plan_date) for x in tasks]}
+
+@app.patch('/api/study/daily-plan/tasks/{task_id}')
+def update_daily_plan_task(task_id:int,payload:dict,user:User=Depends(current_user),db:Session=Depends(get_db)):
+    require_paid_access(user,db)
+    row=db.query(DailyStudyTask).filter(DailyStudyTask.id==task_id,DailyStudyTask.user_id==user.id).first()
+    if not row: raise HTTPException(404,'Daily study task not found')
+    status=str(payload.get('status') or '').strip()
+    if status not in DAILY_TASK_STATUSES: raise HTTPException(400,'Invalid daily task status')
+    now=datetime.utcnow();row.status=status;row.updated_at=now
+    if status=='in_progress': row.started_at=row.started_at or now;row.completed_at=None
+    elif status=='done':
+        row.started_at=row.started_at or now;row.completed_at=row.completed_at or now
+        if row.task_type in {'note','tricky','diagram'} and row.content_id:
+            _upsert_study_state(db,user.id,row.task_type,row.content_id,status='reviewed')
+    else: row.completed_at=None
+    db.add(row);db.commit();db.refresh(row)
+    plan=db.get(DailyStudyPlan,row.plan_id)
+    return _daily_task_payload(row,plan.plan_date if plan else None)
 
 @app.get('/api/study/summary')
 def study_summary(user:User=Depends(current_user),db:Session=Depends(get_db)):

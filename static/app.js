@@ -582,86 +582,85 @@ function dashboardWorkspaceHeader(title,sub,badge=''){return `<div class="worksp
 
 function todayDateKey(offsetDays=0){const d=new Date();d.setDate(d.getDate()+offsetDays);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function planUserKey(){return (state.user?.email||state.user?.id||'learner').toString().toLowerCase()}
-function todayPlanStorageKey(dateKey=todayDateKey()){return `az_today_plan:${planUserKey()}:${dateKey}`}
-function todayPlanSnapshotKey(dateKey=todayDateKey()){return `az_today_plan_tasks:${planUserKey()}:${dateKey}`}
-function getTodayPlanState(dateKey=todayDateKey()){try{return JSON.parse(localStorage.getItem(todayPlanStorageKey(dateKey))||'{}')||{}}catch{return {}}}
-function saveTodayPlanState(v,dateKey=todayDateKey()){localStorage.setItem(todayPlanStorageKey(dateKey),JSON.stringify(v||{}))}
-function getPlanSnapshot(dateKey=todayDateKey()){try{return JSON.parse(localStorage.getItem(todayPlanSnapshotKey(dateKey))||'[]')||[]}catch{return []}}
-function savePlanSnapshot(tasks,dateKey=todayDateKey()){const safe=(tasks||[]).map(t=>({id:t.id,type:t.type,label:t.label,title:t.title,detail:t.detail||'',view:t.view||'',count:t.count||null,focus:t.focus||'',domain:t.domain||'',examKind:t.examKind||'',itemId:t.item?.id||t.itemId||null,dateKey:t.dateKey||dateKey,carriedFrom:t.carriedFrom||null}));localStorage.setItem(todayPlanSnapshotKey(dateKey),JSON.stringify(safe))}
-function taskNativeDone(task){const x=task.item;if(!x)return false;const st=x.studyStatus||'not_started';return st==='reviewed'||st==='mastered'}
-function taskState(task){if(taskNativeDone(task))return 'done';const saved=getTodayPlanState()[task.id];return saved==='done'?'done':saved==='in_progress'?'in_progress':'not_started'}
-function taskStateLabel(s){return s==='done'?'Done':s==='in_progress'?'In progress':'Need to study'}
-function hydrateStoredTask(t){if(!t)return null;let item=null;if(t.type==='note')item=state.notes.find(x=>String(x.id)===String(t.itemId||String(t.id).replace(/^note:/,'')))||null;if(t.type==='tricky')item=state.tricky.find(x=>String(x.id)===String(t.itemId||String(t.id).replace(/^tricky:/,'')))||null;if(t.type==='diagram')item=state.diagrams.find(x=>String(x.id)===String(t.itemId||String(t.id).replace(/^diagram:/,'')))||null;return {...t,item,carriedFrom:t.carriedFrom||t.dateKey||null}}
-function priorUnfinishedTasks(maxDays=7){
-  const out=[];
-  for(let offset=1;offset<=maxDays;offset++){
-    const dateKey=todayDateKey(-offset),stateForDay=getTodayPlanState(dateKey),snapshot=getPlanSnapshot(dateKey);
-    for(const raw of snapshot){
-      const t=hydrateStoredTask({...raw,dateKey});if(!t)continue;
-      const saved=stateForDay[t.id]||'not_started';
-      const nativeDone=taskNativeDone(t);
-      if(saved==='done'||nativeDone)continue;
-      if(out.some(x=>x.id===t.id))continue;
-      out.push({...t,carriedFrom:dateKey,rolloverStatus:saved});
-    }
-  }
-  return out;
+function legacyTodayPlanStorageKey(dateKey=todayDateKey()){return `az_today_plan:${planUserKey()}:${dateKey}`}
+function legacyTodayPlanSnapshotKey(dateKey=todayDateKey()){return `az_today_plan_tasks:${planUserKey()}:${dateKey}`}
+function legacyPlanState(dateKey=todayDateKey()){try{return JSON.parse(localStorage.getItem(legacyTodayPlanStorageKey(dateKey))||'{}')||{}}catch{return {}}}
+function legacyPlanSnapshot(dateKey=todayDateKey()){try{return JSON.parse(localStorage.getItem(legacyTodayPlanSnapshotKey(dateKey))||'[]')||[]}catch{return []}}
+async function migrateLocalDailyPlanOnce(){
+  const flag=`az_daily_plan_db_migrated:${planUserKey()}`;if(localStorage.getItem(flag)==='1')return;
+  const plans=[];
+  for(let offset=7;offset>=0;offset--){const dateKey=todayDateKey(-offset),snapshot=legacyPlanSnapshot(dateKey),saved=legacyPlanState(dateKey);if(!snapshot.length)continue;plans.push({plan_date:dateKey,tasks:snapshot.map(t=>({...t,status:saved[t.id]||'not_started'}))})}
+  try{if(plans.length)await api('/api/study/daily-plan/import-local',{method:'POST',body:JSON.stringify({plans})});localStorage.setItem(flag,'1')}catch(e){/* retry on the next login */}
 }
+function taskNativeDone(task){const x=task.item;if(!x)return false;const st=x.studyStatus||'not_started';return st==='reviewed'||st==='mastered'}
+function taskState(task){if(taskNativeDone(task))return 'done';return ['done','in_progress'].includes(task?.status)?task.status:'not_started'}
+function taskStateLabel(s){return s==='done'?'Done':s==='in_progress'?'In progress':'Need to study'}
+function hydrateDbTask(t){if(!t)return null;let item=null;const itemId=t.itemId||t.content_id||String(t.id||'').replace(/^[^:]+:/,'');if(t.type==='note')item=state.notes.find(x=>String(x.id)===String(itemId))||null;if(t.type==='tricky')item=state.tricky.find(x=>String(x.id)===String(itemId))||null;if(t.type==='diagram')item=state.diagrams.find(x=>String(x.id)===String(itemId))||null;return {...t,item,itemId,carriedFrom:t.carriedFrom||null}}
 function todayTaskRow(task){const st=taskState(task),disabled=st==='done',carry=task.carriedFrom?`<span class="today-carryover">Carried over</span>`:'';return `<article class="today-plan-task state-${st} ${task.carriedFrom?'is-carryover':''}" data-today-task="${escapeHtml(task.id)}"><span class="today-task-state">${st==='done'?'✓':st==='in_progress'?'●':'○'}</span><div class="today-task-main"><div class="today-task-title-row"><span class="workspace-kicker">${escapeHtml(task.label)}</span>${carry}<span class="today-task-status">${escapeHtml(taskStateLabel(st))}</span></div><h4>${escapeHtml(task.title)}</h4><p>${escapeHtml(task.detail||'')}</p></div><div class="today-task-actions"><button class="text-btn" type="button" data-today-open="${escapeHtml(task.id)}">${st==='done'?'Review':'Open'} →</button><button class="secondary today-done-btn ${st==='done'?'is-complete':''}" type="button" data-today-done="${escapeHtml(task.id)}" ${disabled?'disabled':''}>${st==='done'?'✓ Done':'Done'}</button></div></article>`}
 function prioritizedNextItem(rows,weakDomain){if(!rows?.length)return null;const candidates=rows.filter(x=>['not_started','needs_review'].includes(x.studyStatus||'not_started'));if(!candidates.length)return rows[0]||null;if(weakDomain){const hit=candidates.find(x=>String(x.domain||'').toLowerCase()===String(weakDomain).toLowerCase());if(hit)return hit}return candidates[0]}
-function buildTodayTasks(p){
+function buildFreshTodayTasks(p){
   const plan=p?.adaptive_plan||{},weakDomain=plan?.weak_domains?.[0]?.domain||'';
   const nextNote=prioritizedNextItem(state.notes,weakDomain),nextTricky=prioritizedNextItem(state.tricky,weakDomain),nextDiagram=prioritizedNextItem(state.diagrams,weakDomain);
   const daysLeft=Number(plan.days_until_exam||0),tier=state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'full';
   const practiceCount=daysLeft>0&&daysLeft<=10?25:daysLeft>0&&daysLeft<=20?20:15;
   const fresh=[];
-  if(nextNote)fresh.push({id:`note:${nextNote.id}`,type:'note',item:nextNote,label:'Read',title:nextNote.title,detail:(nextNote.keyRules||[])[0]||nextNote.summary||'Learn the rule PMI expects you to recognize.',view:'notes'});
-  if(nextTricky)fresh.push({id:`tricky:${nextTricky.id}`,type:'tricky',item:nextTricky,label:'Compare',title:`${nextTricky.left} vs ${nextTricky.right}`,detail:trickyDecisionText(nextTricky),view:'tricky'});
-  if((tier==='full'||String(tier).startsWith('full'))&&nextDiagram)fresh.push({id:`diagram:${nextDiagram.id}`,type:'diagram',item:nextDiagram,label:'Visualize',title:nextDiagram.title,detail:nextDiagram.whyItMatters||nextDiagram.whatItIs||'Use the model to connect the decision flow.',view:'diagrams'});
+  if(nextNote)fresh.push({id:`note:${nextNote.id}`,type:'note',itemId:nextNote.id,label:'Read',title:nextNote.title,detail:(nextNote.keyRules||[])[0]||nextNote.summary||'Learn the rule PMI expects you to recognize.',view:'notes',reason:weakDomain&&String(nextNote.domain||'').toLowerCase()===weakDomain.toLowerCase()?`Priority: weak area — ${weakDomain}`:'Next high-value concept'});
+  if(nextTricky)fresh.push({id:`tricky:${nextTricky.id}`,type:'tricky',itemId:nextTricky.id,label:'Compare',title:`${nextTricky.left} vs ${nextTricky.right}`,detail:trickyDecisionText(nextTricky),view:'tricky',reason:'Build exam-day distinction speed'});
+  if((tier==='full'||String(tier).startsWith('full'))&&nextDiagram)fresh.push({id:`diagram:${nextDiagram.id}`,type:'diagram',itemId:nextDiagram.id,label:'Visualize',title:nextDiagram.title,detail:nextDiagram.whyItMatters||nextDiagram.whatItIs||'Use the model to connect the decision flow.',view:'diagrams',reason:'Reinforce the concept visually'});
   const practiceDetail=weakDomain?`Focus first on ${weakDomain}${(p?.practice_unique_missed||0)>0?' and retry missed questions.':'. Then continue with mixed practice.'}`:((p?.practice_unique_missed||0)>0?'Start with missed questions, then continue with mixed practice.':'Use mixed questions to turn today’s reading into exam decisions.');
-  fresh.push({id:`practice:${todayDateKey()}`,type:'practice',label:'Practice',title:`${practiceCount} targeted questions`,detail:practiceDetail,view:'practice',count:practiceCount,focus:(p?.practice_unique_missed||0)>0?'ever_missed':'',domain:weakDomain});
+  fresh.push({id:`practice:${todayDateKey()}`,type:'practice',label:'Practice',title:`${practiceCount} targeted questions`,detail:practiceDetail,view:'practice',count:practiceCount,focus:(p?.practice_unique_missed||0)>0?'ever_missed':'',domain:weakDomain,reason:weakDomain?`Target current weak area — ${weakDomain}`:'Convert learning into exam decisions'});
   const activeExam=(p?.exam_cards||[]).filter(x=>x.kind==='mock').find(x=>x.status==='active'||x.status==='paused');
-  if(daysLeft>0&&daysLeft<=10&&activeExam)fresh.push({id:`exam:${activeExam.exam_code}`,type:'exam',label:'Exam stamina',title:`Resume ${activeExam.exam_name||'mock exam'}`,detail:`${activeExam.answered||0}/${activeExam.total||180} answered`,view:'exams',examKind:'mock'});
-
-  const carried=priorUnfinishedTasks(7).slice(0,2);
-  const tasks=[];
-  for(const t of [...carried,...fresh]){if(!tasks.some(x=>x.id===t.id))tasks.push(t);if(tasks.length>=4)break}
-  const todayState=getTodayPlanState();
-  let changed=false;
-  for(const t of tasks){if(t.carriedFrom&&!todayState[t.id]&&t.rolloverStatus==='in_progress'){todayState[t.id]='in_progress';changed=true}}
-  if(changed)saveTodayPlanState(todayState);
-  savePlanSnapshot(tasks);
-  return tasks;
+  if(daysLeft>0&&daysLeft<=10&&activeExam)fresh.push({id:`exam:${activeExam.exam_code}`,type:'exam',label:'Exam stamina',title:`Resume ${activeExam.exam_name||'mock exam'}`,detail:`${activeExam.answered||0}/${activeExam.total||180} answered`,view:'exams',examKind:'mock',reason:'Exam is close — protect pacing and stamina'});
+  return fresh;
+}
+async function syncDatabaseTodayPlan(p){
+  await migrateLocalDailyPlanOnce();
+  const plan=p?.adaptive_plan||{},payload={plan_date:todayDateKey(),days_remaining:Number(plan.days_until_exam||0)||null,tasks:buildFreshTodayTasks(p)};
+  const r=await api('/api/study/daily-plan/sync',{method:'POST',body:JSON.stringify(payload)});
+  state.todayPlan=(r.tasks||[]).map(hydrateDbTask).filter(Boolean);return r;
+}
+function renderTodayPlanFromDb(p,tasks){
+  const host=$('#dashboardWorkspace');if(!host)return;const plan=p?.adaptive_plan||{},daysLeft=Number(plan.days_until_exam||0),done=tasks.filter(t=>taskState(t)==='done').length,carried=tasks.filter(t=>t.carriedFrom).length;
+  const badge=daysLeft>0?`${daysLeft} day${daysLeft===1?'':'s'} to exam`:`${done}/${tasks.length} done`;
+  const rolloverNote=carried?`${carried} unfinished item${carried===1?' was':'s were'} carried forward first. `:'';
+  host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','Open each item, complete it, then mark it Done. Your progress is saved to your account.',badge)}<div class="today-plan-summary"><div><span class="workspace-kicker">Today</span><b>${done}/${tasks.length} completed</b></div><div class="today-plan-progress"><i style="width:${tasks.length?Math.round(done/tasks.length*100):0}%"></i></div><small>${escapeHtml(rolloverNote+(plan.guidance||'The remaining slots are selected from your exam timeline and weakest areas.'))}</small></div><div class="today-plan-list">${tasks.length?tasks.map(todayTaskRow).join(''):'<div class="workspace-empty"><b>You are caught up for today.</b><p>Complete practice or review your readiness while Azielon prepares the next study day.</p></div>'}</div>`;
+  bindDashboardWorkspaceActions();
+}
+async function loadAndRenderTodayPlan(p){
+  const host=$('#dashboardWorkspace');if(host)host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','Building today’s account-synced study list…')}<div class="workspace-empty"><p>Loading your plan…</p></div>`;
+  try{await syncDatabaseTodayPlan(p);renderTodayPlanFromDb(p,state.todayPlan||[])}catch(err){if(host)host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','Your daily plan could not be loaded.')}<div class="workspace-empty"><b>Unable to sync your study plan.</b><p>${escapeHtml(err.message||'Please try again.')}</p></div>`}
+}
+async function setDailyTaskStatus(task,status){
+  if(!task?.db_id)throw new Error('This task has not been saved to your account yet.');
+  const updated=await api(`/api/study/daily-plan/tasks/${task.db_id}`,{method:'PATCH',body:JSON.stringify({status})});
+  Object.assign(task,hydrateDbTask(updated));return task;
 }
 async function markTodayTaskDone(task){
-  if(task.item&&['note','tricky','diagram'].includes(task.type))await setStudyStatus(task.type,task.item.id,'reviewed');
-  const s=getTodayPlanState();s[task.id]='done';saveTodayPlanState(s);await loadProgress();state.dashboardFocus='today';renderFeatureLaunchpad(state.lastProgress||{});
+  await setDailyTaskStatus(task,'done');await loadProgress();state.dashboardFocus='today';renderFeatureLaunchpad(state.lastProgress||{});
 }
-function openTodayTask(task){
-  const s=getTodayPlanState();if(s[task.id]!=='done'){s[task.id]='in_progress';saveTodayPlanState(s)}
+async function openTodayTask(task){
+  if(taskState(task)!=='done')await setDailyTaskStatus(task,'in_progress');
   if(task.type==='practice'){showView('practice');setTimeout(()=>{if($('#pCount'))$('#pCount').value=task.count||15;if($('#pReviewFocus'))$('#pReviewFocus').value=task.focus||'';if($('#pDomain'))$('#pDomain').value=task.domain||'';createPracticeSession()},50);return}
   if(task.type==='exam'){state.examKind=task.examKind||'mock';showView('exams');return}
-  if(task.type==='note'){state.noteMode='all';showView('notes');setTimeout(()=>{const i=state.notes.findIndex(x=>x.id===task.item.id);if(i>=0){state.noteIndex=i;renderNotes()}},60);return}
-  if(task.type==='tricky'){state.trickyMode='all';showView('tricky');setTimeout(()=>{const rows=trickyRows();const i=rows.findIndex(x=>x.id===task.item.id);if(i>=0){state.flashIndex=i;renderTricky()}},60);return}
-  if(task.type==='diagram'){state.diagramMode='all';showView('diagrams');setTimeout(()=>{const rows=diagramRows();const i=rows.findIndex(x=>x.id===task.item.id);if(i>=0){state.diagramIndex=i;renderDiagrams()}},60);return}
+  if(task.type==='note'){state.noteMode='all';showView('notes');setTimeout(()=>{const i=state.notes.findIndex(x=>String(x.id)===String(task.itemId));if(i>=0){state.noteIndex=i;renderNotes()}},60);return}
+  if(task.type==='tricky'){state.trickyMode='all';showView('tricky');setTimeout(()=>{const rows=trickyRows();const i=rows.findIndex(x=>String(x.id)===String(task.itemId));if(i>=0){state.flashIndex=i;renderTricky()}},60);return}
+  if(task.type==='diagram'){state.diagramMode='all';showView('diagrams');setTimeout(()=>{const rows=diagramRows();const i=rows.findIndex(x=>String(x.id)===String(task.itemId));if(i>=0){state.diagramIndex=i;renderDiagrams()}},60);return}
   showView(task.view||'dashboard');
 }
 function bindDashboardWorkspaceActions(){
   $$('[data-dash-open]').forEach(b=>b.onclick=()=>{const view=b.dataset.dashOpen;if(view==='exams')state.examKind=b.dataset.examKind||'mock';showView(view)});
   $$('[data-dash-focus]').forEach(b=>b.onclick=()=>{state.dashboardFocus=b.dataset.dashFocus;renderFeatureLaunchpad(state.lastProgress||{})});
   $$('[data-dash-practice]').forEach(b=>b.onclick=()=>{const count=Number(b.dataset.count||10),focus=b.dataset.focus||'',domain=b.dataset.domain||'';showView('practice');setTimeout(()=>{if($('#pCount'))$('#pCount').value=count;if($('#pReviewFocus'))$('#pReviewFocus').value=focus;if($('#pDomain'))$('#pDomain').value=domain;createPracticeSession()},50)});
-  const todayTasks=buildTodayTasks(state.lastProgress||{}),todayMap=Object.fromEntries(todayTasks.map(x=>[x.id,x]));
-  $$('[data-today-open]').forEach(b=>b.onclick=()=>{const t=todayMap[b.dataset.todayOpen];if(t)openTodayTask(t)});
+  const todayTasks=state.todayPlan||[],todayMap=Object.fromEntries(todayTasks.map(x=>[x.id,x]));
+  $$('[data-today-open]').forEach(b=>b.onclick=async()=>{const t=todayMap[b.dataset.todayOpen];if(!t)return;b.disabled=true;try{await openTodayTask(t)}catch(err){b.disabled=false;alert(err.message||'Unable to open this study item.')}});
   $$('[data-today-done]').forEach(b=>b.onclick=async()=>{const t=todayMap[b.dataset.todayDone];if(!t)return;b.disabled=true;b.textContent='Saving…';try{await markTodayTaskDone(t)}catch(err){b.disabled=false;b.textContent='Done';alert(err.message||'Unable to update status.')}});
   const coach=$('#dashboardCoachForm');if(coach)coach.onsubmit=async e=>{e.preventDefault();const input=$('#dashboardCoachInput'),out=$('#dashboardCoachAnswer'),msg=input.value.trim();if(!msg)return;out.innerHTML='<span class="small-note">Thinking…</span>';try{const r=await api('/api/ai/coach',{method:'POST',body:JSON.stringify({message:msg})});out.innerHTML=`<b>PMP Coach</b><p>${escapeHtml(r.text||'No response.').replace(/\n/g,'<br>')}</p>`}catch(err){out.innerHTML=`<p>${escapeHtml(err.message)}</p>`}};
 }
 function renderDashboardWorkspace(kind,p){
   const host=$('#dashboardWorkspace');if(!host)return;const next=state.studySummary?.next_item||null,overview=learningOverview(p),reviewCount=(p?.review_queue||[]).length||0;
   if(kind==='today'){
-    const plan=p?.adaptive_plan||{},daysLeft=Number(plan.days_until_exam||0),tasks=buildTodayTasks(p),done=tasks.filter(t=>taskState(t)==='done').length,carried=tasks.filter(t=>t.carriedFrom).length;
-    const badge=daysLeft>0?`${daysLeft} day${daysLeft===1?'':'s'} to exam`:`${done}/${tasks.length} done`;
-    const rolloverNote=carried?`${carried} unfinished item${carried===1?' was':'s were'} carried forward first. `:'';
-    host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','Open each item, complete it, then mark it Done. Unfinished work automatically moves to your next study day.',badge)}<div class="today-plan-summary"><div><span class="workspace-kicker">Today</span><b>${done}/${tasks.length} completed</b></div><div class="today-plan-progress"><i style="width:${tasks.length?Math.round(done/tasks.length*100):0}%"></i></div><small>${escapeHtml(rolloverNote+(plan.guidance||'The remaining slots are selected from your exam timeline and weakest areas.'))}</small></div><div class="today-plan-list">${tasks.map(todayTaskRow).join('')}</div>`;
+    loadAndRenderTodayPlan(p);
+    return;
   }else if(kind==='notes'){
     const n=dashboardNextNote(),g=state.studySummary?.groups?.notes||{};
     host.innerHTML=`${dashboardWorkspaceHeader('Topic Notes','Learn the concepts PMI expects you to recognize before you practice them.',`${g.complete||0}/${g.total||0} complete`)}${n?`<div class="workspace-two-col"><div class="workspace-primary"><span class="workspace-kicker">Next topic</span><h4>${escapeHtml(n.title)}</h4><p>${escapeHtml(n.summary||'Review the concept, decision rules, and exam traps.')}</p><button class="primary" data-dash-open="notes">Study this topic →</button></div><div class="workspace-detail-grid"><div><span>Key rule</span><p>${escapeHtml((n.keyRules||[])[0]||n.doFirst||'Focus on the decision rule the scenario is testing.')}</p></div><div><span>Trigger words</span><p>${escapeHtml((n.triggerWords||[]).slice(0,5).join(' · ')||'Open the topic to see the trigger words.')}</p></div><div><span>Memory</span><p>${escapeHtml(n.flowOrMemory||'Use the memory cue to retrieve the rule quickly on exam day.')}</p></div></div></div>`:'<div class="workspace-empty">No topic notes are available yet.</div>'}`;
