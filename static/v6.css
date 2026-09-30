@@ -1,0 +1,611 @@
+/* ==========================================================================
+   Azielon PMP Coach — v6 "Ink & Gold" learner experience
+   Loaded after styles.css. Scoped to body.v6 so it can be removed in one line.
+   ========================================================================== */
+body.v6{
+  --v6-ink:#0F1A2F;          /* sidebar */
+  --v6-ink-2:#18264A;
+  --v6-navy:#14213D;         /* headings */
+  --v6-text:#2A3244;
+  --v6-muted:#667085;
+  --v6-bg:#F6F3EC;           /* app background */
+  --v6-card:#FFFFFF;
+  --v6-line:#E9E2D2;
+  --v6-line-2:#F1ECE1;
+  --v6-gold:#B8862F;
+  --v6-gold-deep:#8F6219;
+  --v6-gold-soft:#E4C47C;
+  --v6-gold-wash:#FBF4E4;
+  --v6-sage:#2F7A64;
+  --v6-sage-wash:#EAF4EF;
+  --v6-rose:#A8434F;
+  --v6-rose-wash:#F9ECEE;
+  --v6-sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --v6-serif:'Cormorant Garamond',Georgia,serif;
+  --v6-radius:14px;
+  --v6-shadow:0 1px 2px rgba(15,26,47,.04),0 8px 24px rgba(15,26,47,.05);
+}
+
+/* ---------- Shell ------------------------------------------------------- */
+body.v6:not(.landing-active){background:var(--v6-bg)!important;font-family:var(--v6-sans)!important;color:var(--v6-text);overflow:hidden}
+body.v6 #app{display:grid!important;grid-template-columns:224px minmax(0,1fr)!important;height:100vh!important;min-height:0!important;overflow:hidden}
+body.v6 #app.hidden{display:none!important}
+body.v6 #app main{display:flex!important;flex-direction:column!important;height:100vh!important;min-width:0;overflow:hidden!important;background:var(--v6-bg)!important;padding:0!important}
+body.v6 #app main,body.v6 #app main button,body.v6 #app main input,body.v6 #app main select,body.v6 #app main textarea{font-family:var(--v6-sans)}
+
+/* ---------- Sidebar ----------------------------------------------------- */
+body.v6 .sidebar{background:var(--v6-ink)!important;display:flex!important;flex-direction:column!important;height:100vh!important;padding:16px 12px 12px!important;overflow:hidden!important;border-right:0!important;width:auto!important;position:relative!important}
+body.v6 .sidebar .brand{display:flex!important;align-items:center;gap:10px;padding:0 6px 14px!important;margin:0 0 6px!important;border-bottom:1px solid rgba(255,255,255,.07)}
+body.v6 .sidebar .brand img{width:34px!important;height:34px!important;border-radius:9px}
+body.v6 .sidebar .brand strong{font-family:var(--v6-serif)!important;font-size:21px!important;font-weight:600!important;color:#fff!important;letter-spacing:.02em;line-height:1}
+body.v6 .sidebar .brand span{font-family:var(--v6-sans)!important;font-size:8.5px!important;letter-spacing:.2em!important;color:var(--v6-gold-soft)!important;text-transform:uppercase;font-weight:600}
+body.v6 #nav{display:flex!important;flex-direction:column!important;flex:1 1 auto;min-height:0;gap:1px!important;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;padding:0!important;margin:0!important}
+body.v6 #nav::-webkit-scrollbar{display:none}
+body.v6 #nav .nav-group-label{font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(228,196,124,.62);padding:12px 10px 4px}
+body.v6 #nav .nav-spacer{flex:1 1 auto;min-height:10px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:6px}
+body.v6 #nav button{display:flex!important;align-items:center!important;gap:11px!important;width:100%!important;min-height:0!important;height:34px!important;padding:0 10px!important;margin:0!important;border:0!important;border-radius:9px!important;background:transparent!important;color:#B9C1D0!important;font-family:var(--v6-sans)!important;font-size:13.5px!important;font-weight:500!important;letter-spacing:0!important;text-align:left!important;box-shadow:none!important;position:relative!important;transition:background .15s,color .15s;flex:0 0 auto}
+body.v6 #nav button:hover{background:rgba(255,255,255,.05)!important;color:#fff!important}
+body.v6 #nav button.active{background:rgba(228,196,124,.12)!important;color:#fff!important}
+body.v6 #nav button.active::before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--v6-gold-soft)}
+body.v6 #nav button .nav-icon{width:18px!important;height:18px!important;min-width:18px!important;opacity:.9;color:currentColor}
+body.v6 #nav button .nav-icon svg{width:18px!important;height:18px!important}
+body.v6 #nav button.active .nav-icon{color:var(--v6-gold-soft)}
+body.v6 #nav button > span:not(.nav-icon){white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.v6 #nav button.nav-locked{color:rgba(185,193,208,.55)!important}
+body.v6 #nav .plan-lock{margin-left:auto;color:var(--v6-gold-soft);opacity:.8}
+body.v6 #nav .live-tag,body.v6 #nav .nav-live-btn .live-tag{margin-left:auto;font-style:normal;font-size:8.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:999px;border:1px solid rgba(228,196,124,.45);color:var(--v6-gold-soft)}
+body.v6 .sidebar .side-bottom{display:none!important}
+body.v6 #nav button.hidden{display:none!important}
+body.v6 #nav .nav-live-btn .live-tag{display:none!important}
+body.v6 #nav .nav-live-btn > span:not(.nav-icon)::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#E0625B;margin-left:8px;vertical-align:2px;box-shadow:0 0 0 3px rgba(224,98,91,.18)}
+
+/* ---------- Top bar ----------------------------------------------------- */
+body.v6 .topbar{display:flex!important;align-items:center!important;gap:18px!important;height:58px!important;min-height:58px!important;flex:0 0 58px;padding:0 24px!important;margin:0!important;background:var(--v6-bg)!important;border-bottom:1px solid var(--v6-line)!important;box-shadow:none!important;position:relative;z-index:20}
+body.v6 .topbar > div:first-child{min-width:0;flex:0 1 auto}
+body.v6 .topbar .eyebrow{display:none!important}
+body.v6 #pageTitle{font-family:var(--v6-serif)!important;font-size:27px!important;font-weight:600!important;color:var(--v6-navy)!important;line-height:1!important;margin:0!important;white-space:nowrap;letter-spacing:0}
+body.v6 .top-actions{margin-left:auto;display:flex!important;align-items:center;gap:12px}
+body.v6 #healthPill{display:none!important}
+body.v6 #healthPill.is-offline{display:inline-flex!important;background:var(--v6-rose-wash)!important;color:var(--v6-rose)!important;border-color:transparent!important}
+body.v6 .avatar{width:36px!important;height:36px!important;font-size:12px!important;background:var(--v6-navy)!important;color:var(--v6-gold-soft)!important;border:0!important;font-family:var(--v6-sans)!important;font-weight:600!important;letter-spacing:.04em}
+
+/* Exam countdown chip */
+body.v6 .v6-exam-chip{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;border-radius:999px;background:var(--v6-card);border:1px solid var(--v6-line);color:var(--v6-navy);font-size:12.5px;font-weight:500;white-space:nowrap;cursor:pointer}
+body.v6 .v6-exam-chip b{font-family:var(--v6-serif);font-size:19px;font-weight:700;color:var(--v6-gold-deep);line-height:1}
+body.v6 .v6-exam-chip.is-unset{color:var(--v6-gold-deep);border-color:rgba(184,134,47,.45);background:var(--v6-gold-wash)}
+body.v6 .v6-exam-chip:hover{border-color:var(--v6-gold)}
+
+/* Journey stepper — lives inside the top bar */
+body.v6 .topbar .learner-journey{flex:0 1 auto;margin:0 auto 0 8px!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;position:static!important}
+body.v6 .topbar .learner-journey.hidden{display:none!important}
+body.v6 .topbar .learner-journey-inner{padding:0!important;margin:0!important;background:none!important;border:0!important;max-width:none!important}
+body.v6 .topbar .journey-stage-row{display:flex!important;align-items:center;gap:0!important;background:var(--v6-card);border:1px solid var(--v6-line);border-radius:999px;padding:3px!important;margin:0!important;box-shadow:none!important;grid-template-columns:none!important}
+body.v6 .topbar .journey-stage{all:unset;box-sizing:border-box!important;position:relative!important;display:inline-flex!important;flex:0 0 auto!important;align-items:center!important;gap:6px!important;min-width:0!important;max-width:none!important;height:28px!important;padding:0 13px!important;border:0!important;border-radius:999px!important;background:transparent!important;box-shadow:none!important;font-family:var(--v6-sans)!important;font-size:12px!important;font-weight:500!important;color:var(--v6-muted)!important;cursor:pointer;white-space:nowrap}
+body.v6 .topbar .journey-stage b{font-weight:inherit!important;font-size:inherit!important;color:inherit!important;display:inline!important;line-height:1!important}
+body.v6 .topbar .journey-stage .journey-stage-copy{display:inline!important}
+body.v6 .topbar .journey-stage .journey-stage-copy small,body.v6 .topbar .journey-stage .journey-stage-dot{display:none!important}
+body.v6 .topbar .journey-stage::before{content:"";width:7px;height:7px;border-radius:50%;background:#D9D2C2;flex:0 0 7px}
+body.v6 .topbar .journey-stage.done{color:var(--v6-sage)!important}
+body.v6 .topbar .journey-stage.done::before{background:var(--v6-sage)}
+body.v6 .topbar .journey-stage.current{background:var(--v6-navy)!important;color:#fff!important;font-weight:600!important}
+body.v6 .topbar .journey-stage.current::before{background:var(--v6-gold-soft);box-shadow:0 0 0 3px rgba(228,196,124,.25)}
+body.v6 .topbar .journey-stage:not(.current):hover{color:var(--v6-navy)!important;background:var(--v6-line-2)!important}
+body.v6 .topbar .journey-stage::after{display:none!important}
+body.v6 .topbar .journey-stage[data-journey-tip]:hover .v6-tip{display:block}
+body.v6 .v6-tip{display:none;position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);width:260px;background:var(--v6-navy);color:#E9ECF3;font-size:12px;font-weight:400;line-height:1.5;padding:10px 12px;border-radius:10px;white-space:pre-line;box-shadow:0 12px 28px rgba(15,26,47,.22);z-index:50;cursor:default}
+body.v6 .v6-tip::before{content:"";position:absolute;top:-5px;left:50%;margin-left:-5px;border:5px solid transparent;border-top:0;border-bottom-color:var(--v6-navy)}
+
+/* Duplicate study tab row: removed (the sidebar is the one navigation) */
+body.v6 #globalStudyNav{display:none!important}
+
+/* ---------- Views ------------------------------------------------------- */
+body.v6 #app main > .view{display:none!important}
+body.v6 #app main > .view.active{display:block!important;flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;padding:18px 24px 22px!important;margin:0!important;scrollbar-width:thin;scrollbar-color:#D8CFBC transparent}
+body.v6 #app main > .view.active::-webkit-scrollbar{width:8px}
+body.v6 #app main > .view.active::-webkit-scrollbar-thumb{background:#D8CFBC;border-radius:8px}
+body.v6 .section-intro{display:none!important}
+body.v6 .panel,body.v6 .card{border-radius:var(--v6-radius)!important;border-color:var(--v6-line)!important;box-shadow:var(--v6-shadow)!important}
+body.v6 .eyebrow,body.v6 .workspace-kicker{font-family:var(--v6-sans)!important;font-size:10px!important;font-weight:600!important;letter-spacing:.16em!important;text-transform:uppercase;color:var(--v6-gold-deep)!important}
+
+/* Buttons */
+body.v6 #app main .primary{background:var(--v6-navy)!important;color:#fff!important;border:1px solid var(--v6-navy)!important;border-radius:10px!important;font-family:var(--v6-sans)!important;font-weight:600!important;letter-spacing:.01em!important;text-transform:none!important;box-shadow:none!important}
+body.v6 #app main .primary:hover{background:#0B1528!important}
+body.v6 #app main .secondary{border-radius:10px!important;font-family:var(--v6-sans)!important;text-transform:none!important;letter-spacing:.01em!important}
+body.v6 #app main .text-btn{font-family:var(--v6-sans)!important;color:var(--v6-gold-deep)!important;font-weight:600!important;text-transform:none!important;letter-spacing:0!important}
+body.v6 #app main input,body.v6 #app main select,body.v6 #app main textarea{border-radius:10px!important;border-color:var(--v6-line)!important;font-size:14px!important}
+body.v6 #app main input:focus,body.v6 #app main select:focus,body.v6 #app main textarea:focus{outline:none!important;border-color:var(--v6-gold)!important;box-shadow:0 0 0 3px rgba(184,134,47,.14)!important}
+
+/* ==========================================================================
+   HOME ("Today")
+   ========================================================================== */
+body.v6 #app main > #dashboard.view.active{display:flex!important;flex-direction:column}
+body.v6 #dashboard .pmp-home-shell{display:flex;flex-direction:column;gap:14px;flex:1 1 auto;min-height:0;padding:0!important;margin:0!important;background:none!important;border:0!important;box-shadow:none!important}
+body.v6 #featureLaunchpad{display:flex!important;align-items:center;gap:4px;flex:0 0 auto;padding:3px!important;margin:0!important;background:var(--v6-card)!important;border:1px solid var(--v6-line)!important;border-radius:12px!important;align-self:flex-start;box-shadow:none!important;overflow:visible!important;grid-template-columns:none!important;width:auto!important;max-width:100%}
+body.v6 #featureLaunchpad .pmp-focus-tab{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 14px;border-radius:9px;font-family:var(--v6-sans);font-size:13px;font-weight:500;color:var(--v6-muted);cursor:pointer;white-space:nowrap}
+body.v6 #featureLaunchpad .pmp-focus-tab svg{width:15px;height:15px}
+body.v6 #featureLaunchpad .feature-launch-icon{display:inline-flex;width:15px;height:15px;color:currentColor}
+body.v6 #featureLaunchpad .pmp-focus-tab.active{background:var(--v6-navy);color:#fff;font-weight:600}
+body.v6 #featureLaunchpad .pmp-focus-tab.active .feature-launch-icon{color:var(--v6-gold-soft)}
+body.v6 #featureLaunchpad .pmp-focus-tab:not(.active):hover{background:var(--v6-line-2);color:var(--v6-navy)}
+body.v6 #dashboardWorkspace{flex:1 1 auto;min-height:0;padding:0!important;margin:0!important;background:none!important;border:0!important;box-shadow:none!important;overflow:visible}
+body.v6 #dashboardWorkspace:not(.v6-today-host){background:var(--v6-card)!important;border:1px solid var(--v6-line)!important;border-radius:var(--v6-radius)!important;padding:18px 20px!important;box-shadow:var(--v6-shadow)!important;overflow:auto}
+
+/* Today grid */
+body.v6 .v6-home{display:grid;grid-template-columns:minmax(0,1.62fr) minmax(280px,1fr);gap:16px;height:100%;min-height:0}
+body.v6 .v6-col{display:flex;flex-direction:column;gap:14px;min-height:0}
+body.v6 .v6-card{background:var(--v6-card);border:1px solid var(--v6-line);border-radius:var(--v6-radius);box-shadow:var(--v6-shadow)}
+body.v6 .v6-kicker{display:block;font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--v6-gold-deep)}
+
+/* Next step hero */
+body.v6 .v6-next{position:relative;overflow:hidden;border-radius:var(--v6-radius);padding:20px 22px 20px;background:linear-gradient(135deg,#14213D 0%,#1B2C52 60%,#22365F 100%);color:#fff;box-shadow:0 14px 30px rgba(20,33,61,.18);flex:0 0 auto}
+body.v6 .v6-next::after{content:"";position:absolute;right:-60px;top:-80px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(228,196,124,.18),rgba(228,196,124,0) 70%);pointer-events:none}
+body.v6 .v6-next-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+body.v6 .v6-next .v6-kicker{color:var(--v6-gold-soft)}
+body.v6 .v6-next-type{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 9px;border-radius:999px;background:rgba(255,255,255,.1);color:#E9ECF3;font-size:11px;font-weight:500}
+body.v6 .v6-next-type svg{width:13px;height:13px;color:var(--v6-gold-soft)}
+body.v6 .v6-next h2{font-family:var(--v6-serif);font-size:28px;font-weight:600;line-height:1.1;margin:0 0 6px;color:#fff;max-width:95%;letter-spacing:0}
+body.v6 .v6-next p{margin:0 0 16px;color:#C5CCDA;font-size:13.5px;line-height:1.5;max-width:92%;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+body.v6 .v6-next-why{display:inline-flex;align-items:center;gap:6px;color:var(--v6-gold-soft);font-size:12px;margin:-8px 0 14px}
+body.v6 .v6-next-actions{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+body.v6 .v6-btn-gold{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;gap:10px;height:42px;padding:0 22px;border-radius:10px;background:var(--v6-gold-soft);color:var(--v6-navy);font-family:var(--v6-sans);font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.18);transition:transform .15s,background .15s}
+body.v6 .v6-btn-gold:hover{background:#EDD29A;transform:translateY(-1px)}
+body.v6 .v6-btn-quiet{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;height:42px;padding:0 16px;border-radius:10px;color:#D5DBE6;font-family:var(--v6-sans);font-size:13px;font-weight:500;cursor:pointer;border:1px solid rgba(255,255,255,.18)}
+body.v6 .v6-btn-quiet:hover{background:rgba(255,255,255,.08);color:#fff}
+body.v6 .v6-btn-quiet[disabled]{opacity:.5;cursor:default}
+
+/* Today's plan list */
+body.v6 .v6-plan{display:flex;flex-direction:column;min-height:0;flex:1 1 auto;padding:14px 16px 8px}
+body.v6 .v6-plan-head{display:flex;align-items:center;gap:12px;padding:0 4px 10px}
+body.v6 .v6-plan-head h3{font-family:var(--v6-serif);font-size:20px;font-weight:600;color:var(--v6-navy);margin:0;line-height:1}
+body.v6 .v6-plan-count{font-size:12px;color:var(--v6-muted);white-space:nowrap}
+body.v6 .v6-plan-bar{flex:1;height:5px;border-radius:5px;background:var(--v6-line-2);overflow:hidden}
+body.v6 .v6-plan-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--v6-gold),var(--v6-gold-soft));border-radius:5px}
+body.v6 .v6-plan-list{display:flex;flex-direction:column;overflow:auto;min-height:0}
+body.v6 .v6-task{display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:center;gap:12px;padding:9px 6px;border-top:1px solid var(--v6-line-2)}
+body.v6 .v6-task:first-child{border-top:0}
+body.v6 .v6-task-dot{all:unset;box-sizing:border-box;width:24px;height:24px;border-radius:50%;border:1.5px solid #CFC6B3;display:grid;place-items:center;cursor:pointer;color:transparent;font-size:12px;transition:all .15s}
+body.v6 .v6-task-dot:hover{border-color:var(--v6-sage);color:var(--v6-sage)}
+body.v6 .v6-task.is-done .v6-task-dot{background:var(--v6-sage);border-color:var(--v6-sage);color:#fff;cursor:default}
+body.v6 .v6-task.is-progress .v6-task-dot{border-color:var(--v6-gold);box-shadow:inset 0 0 0 4px #fff;background:var(--v6-gold)}
+body.v6 .v6-task-copy{min-width:0}
+body.v6 .v6-task-meta{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+body.v6 .v6-task-type{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--v6-gold-deep)}
+body.v6 .v6-task-flag{font-size:10.5px;color:var(--v6-muted)}
+body.v6 .v6-task-title{font-size:14px;font-weight:600;color:var(--v6-navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}
+body.v6 .v6-task.is-done .v6-task-title{color:var(--v6-muted);text-decoration:line-through;text-decoration-color:rgba(102,112,133,.4)}
+body.v6 .v6-task.is-next{background:var(--v6-gold-wash);border-radius:10px;border-top-color:transparent}
+body.v6 .v6-task.is-next + .v6-task{border-top-color:transparent}
+body.v6 .v6-task-open{all:unset;box-sizing:border-box;height:30px;padding:0 12px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--v6-gold-deep);cursor:pointer;white-space:nowrap}
+body.v6 .v6-task-open:hover{background:var(--v6-gold-wash)}
+
+/* Right column */
+body.v6 .v6-ready{padding:16px 18px;display:grid;grid-template-columns:96px minmax(0,1fr);gap:16px;align-items:center;flex:0 0 auto}
+body.v6 .v6-ring{position:relative;width:96px;height:96px}
+body.v6 .v6-ring svg{width:96px;height:96px;transform:rotate(-90deg)}
+body.v6 .v6-ring-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+body.v6 .v6-ring-num b{font-family:var(--v6-serif);font-size:32px;font-weight:700;color:var(--v6-navy);line-height:.9}
+body.v6 .v6-ring-num span{font-size:10px;color:var(--v6-muted);letter-spacing:.06em}
+body.v6 .v6-ready h4{font-family:var(--v6-serif);font-size:19px;font-weight:600;color:var(--v6-navy);margin:3px 0 4px;line-height:1.1}
+body.v6 .v6-ready p{margin:0;font-size:12.5px;color:var(--v6-muted);line-height:1.45}
+body.v6 .v6-ready p b{color:var(--v6-navy);font-weight:600}
+body.v6 .v6-date-form{display:flex;gap:6px;margin-top:8px}
+body.v6 .v6-date-form input{height:32px!important;padding:0 8px!important;font-size:12.5px!important;min-width:0;flex:1;border:1px solid var(--v6-line)!important}
+body.v6 .v6-date-form button{all:unset;box-sizing:border-box;height:32px;padding:0 12px;border-radius:8px;background:var(--v6-navy);color:#fff;font-size:12px;font-weight:600;cursor:pointer}
+body.v6 .v6-watch{padding:15px 18px;flex:1 1 auto;min-height:0;display:flex;flex-direction:column;border-left:3px solid var(--v6-rose)!important}
+body.v6 .v6-watch .v6-kicker{color:var(--v6-rose)}
+body.v6 .v6-watch.is-good{border-left-color:var(--v6-sage)!important}
+body.v6 .v6-watch.is-good .v6-kicker{color:var(--v6-sage)}
+body.v6 .v6-watch h4{font-size:15px;font-weight:600;color:var(--v6-navy);margin:6px 0 4px}
+body.v6 .v6-watch p{font-size:12.5px;line-height:1.5;color:var(--v6-muted);margin:0 0 10px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+body.v6 .v6-watch .v6-link{margin-top:auto}
+body.v6 .v6-link{all:unset;cursor:pointer;font-size:12.5px;font-weight:600;color:var(--v6-gold-deep)}
+body.v6 .v6-link:hover{text-decoration:underline}
+body.v6 .v6-stats{display:grid;grid-template-columns:repeat(3,1fr);flex:0 0 auto;overflow:hidden}
+body.v6 .v6-stat{all:unset;box-sizing:border-box;padding:12px 14px;cursor:pointer;border-left:1px solid var(--v6-line-2)}
+body.v6 .v6-stat:first-child{border-left:0}
+body.v6 .v6-stat:hover{background:var(--v6-gold-wash)}
+body.v6 .v6-stat b{display:block;font-family:var(--v6-serif);font-size:24px;font-weight:700;color:var(--v6-navy);line-height:1}
+body.v6 .v6-stat span{display:block;font-size:11px;color:var(--v6-muted);margin-top:4px}
+body.v6 .v6-done-hero h2::before{content:"✓";display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--v6-sage);color:#fff;font-family:var(--v6-sans);font-size:15px;margin-right:10px;vertical-align:4px}
+
+/* ---------- Short screens (e.g. 1280×590 with display scaling) ---------- */
+@media (max-height:700px){
+  body.v6 .sidebar{padding:12px 10px 10px!important}
+  body.v6 .sidebar .brand{padding:0 6px 10px!important}
+  body.v6 .sidebar .brand img{width:30px!important;height:30px!important}
+  body.v6 .sidebar .brand strong{font-size:19px!important}
+  body.v6 #nav button{height:29px!important;font-size:13px!important}
+  body.v6 #nav .nav-group-label{padding:8px 10px 3px;font-size:9px}
+  body.v6 .topbar{height:52px!important;min-height:52px!important;flex-basis:52px}
+  body.v6 #pageTitle{font-size:24px!important}
+  body.v6 #app main > .view.active{padding:14px 20px 16px!important}
+  body.v6 #dashboard .pmp-home-shell{gap:12px}
+  body.v6 .v6-next{padding:16px 20px}
+  body.v6 .v6-next h2{font-size:24px}
+  body.v6 .v6-next p{margin-bottom:12px;-webkit-line-clamp:1}
+  body.v6 .v6-next-why{display:none}
+  body.v6 .v6-plan{padding:10px 14px 4px}
+  body.v6 .v6-plan-head{padding-bottom:6px}
+  body.v6 .v6-btn-gold,body.v6 .v6-btn-quiet{height:38px}
+  body.v6 .v6-col{gap:12px}
+  body.v6 .v6-task{padding:6px 6px}
+  body.v6 .v6-task-title{font-size:13.5px}
+  body.v6 .v6-ready{padding:12px 16px;grid-template-columns:84px minmax(0,1fr)}
+  body.v6 .v6-ring,body.v6 .v6-ring svg{width:84px;height:84px}
+  body.v6 .v6-ring-num b{font-size:28px}
+  body.v6 .v6-watch{padding:12px 16px}
+  body.v6 .v6-stat{padding:10px 12px}
+  body.v6 .v6-stat b{font-size:21px}
+}
+@media (max-width:1180px){
+  body.v6 .topbar .journey-stage{padding:0 10px}
+  body.v6 .v6-exam-chip span{display:none}
+}
+@media (max-width:1060px){
+  body.v6 .topbar .journey-stage:not(.current) .journey-stage-copy{display:none!important}
+  body.v6 .topbar .journey-stage:not(.current){padding:0 7px}
+}
+/* Phones and small tablets: sidebar becomes a top strip; page scrolls normally */
+@media (max-width:860px){
+  body.v6:not(.landing-active){overflow:auto}
+  body.v6 #app{display:block!important;height:auto!important;overflow:visible}
+  body.v6 #app main{height:auto!important;overflow:visible!important}
+  body.v6 .sidebar{height:auto!important;padding:10px 12px!important;position:sticky!important;top:0;z-index:30}
+  body.v6 .sidebar .brand{display:none!important}
+  body.v6 #nav{flex-direction:row!important;overflow-x:auto;gap:4px!important}
+  body.v6 #nav .nav-group-label,body.v6 #nav .nav-spacer{display:none}
+  body.v6 #nav button{width:auto!important;flex:0 0 auto}
+  body.v6 #nav button.active::before{display:none}
+  body.v6 .topbar{flex-wrap:wrap;height:auto!important;padding:10px 16px!important;gap:10px!important}
+  body.v6 .topbar .learner-journey{order:3;width:100%;margin:0!important;overflow-x:auto}
+  body.v6 #app main > .view.active{overflow:visible;padding:14px 16px 24px!important}
+  body.v6 .v6-home{grid-template-columns:1fr;height:auto}
+}
+body.v6 #featureLaunchpad .pmp-focus-tab::before,body.v6 #featureLaunchpad .pmp-focus-tab::after{display:none!important;content:none!important}
+body.v6 .v6-watch-sub{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:10px;border-top:1px solid var(--v6-line-2)}
+body.v6 .v6-watch-sub span{font-size:12px;color:var(--v6-muted)}
+body.v6 .v6-watch-sub b{color:var(--v6-navy);font-weight:600}
+body.v6 .v6-watch .v6-watch-actions{display:flex;gap:16px;margin-top:10px}
+/* Tall screens: natural heights + "coming up" preview; never stretch cards into empty boxes */
+body.v6 #app{grid-template-columns:236px minmax(0,1fr)!important}
+body.v6 .v6-home{height:auto;align-items:start;max-width:1280px}
+body.v6 .v6-plan{flex:0 0 auto}
+body.v6 .v6-watch{flex:0 0 auto}
+body.v6 .v6-upnext{padding:12px 16px 6px}
+body.v6 .v6-upnext .v6-plan-head h3{font-size:17px}
+body.v6 .v6-upnext .v6-task-dot{border-style:dashed;cursor:default}
+body.v6 .v6-upnext .v6-task-title{font-weight:500;color:var(--v6-text)}
+@media (max-height:880px){body.v6 .v6-upnext{display:none}}
+@media (max-height:700px){body.v6 .v6-home{height:100%;align-items:stretch}body.v6 .v6-plan{flex:1 1 auto}body.v6 .v6-watch{flex:1 1 auto}}
+/* ---------- My Progress ---------- */
+body.v6 #progress .progress-tabbar{display:inline-flex!important;gap:4px!important;padding:3px!important;margin:0 0 14px!important;background:var(--v6-card)!important;border:1px solid var(--v6-line)!important;border-radius:12px!important;box-shadow:none!important}
+body.v6 #progress .progress-tab{all:unset;box-sizing:border-box;height:32px;padding:0 16px;border-radius:9px;font-size:13px;font-weight:500;color:var(--v6-muted);cursor:pointer}
+body.v6 #progress .progress-tab.active{background:var(--v6-navy);color:#fff;font-weight:600}
+body.v6 #progress .progress-tab::after{display:none!important}
+body.v6 #progress .progress-tabpanel.active{background:var(--v6-card);border:1px solid var(--v6-line);border-radius:var(--v6-radius);box-shadow:var(--v6-shadow);padding:18px 20px!important}
+body.v6 #progress .progress-summary-line{margin:0 0 12px!important;padding:0!important;border:0!important;display:flex;align-items:baseline;justify-content:space-between}
+body.v6 #progress .progress-summary-line strong{font-family:var(--v6-serif);font-size:20px;font-weight:600;color:var(--v6-navy)}
+body.v6 #progress .progress-summary-line b{font-family:var(--v6-serif);font-size:30px;color:var(--v6-gold-deep)}
+body.v6 #progress .progress-kpi-row{border-radius:12px;border:1px solid var(--v6-line-2)!important;overflow:hidden}
+body.v6 #progress .progress-kpi-row b{font-family:var(--v6-serif)!important;font-size:26px!important;color:var(--v6-navy)!important}
+body.v6 #progress .progress-next-panel{margin-top:14px!important;padding:14px 0 0!important;border-top:1px solid var(--v6-line-2)!important;display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:20px}
+body.v6 #progress .progress-next-panel .mini-panel-head{grid-column:1;margin:0!important}
+body.v6 #progress .progress-next-panel #progressTodayGuide{grid-column:1;margin:4px 0 0!important;font-size:13px!important}
+body.v6 #progress .progress-next-panel #progressTodayBadge{display:none!important}
+body.v6 #progress #progressTodayList{display:none!important}
+body.v6 #progress .v6-progress-today{grid-column:2;grid-row:1 / span 2;height:40px;padding:0 20px!important}
+
+/* ---------- One-at-a-time study viewers (Notes, Tricky Words, Diagrams) ---------- */
+body.v6 #app main > #notes.view.active,body.v6 #app main > #tricky.view.active,body.v6 #app main > #diagrams.view.active{display:flex!important;flex-direction:column;gap:10px;overflow:hidden!important}
+body.v6 .notes-toolbar,body.v6 .tricky-toolbar,body.v6 .diagram-toolbar{flex:0 0 auto;margin:0!important;display:flex!important;align-items:center;justify-content:space-between;gap:12px}
+body.v6 .segmented{display:inline-flex!important;gap:3px!important;padding:3px!important;background:var(--v6-card)!important;border:1px solid var(--v6-line)!important;border-radius:11px!important;box-shadow:none!important}
+body.v6 .segmented button{all:unset;box-sizing:border-box;height:30px;padding:0 13px;border-radius:8px;font-family:var(--v6-sans);font-size:12.5px;font-weight:500;color:var(--v6-muted);cursor:pointer;white-space:nowrap}
+body.v6 .segmented button.active{background:var(--v6-navy);color:#fff;font-weight:600}
+body.v6 .segmented button:not(.active):hover{background:var(--v6-line-2);color:var(--v6-navy)}
+body.v6 .notes-toolbar-right{display:flex;gap:8px}
+body.v6 .notes-toolbar select,body.v6 .notes-toolbar input,body.v6 .tricky-toolbar input,body.v6 .diagram-toolbar select{height:36px!important;padding:0 12px!important;background:var(--v6-card)!important;margin:0!important}
+body.v6 #notesProgressLine{flex:0 0 auto;margin:-2px 0 0!important;padding:0!important;font-size:12px!important}
+body.v6 #notesGrid,body.v6 #trickyGrid,body.v6 #diagramGrid{flex:1 1 auto;min-height:0;overflow:auto;margin:0!important;padding:0!important}
+body.v6 #notesGrid.notes-study-view,body.v6 #trickyGrid.notes-study-view,body.v6 #diagramGrid.diagram-single{display:flex!important;flex-direction:column;overflow:hidden}
+body.v6 .note-viewer,body.v6 .diagram-viewer{display:flex!important;flex-direction:column;flex:1 1 auto;min-height:0;height:100%;margin:0!important;background:var(--v6-card)!important;border:1px solid var(--v6-line)!important;border-radius:var(--v6-radius)!important;box-shadow:var(--v6-shadow)!important;overflow:hidden}
+body.v6 .note-view-head,body.v6 .diagram-view-head{flex:0 0 auto;padding:12px 18px!important;margin:0!important;border-bottom:1px solid var(--v6-line-2)!important;display:flex!important;align-items:center!important;justify-content:space-between;gap:12px}
+body.v6 .note-view-head h3,body.v6 .diagram-view-head h3{font-family:var(--v6-serif)!important;font-size:24px!important;font-weight:600!important;color:var(--v6-navy)!important;margin:3px 0 0!important;line-height:1.1!important}
+body.v6 .note-study-body,body.v6 .tricky-compare-shell{flex:1 1 auto;min-height:0;overflow-y:auto!important;padding:14px 18px!important;margin:0!important}
+body.v6 .note-nav,body.v6 .diagram-nav{flex:0 0 auto;display:flex!important;justify-content:flex-end;gap:8px;padding:10px 18px!important;margin:0!important;border-top:1px solid var(--v6-line-2)!important;background:#FDFBF7}
+body.v6 .note-nav button,body.v6 .diagram-nav button{height:34px!important;min-height:0!important;padding:0 16px!important;font-size:13px!important}
+body.v6 .viewer-icon-btn{width:32px!important;height:32px!important;border-radius:9px!important}
+body.v6 .viewer-head-actions{display:flex!important;align-items:center;gap:6px}
+body.v6 .fingertip-summary{font-size:14px!important;line-height:1.6!important;color:var(--v6-text)!important;margin:0 0 12px!important}
+body.v6 .fingertip-section li{font-size:13.5px!important;line-height:1.55!important}
+body.v6 .fingertip-rule{margin-top:12px!important}
+body.v6 .tricky-compare-two{gap:12px!important}
+body.v6 .tricky-side-card{padding:12px 14px!important}
+body.v6 .tricky-decision-strip{margin-top:10px!important;gap:12px!important}
+body.v6 .diagram-stage{flex:1 1 auto!important;min-height:0!important;height:auto!important;display:flex!important;align-items:center;justify-content:center;padding:10px!important;margin:0!important;overflow:hidden;background:#FBFAF6!important}
+body.v6 .diagram-stage img{max-height:100%!important;max-width:100%!important;height:auto!important;width:auto!important;object-fit:contain}
+body.v6 .diagram-study-meta{flex:0 0 auto;order:2;display:flex!important;gap:18px;padding:8px 18px!important;margin:0!important;border-top:1px solid var(--v6-line-2);font-size:12.5px!important}
+body.v6 .diagram-study-meta p{margin:0!important;font-size:12.5px!important;line-height:1.45!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+body.v6 .diagram-nav{order:3}
+@media (max-height:700px){
+  body.v6 .note-view-head,body.v6 .diagram-view-head{padding:9px 16px!important}
+  body.v6 .note-view-head h3,body.v6 .diagram-view-head h3{font-size:21px!important}
+  body.v6 .note-nav,body.v6 .diagram-nav{padding:7px 16px!important}
+  body.v6 .note-nav button,body.v6 .diagram-nav button{height:32px!important}
+  body.v6 .diagram-study-meta{display:none!important}
+}
+/* Content watermark: keep it visible but out of the way of buttons */
+body.v6 #contentWatermark{position:fixed!important;left:248px!important;right:auto!important;bottom:6px!important;top:auto!important;transform:none!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;font-size:10px!important;color:rgba(20,33,61,.32)!important;pointer-events:none!important;z-index:5!important}
+@media (max-width:860px){body.v6 #contentWatermark{left:12px!important}}
+
+/* ---------- Concepts to Review: compact queue ---------- */
+body.v6 #app main > #review.view.active{display:flex!important;flex-direction:column;gap:10px;overflow:hidden!important}
+body.v6 #review .review-filter-row{flex:0 0 auto;align-self:flex-start;margin:0!important}
+body.v6 #conceptReviewSummary{flex:0 0 auto;margin:0!important;font-size:12.5px!important;display:flex;align-items:center;gap:8px}
+body.v6 #conceptReviewSummary b{font-family:var(--v6-serif);font-size:20px!important;color:var(--v6-navy)}
+body.v6 #reviewList{flex:1 1 auto;min-height:0;overflow:auto;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:0 16px!important;align-content:start;background:var(--v6-card);border:1px solid var(--v6-line);border-radius:var(--v6-radius);box-shadow:var(--v6-shadow);padding:6px 16px!important;margin:0!important}
+body.v6 #reviewList .concept-review-card{display:flex!important;align-items:center;justify-content:space-between;gap:12px;padding:9px 2px!important;margin:0!important;border:0!important;border-bottom:1px solid var(--v6-line-2)!important;border-radius:0!important;box-shadow:none!important;background:none!important;min-height:0!important}
+body.v6 #reviewList .concept-review-card > div:first-child{min-width:0;display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:baseline}
+body.v6 #reviewList .concept-review-card .eyebrow{grid-column:1 / -1;font-size:9.5px!important;margin:0!important}
+body.v6 #reviewList .concept-review-card h3{grid-column:1 / -1;font-family:var(--v6-sans)!important;font-size:13.5px!important;font-weight:600!important;color:var(--v6-navy)!important;margin:2px 0 0!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.v6 #reviewList .concept-review-card p{grid-column:1;margin:1px 0 0!important;font-size:11.5px!important;color:var(--v6-rose)!important}
+body.v6 #reviewList .concept-review-card small{grid-column:2;margin:0!important;font-size:11px!important;color:var(--v6-muted)!important}
+body.v6 #reviewList .concept-review-card small::before{content:"· "}
+body.v6 #reviewList .concept-review-actions{display:flex!important;align-items:center;gap:4px;flex:0 0 auto;margin:0!important}
+body.v6 #reviewList .concept-review-actions .secondary{height:30px!important;min-height:0!important;padding:0 12px!important;font-size:12px!important;background:var(--v6-navy)!important;color:#fff!important;border-color:var(--v6-navy)!important}
+body.v6 #reviewList .concept-review-actions .text-btn{font-size:12px!important;padding:0 6px!important;color:var(--v6-muted)!important;font-weight:500!important}
+@media (max-width:1100px){body.v6 #reviewList{grid-template-columns:1fr!important}}
+body.v6 #app{font-variant-numeric:lining-nums;font-feature-settings:"lnum" 1}
+body.v6 #app *{font-variant-numeric:lining-nums}
+
+/* ==========================================================================
+   FLAT PASS — no banners, no stacked boxes. Hairlines + whitespace only.
+   ========================================================================== */
+body.v6 .v6-card{background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+body.v6 .v6-home{grid-template-columns:minmax(0,1.7fr) minmax(260px,1fr);gap:0;max-width:1180px}
+body.v6 .v6-home > .v6-col:first-child{padding-right:32px}
+body.v6 .v6-home > .v6-col:last-child{padding-left:32px;border-left:1px solid var(--v6-line)}
+body.v6 .v6-col{gap:0}
+
+/* Up next: plain text, one small button */
+body.v6 .v6-next{background:none!important;color:var(--v6-text)!important;box-shadow:none!important;border-radius:0!important;padding:4px 0 18px!important;border-bottom:1px solid var(--v6-line)}
+body.v6 .v6-next::after{display:none}
+body.v6 .v6-next .v6-kicker{color:var(--v6-gold-deep)!important}
+body.v6 .v6-next-type{background:none!important;padding:0!important;height:auto!important;color:var(--v6-muted)!important;font-size:12px!important}
+body.v6 .v6-next-type svg{color:var(--v6-gold)!important}
+body.v6 .v6-next h2{color:var(--v6-navy)!important;font-size:28px!important;margin:2px 0 4px!important}
+body.v6 .v6-next p{color:var(--v6-muted)!important;margin-bottom:14px!important}
+body.v6 .v6-next-why{color:var(--v6-gold-deep)!important}
+body.v6 .v6-btn-gold{height:38px!important;padding:0 18px!important;border-radius:9px!important;background:var(--v6-navy)!important;color:#fff!important;box-shadow:none!important;font-size:13.5px!important}
+body.v6 .v6-btn-gold:hover{background:#0B1528!important;transform:none!important}
+body.v6 .v6-btn-quiet{height:38px!important;border:0!important;color:var(--v6-muted)!important;padding:0 10px!important}
+body.v6 .v6-btn-quiet:hover{background:none!important;color:var(--v6-navy)!important;text-decoration:underline}
+body.v6 .v6-done-hero h2::before{width:24px;height:24px;font-size:13px}
+
+/* Today's plan list */
+body.v6 .v6-plan{padding:16px 0 0!important}
+body.v6 .v6-plan-head{padding:0 0 6px!important}
+body.v6 .v6-plan-head h3{font-size:19px!important}
+body.v6 .v6-plan-bar{height:3px!important}
+body.v6 .v6-task{padding:9px 0!important;border-top:1px solid var(--v6-line-2)}
+body.v6 .v6-task.is-next{background:none!important;border-radius:0}
+body.v6 .v6-task.is-next .v6-task-title{color:var(--v6-gold-deep)}
+body.v6 .v6-task.is-next + .v6-task{border-top-color:var(--v6-line-2)!important}
+body.v6 .v6-task-open{padding:0 4px!important;height:28px!important;color:var(--v6-muted)!important;font-weight:500!important}
+body.v6 .v6-task-open:hover{background:none!important;color:var(--v6-gold-deep)!important}
+body.v6 .v6-task-dot{width:20px!important;height:20px!important}
+body.v6 .v6-task{grid-template-columns:24px minmax(0,1fr) auto!important}
+body.v6 .v6-upnext{padding-top:18px!important}
+
+/* Right column: readiness, watch-out, numbers — separated by hairlines */
+body.v6 .v6-ready{display:block!important;padding:4px 0 16px!important;border-bottom:1px solid var(--v6-line)}
+body.v6 .v6-score{display:flex;align-items:baseline;gap:4px;margin:4px 0 6px}
+body.v6 .v6-score b{font-family:var(--v6-serif);font-size:44px;font-weight:600;color:var(--v6-navy);line-height:.9}
+body.v6 .v6-score span{font-size:13px;color:var(--v6-muted)}
+body.v6 .v6-thinbar{height:3px;background:var(--v6-line-2);border-radius:3px;overflow:hidden;margin-bottom:10px}
+body.v6 .v6-thinbar i{display:block;height:100%;background:var(--v6-gold)}
+body.v6 .v6-ready > div:last-child{display:contents}
+body.v6 .v6-ready .v6-kicker{order:-1}
+body.v6 .v6-ready h4{font-family:var(--v6-sans)!important;font-size:13px!important;font-weight:600!important;margin:0 0 2px!important}
+body.v6 .v6-watch{border:0!important;border-bottom:1px solid var(--v6-line)!important;padding:16px 0!important}
+body.v6 .v6-watch h4{font-size:14.5px!important}
+body.v6 .v6-watch-sub{border-top:0!important;padding-top:6px!important;margin-top:4px!important}
+body.v6 .v6-watch .v6-watch-actions{margin-top:0!important}
+body.v6 .v6-stats{padding:14px 0 0!important}
+body.v6 .v6-stat{border:0!important;padding:0!important}
+body.v6 .v6-stat:hover{background:none!important}
+body.v6 .v6-stat:hover b{color:var(--v6-gold-deep)}
+body.v6 .v6-stat b{font-size:24px!important}
+
+/* Tabs everywhere become quiet underline tabs, not boxed pills */
+body.v6 #featureLaunchpad,body.v6 .segmented,body.v6 #progress .progress-tabbar{background:none!important;border:0!important;border-bottom:1px solid var(--v6-line)!important;border-radius:0!important;padding:0!important;gap:22px!important;align-self:stretch!important;display:flex!important}
+body.v6 #featureLaunchpad .pmp-focus-tab,body.v6 .segmented button,body.v6 #progress .progress-tab{height:34px!important;padding:0!important;border-radius:0!important;background:none!important;color:var(--v6-muted)!important;font-weight:500!important;border-bottom:2px solid transparent!important;margin-bottom:-1px!important}
+body.v6 #featureLaunchpad .pmp-focus-tab.active,body.v6 .segmented button.active,body.v6 #progress .progress-tab.active{background:none!important;color:var(--v6-navy)!important;font-weight:600!important;border-bottom-color:var(--v6-gold)!important}
+body.v6 #featureLaunchpad .pmp-focus-tab:not(.active):hover,body.v6 .segmented button:not(.active):hover{background:none!important;color:var(--v6-navy)!important}
+body.v6 #featureLaunchpad .feature-launch-icon{display:none!important}
+body.v6 .notes-toolbar,body.v6 .tricky-toolbar,body.v6 .diagram-toolbar{border-bottom:1px solid var(--v6-line)}
+body.v6 .notes-toolbar .segmented,body.v6 .tricky-toolbar .segmented,body.v6 .diagram-toolbar .segmented{border-bottom:0!important}
+
+/* Top bar: stepper and countdown as quiet text */
+body.v6 .topbar .journey-stage-row{background:none!important;border:0!important;padding:0!important}
+body.v6 .topbar .journey-stage{padding:0 10px!important}
+body.v6 .topbar .journey-stage.current{background:none!important;color:var(--v6-navy)!important}
+body.v6 .topbar .journey-stage.current::before{background:var(--v6-gold)!important}
+body.v6 .topbar .journey-stage:not(.current):hover{background:none!important}
+body.v6 .v6-exam-chip{border:0!important;background:none!important;padding:0 6px!important}
+body.v6 .v6-exam-chip.is-unset{background:none!important;text-decoration:underline;text-underline-offset:3px}
+
+/* Panels and viewers: one light surface, no shadows */
+body.v6 .panel,body.v6 .card,body.v6 .note-viewer,body.v6 .diagram-viewer,body.v6 #reviewList,body.v6 #progress .progress-tabpanel.active,body.v6 #dashboardWorkspace:not(.v6-today-host){box-shadow:none!important}
+body.v6 #progress .progress-tabpanel.active,body.v6 #dashboardWorkspace:not(.v6-today-host){background:none!important;border:0!important;padding:14px 0 0!important}
+body.v6 #reviewList{background:none!important;border:0!important;padding:0!important}
+body.v6 .note-nav,body.v6 .diagram-nav{background:none!important}
+
+@media (max-height:700px){
+  body.v6 .v6-next{padding-bottom:14px!important}
+  body.v6 .v6-next h2{font-size:25px!important}
+  body.v6 .v6-plan{padding-top:12px!important}
+  body.v6 .v6-task{padding:7px 0!important}
+  body.v6 .v6-score b{font-size:38px}
+  body.v6 .v6-watch{padding:12px 0!important}
+}
+@media (max-width:860px){body.v6 .v6-home > .v6-col:first-child{padding-right:0}body.v6 .v6-home > .v6-col:last-child{padding-left:0;border-left:0;border-top:1px solid var(--v6-line);padding-top:16px;margin-top:16px}}
+body.v6 .v6-ready{display:flex!important;flex-direction:column}
+body.v6 .v6-ready .v6-score{order:1}body.v6 .v6-ready .v6-thinbar{order:2}
+body.v6 .v6-ready h4{order:3}body.v6 .v6-ready p,body.v6 .v6-ready form{order:4}
+body.v6 .v6-ready .v6-kicker{order:0}
+body.v6 #featureLaunchpad .pmp-focus-tab,body.v6 .segmented button,body.v6 #progress .progress-tab{border-left:0!important;border-right:0!important;border-top:0!important;box-shadow:none!important}
+body.v6 #featureLaunchpad .pmp-focus-tab + .pmp-focus-tab{border-left:0!important}
+@media (max-height:700px){body.v6 .v6-home{height:auto!important;align-items:start!important}body.v6 .v6-watch,body.v6 .v6-plan{flex:0 0 auto!important}}
+body.v6 .v6-ready{align-items:stretch!important;justify-content:flex-start!important;text-align:left!important;gap:0!important}
+body.v6 .v6-ready p{margin:0 0 2px!important}
+body.v6 .v6-ready .v6-score{margin:6px 0 8px!important}
+
+/* ---------- Practice ---------- */
+body.v6 #practice .practice-head h2,body.v6 #practice .practice-head .eyebrow{display:none!important}
+body.v6 #practice .practice-head{margin:0 0 10px!important;padding:0!important;display:flex;justify-content:space-between;align-items:center}
+body.v6 #practice .practice-head p{margin:0!important;font-size:13px!important;color:var(--v6-muted)!important}
+body.v6 #practice .practice-progress-strip{background:none!important;border:0!important;border-top:1px solid var(--v6-line)!important;border-bottom:1px solid var(--v6-line)!important;border-radius:0!important;box-shadow:none!important;padding:12px 0!important;margin:0 0 14px!important}
+body.v6 #practice .practice-builder-panel{background:none!important;border:0!important;box-shadow:none!important;padding:0!important}
+body.v6 #practice.v6-in-session .practice-head,body.v6 #practice.v6-in-session .practice-progress-strip,body.v6 #practice.v6-in-session .builder-grid{display:none!important}
+body.v6 #sessionArea{margin:0!important;max-width:980px}
+body.v6 #sessionArea .session-top{display:flex!important;align-items:center;gap:16px;margin:0 0 12px!important;padding:0 0 10px!important;border-bottom:1px solid var(--v6-line)}
+body.v6 #sessionArea .session-top .eyebrow{display:none!important}
+body.v6 #sessionArea #sessionProgress{font-family:var(--v6-sans)!important;font-size:13px!important;font-weight:600!important;color:var(--v6-muted)!important;margin:0!important}
+body.v6 #sessionArea #practiceTimer{margin-left:auto}
+body.v6 .v6-session-exit{all:unset;cursor:pointer;font-size:13px;font-weight:500;color:var(--v6-muted);margin-right:auto;order:0}
+body.v6 .v6-session-exit:hover{color:var(--v6-navy)}
+body.v6 #sessionArea .session-top > div{order:1}
+body.v6 #questionCard,body.v6 #examQuestionCard{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;max-width:980px}
+body.v6 #questionCard .question-meta,body.v6 #examQuestionCard .question-meta{margin-bottom:10px!important}
+body.v6 #questionCard .pill,body.v6 #examQuestionCard .pill{background:none!important;border:0!important;padding:0 10px 0 0!important;font-size:10px!important;letter-spacing:.12em!important;color:var(--v6-gold-deep)!important}
+body.v6 #questionCard .stem,body.v6 #questionCard h2,body.v6 #questionCard h3,body.v6 #examQuestionCard .stem,body.v6 #examQuestionCard h2,body.v6 #examQuestionCard h3{font-family:var(--v6-sans)!important;font-size:16.5px!important;font-weight:500!important;line-height:1.6!important;color:var(--v6-navy)!important;margin:0 0 14px!important}
+body.v6 #questionCard .option,body.v6 #examQuestionCard .option{border-radius:10px!important;border:1px solid var(--v6-line)!important;background:var(--v6-card)!important;box-shadow:none!important;padding:11px 14px!important;margin:0 0 8px!important;font-size:14px!important}
+body.v6 #questionCard .option:hover,body.v6 #examQuestionCard .option:hover{border-color:var(--v6-gold-soft)!important}
+body.v6 #questionCard .option.selected,body.v6 #examQuestionCard .option.selected{border-color:var(--v6-navy)!important;background:#F4F6FA!important}
+body.v6 #questionCard .question-stem,body.v6 #examQuestionCard .question-stem,body.v6 .question-stem{font-family:var(--v6-sans)!important;font-size:16.5px!important;font-weight:500!important;line-height:1.6!important;color:var(--v6-navy)!important;margin:0 0 14px!important;letter-spacing:0!important}
+/* Keep answer feedback colors visible */
+body.v6 #questionCard .option.correct,body.v6 #examQuestionCard .option.correct,body.v6 .option.correct{border-color:var(--v6-sage)!important;background:var(--v6-sage-wash)!important;color:#1F5A48!important}
+body.v6 #questionCard .option.wrong,body.v6 #examQuestionCard .option.wrong,body.v6 .option.wrong{border-color:var(--v6-rose)!important;background:var(--v6-rose-wash)!important;color:#7E2F39!important}
+body.v6 #feedback{margin-top:4px}
+body.v6 #feedback > *{border-radius:10px!important;box-shadow:none!important}
+body.v6 #feedback .feedback,body.v6 #feedback .feedback *{font-size:14px!important;line-height:1.6!important}
+body.v6 #feedback .feedback{padding:12px 16px!important;background:#FBF8F1!important;border:0!important;border-left:3px solid var(--v6-gold)!important;border-radius:0 10px 10px 0!important}
+body.v6 #feedback .feedback b:first-child,body.v6 #feedback .feedback strong:first-child{font-size:12px!important;letter-spacing:.08em;text-transform:uppercase;color:var(--v6-gold-deep)!important}
+body.v6 #questionCard .question-actions,body.v6 #examQuestionCard .question-actions{position:sticky;bottom:-22px;z-index:3;display:flex!important;justify-content:space-between;align-items:center;margin:10px 0 0!important;padding:10px 0 12px!important;background:linear-gradient(180deg,rgba(246,243,236,0),var(--v6-bg) 30%)!important}
+body.v6 #questionCard .question-actions button,body.v6 #examQuestionCard .question-actions button{height:38px!important;min-height:0!important;padding:0 18px!important;font-size:13.5px!important}
+@media (max-height:700px){body.v6 #questionCard .question-actions,body.v6 #examQuestionCard .question-actions{bottom:-16px}}
+/* Readiness lives on My Progress only — no stage bar or countdown in the top bar */
+body.v6 .topbar .learner-journey,body.v6 #learnerJourney{display:none!important}
+body.v6 .v6-exam-chip{display:none!important}
+body.v6 .v6-nudge{padding:16px 0;border-bottom:1px solid var(--v6-line)}
+body.v6 .v6-nudge p{font-size:13px;color:var(--v6-muted);margin:6px 0 0;line-height:1.5}
+/* Done is the primary action in every study viewer */
+body.v6 #noteReviewed,body.v6 #trickyReviewed,body.v6 #diagramReviewed{background:var(--v6-navy)!important;color:#fff!important;border-color:var(--v6-navy)!important;min-width:96px}
+body.v6 #noteReviewed.is-complete,body.v6 #trickyReviewed.is-complete,body.v6 #diagramReviewed.is-complete{background:var(--v6-sage)!important;border-color:var(--v6-sage)!important}
+body.v6 .note-nav .review-toggle,body.v6 .diagram-nav .review-toggle{background:none!important;border-color:transparent!important;color:var(--v6-muted)!important}
+body.v6 .note-nav .review-toggle.is-marked,body.v6 .diagram-nav .review-toggle.is-marked{color:var(--v6-gold-deep)!important}
+
+/* ---------- Flat pass: remaining screens ---------- */
+/* Tricky Words: two columns split by a hairline, no nested boxes */
+body.v6 .tricky-side-card{background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:4px 18px 4px 0!important}
+body.v6 .tricky-compare-two{gap:0!important}
+body.v6 .tricky-compare-two > .tricky-side-card + .tricky-side-card{border-left:1px solid var(--v6-line)!important;padding-left:18px!important}
+body.v6 .tricky-decision-card{background:none!important;border:0!important;border-top:1px solid var(--v6-line)!important;border-radius:0!important;box-shadow:none!important;padding:10px 0 0!important}
+body.v6 .tricky-decision-card.tricky-trap{border-left:0!important}
+body.v6 .fingertip-section{background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important}
+body.v6 .fingertip-columns{gap:0!important}
+body.v6 .fingertip-columns > .fingertip-section + .fingertip-section{border-left:1px solid var(--v6-line)!important;padding-left:20px!important}
+body.v6 .fingertip-rule{background:var(--v6-gold-wash)!important;border:0!important;border-left:3px solid var(--v6-gold)!important;border-radius:0 10px 10px 0!important;box-shadow:none!important}
+
+/* Mock / mastery exams: a clean list, rules as a quiet footnote */
+body.v6 #examCatalog{display:flex!important;flex-direction:column;gap:0!important;border-top:1px solid var(--v6-line);max-width:980px}
+body.v6 #examCatalog .exam-card{display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto auto;column-gap:24px;align-items:center;background:none!important;border:0!important;border-bottom:1px solid var(--v6-line)!important;border-radius:0!important;box-shadow:none!important;padding:14px 0!important;margin:0!important;min-height:0!important;width:auto!important;max-width:none!important}
+body.v6 #examCatalog .exam-card > *{grid-column:1;margin:0!important}
+body.v6 #examCatalog .exam-card .pill{background:none!important;border:0!important;padding:0!important;font-size:10px!important;letter-spacing:.14em!important;color:var(--v6-gold-deep)!important}
+body.v6 #examCatalog .exam-card h3{font-family:var(--v6-serif)!important;font-size:22px!important;font-weight:600!important;color:var(--v6-navy)!important;margin:2px 0!important}
+body.v6 #examCatalog .exam-card p{font-size:13px!important;color:var(--v6-muted)!important;display:inline}
+body.v6 #examCatalog .exam-card button{grid-column:2;grid-row:1 / span 4;height:38px!important;min-height:0!important;padding:0 20px!important;margin:0!important}
+body.v6 .exam-rules-panel{background:none!important;border:0!important;box-shadow:none!important;padding:16px 0 0!important;margin:10px 0 0!important;max-width:980px}
+body.v6 .exam-rules-panel .exam-rules-grid{border:0!important;background:none!important;gap:28px!important;display:flex!important;flex-wrap:wrap}
+body.v6 .exam-rules-panel .exam-rules-grid > div{background:none!important;border:0!important;padding:0!important;text-align:left!important}
+body.v6 .exam-rules-panel .exam-rules-grid b{font-family:var(--v6-serif)!important;font-size:24px!important;color:var(--v6-navy)!important}
+body.v6 .exam-rules-panel p{font-size:12px!important;color:var(--v6-muted)!important;line-height:1.5!important;margin-top:8px!important}
+
+/* PMP Coach: conversation on the page, input pinned at the bottom */
+body.v6 #app main > #coach.view.active{display:flex!important;flex-direction:column;overflow:hidden!important}
+body.v6 #coach .coach-shell{display:flex!important;flex-direction:column;flex:1 1 auto;min-height:0;max-width:900px;width:100%;background:none!important;border:0!important;box-shadow:none!important;padding:0!important}
+body.v6 #coach .coach-source-pill{display:none!important}
+body.v6 #coach .coach-intro-row p{font-size:13px!important;color:var(--v6-muted)!important;margin:0!important}
+body.v6 #coach .coach-prompt-row{margin:10px 0!important;display:flex;flex-wrap:wrap;gap:8px}
+body.v6 #coach .coach-prompt-row button{all:unset;cursor:pointer;height:30px;padding:0 12px;border-radius:999px;border:1px solid var(--v6-line);font-size:12.5px;color:var(--v6-navy);background:var(--v6-card)}
+body.v6 #coach .coach-prompt-row button:hover{border-color:var(--v6-gold)}
+body.v6 #coach .coach-conversation-card{display:flex!important;flex-direction:column;flex:1 1 auto;min-height:0;background:none!important;border:0!important;box-shadow:none!important;padding:0!important;border-top:1px solid var(--v6-line)!important}
+body.v6 #coach #chat{flex:1 1 auto;min-height:0;overflow:auto;background:none!important;border:0!important;padding:12px 0!important;height:auto!important;max-height:none!important}
+body.v6 #coach .bubble{background:none!important;border:0!important;box-shadow:none!important;padding:0 0 12px!important;max-width:none!important}
+body.v6 #coach .bubble.user{text-align:right}
+body.v6 #coach .bubble b{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--v6-gold-deep)}
+body.v6 #coach form{flex:0 0 auto;display:flex!important;gap:8px;align-items:stretch;padding-top:10px!important;border-top:1px solid var(--v6-line)!important;background:none!important;box-shadow:none!important;margin:0!important}
+body.v6 #coach form textarea{flex:1;min-height:44px!important;height:44px!important;resize:none;padding:11px 14px!important;background:var(--v6-card)!important}
+body.v6 #coach form button{height:44px!important;min-height:0!important;padding:0 20px!important}
+
+/* Live classes: facts as plain figures, form as a single quiet column */
+body.v6 #live .live-facts div,body.v6 #live .live-card{background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important}
+body.v6 #live .live-facts{gap:28px!important;display:flex!important}
+body.v6 #live .live-facts div{padding:0!important}
+body.v6 #live .live-card{border-left:1px solid var(--v6-line)!important;padding:4px 0 4px 28px!important}
+
+/* Pricing: keep three columns (easy to compare) but lighter */
+body.v6 .simple-price-card{box-shadow:none!important;background:transparent!important}
+body.v6 .simple-price-card.featured{background:var(--v6-card)!important}
+/* Pricing: compact cards so the Choose buttons are visible */
+body.v6 #billing .billing-head{margin:0 0 8px!important}
+body.v6 #billing .billing-head p{font-size:13px!important;color:var(--v6-muted)!important}
+body.v6 #billing .billing-message:empty{display:none}
+body.v6 #billing .billing-message{margin:0 0 10px!important;font-size:12.5px!important}
+body.v6 #planGrid{gap:16px!important;align-items:start!important;max-width:1080px}
+body.v6 #planGrid .simple-price-card{padding:16px 20px!important;min-height:0!important;height:auto!important;border-radius:14px!important;border:1px solid var(--v6-line)!important}
+body.v6 #planGrid .simple-price-card.featured{border-color:var(--v6-navy)!important}
+body.v6 #planGrid .simple-price-top{padding:0 0 10px!important;margin:0 0 10px!important;min-height:0!important}
+body.v6 #planGrid .simple-price-top h3{font-size:24px!important;margin:2px 0 6px!important}
+body.v6 #planGrid .simple-price-badge strong{font-size:28px!important}
+body.v6 #planGrid .simple-feature-list{gap:0!important;margin:0 0 14px!important}
+body.v6 #planGrid .simple-feature-list li{min-height:0!important;height:auto!important;padding:5px 0!important;font-size:13.5px!important;align-items:center!important}
+body.v6 #planGrid .simple-plan-button{height:38px!important;min-height:0!important;margin:0!important}
+body.v6 #nav button{font-size:13px!important;gap:10px!important}
+body.v6 #nav .plan-lock{margin-left:auto;flex:0 0 auto;padding-left:4px}
+
+/* ---------- Phones (must stay last) ---------- */
+@media (max-width:860px){
+  body.v6 .v6-home{display:block!important;height:auto!important}
+  body.v6 .v6-home > .v6-col:first-child{padding-right:0!important}
+  body.v6 .v6-home > .v6-col:last-child{padding-left:0!important;border-left:0!important;border-top:1px solid var(--v6-line);margin-top:18px;padding-top:4px}
+  body.v6 .v6-next h2{font-size:24px!important}
+  body.v6 .v6-next-top{flex-wrap:wrap}
+  body.v6 .v6-next-actions{flex-wrap:wrap}
+  body.v6 #featureLaunchpad{gap:18px!important;overflow-x:auto}
+  body.v6 .fingertip-columns,body.v6 .tricky-compare-two{display:block!important}
+  body.v6 .fingertip-columns > .fingertip-section + .fingertip-section,body.v6 .tricky-compare-two > .tricky-side-card + .tricky-side-card{border-left:0!important;padding-left:0!important;border-top:1px solid var(--v6-line)!important;margin-top:12px;padding-top:12px!important}
+  body.v6 #app main > #notes.view.active,body.v6 #app main > #tricky.view.active,body.v6 #app main > #diagrams.view.active,body.v6 #app main > #review.view.active,body.v6 #app main > #coach.view.active{display:block!important;overflow:visible!important}
+  body.v6 .note-viewer,body.v6 .diagram-viewer{height:auto!important}
+  body.v6 .note-study-body,body.v6 .tricky-compare-shell{overflow:visible!important}
+  body.v6 .notes-toolbar,body.v6 .tricky-toolbar,body.v6 .diagram-toolbar{flex-wrap:wrap}
+  body.v6 #reviewList{grid-template-columns:1fr!important}
+  body.v6 #examCatalog .exam-card{grid-template-columns:1fr}
+  body.v6 #examCatalog .exam-card button{grid-column:1;grid-row:auto;justify-self:start;margin-top:8px!important}
+  body.v6 #live .live-card{border-left:0!important;padding-left:0!important;border-top:1px solid var(--v6-line)!important;padding-top:16px!important}
+  body.v6 #contentWatermark{left:12px!important}
+}
+/* ---------- Exams: focus mode ---------- */
+body.v6 .v6-exam-back{display:block;margin:0 0 12px}
+body.v6 .v6-exam-back[hidden]{display:none!important}
+body.v6 #exams:not(.v6-exam-focus) .v6-exam-back{display:none!important}
+body.v6 #exams.v6-exam-focus #examCatalog,body.v6 #exams.v6-exam-focus .exam-rules-panel,body.v6 #exams.v6-exam-focus .section-intro{display:none!important}
+body.v6 #examSetup,body.v6 #ruleReviewArea{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;max-width:1000px}
+body.v6 #examSetup h3{font-family:var(--v6-serif)!important;font-size:24px!important;color:var(--v6-navy)!important;margin:4px 0 14px!important}
+body.v6 #examSetup .mode-grid{display:flex!important;flex-direction:column;gap:0!important;border-top:1px solid var(--v6-line)}
+body.v6 #examSetup .mode-grid > *{all:unset;box-sizing:border-box;display:block;cursor:pointer;padding:14px 4px;border-bottom:1px solid var(--v6-line);font-size:15px;font-weight:600;color:var(--v6-navy)}
+body.v6 #examSetup .mode-grid > *:hover{background:var(--v6-gold-wash)}
+body.v6 #examSetup .mode-grid > * small,body.v6 #examSetup .mode-grid > * span{display:block;font-size:12.5px;font-weight:400;color:var(--v6-muted);margin-top:3px}
+body.v6 #examNavigator{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;gap:4px!important;max-height:none!important;height:auto!important;padding:4px 0 8px!important;margin:0 0 10px!important;background:none!important;border:0!important;box-shadow:none!important;scrollbar-width:thin;grid-template-columns:none!important}
+body.v6 #examNavigator .exam-nav-q{flex:0 0 34px!important;width:34px!important;height:30px!important;min-height:0!important;font-size:12px!important;padding:0!important;border-radius:7px!important}
+body.v6 #examSetup .mode-grid > *{border:0!important;border-bottom:1px solid var(--v6-line)!important;border-radius:0!important;background:none!important;box-shadow:none!important;padding:12px 4px!important}

@@ -675,8 +675,10 @@ FEATURE_MATRIX = {
         'practice','review','progress','bookmarks','mock1','mock2'
     },
     'concept': {
-        'practice','review','progress','bookmarks','notes','tricky',
-        'mastery3','mastery4','mastery5','rules','mastery_learning'
+        # Standard = everything in Starter + Topic Notes + Tricky Words.
+        # Concept Mastery exams are Premium-only (matches the plan cards).
+        'practice','review','progress','bookmarks','mock1','mock2',
+        'notes','tricky','rules'
     },
     'full': {
         'practice','review','progress','bookmarks','notes','tricky','diagrams',
