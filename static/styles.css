@@ -3129,3 +3129,43 @@ body .exam-report-card{border-radius:0!important;box-shadow:none!important;borde
   body .progress-kpi-row article:nth-child(-n+2){border-bottom:1px solid rgba(74,59,52,.08)!important}
   .viewer-head-actions{gap:4px}.viewer-icon-btn,.viewer-text-btn{height:28px;min-width:28px;padding:0 6px}
 }
+
+/* v5.14.26 — compact Topic Notes: fit one concept in the viewport */
+@media (min-width: 761px){
+  body #notes .notes-study-view{max-width:none!important;margin:0!important}
+  body #notes .note-viewer{border-radius:8px!important;box-shadow:none!important}
+  body #notes .note-view-head{padding:8px 14px 6px!important;gap:10px!important;align-items:center!important}
+  body #notes .note-view-head h3{font-size:18px!important;line-height:1.12!important;margin:1px 0 0!important}
+  body #notes .note-view-head .eyebrow{font-size:7.5px!important;line-height:1!important;letter-spacing:.12em!important}
+  body #notes .viewer-head-actions{gap:5px!important;align-items:center!important}
+  body #notes .viewer-icon-btn{width:28px!important;height:28px!important;min-width:28px!important;padding:0!important;font-size:18px!important}
+  body #notes .study-status-badge{font-size:8px!important;padding:4px 7px!important}
+
+  body #notes .note-study-body.fingertip-note{padding:8px 14px 6px!important;gap:7px!important}
+  body #notes .fingertip-summary{font-size:11.5px!important;line-height:1.35!important;margin:0!important;max-width:none!important}
+  body #notes .fingertip-columns{margin:0!important}
+  body #notes .fingertip-section{padding:8px 12px!important;min-height:0!important}
+  body #notes .fingertip-section .exam-section-kicker,
+  body #notes .fingertip-rule .exam-section-kicker{font-size:8px!important;line-height:1!important;letter-spacing:.13em!important;margin:0!important}
+  body #notes .fingertip-section ul{margin:5px 0 0!important;padding-left:16px!important;gap:3px!important}
+  body #notes .fingertip-section li{font-size:10.5px!important;line-height:1.28!important;margin:0!important}
+  body #notes .fingertip-rule{padding:7px 11px!important;gap:3px!important;border-left-width:3px!important;border-radius:0 7px 7px 0!important}
+  body #notes .fingertip-rule strong{font-size:12px!important;line-height:1.28!important}
+
+  body #notes .note-nav.note-status-actions{padding:6px 14px 8px!important;gap:6px!important;margin:0!important;justify-content:flex-end!important;border-top:1px solid var(--line)!important}
+  body #notes .note-status-actions button{padding:6px 10px!important;font-size:9px!important;min-height:28px!important}
+}
+
+/* Keep compactness on smaller screens without making text too tiny. */
+@media (max-width: 760px){
+  body #notes .note-view-head{padding:8px 10px 6px!important}
+  body #notes .note-view-head h3{font-size:17px!important}
+  body #notes .note-study-body.fingertip-note{padding:8px 10px!important;gap:7px!important}
+  body #notes .fingertip-summary{font-size:12px!important;line-height:1.4!important}
+  body #notes .fingertip-section{padding:8px 2px!important}
+  body #notes .fingertip-section ul{margin:5px 0 0!important;gap:3px!important;padding-left:18px!important}
+  body #notes .fingertip-section li{font-size:11px!important;line-height:1.32!important}
+  body #notes .fingertip-rule{padding:8px 10px!important;gap:3px!important}
+  body #notes .fingertip-rule strong{font-size:12px!important;line-height:1.3!important}
+  body #notes .note-nav.note-status-actions{padding:7px 10px!important;gap:6px!important}
+}
