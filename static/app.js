@@ -574,6 +574,7 @@ function learningOverview(progress){
 }
 function dashboardProgressSummary(p,kind){
   const g=state.studySummary?.groups||{};
+  if(kind==='plan'){renderFullPlan(p);return}
   if(kind==='notes'){const x=g.notes||{};return `${x.complete||0}/${x.total||0}`}
   if(kind==='tricky'){const x=g.tricky||{};return `${x.complete||0}/${x.total||0}`}
   if(kind==='diagrams'){const x=g.diagrams||{};return `${x.complete||0}/${x.total||0}`}
@@ -627,6 +628,48 @@ async function syncDatabaseTodayPlan(p){
   const r=await api('/api/study/daily-plan/sync',{method:'POST',body:JSON.stringify(payload)});
   state.todayPlan=(r.tasks||[]).map(hydrateDbTask).filter(Boolean);return r;
 }
+
+function fullPlanStatus(item){
+  const st=item?.studyStatus||'not_started';
+  if(st==='reviewed'||st==='mastered')return {key:'done',label:'Done'};
+  if(st==='needs_review')return {key:'progress',label:'In progress'};
+  return {key:'not_started',label:'Need to study'};
+}
+function fullPlanRow(type,item,label,title,detail){
+  const st=fullPlanStatus(item),id=item?.id??'';
+  return `<article class="full-plan-row status-${st.key}"><span class="full-plan-check">${st.key==='done'?'✓':st.key==='progress'?'●':'○'}</span><div class="full-plan-copy"><div><span class="workspace-kicker">${escapeHtml(label)}</span><span class="full-plan-status">${escapeHtml(st.label)}</span></div><h4>${escapeHtml(title)}</h4>${detail?`<p>${escapeHtml(detail)}</p>`:''}</div><button class="text-btn" type="button" data-full-plan-open="${escapeHtml(type)}" data-full-plan-id="${escapeHtml(String(id))}">Open →</button></article>`;
+}
+function renderFullPlan(p){
+  const host=$('#dashboardWorkspace');if(!host)return;
+  const tier=state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'full';
+  const notes=(state.notes||[]).map(x=>fullPlanRow('note',x,'Learn · Topic Note',x.title,(x.keyRules||[])[0]||x.summary||''));
+  const tricky=(state.tricky||[]).map(x=>fullPlanRow('tricky',x,'Learn · Tricky Words',`${x.left} vs ${x.right}`,trickyDecisionText(x)));
+  const diagrams=(tier==='full'||String(tier).startsWith('full'))?(state.diagrams||[]).map(x=>fullPlanRow('diagram',x,'Learn · Diagram',x.title,x.whyItMatters||x.whatItIs||'')):[];
+  const practiceDone=Number(p?.practice_coverage||0)>=100;
+  const practice=`<article class="full-plan-row status-${practiceDone?'done':Number(p?.practice_unique_attempted||0)>0?'progress':'not_started'}"><span class="full-plan-check">${practiceDone?'✓':Number(p?.practice_unique_attempted||0)>0?'●':'○'}</span><div class="full-plan-copy"><div><span class="workspace-kicker">Apply · Practice</span><span class="full-plan-status">${practiceDone?'Done':Number(p?.practice_unique_attempted||0)>0?'In progress':'Need to study'}</span></div><h4>Practice question bank</h4><p>${p?.practice_unique_attempted||0}/${p?.practice_bank_total||0} unique questions practiced</p></div><button class="text-btn" type="button" data-full-plan-open="practice">Open →</button></article>`;
+  const reviewCount=(p?.review_queue||[]).length||0;
+  const repair=`<article class="full-plan-row status-${reviewCount?'progress':'not_started'}"><span class="full-plan-check">${reviewCount?'●':'○'}</span><div class="full-plan-copy"><div><span class="workspace-kicker">Repair · Weak areas</span><span class="full-plan-status">${reviewCount?'In progress':'Need to study'}</span></div><h4>Concepts to Review</h4><p>${reviewCount} concept${reviewCount===1?'':'s'} currently in your review queue</p></div><button class="text-btn" type="button" data-full-plan-open="review">Open →</button></article>`;
+  const exams=(p?.exam_cards||[]).map(x=>`<article class="full-plan-row status-${x.completed?'done':(x.status==='active'||x.status==='paused')?'progress':'not_started'}"><span class="full-plan-check">${x.completed?'✓':(x.status==='active'||x.status==='paused')?'●':'○'}</span><div class="full-plan-copy"><div><span class="workspace-kicker">Prove · ${escapeHtml(x.kind==='mock'?'Mock Exam':'Mastery Exam')}</span><span class="full-plan-status">${x.completed?'Done':(x.status==='active'||x.status==='paused')?'In progress':'Need to study'}</span></div><h4>${escapeHtml(x.exam_name||x.exam_code)}</h4><p>${x.completed?`${x.accuracy}% · ${x.correct}/${x.total} correct`:`${x.answered||0}/${x.total||0} answered`}</p></div><button class="text-btn" type="button" data-full-plan-open="exam" data-exam-code="${escapeHtml(x.exam_code||'')}" data-exam-status="${escapeHtml(x.status||'')}" data-session-id="${x.session_id||''}">Open →</button></article>`).join('');
+  const total=notes.length+tricky.length+diagrams.length+1+1+(p?.exam_cards||[]).length;
+  host.innerHTML=`${dashboardWorkspaceHeader('Full PMP Plan','',`${total} items`)}<div class="full-plan-toolbar"><div><b>Your entire plan</b><span>Done, in progress, and what remains — with a direct link to every item.</span></div></div><div class="full-plan-document"><section><h3>Learn</h3>${notes.join('')}${tricky.join('')}${diagrams.join('')}</section><section><h3>Apply</h3>${practice}</section><section><h3>Repair</h3>${repair}</section><section><h3>Prove</h3>${exams||'<p class="small-note">No exams are available in this plan.</p>'}</section></div>`;
+  bindDashboardWorkspaceActions();
+}
+function nextFourTasks(p,currentTasks=[]){
+  const weak=p?.adaptive_plan?.weak_domains?.[0]?.domain||'',currentIds=new Set((currentTasks||[]).map(x=>String(x.id)));
+  const out=[];
+  const add=(t)=>{if(t&&!currentIds.has(String(t.id))&&!out.some(x=>x.id===t.id)&&out.length<4)out.push(t)};
+  const notes=(state.notes||[]).filter(x=>['not_started','needs_review'].includes(x.studyStatus||'not_started'));
+  const tricky=(state.tricky||[]).filter(x=>['not_started','needs_review'].includes(x.studyStatus||'not_started'));
+  const diagrams=(state.diagrams||[]).filter(x=>['not_started','needs_review'].includes(x.studyStatus||'not_started'));
+  const prioritized=(rows)=>{const hit=weak?rows.find(x=>String(x.domain||'').toLowerCase()===String(weak).toLowerCase()):null;return hit?[hit,...rows.filter(x=>x!==hit)]:rows};
+  prioritized(notes).slice(0,3).forEach(x=>add({id:`note:${x.id}`,type:'note',itemId:x.id,label:'Read',title:x.title,detail:(x.keyRules||[])[0]||x.summary||'Learn the next PMP rule.'}));
+  prioritized(tricky).slice(0,2).forEach(x=>add({id:`tricky:${x.id}`,type:'tricky',itemId:x.id,label:'Compare',title:`${x.left} vs ${x.right}`,detail:trickyDecisionText(x)}));
+  if((state.tierCode==='full'||String(state.tierCode||'').startsWith('full')))prioritized(diagrams).slice(0,2).forEach(x=>add({id:`diagram:${x.id}`,type:'diagram',itemId:x.id,label:'Visualize',title:x.title,detail:x.whyItMatters||x.whatItIs||'Connect the concept visually.'}));
+  add({id:'next:practice',type:'practice',label:'Practice',title:`${Number(p?.adaptive_plan?.days_until_exam||0)>0&&Number(p.adaptive_plan.days_until_exam)<=10?25:15} targeted questions`,detail:weak?`Focus on ${weak}.`:'Turn the next concepts into exam decisions.'});
+  if(out.length<4)add({id:'next:review',type:'review',label:'Repair',title:'Review weak concepts',detail:'Work through your review queue and retry missed questions.'});
+  return out.slice(0,4);
+}
+function nextPlanPreviewRow(task){return `<article class="next-plan-row"><span class="next-plan-dot">○</span><div><div class="next-plan-meta"><span class="workspace-kicker">${escapeHtml(task.label)}</span><span>Need to study</span></div><h4>${escapeHtml(task.title)}</h4><p>${escapeHtml(task.detail||'')}</p></div><button class="text-btn" type="button" data-next-preview-open="${escapeHtml(task.type)}" data-next-preview-id="${escapeHtml(String(task.itemId||''))}">Open →</button></article>`}
 function nextAfterTodayAction(p){
   const j=learnerJourneyState(p||{}),plan=p?.adaptive_plan||{},weak=plan?.weak_domains?.[0]?.domain||'';
   if(j.index===0){
@@ -645,8 +688,8 @@ function renderTodayPlanFromDb(p,tasks){
   const host=$('#dashboardWorkspace');if(!host)return;const plan=p?.adaptive_plan||{},daysLeft=Number(plan.days_until_exam||0),done=tasks.filter(t=>taskState(t)==='done').length,carried=tasks.filter(t=>t.carriedFrom).length,allDone=tasks.length>0&&done===tasks.length;
   const badge=daysLeft>0?`${daysLeft} day${daysLeft===1?'':'s'} to exam`:`${done}/${tasks.length} done`;
   if(allDone){
-    const next=nextAfterTodayAction(p),tomorrow=(plan.sessions||[])[1]||(plan.sessions||[])[0]||null;
-    host.innerHTML=`${dashboardWorkspaceHeader('Today’s plan complete','',badge)}<section class="today-complete-state"><div class="today-complete-check">✓</div><div class="today-complete-copy"><span class="workspace-kicker">You finished today’s plan</span><h3>Nice work. Here’s what to do next.</h3><p>Your required work for today is complete. Continue only if you have more study time.</p></div></section><section class="today-next-action"><span class="workspace-kicker">Next recommended</span><h4>${escapeHtml(next.title)}</h4><p>${escapeHtml(next.detail||'')}</p><button class="primary" type="button" data-next-after-today="${escapeHtml(next.kind)}" data-next-item="${escapeHtml(String(next.itemId||''))}">${escapeHtml(next.button)} →</button></section><div class="today-tomorrow"><span class="workspace-kicker">Tomorrow</span><b>${escapeHtml(tomorrow?tomorrow.title:'Your next plan will be built from your progress.')}</b><p>${escapeHtml(tomorrow?.detail||'Unfinished work, weak areas, and your exam timeline will determine the next plan.')}</p></div>${completedTodayRows(tasks)}`;
+    const nextTasks=nextFourTasks(p,tasks);
+    host.innerHTML=`${dashboardWorkspaceHeader('Today complete','',badge)}<section class="today-complete-state compact"><div class="today-complete-check">✓</div><div class="today-complete-copy"><span class="workspace-kicker">4/4 complete</span><h3>Next plan: 0/${nextTasks.length}</h3><p>Your next four items are ready. They begin as Need to study.</p></div></section><section class="next-plan-preview"><div class="next-plan-head"><div><span class="workspace-kicker">Next 4 tasks</span><h4>Continue in Learn</h4></div><button class="text-btn" type="button" data-dashboard-focus="plan">View full plan →</button></div><div class="next-plan-list">${nextTasks.map(nextPlanPreviewRow).join('')}</div></section>${completedTodayRows(tasks)}`;
     bindDashboardWorkspaceActions();return;
   }
   const rolloverNote=carried?`${carried} unfinished item${carried===1?' was':'s were'} carried forward first. `:'';
@@ -681,6 +724,9 @@ function bindDashboardWorkspaceActions(){
   const todayTasks=state.todayPlan||[],todayMap=Object.fromEntries(todayTasks.map(x=>[x.id,x]));
   $$('[data-today-open]').forEach(b=>b.onclick=async()=>{const t=todayMap[b.dataset.todayOpen];if(!t)return;b.disabled=true;try{await openTodayTask(t)}catch(err){b.disabled=false;alert(err.message||'Unable to open this study item.')}});
   $$('[data-today-done]').forEach(b=>b.onclick=async()=>{const t=todayMap[b.dataset.todayDone];if(!t)return;b.disabled=true;b.textContent='Saving…';try{await markTodayTaskDone(t)}catch(err){b.disabled=false;b.textContent='Done';alert(err.message||'Unable to update status.')}});
+  $$('[data-full-plan-open]').forEach(b=>b.onclick=async()=>{const type=b.dataset.fullPlanOpen,id=b.dataset.fullPlanId||'';if(type==='practice'){showView('practice');return}if(type==='review'){showView('review');return}if(type==='exam'){await openExamFromProgress(b.dataset.examCode,Number(b.dataset.sessionId)||null,b.dataset.examStatus||'');return}const task={type,itemId:id,status:'done'};await openTodayTask(task)});
+  $$('[data-next-preview-open]').forEach(b=>b.onclick=async()=>{const type=b.dataset.nextPreviewOpen,id=b.dataset.nextPreviewId||'';if(type==='practice'){showView('practice');return}if(type==='review'){showView('review');return}await openTodayTask({type,itemId:id,status:'done'})});
+  $$('[data-dashboard-focus]').forEach(b=>b.onclick=()=>{state.dashboardFocus=b.dataset.dashboardFocus;renderFeatureLaunchpad(state.lastProgress||{})});
   $$('[data-next-after-today]').forEach(b=>b.onclick=()=>{const kind=b.dataset.nextAfterToday,itemId=b.dataset.nextItem||'';if(kind==='note'){showView('notes');setTimeout(()=>{const i=state.notes.findIndex(x=>String(x.id)===String(itemId));if(i>=0){state.noteMode='all';state.noteIndex=i;renderNotes()}},60)}else if(kind==='tricky'){showView('tricky');setTimeout(()=>{const rows=trickyRows();const i=rows.findIndex(x=>String(x.id)===String(itemId));if(i>=0){state.trickyMode='all';state.flashIndex=i;renderTricky()}},60)}else if(kind==='diagram'){showView('diagrams');setTimeout(()=>{const rows=diagramRows();const i=rows.findIndex(x=>String(x.id)===String(itemId));if(i>=0){state.diagramMode='all';state.diagramIndex=i;renderDiagrams()}},60)}else if(kind==='practice'){showView('practice')}else if(kind==='review'){showView('review')}else if(kind==='exam'){state.examKind='mock';showView('exams')}else{state.dashboardFocus='readiness';showView('dashboard');setTimeout(()=>{state.dashboardFocus='readiness';renderFeatureLaunchpad(state.lastProgress||{})},0)}});
   const coach=$('#dashboardCoachForm');if(coach)coach.onsubmit=async e=>{e.preventDefault();const input=$('#dashboardCoachInput'),out=$('#dashboardCoachAnswer'),msg=input.value.trim();if(!msg)return;out.innerHTML='<span class="small-note">Thinking…</span>';try{const r=await api('/api/ai/coach',{method:'POST',body:JSON.stringify({message:msg})});out.innerHTML=`<b>PMP Coach</b><p>${escapeHtml(r.text||'No response.').replace(/\n/g,'<br>')}</p>`}catch(err){out.innerHTML=`<p>${escapeHtml(err.message)}</p>`}};
   $$('[data-dashboard-coach-prompt]').forEach(b=>b.onclick=()=>{const i=$('#dashboardCoachInput');if(i){i.value=b.dataset.dashboardCoachPrompt||'';i.focus()}});
@@ -728,10 +774,11 @@ function studyNavState(kind,p,overview){
   }else if(kind==='readiness')pct=Number(p?.readiness?.score||0);
   else if(kind==='mistakes')return (p?.mistake_patterns||[]).length?'progress':'not-started';
   else if(kind==='coach')return 'not-started';
+  else if(kind==='plan')return overview?.avg>=100?'done':overview?.avg>0?'progress':'not-started';
   else if(kind==='today')return overview?.avg>=100?'done':overview?.avg>0?'progress':'not-started';
   return pct>=100?'done':pct>0?'progress':'not-started';
 }
-function studyNavTarget(kind){return ({today:'dashboard',notes:'notes',tricky:'tricky',diagrams:'diagrams',practice:'practice',mistakes:'review',exams:'exams',readiness:'progress',coach:'coach'})[kind]||'dashboard'}
+function studyNavTarget(kind){return ({today:'dashboard',plan:'dashboard',notes:'notes',tricky:'tricky',diagrams:'diagrams',practice:'practice',mistakes:'review',exams:'exams',readiness:'progress',coach:'coach'})[kind]||'dashboard'}
 
 function learnerJourneyState(p){
   const score=Math.max(0,Math.min(100,Number(p?.readiness?.score||0)));
@@ -821,15 +868,15 @@ function renderGlobalStudyNav(p){
   if(!studyContext){host.classList.add('hidden');host.innerHTML='';renderLearnerJourney(p||{});return}
   host.classList.remove('hidden');
   const overview=learningOverview(p||{});
-  const tabs=[['today','Today'],['notes','Topic Notes'],['tricky','Tricky Words'],['diagrams','Diagrams'],['practice','Practice'],['mistakes','Fix Mistakes'],['exams','Mock Exams'],['readiness','Readiness + Plan'],['coach','PMP Coach']];
+  const tabs=[['today','Today'],['plan','Full Plan'],['notes','Topic Notes'],['tricky','Tricky Words'],['diagrams','Diagrams'],['practice','Practice'],['mistakes','Fix Mistakes'],['exams','Mock Exams'],['readiness','Readiness + Plan'],['coach','PMP Coach']];
   host.innerHTML=`<div class="global-study-nav-inner">${tabs.map(([kind,title])=>{const target=studyNavTarget(kind),active=current==='dashboard'?(state.dashboardFocus||'today')===kind:current===target,status=studyNavState(kind,p||{},overview);return `<button type="button" class="global-study-tab ${active?'active':''} status-${status}" data-global-study="${kind}"><span class="study-state-dot" aria-hidden="true"></span><span>${escapeHtml(title)}</span></button>`}).join('')}</div>`;
-  $$('[data-global-study]').forEach(btn=>btn.onclick=()=>{const kind=btn.dataset.globalStudy,target=studyNavTarget(kind);if(['today','mistakes','readiness'].includes(kind)){state.dashboardFocus=kind;showView('dashboard');setTimeout(()=>{state.dashboardFocus=kind;renderFeatureLaunchpad(state.lastProgress||{})},0)}else if(kind==='exams'){state.examKind='mock';showView('exams')}else showView(target)});
+  $$('[data-global-study]').forEach(btn=>btn.onclick=()=>{const kind=btn.dataset.globalStudy,target=studyNavTarget(kind);if(['today','plan','mistakes','readiness'].includes(kind)){state.dashboardFocus=kind;showView('dashboard');setTimeout(()=>{state.dashboardFocus=kind;renderFeatureLaunchpad(state.lastProgress||{})},0)}else if(kind==='exams'){state.examKind='mock';showView('exams')}else showView(target)});
   renderLearnerJourney(p||{});
 }
 function renderFeatureLaunchpad(p){
   const host=$('#featureLaunchpad');if(!host)return;const overview=learningOverview(p),focus=state.dashboardFocus||'today';
   const tabs=[
-    ['today','Today'],['notes','Topic Notes'],['tricky','Tricky Words'],['diagrams','Diagrams'],['practice','Practice'],['mistakes','Fix Mistakes'],['exams','Mock Exams'],['readiness','Readiness + Plan'],['coach','PMP Coach']
+    ['today','Today'],['plan','Full Plan'],['notes','Topic Notes'],['tricky','Tricky Words'],['diagrams','Diagrams'],['practice','Practice'],['mistakes','Fix Mistakes'],['exams','Mock Exams'],['readiness','Readiness + Plan'],['coach','PMP Coach']
   ];
   host.innerHTML=tabs.map(([kind,title])=>`<button class="pmp-focus-tab ${focus===kind?'active':''}" type="button" role="tab" aria-selected="${focus===kind?'true':'false'}" data-dashboard-focus="${kind}"><span class="feature-launch-icon" aria-hidden="true">${launchpadIcon(kind)}</span><span>${escapeHtml(title)}</span></button>`).join('');
   const overall=$('#dashboardOverallPct');if(overall)overall.textContent=overview.avg+'%';
