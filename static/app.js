@@ -238,18 +238,10 @@ function bindStudySelects(){$$('.study-status-select').forEach(x=>x.onchange=()=
 function noteRows(){const q=($('#notesSearch')?.value||'').trim().toLowerCase();let rows=state.notes.filter(n=>(!noteDomain||n.domain===noteDomain)&&(!q||JSON.stringify(n).toLowerCase().includes(q)));if(state.noteMode==='study')rows=rows.filter(n=>['not_started','needs_review'].includes(n.studyStatus||'not_started'));if(state.noteMode==='needs_review')rows=rows.filter(n=>(n.studyStatus||'')==='needs_review');return rows}
 
 function noteDetailHtml(n){
-  const uniq=(items=[])=>[...new Set((items||[]).filter(Boolean).map(x=>String(x).trim()).filter(Boolean))];
-  const doItems=uniq([n.doFirst,...(n.keyRules||[])]).slice(0,4);
-  const dontItems=uniq([...(n.examTraps||[]),...(n.trickyDistinctions||[])]).slice(0,4);
-  const remember=n.flowOrMemory||((n.triggerWords||[]).length?`Watch for: ${(n.triggerWords||[]).join(' · ')}`:'Focus on the PMI mindset: assess first, collaborate, then act.');
-  return `<div class="note-study-body note-do-dont-layout">
-    <p class="note-summary">${escapeHtml(n.summary||'')}</p>
-    <div class="note-do-dont-grid">
-      <section class="note-do-card"><div class="note-action-title"><span>✓</span><h4>DO</h4></div><ul>${doItems.map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>Assess the situation before taking action.</li>'}</ul></section>
-      <section class="note-dont-card"><div class="note-action-title"><span>×</span><h4>DON’T</h4></div><ul>${dontItems.map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>Do not escalate or act before understanding the situation.</li>'}</ul></section>
-    </div>
-    <section class="note-remember-card"><span class="eyebrow">Remember</span><p><b>${escapeHtml(remember)}</b></p></section>
-  </div>`
+  const dos=[n.doFirst,...(n.keyRules||[])].filter(Boolean).slice(0,4);
+  const donts=[...(n.examTraps||[]),...(n.trickyDistinctions||[])].filter(Boolean).slice(0,4);
+  const remember=n.flowOrMemory||(n.triggerWords||[]).join(' · ')||'Focus on the best next action, not merely a possible action.';
+  return `<div class="note-study-body note-exam-focus"><p class="note-summary">${escapeHtml(n.summary||'')}</p><div class="note-do-dont-grid"><section class="note-do"><h4>DO</h4><ul>${dos.map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>Identify the situation before acting.</li>'}</ul></section><section class="note-dont"><h4>DON’T</h4><ul>${donts.map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>Jump to escalation before understanding the issue.</li>'}</ul></section></div><section class="note-remember"><h4>REMEMBER</h4><p><b>${escapeHtml(remember)}</b></p></section></div>`
 }
 
 function renderNotesBrowse(rows){$('#notesGrid').className='notes-grid';$('#notesGrid').innerHTML=rows.length?rows.map((n,i)=>`<article class="note-card browse-note"><div class="card-topline"><span class="pill">${escapeHtml(n.domain)}</span>${studySelect('note',n.id,n.studyStatus||'not_started')}</div><h3>${escapeHtml(n.title)}</h3><p class="summary">${escapeHtml(n.summary||'')}</p><button class="secondary" data-open-note="${i}">Study note</button></article>`).join(''):'<div class="panel empty-state"><h3>No notes match.</h3><p>Try another domain or search term.</p></div>';bindStudySelects();$$('[data-open-note]').forEach(b=>b.onclick=()=>{const n=rows[+b.dataset.openNote];state.noteMode='all';state.noteIndex=Math.max(0,state.notes.findIndex(x=>x.id===n.id));$$('[data-note-mode]').forEach(x=>x.classList.toggle('active',x.dataset.noteMode==='all'));$('#notesSearch').value='';noteDomain='';$('#noteDomainSelect').value='';renderNotesSingle([n],0,true)})}
@@ -571,49 +563,129 @@ function workflowStep(label,pct,view,index,key){
 
 }
 
-function renderLearningDashboard(p){
-
-  if(!$('#learningWorkflow')||!state.studySummary)return;
-
-  const g=state.studySummary.groups||{}; p=p||state.lastProgress||{};
-
-  const tier=state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'full';
-
-  const practice={total:p.practice_bank_total||0,complete:p.practice_unique_attempted||0,pct:p.practice_coverage||0};
-
-  const cards=p.exam_cards||[];
-
-  const mockRows=cards.filter(x=>x.kind==='mock'), masteryRows=cards.filter(x=>x.kind==='mastery');
-
-  const mock={total:mockRows.length,complete:mockRows.filter(x=>x.completed).length}; mock.pct=mock.total?Math.round(mock.complete/mock.total*100):0;
-
-  const mastery={total:masteryRows.length,complete:masteryRows.filter(x=>x.completed).length}; mastery.pct=mastery.total?Math.round(mastery.complete/mastery.total*100):0;
-
-  const defs={
-
-    notes:['Topic Notes','notes',g.notes||{}],diagrams:['Diagrams & Models','diagrams',g.diagrams||{}],tricky:['Tricky Words','tricky',g.tricky||{}],practice:['Practice Questions','practice',practice],mock:['Full Mock Exams','exams',mock],mastery:['Concept Mastery Exams','exams',mastery]
-
+function initWorkspaceTabs(){
+  const tabs=$$('[data-workspace-tab]');
+  if(!tabs.length)return;
+  const open=name=>{
+    tabs.forEach(b=>b.classList.toggle('active',b.dataset.workspaceTab===name));
+    $$('[data-workspace-panel]').forEach(p=>p.classList.toggle('active',p.dataset.workspacePanel===name));
   };
-
-  let keys=tier==='drills'?['practice','mock']:tier==='concept'?['notes','tricky','practice','mock']:['notes','diagrams','tricky','practice','mock','mastery'];
-
-  keys=keys.filter(k=>(defs[k][2].total||0)>0);
-
-  const avg=keys.length?Math.round(keys.reduce((a,k)=>a+(defs[k][2].pct||0),0)/keys.length):0;
-
-  $('#learningOverallPct').textContent=avg+'%';
-
-  $('#learningPlanTitle').textContent='Your Learning Path';
-
-  $('#learningWorkflow').innerHTML=keys.map((k,i)=>workflowStep(defs[k][0],defs[k][2].pct,defs[k][1],i+1,k)).join('<span class="journey-connector" aria-hidden="true"><i>›</i></span>');
-
-  $('#learningChecklist').innerHTML=keys.map(k=>learningCard(defs[k][0],k,defs[k][1],defs[k][2])).join('');
-
-  $$('[data-learning-jump]').forEach(b=>b.onclick=()=>{const v=b.dataset.learningJump;if(v==='exams'){const key=b.dataset.learningKey||b.closest('.learning-check-card')?.dataset.learningKey||'';state.examKind=key==='mastery'||b.textContent.includes('Concept')?'mastery':'mock'}showView(v)});
-
+  tabs.forEach(b=>b.onclick=()=>open(b.dataset.workspaceTab));
+  $$('[data-workspace-jump]').forEach(b=>b.onclick=()=>showView(b.dataset.workspaceJump));
+  $$('[data-workspace-exam]').forEach(b=>b.onclick=()=>{state.examKind=b.dataset.workspaceExam||'mock';showView('exams')});
 }
 
- 
+function dailyDateKey(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function dailyCandidates(){
+  const out=[];
+  (state.notes||[]).forEach(x=>out.push({type:'note',id:String(x.id),title:x.title||'Topic Note',summary:x.summary||'',label:'READ'}));
+  (state.diagrams||[]).forEach(x=>out.push({type:'diagram',id:String(x.id),title:x.title||'Diagram & Model',summary:x.summary||x.description||'',label:'VISUALIZE'}));
+  (state.tricky||[]).forEach(x=>out.push({type:'tricky',id:String(x.id),title:x.title||x.term||x.name||'Tricky Words',summary:x.summary||x.distinction||'',label:'COMPARE'}));
+  return out;
+}
+
+function dailySourceItem(t){
+  const list=t.type==='note'?state.notes:t.type==='diagram'?state.diagrams:state.tricky;
+  return (list||[]).find(x=>String(x.id)===String(t.id));
+}
+
+function dailyTaskDone(t){
+  const x=dailySourceItem(t);
+  const st=x?.studyStatus||x?.status||'not_started';
+  return st==='reviewed'||st==='mastered';
+}
+
+function openDailyTask(t){
+  if(t.type==='note'){
+    state.noteMode='study';
+    const i=(state.notes||[]).findIndex(x=>String(x.id)===String(t.id));
+    if(i>=0)state.noteIndex=i;
+    showView('notes');setTimeout(()=>renderNotes(),30);return;
+  }
+  if(t.type==='diagram'){
+    state.diagramMode='study';
+    const rows=diagramRows();const i=rows.findIndex(x=>String(x.id)===String(t.id));
+    if(i>=0)state.diagramIndex=i;
+    showView('diagrams');setTimeout(()=>renderDiagrams(),30);return;
+  }
+  if(t.type==='tricky'){
+    state.trickyMode='study';
+    const rows=trickyRows();const i=rows.findIndex(x=>String(x.id)===String(t.id));
+    if(i>=0)state.flashIndex=i;
+    showView('tricky');setTimeout(()=>renderTricky(),30);return;
+  }
+  showView('practice');
+}
+
+function getDailyPlanTasks(){
+  const key=`az_daily_plan_${dailyDateKey()}`;
+  const candidates=dailyCandidates();
+  let saved=[];
+  try{saved=JSON.parse(localStorage.getItem(key)||'[]')}catch{}
+  saved=(saved||[]).filter(t=>t&&t.id&&candidates.some(c=>c.type===t.type&&String(c.id)===String(t.id)));
+  if(!saved.length){
+    const unfinished=candidates.filter(t=>!dailyTaskDone(t));
+    const source=(unfinished.length?unfinished:candidates).slice(0,4);
+    saved=source.map(({type,id,title,summary,label})=>({type,id,title,summary,label}));
+    localStorage.setItem(key,JSON.stringify(saved));
+  }
+  const completed=saved.filter(dailyTaskDone).length;
+  if(saved.length===4&&completed===4){
+    const used=new Set(saved.map(t=>`${t.type}:${t.id}`));
+    const next=candidates.find(t=>!used.has(`${t.type}:${t.id}`)&&!dailyTaskDone(t));
+    if(next){
+      saved.push({type:next.type,id:next.id,title:next.title,summary:next.summary,label:next.label});
+      localStorage.setItem(key,JSON.stringify(saved));
+      const toastKey=`az_daily_congrats_${dailyDateKey()}`;
+      if(!sessionStorage.getItem(toastKey)){
+        sessionStorage.setItem(toastKey,'1');
+        const box=$('#todaySuccess');if(box){box.classList.remove('hidden');setTimeout(()=>box.classList.add('hidden'),5500)}
+      }
+    }
+  }
+  return saved;
+}
+
+function renderTodayPlan(){
+  const el=$('#todayTaskList');if(!el)return;
+  const tasks=getDailyPlanTasks();
+  const done=tasks.filter(dailyTaskDone).length,total=tasks.length||4;
+  const count=$('#todayPlanCount'),label=$('#todayPlanLabel'),bar=$('#todayPlanBar');
+  if(count)count.textContent=`${done}/${total} done`;
+  if(label)label.innerHTML=`TODAY &nbsp; ${done}/${total} completed`;
+  if(bar)bar.style.width=`${total?Math.round(done/total*100):0}%`;
+  el.innerHTML=tasks.map((t,i)=>{
+    const isDone=dailyTaskDone(t),source=dailySourceItem(t)||t;
+    const title=source.title||t.title||'Study task';
+    const summary=source.summary||source.description||t.summary||'Review this concept for the PMP exam.';
+    return `<article class="today-task ${isDone?'done':''}"><span class="today-check">${isDone?'✓':'○'}</span><div class="today-task-copy"><div class="today-task-meta"><b>${escapeHtml(t.label||'LEARN')}</b><span>${isDone?'DONE':'NEED TO STUDY'}</span></div><h4>${escapeHtml(title)}</h4><p>${escapeHtml(summary)}</p></div><button class="text-btn" type="button" data-daily-open="${i}">${isDone?'Review':'Open'} →</button></article>`;
+  }).join('')||'<div class="progress-all-clear"><b>✓ Learning content complete</b><span>Move to Practice or Mock Exams.</span></div>';
+  $$('[data-daily-open]').forEach(b=>b.onclick=()=>openDailyTask(tasks[Number(b.dataset.dailyOpen)]));
+}
+
+function renderLearningDashboard(p){
+  if(!state.studySummary)return;
+  initWorkspaceTabs();
+  const g=state.studySummary.groups||{}; p=p||state.lastProgress||{};
+  const tier=state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'full';
+  const practice={total:p.practice_bank_total||0,complete:p.practice_unique_attempted||0,pct:p.practice_coverage||0};
+  const cards=p.exam_cards||[];
+  const mockRows=cards.filter(x=>x.kind==='mock'), masteryRows=cards.filter(x=>x.kind==='mastery');
+  const mock={total:mockRows.length,complete:mockRows.filter(x=>x.completed).length}; mock.pct=mock.total?Math.round(mock.complete/mock.total*100):0;
+  const mastery={total:masteryRows.length,complete:masteryRows.filter(x=>x.completed).length}; mastery.pct=mastery.total?Math.round(mastery.complete/mastery.total*100):0;
+  const defs={notes:['Topic Notes','notes',g.notes||{}],diagrams:['Diagrams & Models','diagrams',g.diagrams||{}],tricky:['Tricky Words','tricky',g.tricky||{}],practice:['Practice Questions','practice',practice],mock:['Full Mock Exams','exams',mock],mastery:['Concept Mastery Exams','exams',mastery]};
+  let keys=tier==='drills'?['practice','mock']:tier==='concept'?['notes','tricky','practice','mock']:['notes','diagrams','tricky','practice','mock','mastery'];
+  keys=keys.filter(k=>(defs[k][2].total||0)>0);
+  const avg=keys.length?Math.round(keys.reduce((a,k)=>a+(defs[k][2].pct||0),0)/keys.length):0;
+  if($('#learningOverallPct'))$('#learningOverallPct').textContent=avg+'%';
+  if($('#learningChecklist'))$('#learningChecklist').innerHTML=keys.map(k=>learningCard(defs[k][0],k,defs[k][1],defs[k][2])).join('');
+  $$('[data-learning-jump]').forEach(b=>b.onclick=()=>{const v=b.dataset.learningJump;if(v==='exams'){const key=b.dataset.learningKey||b.closest('.learning-check-card')?.dataset.learningKey||'';state.examKind=key==='mastery'||b.textContent.includes('Concept')?'mastery':'mock'}showView(v)});
+  renderTodayPlan();
+}
 
 function renderContinueLearning(){if(!$('#continueTitle')||!state.studySummary)return;const n=state.studySummary.next_item;if(!n){$('#continueTitle').textContent='You are caught up';$('#continueMeta').textContent='Review weak areas or start a practice session.';$('#continueBtn').textContent='Practice';$('#continueBtn').onclick=()=>showView('practice');return}$('#continueTitle').textContent=n.title;$('#continueMeta').textContent=`Next ${n.status==='needs_review'?'review':'unstudied'} ${n.content_type}`;$('#continueBtn').textContent='Continue';$('#continueBtn').onclick=()=>{if(n.content_type==='diagram'){state.diagramMode='study';state.diagramIndex=0;showView('diagrams')}else if(n.content_type==='tricky'){state.trickyMode='flashcards';showView('tricky')}else showView('notes')}}
 
@@ -663,9 +735,9 @@ function renderProgressPlan(bm){
 
   if(isStaff()){
 
-    $('#progressPlanName').textContent='Staff / Instructor Access';
+    if($('#progressPlanName'))$('#progressPlanName').textContent='Staff / Instructor Access';
 
-    $('#progressPlanDetail').textContent='Administrative access does not expire with a learner subscription.';
+    if($('#progressPlanDetail'))$('#progressPlanDetail').textContent='Administrative access does not expire with a learner subscription.';
 
     return;
 
@@ -673,9 +745,9 @@ function renderProgressPlan(bm){
 
   if(!e){
 
-    $('#progressPlanName').textContent='No active plan';
+    if($('#progressPlanName'))$('#progressPlanName').textContent='No active plan';
 
-    $('#progressPlanDetail').textContent='Choose a plan to unlock learner content.';
+    if($('#progressPlanDetail'))$('#progressPlanDetail').textContent='Choose a plan to unlock learner content.';
 
     return;
 
@@ -683,13 +755,13 @@ function renderProgressPlan(bm){
 
   const name=e.plan_name||planLabel(e.tier_code);
 
-  $('#progressPlanName').textContent=name;
+  if($('#progressPlanName'))$('#progressPlanName').textContent=name;
 
   const end=e.ends_at?new Date((/Z$|[+-]\d\d:\d\d$/.test(e.ends_at)?e.ends_at:e.ends_at+'Z')):null;
 
   const days=end&&!Number.isNaN(end.getTime())?Math.max(0,Math.ceil((end-Date.now())/86400000)):null;
 
-  $('#progressPlanDetail').textContent=`${planLabel(e.tier_code)} · Active through ${fmtAccessDate(e.ends_at)}${days!=null?` · ${days} day${days===1?'':'s'} remaining`:''}`;
+  if($('#progressPlanDetail'))$('#progressPlanDetail').textContent=`${planLabel(e.tier_code)} · Active through ${fmtAccessDate(e.ends_at)}${days!=null?` · ${days} day${days===1?'':'s'} remaining`:''}`;
 
 }
 
@@ -771,7 +843,6 @@ function renderProgressWeakAreas(p){
   if($('#domainBars'))$('#domainBars').innerHTML=rows.map(x=>`<div class="progress-domain-row"><div class="progress-domain-name"><strong>${escapeHtml(x.name)}</strong><span>${x.answered?x.answered+' answered':'Not practiced yet'}</span></div><div class="bar-track"><i style="width:${x.pct}%"></i></div><b>${x.answered?x.pct+'%':'—'}</b><button class="text-btn" data-domain-practice="${escapeHtml(x.name)}">Practice →</button></div>`).join('');
   $$('[data-domain-practice]').forEach(b=>b.onclick=()=>showView('practice'));
   const q=p.review_queue||[];
-  if($('#progressWeakBadge'))$('#progressWeakBadge').textContent=q.length;
   if($('#progressWeakConcepts'))$('#progressWeakConcepts').innerHTML=q.length?q.slice(0,8).map((x,i)=>{const title=x.title||x.concept||x.name||x.topic||`Review concept ${i+1}`;const reason=x.reason||x.domain||'Needs review';return `<button class="progress-concept-row" type="button" data-open-review><span><strong>${escapeHtml(title)}</strong><small>${escapeHtml(reason)}</small></span><b>Repair →</b></button>`}).join(''):'<div class="progress-all-clear"><b>✓ No concepts waiting</b><span>Keep practicing to maintain your strengths.</span></div>';
   $$('[data-open-review]').forEach(b=>b.onclick=()=>showView('review'));
 }

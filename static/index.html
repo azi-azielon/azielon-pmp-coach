@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Azielon PMP Practice Coach</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="/static/styles.css?v=5.13.4"/>
+<link rel="stylesheet" href="/static/styles.css?v=5.13.5"/>
 </head>
 <body class="landing-active">
 <div id="authGate" class="auth-gate">
@@ -141,17 +141,44 @@
   <main>
     <header class="topbar"><div><span class="eyebrow">Reasoning-first PMP preparation</span><h1 id="pageTitle">My Learning</h1></div><div class="top-actions"><span id="healthPill" class="status-pill">Checking…</span><div id="avatar" class="avatar">AZ</div></div></header>
 
-    <section class="view active" id="dashboard">
-      <div class="learning-path-card learning-journey-card">
-        <div class="learning-path-head journey-head"><div><span class="eyebrow">Your learning path</span><h2 id="learningPlanTitle">Learning plan</h2><p>Follow the path at your pace. Each dot represents 20% of that stage.</p></div><div class="learning-overall"><b id="learningOverallPct">0%</b><span>overall</span></div></div>
-        <div id="learningWorkflow" class="learning-journey" aria-label="Your learning path"></div>
+    <section class="view active learning-workspace" id="dashboard">
+      <div class="workspace-tabs" role="tablist" aria-label="Learning workspace">
+        <button class="active" type="button" data-workspace-tab="today">● Today</button>
+        <button type="button" data-workspace-tab="plan">● Full Plan</button>
+        <button type="button" data-workspace-jump="notes">● Topic Notes</button>
+        <button type="button" data-workspace-jump="tricky">● Tricky Words</button>
+        <button type="button" data-workspace-jump="diagrams">● Diagrams</button>
+        <button type="button" data-workspace-jump="practice">● Practice</button>
+        <button type="button" data-workspace-jump="review">● Fix Mistakes</button>
+        <button type="button" data-workspace-exam="mock">● Mock Exams</button>
+        <button type="button" data-workspace-jump="progress">● Readiness + Plan</button>
+        <button type="button" data-workspace-jump="coach">● PMP Coach</button>
       </div>
-      <div class="continue-strip panel compact-continue"><div><span class="eyebrow">Continue learning</span><h3 id="continueTitle">Finding your next item…</h3><p id="continueMeta" class="small-note"></p></div><button id="continueBtn" class="primary">Continue</button></div>
-      <div class="learning-section-head"><div><span class="eyebrow">What to complete</span><h3>Your learning checklist</h3></div><button class="text-btn" data-jump="review"><span id="learningReviewCount">0</span> concepts to review →</button></div>
-      <div id="learningChecklist" class="learning-checklist-cards"></div>
-    </section>
+      <div class="workspace-phases" aria-hidden="true"><span class="active">Learn</span><span>Apply</span><span>Repair</span><span>Prove</span></div>
 
-    
+      <div class="workspace-panel active" data-workspace-panel="today">
+        <div class="workspace-heading"><div><span class="eyebrow">PMP exam workspace</span><h2>Today</h2></div><div class="workspace-overall"><span>Learning path</span><b id="learningOverallPct">0%</b></div></div>
+        <div id="todaySuccess" class="today-success hidden"><b>Congratulations!</b><span>Your next task is added for the day.</span></div>
+        <div class="today-plan-card panel">
+          <div class="today-plan-head"><div><h3>Today’s PMP Plan</h3><p>Open each item, review it, then mark it done in the learning page.</p></div><span id="todayPlanCount" class="today-count">0/4 done</span></div>
+          <div class="today-plan-progress"><b id="todayPlanLabel">TODAY &nbsp; 0/4 completed</b><div class="mini-track"><i id="todayPlanBar" style="width:0%"></i></div></div>
+          <p class="today-plan-guidance">Prioritize concept understanding and targeted practice before increasing exam volume.</p>
+          <div id="todayTaskList" class="today-task-list"></div>
+        </div>
+      </div>
+
+      <div class="workspace-panel" data-workspace-panel="plan">
+        <div class="workspace-heading"><div><span class="eyebrow">Your learning path</span><h2>Full Plan</h2></div></div>
+        <div id="learningChecklist" class="learning-checklist-cards"></div>
+      </div>
+
+      <div class="hidden" id="learningWorkflow"></div>
+      <div class="hidden" id="learningPlanTitle"></div>
+      <div class="hidden" id="continueTitle"></div>
+      <div class="hidden" id="continueMeta"></div>
+      <button class="hidden" id="continueBtn" type="button"></button>
+      <span class="hidden" id="learningReviewCount">0</span>
+    </section>
 
     <section class="view" id="notes">
       <div class="section-intro compact-intro"><div><span class="eyebrow">Structured learning topics</span><h2>Topic Notes</h2><p>Study one concept at a time, mark your status, and continue with unfinished topics first.</p></div></div>
@@ -234,58 +261,45 @@
         </div>
       </div>
     </section>
-    <section class="view progress-view" id="progress">
-      <div class="progress-page-head">
-        <div><span class="eyebrow">Your PMP journey</span><h2>My Progress</h2><p>See where you are, what needs attention, and exactly what to do next.</p></div>
-        <div class="progress-plan-inline"><div><span class="eyebrow">Current plan</span><strong id="progressPlanName">Loading…</strong><small id="progressPlanDetail">Checking access dates…</small></div><button class="secondary" id="progressManagePlan">Manage plan</button></div>
-      </div>
-
-      <div class="progress-readiness-card">
-        <div class="readiness-score-block"><span class="eyebrow">Azielon readiness</span><div class="readiness-score-line"><strong id="progressReadinessScore">0%</strong><span id="progressReadinessLabel">Building foundation</span></div><div class="readiness-track"><i id="progressReadinessFill" style="width:0%"></i></div><small>Learning indicator based on your activity. It is not PMI's passing score.</small></div>
-        <div class="progress-stage-journey" id="progressStageJourney" aria-label="PMP readiness journey">
-          <button type="button" data-stage="0"><b>✓</b><span>Learn</span></button><i></i>
-          <button type="button" data-stage="1"><b>○</b><span>Apply</span></button><i></i>
-          <button type="button" data-stage="2"><b>○</b><span>Repair</span></button><i></i>
-          <button type="button" data-stage="3"><b>○</b><span>Prove</span></button><i></i>
-          <button type="button" data-stage="4"><b>○</b><span>Ready</span></button>
-        </div>
-        <div class="progress-stage-note"><b id="progressStageTitle">You are in Learn</b><span id="progressStageHint">Build the foundation, then apply it in practice.</span></div>
-      </div>
-
-      <div class="progress-tabs" role="tablist" aria-label="My Progress sections">
+    <section class="view progress-view progress-simple" id="progress">
+      <div class="progress-tabs progress-tabs-top" role="tablist" aria-label="My Progress sections">
         <button class="active" type="button" role="tab" aria-selected="true" data-progress-tab="overview">Overview</button>
-        <button type="button" role="tab" aria-selected="false" data-progress-tab="plan">My Plan</button>
-        <button type="button" role="tab" aria-selected="false" data-progress-tab="weak">Weak Areas <span id="progressWeakBadge">0</span></button>
+        <button type="button" role="tab" aria-selected="false" data-progress-tab="weak">Weak Areas</button>
         <button type="button" role="tab" aria-selected="false" data-progress-tab="exams">Exams</button>
+        <button type="button" role="tab" aria-selected="false" data-progress-tab="plan">My Plan</button>
       </div>
 
       <div class="progress-tab-panels">
         <section class="progress-tab-panel active" data-progress-panel="overview">
-          <div class="progress-summary-strip progress-summary-modern"><div><span>Questions</span><b id="pPracticeAnswered">0</b><small>practice attempts</small></div><div><span>Correct</span><b id="pCorrect">0</b><small>all activity</small></div><div><span>Accuracy</span><b id="pAccuracy">—</b><small>overall</small></div><div><span>Review</span><b id="pReviewCount">0</b><small>concepts waiting</small></div></div>
-          <div class="progress-overview-grid">
-            <div class="panel progress-next-card"><div class="progress-card-head"><div><span class="eyebrow">Your next move</span><h3 id="progressNextHeading">Loading your next tasks…</h3></div><button class="primary" id="progressContinueBtn">Continue my plan →</button></div><div id="progressNextTasks" class="progress-next-list"></div></div>
-            <div class="panel progress-snapshot-card"><span class="eyebrow">Performance snapshot</span><div id="progressPracticeReport" class="practice-report-mini"></div><button class="text-btn" type="button" data-progress-open-tab="weak">See weak areas →</button></div>
+          <div class="progress-summary-strip progress-summary-modern exam-focus-strip">
+            <div><span>Questions</span><b id="pPracticeAnswered">0</b><small>practice attempts</small></div>
+            <div><span>Accuracy</span><b id="pAccuracy">—</b><small>practice + exam</small></div>
+            <div><span>Weak areas</span><b id="pReviewCount">0</b><small>concepts to repair</small></div>
           </div>
-        </section>
-
-        <section class="progress-tab-panel" data-progress-panel="plan">
-          <div class="progress-tab-title"><div><span class="eyebrow">Everything in one place</span><h3>My Plan</h3><p>Completed work stays visible. Open any unfinished item and continue from there.</p></div></div>
-          <div id="progressPlanChecklist" class="progress-plan-checklist"></div>
+          <div class="panel progress-next-card exam-focus-card"><div class="progress-card-head"><div><span class="eyebrow">What to do next</span><h3 id="progressNextHeading">Loading your next step…</h3></div><button class="primary" id="progressContinueBtn">Continue →</button></div><div id="progressNextTasks" class="progress-next-list"></div></div>
         </section>
 
         <section class="progress-tab-panel" data-progress-panel="weak">
-          <div class="progress-tab-title"><div><span class="eyebrow">Focus where it matters</span><h3>Weak Areas</h3><p>Use this tab to repair lower-performing domains and concepts before moving on.</p></div></div>
-          <div class="progress-weak-grid"><div class="panel"><span class="eyebrow">Domain performance</span><div id="domainBars" class="bars progress-domain-bars"></div></div><div class="panel"><span class="eyebrow">Concepts to repair</span><div id="progressWeakConcepts" class="progress-weak-concepts"></div></div></div>
+          <div class="progress-tab-title"><div><span class="eyebrow">Exam focus</span><h3>Weak Areas</h3><p>Repair these before adding more mock-exam volume.</p></div></div>
+          <div class="progress-weak-grid"><div class="panel"><span class="eyebrow">Domain accuracy</span><div id="domainBars" class="bars progress-domain-bars"></div></div><div class="panel"><span class="eyebrow">Concepts to repair</span><div id="progressWeakConcepts" class="progress-weak-concepts"></div></div></div>
         </section>
 
         <section class="progress-tab-panel" data-progress-panel="exams">
-          <div class="report-section-head"><div><span class="eyebrow">Exam report cards</span><h3>Your exams</h3></div><small id="progressBenchmarkNote"></small></div>
+          <div class="report-section-head"><div><span class="eyebrow">Exam performance</span><h3>Mock & Mastery Exams</h3></div><small id="progressBenchmarkNote"></small></div>
           <div id="examReportCards" class="exam-report-cards"></div>
-          <div class="panel progress-history-panel"><span class="eyebrow">Recent submitted exams</span><div id="examHistory" class="exam-history"><p class="small-note">No completed exams yet.</p></div></div>
+          <div class="panel progress-history-panel"><span class="eyebrow">Recent exams</span><div id="examHistory" class="exam-history"><p class="small-note">No completed exams yet.</p></div></div>
+        </section>
+
+        <section class="progress-tab-panel" data-progress-panel="plan">
+          <div class="progress-tab-title"><div><span class="eyebrow">Completion</span><h3>My Plan</h3><p>Open only what is still unfinished.</p></div></div>
+          <div id="progressPlanChecklist" class="progress-plan-checklist"></div>
         </section>
       </div>
 
-      <span class="hidden" id="pAnswered">0</span><span class="hidden" id="pCompletedExams">0</span><span class="hidden" id="pExamAnswered">0</span><span class="hidden" id="pBookmarks">0</span>
+      <div class="hidden" aria-hidden="true">
+        <span id="progressPlanName"></span><span id="progressPlanDetail"></span><span id="progressReadinessScore"></span><span id="progressReadinessLabel"></span><i id="progressReadinessFill"></i><span id="progressStageTitle"></span><span id="progressStageHint"></span><div id="progressStageJourney"></div><div id="progressPracticeReport"></div>
+        <span id="pAnswered">0</span><span id="pCorrect">0</span><span id="pCompletedExams">0</span><span id="pExamAnswered">0</span><span id="pBookmarks">0</span>
+      </div>
     </section>
 
     <section class="view" id="billing">
@@ -321,7 +335,7 @@
 <div id="zoomModal" class="modal hidden"><div class="modal-backdrop" data-close-modal="zoomModal"></div><div class="modal-card zoom-card"><div class="modal-head"><h3 id="zoomTitle">Diagram</h3><button class="ghost modal-x" data-close-modal="zoomModal">×</button></div><div class="zoom-controls"><button id="zoomOut" class="secondary">−</button><span id="zoomPct">100%</span><button id="zoomIn" class="secondary">+</button><button id="zoomReset" class="secondary">Fit</button><button id="zoomFull" class="secondary">Full screen</button></div><div id="zoomBody" class="zoom-body"></div></div></div>
 <div id="editorModal" class="modal hidden"><div class="modal-backdrop" data-close-modal="editorModal"></div><div class="modal-card editor-card"><div class="modal-head"><h3 id="editorTitle">Edit content</h3><button class="ghost modal-x" data-close-modal="editorModal">×</button></div><form id="editorForm" class="editor-form"></form></div></div>
 
-<script src="/static/app.js?v=5.13.4"></script>
+<script src="/static/app.js?v=5.13.5"></script>
 <script src="/static/live-form.js?v=5.13.0"></script>
 </body>
 </html>
