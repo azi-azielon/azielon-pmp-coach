@@ -237,7 +237,20 @@ function bindStudySelects(){$$('.study-status-select').forEach(x=>x.onchange=()=
 
 function noteRows(){const q=($('#notesSearch')?.value||'').trim().toLowerCase();let rows=state.notes.filter(n=>(!noteDomain||n.domain===noteDomain)&&(!q||JSON.stringify(n).toLowerCase().includes(q)));if(state.noteMode==='study')rows=rows.filter(n=>['not_started','needs_review'].includes(n.studyStatus||'not_started'));if(state.noteMode==='needs_review')rows=rows.filter(n=>(n.studyStatus||'')==='needs_review');return rows}
 
-function noteDetailHtml(n){return `<div class="note-study-body"><p class="note-summary">${escapeHtml(n.summary||'')}</p><div class="note-section-grid"><section><h4>Key rules</h4><ul>${(n.keyRules||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>—</li>'}</ul></section><section><h4>Trigger words</h4><p>${escapeHtml((n.triggerWords||[]).join(' · ')||'—')}</p></section><section class="note-do-first"><h4>What should the PM do first?</h4><p>${escapeHtml(n.doFirst||'—')}</p></section><section><h4>Tricky distinctions</h4><ul>${(n.trickyDistinctions||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>—</li>'}</ul></section><section class="note-traps"><h4>Exam traps</h4><ul>${(n.examTraps||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>—</li>'}</ul></section><section class="note-memory"><h4>Memory / Flow</h4><p><b>${escapeHtml(n.flowOrMemory||'—')}</b></p></section></div></div>`}
+function noteDetailHtml(n){
+  const uniq=(items=[])=>[...new Set((items||[]).filter(Boolean).map(x=>String(x).trim()).filter(Boolean))];
+  const doItems=uniq([n.doFirst,...(n.keyRules||[])]).slice(0,4);
+  const dontItems=uniq([...(n.examTraps||[]),...(n.trickyDistinctions||[])]).slice(0,4);
+  const remember=n.flowOrMemory||((n.triggerWords||[]).length?`Watch for: ${(n.triggerWords||[]).join(' · ')}`:'Focus on the PMI mindset: assess first, collaborate, then act.');
+  return `<div class="note-study-body note-do-dont-layout">
+    <p class="note-summary">${escapeHtml(n.summary||'')}</p>
+    <div class="note-do-dont-grid">
+      <section class="note-do-card"><div class="note-action-title"><span>✓</span><h4>DO</h4></div><ul>${doItems.map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>Assess the situation before taking action.</li>'}</ul></section>
+      <section class="note-dont-card"><div class="note-action-title"><span>×</span><h4>DON’T</h4></div><ul>${dontItems.map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>Do not escalate or act before understanding the situation.</li>'}</ul></section>
+    </div>
+    <section class="note-remember-card"><span class="eyebrow">Remember</span><p><b>${escapeHtml(remember)}</b></p></section>
+  </div>`
+}
 
 function renderNotesBrowse(rows){$('#notesGrid').className='notes-grid';$('#notesGrid').innerHTML=rows.length?rows.map((n,i)=>`<article class="note-card browse-note"><div class="card-topline"><span class="pill">${escapeHtml(n.domain)}</span>${studySelect('note',n.id,n.studyStatus||'not_started')}</div><h3>${escapeHtml(n.title)}</h3><p class="summary">${escapeHtml(n.summary||'')}</p><button class="secondary" data-open-note="${i}">Study note</button></article>`).join(''):'<div class="panel empty-state"><h3>No notes match.</h3><p>Try another domain or search term.</p></div>';bindStudySelects();$$('[data-open-note]').forEach(b=>b.onclick=()=>{const n=rows[+b.dataset.openNote];state.noteMode='all';state.noteIndex=Math.max(0,state.notes.findIndex(x=>x.id===n.id));$$('[data-note-mode]').forEach(x=>x.classList.toggle('active',x.dataset.noteMode==='all'));$('#notesSearch').value='';noteDomain='';$('#noteDomainSelect').value='';renderNotesSingle([n],0,true)})}
 
