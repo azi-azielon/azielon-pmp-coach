@@ -1,7 +1,1 @@
-Azielon PMP Coach v5.14.23
-
-Topic Notes expansion:
-- 50 high-value exam-focused notes across People, Process, and Business Environment.
-- Added Scrum, Kanban, WIP, CFD, velocity, hybrid, risk, EVM, procurement, compliance, benefits, governance, and more.
-- Simplified each note to Summary + DO + DON’T / EXAM TRAPS + RULE TO REMEMBER.
-- Avoids duplicate titles already returned by the backend.
+5.14.24

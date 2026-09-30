@@ -2873,3 +2873,182 @@ body #dashboard .next-plan-done-btn{min-width:68px;padding:7px 12px!important}
 .fingertip-rule{padding:16px 20px;border-left:4px solid #c69a3b;background:#faf7ef;border-radius:0 12px 12px 0;display:grid;gap:7px}
 .fingertip-rule strong{font:600 16px/1.45 var(--serif);color:var(--navy)}
 @media(max-width:760px){.fingertip-columns{grid-template-columns:1fr}.fingertip-section+ .fingertip-section{border-left:0;border-top:1px solid var(--line)}.fingertip-section{padding:16px 4px}}
+
+/* ===== v5.14.24 seamless app canvas + elegant top tabs ===== */
+@media (min-width:821px){
+  /* The app behaves as one continuous page beside a full-height sidebar. */
+  body .app-shell{
+    height:100vh;
+    min-height:100vh;
+    overflow:hidden;
+    align-items:stretch;
+  }
+  body .sidebar{
+    height:100vh!important;
+    min-height:100vh!important;
+    max-height:100vh!important;
+    align-self:stretch;
+  }
+  body .app-shell>main{
+    height:100vh!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+  body .app-shell>main>.view.active{
+    max-width:none!important;
+    width:100%!important;
+    margin:0!important;
+    min-height:0!important;
+    overflow:auto!important;
+  }
+
+  /* My Learning should meet the sidebar and right edge instead of floating in the middle. */
+  body #dashboard.view.active{
+    padding:0!important;
+    background:#fffdf8;
+  }
+  body #dashboard .pmp-home-shell{
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    gap:0!important;
+  }
+  body #dashboard .dashboard-workspace{
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    border-left:0!important;
+    border-right:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    padding:16px 28px!important;
+    background:#fff!important;
+  }
+}
+
+/* Flat, seamless top navigation — no pills, no clipped edges. */
+body .global-study-nav{
+  padding:0 24px!important;
+  background:#fffdf8!important;
+  border-bottom:1px solid rgba(74,59,52,.12)!important;
+  overflow:visible!important;
+}
+body .global-study-nav-inner{
+  max-width:none!important;
+  width:100%!important;
+  margin:0!important;
+  gap:0!important;
+  overflow-x:auto!important;
+  overflow-y:visible!important;
+  scrollbar-width:none;
+  align-items:stretch!important;
+}
+body .global-study-nav-inner::-webkit-scrollbar{display:none}
+body .global-study-tab{
+  position:relative!important;
+  flex:0 0 auto!important;
+  min-height:46px!important;
+  padding:13px 15px 12px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#69727e!important;
+  font-size:11px!important;
+  font-weight:600!important;
+  letter-spacing:.01em!important;
+  overflow:visible!important;
+}
+body .global-study-tab+ .global-study-tab{border-left:1px solid rgba(74,59,52,.055)!important}
+body .global-study-tab:after{
+  content:"";
+  position:absolute;
+  left:12px;
+  right:12px;
+  bottom:-1px;
+  height:3px;
+  border-radius:3px 3px 0 0;
+  background:transparent;
+}
+body .global-study-tab:hover{
+  background:rgba(255,255,255,.55)!important;
+  border-color:transparent!important;
+  color:var(--navy)!important;
+}
+body .global-study-tab.active,
+body .global-study-tab.active.status-progress,
+body .global-study-tab.active.status-done{
+  background:transparent!important;
+  border-color:transparent!important;
+  color:var(--navy)!important;
+  box-shadow:none!important;
+}
+body .global-study-tab.active:after{background:var(--blue)!important}
+body .study-state-dot{width:6px!important;height:6px!important}
+
+/* The stage row is part of the same navigation surface, not a floating band. */
+body .learner-journey{
+  padding:0 24px!important;
+  background:#fffdf8!important;
+  border-bottom:1px solid rgba(74,59,52,.08)!important;
+}
+body .learner-journey-inner{max-width:none!important;width:100%!important;margin:0!important}
+body .learner-journey .journey-stage{padding:8px 10px 9px!important}
+
+/* My Progress uses the same visual language as My Learning tabs. */
+body #progress.view.active{padding:0 24px 24px!important;max-width:none!important;margin:0!important}
+body .progress-tabbar{
+  top:0!important;
+  gap:0!important;
+  min-height:46px!important;
+  margin:0 -24px 16px!important;
+  padding:0 24px!important;
+  background:#fffdf8!important;
+  border-bottom:1px solid rgba(74,59,52,.12)!important;
+  overflow-x:auto!important;
+  overflow-y:visible!important;
+}
+body .progress-tab{
+  min-height:46px!important;
+  padding:14px 18px 12px!important;
+  font-size:11.5px!important;
+  font-weight:600!important;
+}
+body .progress-tab+ .progress-tab{border-left:1px solid rgba(74,59,52,.055)!important}
+body .progress-tab:after{bottom:-1px!important;height:3px!important;left:12px!important;right:12px!important}
+
+/* Exams are the first useful content visible when the exam page opens. */
+body #exams.view.active{
+  padding-top:12px!important;
+  max-width:none!important;
+  margin:0!important;
+}
+body #exams .exam-intro-compact{
+  margin:0 0 10px!important;
+  align-items:end!important;
+}
+body #exams .exam-intro-compact h2{
+  margin:2px 0 2px!important;
+  font-size:28px!important;
+}
+body #exams .exam-intro-compact p{
+  margin:0!important;
+  font-size:12px!important;
+}
+body #exams .exam-grid-top{
+  margin:0 0 14px!important;
+}
+body #exams .exam-rules-below{
+  margin-top:6px!important;
+}
+
+@media(max-width:1100px) and (min-width:821px){
+  body .global-study-tab{padding-left:11px!important;padding-right:11px!important;font-size:10.5px!important}
+}
+@media(max-width:820px){
+  body .global-study-nav{padding:0 8px!important}
+  body .global-study-tab{min-height:42px!important;padding:11px 10px 10px!important;font-size:10px!important}
+  body .learner-journey{padding:0 8px!important}
+  body #progress.view.active{padding-left:12px!important;padding-right:12px!important}
+  body .progress-tabbar{margin-left:-12px!important;margin-right:-12px!important;padding-left:12px!important;padding-right:12px!important}
+}
