@@ -1904,13 +1904,14 @@ function activateAuthTab(name){
 
 async function openPublicTrial(){
 
-  if(!state.token||!state.user){requestFreeDrillSignup();return}
-
   trialState.index=0;trialState.question=null;trialState.selected=null;trialState.answered=false;trialState.score=0;
 
   $('#trialSubmitBtn').textContent='Check answer';$('#trialSubmitBtn').onclick=handleTrialSubmit;
 
-  $('#publicTrial').classList.remove('hidden');
+  const overlay=$('#publicTrial');
+  if(!overlay)throw new Error('Free preview is temporarily unavailable.');
+  overlay.classList.remove('hidden');
+  $('#trialQuestion').innerHTML='<p class="trial-loading">Loading your first question…</p>';
 
   await loadPublicTrialQuestion();
 
@@ -1932,7 +1933,16 @@ function requestFreeDrillSignup(){
 
 $('#trialStartBtn').onclick=requestFreeDrillSignup;
 
-const billingFreeTrialBtn=$('#billingFreeTrialBtn'); if(billingFreeTrialBtn)billingFreeTrialBtn.onclick=async e=>{e.preventDefault();billingFreeTrialBtn.disabled=true;const original=billingFreeTrialBtn.innerHTML;billingFreeTrialBtn.innerHTML='Loading 5 free questions…';try{await openPublicTrial()}finally{billingFreeTrialBtn.disabled=false;billingFreeTrialBtn.innerHTML=original}};
+async function launchFiveQuestionPreview(btn=null){
+  const original=btn?.innerHTML;
+  if(btn){btn.disabled=true;btn.innerHTML='Loading 5 free questions…'}
+  try{await openPublicTrial()}catch(err){
+    const overlay=$('#publicTrial');if(overlay)overlay.classList.remove('hidden');
+    const host=$('#trialQuestion');if(host)host.innerHTML=`<div class="trial-load-error"><b>Unable to load the free questions.</b><p>${escapeHtml(err.message||'Please try again.')}</p><button class="secondary" type="button" onclick="openPublicTrial()">Try again</button></div>`;
+  }finally{if(btn){btn.disabled=false;btn.innerHTML=original}}
+}
+const billingFreeTrialBtn=$('#billingFreeTrialBtn'); if(billingFreeTrialBtn)billingFreeTrialBtn.onclick=e=>{e.preventDefault();launchFiveQuestionPreview(billingFreeTrialBtn)};
+document.addEventListener('click',e=>{const btn=e.target.closest('#billingFreeTrialBtn,[data-free-trial]');if(!btn||btn===billingFreeTrialBtn)return;e.preventDefault();launchFiveQuestionPreview(btn)});
 
  
 

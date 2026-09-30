@@ -568,7 +568,7 @@ def _public_trial_items(db: Session):
     return chosen[:5]
 
 @app.get('/api/public/trial/question/{index}')
-def public_trial_question(index: int, user: User = Depends(current_user), db: Session = Depends(get_db)):
+def public_trial_question(index: int, db: Session = Depends(get_db)):
     items=_public_trial_items(db)
     if len(items)<5:
         raise HTTPException(503,'Free preview is not available yet')
@@ -578,7 +578,7 @@ def public_trial_question(index: int, user: User = Depends(current_user), db: Se
     return {'index':index,'total':5,'question':question_payload(q, include_answer=False)}
 
 @app.post('/api/public/trial/answer')
-async def public_trial_answer(request: Request, user: User = Depends(current_user), db: Session = Depends(get_db)):
+async def public_trial_answer(request: Request, db: Session = Depends(get_db)):
     body=await request.json()
     qid=str(body.get('question_id') or '')
     selected=body.get('selected_option_ids') or []
