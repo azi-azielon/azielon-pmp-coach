@@ -211,7 +211,86 @@ async function bootApp(){
 
 let noteDomain='',diagramDomain='';
 
-async function loadNotes(){state.notes=await api('/api/notes'+(noteDomain?`?domain=${encodeURIComponent(noteDomain)}`:''));renderNotes()}
+const supplementalTopicNotes = [
+  // PEOPLE — 15 high-value exam topics
+  {id:'az-note-people-01',domain:'People',title:'Conflict Resolution',summary:'PMP questions usually reward understanding the source of conflict and resolving it collaboratively before escalating.',dos:['Identify the source of conflict before acting.','Use collaborative problem solving when possible.','Address conflict early and directly with the people involved.'],donts:['Do not escalate to the sponsor as the first move.','Do not replace a team member before understanding the issue.','Do not avoid the conflict and hope it disappears.'],rule:'Understand → Discuss → Collaborate → Escalate only when necessary.'},
+  {id:'az-note-people-02',domain:'People',title:'Servant Leadership',summary:'In agile environments, the leader enables the team rather than directing every task.',dos:['Remove impediments.','Coach and empower the team.','Protect the team from unnecessary interference.'],donts:['Do not micromanage task assignments.','Do not make every team decision yourself.','Do not measure leadership by command and control.'],rule:'Serve the team so the team can deliver value.'},
+  {id:'az-note-people-03',domain:'People',title:'Team Development & Tuckman',summary:'Know how team behavior changes through forming, storming, norming, performing, and adjourning.',dos:['Expect conflict during storming.','Coach the team toward self-organization.','Use team-building actions appropriate to the stage.'],donts:['Do not treat all conflict as failure.','Do not assume a newly formed team is immediately high performing.'],rule:'Forming → Storming → Norming → Performing → Adjourning.'},
+  {id:'az-note-people-04',domain:'People',title:'Stakeholder Engagement',summary:'The PM should understand stakeholder needs, influence, expectations, and engagement before choosing a communication response.',dos:['Analyze stakeholder interest and influence.','Tailor engagement to stakeholder needs.','Reassess engagement as the project changes.'],donts:['Do not use the same communication approach for everyone.','Do not ignore resistant stakeholders.'],rule:'Analyze first; engage intentionally; monitor continuously.'},
+  {id:'az-note-people-05',domain:'People',title:'Communication Methods',summary:'Choose interactive, push, or pull communication based on urgency, complexity, audience, and need for feedback.',dos:['Use interactive communication when immediate feedback matters.','Use push for targeted distribution.','Use pull for large information repositories.'],donts:['Do not use email alone for sensitive conflict.','Do not choose the fastest method without considering effectiveness.'],rule:'Complex or sensitive = interactive; broad reference material = pull.'},
+  {id:'az-note-people-06',domain:'People',title:'Emotional Intelligence',summary:'PMP scenarios often reward self-awareness, empathy, and adapting your approach before reacting.',dos:['Listen before responding.','Recognize emotional cues.','Adapt communication to the person and context.'],donts:['Do not react defensively.','Do not assume resistance is purely technical.'],rule:'Pause → Understand → Adapt → Respond.'},
+  {id:'az-note-people-07',domain:'People',title:'Coaching vs Mentoring vs Training',summary:'Choose the people-development technique based on whether the need is performance, long-term growth, or skill acquisition.',dos:['Coach for current performance improvement.','Mentor for broader career or professional growth.','Train when a specific skill or knowledge gap exists.'],donts:['Do not use training when the issue is motivation or conflict.'],rule:'Coach = performance; Mentor = growth; Train = skill.'},
+  {id:'az-note-people-08',domain:'People',title:'Motivation & Team Performance',summary:'Understand what is blocking performance before offering rewards, discipline, or structural changes.',dos:['Identify the root cause of low performance.','Use recognition and autonomy appropriately.','Create psychological safety.'],donts:['Do not assume money is the only motivator.','Do not punish before understanding the cause.'],rule:'Diagnose first; motivate based on the real need.'},
+  {id:'az-note-people-09',domain:'People',title:'Virtual Teams',summary:'Remote teams need deliberate communication, trust-building, working agreements, and inclusive collaboration.',dos:['Set communication norms.','Use collaboration tools intentionally.','Account for time zones and culture.'],donts:['Do not assume silence means alignment.','Do not rely only on asynchronous communication for conflict.'],rule:'Make expectations visible when the team is not co-located.'},
+  {id:'az-note-people-10',domain:'People',title:'Negotiation',summary:'PMP negotiation questions favor preparation, interests over positions, and mutually beneficial outcomes.',dos:['Understand interests and constraints.','Look for win-win options.','Use objective criteria when possible.'],donts:['Do not begin with threats or escalation.','Do not focus only on stated positions.'],rule:'Interests first, options next, agreement last.'},
+  {id:'az-note-people-11',domain:'People',title:'Decision Making',summary:'Use an appropriate decision method and involve the right people based on urgency and expertise.',dos:['Clarify decision authority.','Use team input when commitment matters.','Document important decisions.'],donts:['Do not seek consensus for every minor decision.','Do not bypass governance for convenience.'],rule:'Right people + right authority + right method.'},
+  {id:'az-note-people-12',domain:'People',title:'Ground Rules & Working Agreements',summary:'Teams perform better when expectations for behavior, communication, and collaboration are explicit.',dos:['Create rules collaboratively.','Revisit rules when problems emerge.','Use them to resolve recurring friction.'],donts:['Do not impose rules without team input unless policy requires it.'],rule:'Agree early on how the team will work together.'},
+  {id:'az-note-people-13',domain:'People',title:'Leadership Styles',summary:'Adapt leadership style to the team, context, urgency, and delivery approach.',dos:['Use facilitative leadership with mature teams.','Be more directive only when the situation truly requires it.','Adapt as the team develops.'],donts:['Do not use one leadership style for every situation.'],rule:'Situational leadership beats one-size-fits-all leadership.'},
+  {id:'az-note-people-14',domain:'People',title:'Team Empowerment',summary:'PMP increasingly rewards giving teams authority within clear boundaries.',dos:['Clarify decision boundaries.','Let the team own how work is done.','Support accountability.'],donts:['Do not take back decisions just because you would do them differently.'],rule:'Set boundaries, then empower execution.'},
+  {id:'az-note-people-15',domain:'People',title:'Resource Conflict',summary:'When resources are constrained, understand priorities and negotiate rather than escalating immediately.',dos:['Review priorities and resource needs.','Negotiate with functional managers.','Use the resource management plan.'],donts:['Do not bypass the functional manager.','Do not secretly overload the team.'],rule:'Assess → Negotiate → Replan → Escalate if unresolved.'},
+
+  // PROCESS — 27 high-value exam topics
+  {id:'az-note-process-01',domain:'Process',title:'Scrum Roles',summary:'Know exactly who owns value, process facilitation, and delivery work in Scrum.',dos:['Product Owner prioritizes the Product Backlog.','Scrum Master coaches and removes impediments.','Developers decide how to perform the work.'],donts:['Do not let the Scrum Master prioritize the backlog.','Do not have a PM assign individual developer tasks.','Do not let the Product Owner dictate how work is performed.'],rule:'PO = What/Priority · Scrum Master = Process · Developers = How.'},
+  {id:'az-note-process-02',domain:'Process',title:'Scrum Events',summary:'Understand the purpose of Sprint Planning, Daily Scrum, Sprint Review, and Sprint Retrospective.',dos:['Use Sprint Planning to select work and form a Sprint Goal.','Use the Review to inspect the increment with stakeholders.','Use the Retrospective to improve how the team works.'],donts:['Do not confuse Review with Retrospective.','Do not use Daily Scrum as a manager status meeting.'],rule:'Review = product; Retrospective = process/team.'},
+  {id:'az-note-process-03',domain:'Process',title:'Product Backlog & Sprint Backlog',summary:'The Product Backlog is ordered by value; the Sprint Backlog is owned and adapted by Developers during the sprint.',dos:['Refine backlog items continuously.','Let the Product Owner order the Product Backlog.','Let Developers manage the Sprint Backlog.'],donts:['Do not freeze the Product Backlog for the project.','Do not let stakeholders directly insert work into the sprint.'],rule:'Product Backlog = evolving priorities; Sprint Backlog = current sprint plan.'},
+  {id:'az-note-process-04',domain:'Process',title:'Definition of Done vs Acceptance Criteria',summary:'Acceptance criteria describe a specific item; Definition of Done is the shared quality standard for completed work.',dos:['Check both acceptance criteria and DoD before calling work complete.','Keep the DoD visible and consistent.'],donts:['Do not treat acceptance criteria as the same as the DoD.'],rule:'Acceptance criteria = item-specific; DoD = team-wide quality bar.'},
+  {id:'az-note-process-05',domain:'Process',title:'Kanban & WIP Limits',summary:'Kanban optimizes flow by visualizing work, limiting work in progress, and managing bottlenecks.',dos:['Visualize workflow.','Respect WIP limits.','Address bottlenecks before starting more work.'],donts:['Do not maximize utilization by starting everything.','Do not ignore blocked columns.'],rule:'Stop starting; start finishing.'},
+  {id:'az-note-process-06',domain:'Process',title:'Cumulative Flow Diagram',summary:'A cumulative flow diagram shows work distribution over time and helps reveal bottlenecks and WIP growth.',dos:['Look for widening bands as a bottleneck signal.','Use it to discuss flow stability.'],donts:['Do not read it like a burndown chart.'],rule:'Widening band = work accumulating in that state.'},
+  {id:'az-note-process-07',domain:'Process',title:'Burndown vs Burnup',summary:'Burndown shows work remaining; burnup shows work completed against total scope and makes scope change easier to see.',dos:['Use burnup when scope movement matters.','Use burndown for remaining work trend.'],donts:['Do not interpret a flat burnup line as increasing remaining work.'],rule:'Burndown = remaining; Burnup = completed + total scope.'},
+  {id:'az-note-process-08',domain:'Process',title:'Velocity',summary:'Velocity is a team-specific planning aid based on completed story points; it is not a productivity score.',dos:['Use historical velocity for forecasting.','Compare the team to its own history.'],donts:['Do not compare velocity across teams.','Do not force velocity upward as a KPI.'],rule:'Velocity forecasts; it does not rank teams.'},
+  {id:'az-note-process-09',domain:'Process',title:'Agile Estimation',summary:'Relative estimation focuses on size, complexity, and uncertainty rather than false precision.',dos:['Use team-based relative estimation.','Refine estimates as understanding improves.'],donts:['Do not convert story points directly into individual performance.'],rule:'Estimate collaboratively; refine progressively.'},
+  {id:'az-note-process-10',domain:'Process',title:'Hybrid Delivery',summary:'Hybrid combines predictive and agile approaches based on the nature of the work rather than ideology.',dos:['Tailor by component, uncertainty, and stakeholder needs.','Keep governance coherent across approaches.'],donts:['Do not force all work into one lifecycle.'],rule:'Tailor the approach to the work, not the other way around.'},
+  {id:'az-note-process-11',domain:'Process',title:'Risk vs Issue',summary:'A risk is uncertain and may occur; an issue has already occurred and needs action now.',dos:['Manage risks through the risk process.','Log and act on issues immediately.'],donts:['Do not keep an occurred risk only on the risk register.'],rule:'Risk = may happen; Issue = happened.'},
+  {id:'az-note-process-12',domain:'Process',title:'Risk Responses',summary:'Match the response strategy to whether the risk is a threat or opportunity and assign ownership.',dos:['Threats: avoid, mitigate, transfer, accept, escalate.','Opportunities: exploit, enhance, share, accept, escalate.','Assign a risk owner.'],donts:['Do not confuse contingency with prevention.'],rule:'Choose a response, assign an owner, monitor the trigger.'},
+  {id:'az-note-process-13',domain:'Process',title:'Contingency vs Management Reserve',summary:'Contingency reserve covers identified risks; management reserve covers unknown-unknowns and is outside the cost baseline.',dos:['Use contingency for known uncertainty.','Use management reserve according to governance approval.'],donts:['Do not treat management reserve as normal project spending.'],rule:'Known risk = contingency; unknown uncertainty = management reserve.'},
+  {id:'az-note-process-14',domain:'Process',title:'Change Control',summary:'In predictive work, assess impact before approval and update baselines only after authorized change approval.',dos:['Document the change request.','Analyze scope, schedule, cost, quality, risk, and stakeholder impacts.','Follow the defined change authority.'],donts:['Do not implement an unapproved baseline change.','Do not reject a change before assessing it.'],rule:'Request → Analyze → Approve/Reject → Update → Communicate.'},
+  {id:'az-note-process-15',domain:'Process',title:'Issue Escalation',summary:'Resolve issues at the lowest appropriate level, but escalate when authority, urgency, or impact exceeds the team’s limits.',dos:['Investigate before escalating.','Use defined escalation paths.','Document decisions and ownership.'],donts:['Do not escalate every problem immediately.','Do not hide an issue that exceeds your authority.'],rule:'Resolve locally when possible; escalate when necessary.'},
+  {id:'az-note-process-16',domain:'Process',title:'Scope Baseline & Requirements',summary:'Requirements define needs; the scope baseline controls approved project scope in predictive projects.',dos:['Trace requirements to business needs.','Validate deliverables with the customer.','Control changes to the baseline.'],donts:['Do not gold plate.','Do not add requested scope informally.'],rule:'Build only approved value—no gold plating.'},
+  {id:'az-note-process-17',domain:'Process',title:'Validate Scope vs Control Quality',summary:'Control Quality checks correctness; Validate Scope obtains formal acceptance.',dos:['Verify quality before seeking acceptance.','Use Validate Scope with the customer or sponsor.'],donts:['Do not confuse inspection with formal acceptance.'],rule:'Quality first; acceptance second.'},
+  {id:'az-note-process-18',domain:'Process',title:'Critical Path & Float',summary:'The critical path determines the shortest project duration; activities on it generally have zero total float.',dos:['Analyze the network before changing dates.','Focus schedule compression on critical-path work.'],donts:['Do not shorten noncritical work and expect project duration to change.'],rule:'Only changes to the critical path change the finish date—unless the critical path shifts.'},
+  {id:'az-note-process-19',domain:'Process',title:'Fast Tracking vs Crashing',summary:'Fast tracking overlaps sequential work and increases risk; crashing adds resources/cost to shorten duration.',dos:['Evaluate cost and risk before compressing.','Apply compression to critical-path activities.'],donts:['Do not confuse more resources with fast tracking.'],rule:'Fast track = overlap/risk; Crash = cost/resources.'},
+  {id:'az-note-process-20',domain:'Process',title:'Earned Value Basics',summary:'Know the direction of CPI and SPI and what EV, PV, and AC represent.',dos:['CPI = EV/AC.','SPI = EV/PV.','Interpret values above 1 as favorable for these indices.'],donts:['Do not reverse numerator and denominator.'],rule:'CPI < 1 = over budget; SPI < 1 = behind schedule.'},
+  {id:'az-note-process-21',domain:'Process',title:'Quality Management',summary:'Prevent defects through quality planning and process improvement rather than relying only on inspection.',dos:['Build quality into the process.','Analyze root causes.','Use appropriate quality tools.'],donts:['Do not inspect quality in only at the end.'],rule:'Prevention over inspection.'},
+  {id:'az-note-process-22',domain:'Process',title:'Root Cause Analysis',summary:'Fix the underlying cause, not merely the visible symptom.',dos:['Collect facts.','Use tools such as 5 Whys or fishbone diagrams.','Verify the corrective action works.'],donts:['Do not jump to a solution before confirming the cause.'],rule:'Symptom ≠ root cause.'},
+  {id:'az-note-process-23',domain:'Process',title:'Procurement Contracts',summary:'Understand where cost risk sits in fixed-price, cost-reimbursable, and time-and-materials contracts.',dos:['Match contract type to scope certainty and risk allocation.','Monitor seller performance against the contract.'],donts:['Do not change contractual work informally.'],rule:'Fixed price shifts more cost risk to seller; cost reimbursable shifts more to buyer.'},
+  {id:'az-note-process-24',domain:'Process',title:'Make-or-Buy & Procurement Decisions',summary:'Consider capability, cost, schedule, risk, strategic value, and organizational constraints before sourcing.',dos:['Use objective analysis.','Consider total lifecycle impact.'],donts:['Do not choose solely on lowest initial price.'],rule:'Best procurement decision = value + risk + capability, not price alone.'},
+  {id:'az-note-process-25',domain:'Process',title:'RACI & Responsibility Assignment',summary:'Clarify who performs, approves, contributes, and is informed to reduce ownership confusion.',dos:['Ensure accountability is clear.','Resolve overlapping ownership.'],donts:['Do not create multiple unclear accountable owners.'],rule:'One clear accountable owner prevents decision ambiguity.'},
+  {id:'az-note-process-26',domain:'Process',title:'Retrospectives & Continuous Improvement',summary:'Retrospectives improve the team’s way of working and should produce actionable experiments.',dos:['Create psychological safety.','Choose a small number of improvement actions.','Check whether actions helped.'],donts:['Do not turn retrospectives into blame sessions.'],rule:'Inspect the process, adapt the process.'},
+  {id:'az-note-process-27',domain:'Process',title:'Backlog Refinement & Prioritization',summary:'Refinement improves clarity and readiness; prioritization should reflect value, risk, dependencies, and stakeholder needs.',dos:['Break down oversized items.','Clarify acceptance criteria.','Reorder as new information emerges.'],donts:['Do not treat backlog order as permanent.'],rule:'Refine continuously; prioritize by value and risk.'},
+
+  // BUSINESS ENVIRONMENT — 8 high-value exam topics
+  {id:'az-note-business-01',domain:'Business Environment',title:'Compliance',summary:'Legal, regulatory, safety, audit, and mandatory policy requirements are constraints the project must respect.',dos:['Identify applicable compliance requirements early.','Assess project impact.','Escalate compliance risks through proper governance.'],donts:['Do not trade away mandatory compliance for schedule or cost.'],rule:'Mandatory requirement = constraint, not negotiation.'},
+  {id:'az-note-business-02',domain:'Business Environment',title:'Benefits & Value Realization',summary:'Delivering an output is not the same as realizing a business benefit.',dos:['Link deliverables to intended outcomes.','Track benefits ownership and realization.','Revisit the business case when conditions change.'],donts:['Do not assume project completion automatically means value was achieved.'],rule:'Output → Outcome → Benefit → Value.'},
+  {id:'az-note-business-03',domain:'Business Environment',title:'Business Case',summary:'The business case explains why the project should exist and whether continued investment remains justified.',dos:['Use it to understand strategic rationale and expected value.','Revisit viability after major changes.'],donts:['Do not treat it as a one-time kickoff artifact.'],rule:'If the justification disappears, reconsider the project.'},
+  {id:'az-note-business-04',domain:'Business Environment',title:'Governance & Decision Authority',summary:'The PM works within delegated authority and defined governance; not every decision belongs to the PM.',dos:['Know approval thresholds.','Use governance bodies for decisions outside your authority.','Document major decisions.'],donts:['Do not bypass governance because a decision feels obvious.'],rule:'Know who can decide before deciding.'},
+  {id:'az-note-business-05',domain:'Business Environment',title:'Organizational Change & Adoption',summary:'A technically successful project can still fail if users do not adopt the change.',dos:['Assess readiness and resistance.','Engage impacted stakeholders.','Plan training and transition support.'],donts:['Do not treat resistance as merely a communication defect.'],rule:'Delivery creates capability; adoption creates value.'},
+  {id:'az-note-business-06',domain:'Business Environment',title:'Strategic Alignment',summary:'Projects should remain aligned to organizational strategy and intended outcomes.',dos:['Connect objectives to strategic goals.','Raise concerns when priorities materially shift.'],donts:['Do not continue blindly when the project no longer supports strategy.'],rule:'A successful project must still be the right project.'},
+  {id:'az-note-business-07',domain:'Business Environment',title:'External Business Environment',summary:'Market, regulatory, economic, social, and technology changes can alter project assumptions and value.',dos:['Monitor relevant external changes.','Assess impact on risk, scope, and benefits.'],donts:['Do not treat the approved plan as immune to external change.'],rule:'Scan the environment; reassess assumptions.'},
+  {id:'az-note-business-08',domain:'Business Environment',title:'Transition to Operations',summary:'Project closure should prepare the receiving organization to sustain the delivered capability.',dos:['Plan handoff, documentation, training, and support.','Confirm operational acceptance.','Capture lessons learned.'],donts:['Do not close simply because deliverables were produced.'],rule:'Finish the project by enabling successful operations.'}
+].map(n=>({
+  ...n,
+  keyRules:n.dos,
+  examTraps:n.donts,
+  doFirst:n.dos[0]||'',
+  flowOrMemory:n.rule,
+  trickyDistinctions:[],
+  triggerWords:[],
+  studyStatus:'not_started'
+}));
+
+async function loadNotes(){
+  const apiNotes=await api('/api/notes'+(noteDomain?`?domain=${encodeURIComponent(noteDomain)}`:''));
+  const byTitle=new Map(apiNotes.map(n=>[String(n.title||'').trim().toLowerCase(),n]));
+  let extras=supplementalTopicNotes.filter(n=>!byTitle.has(String(n.title||'').trim().toLowerCase()));
+  if(noteDomain)extras=extras.filter(n=>n.domain===noteDomain);
+  try{
+    const states=await api('/api/study/states');
+    const map=new Map((states||[]).filter(x=>x.content_type==='note').map(x=>[x.content_id,x.status]));
+    extras=extras.map(n=>({...n,studyStatus:map.get(n.id)||'not_started'}));
+  }catch{}
+  state.notes=[...apiNotes,...extras];
+  renderNotes();
+}
 
 function statusLabel(s){return ({not_started:'Not Studied',reviewed:'Reviewed',needs_review:'Needs Review',mastered:'Mastered'})[s]||'Not Studied'}
 
@@ -235,28 +314,24 @@ function noteFlowHtml(flow){
   return steps.map((step,i)=>`${i?'<span class="flow-arrow" aria-hidden="true">→</span>':''}<span class="flow-step">${escapeHtml(step)}</span>`).join('');
 }
 function noteDetailHtml(n){
-  const rules=(n.keyRules||[]).slice(0,3);
-  const traps=n.examTraps||[];
-  const distinctions=n.trickyDistinctions||[];
-  const triggers=n.triggerWords||[];
-  return `<div class="note-study-body exam-note-layout">
-    <p class="note-summary exam-note-summary">${escapeHtml(n.summary||'')}</p>
-    <section class="exam-core-rule">
-      <span class="exam-section-kicker">1 · Core PM Rule</span>
-      <h4>${escapeHtml(n.doFirst||'Know the rule, assess the situation, then act.')}</h4>
-      ${rules.length?`<div class="core-rule-points">${rules.map(x=>`<span>• ${escapeHtml(x)}</span>`).join('')}</div>`:''}
-    </section>
-    <section class="exam-flow-panel">
-      <div class="exam-flow-head"><span class="exam-section-kicker">2 · The Exam Flow</span><small>Follow this sequence before choosing an answer.</small></div>
-      <div class="exam-flow-line">${noteFlowHtml(n.flowOrMemory)}</div>
-    </section>
-    <section class="exam-cheat-sheet">
-      <div class="exam-cheat-head"><span class="exam-section-kicker">3 · Quick Exam Cheat Sheet</span><small>Scan these before moving to the next topic.</small></div>
-      <div class="exam-cheat-grid">
-        <div class="exam-cheat-col exam-traps-col"><h5>Exam Traps</h5><ul>${traps.map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>—</li>'}</ul></div>
-        <div class="exam-cheat-col"><h5>Key Distinctions</h5><ul>${distinctions.map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>—</li>'}</ul></div>
-        <div class="exam-cheat-col exam-trigger-col"><h5>Trigger Words</h5><div class="trigger-chip-wrap">${triggers.map(x=>`<span class="trigger-chip">${escapeHtml(x)}</span>`).join('')||'<span class="trigger-chip">—</span>'}</div></div>
-      </div>
+  const dos=(n.dos||n.keyRules||[]).slice(0,4);
+  const donts=(n.donts||n.examTraps||[]).slice(0,4);
+  const rule=n.rule||n.flowOrMemory||n.doFirst||'';
+  return `<div class="note-study-body fingertip-note">
+    <p class="note-summary fingertip-summary">${escapeHtml(n.summary||'')}</p>
+    <div class="fingertip-columns">
+      <section class="fingertip-section do-section">
+        <span class="exam-section-kicker">DO</span>
+        <ul>${dos.map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>—</li>'}</ul>
+      </section>
+      <section class="fingertip-section dont-section">
+        <span class="exam-section-kicker">DON’T / EXAM TRAPS</span>
+        <ul>${donts.map(x=>`<li>${escapeHtml(x)}</li>`).join('')||'<li>—</li>'}</ul>
+      </section>
+    </div>
+    <section class="fingertip-rule">
+      <span class="exam-section-kicker">RULE TO REMEMBER</span>
+      <strong>${escapeHtml(rule||'Know what the PM should do first, and eliminate premature escalation.')}</strong>
     </section>
   </div>`
 }

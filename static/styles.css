@@ -2861,3 +2861,15 @@ body #dashboard .next-plan-done-btn{min-width:68px;padding:7px 12px!important}
   body #dashboard .today-finished-clean{margin-left:-13px;margin-right:-13px;margin-bottom:-13px}
   body #dashboard .next-plan-actions{grid-column:2;justify-content:flex-start}
 }
+
+/* v5.14.23 — fingertip Topic Notes: compact DO / DON'T / RULE format */
+.fingertip-note{display:grid;gap:18px}
+.fingertip-summary{font-size:15px;line-height:1.65;margin:0;color:#506070;max-width:980px}
+.fingertip-columns{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.fingertip-section{padding:20px 22px;background:transparent}
+.fingertip-section+ .fingertip-section{border-left:1px solid var(--line)}
+.fingertip-section ul{margin:12px 0 0;padding-left:20px;display:grid;gap:9px}
+.fingertip-section li{line-height:1.5;color:#263544}
+.fingertip-rule{padding:16px 20px;border-left:4px solid #c69a3b;background:#faf7ef;border-radius:0 12px 12px 0;display:grid;gap:7px}
+.fingertip-rule strong{font:600 16px/1.45 var(--serif);color:var(--navy)}
+@media(max-width:760px){.fingertip-columns{grid-template-columns:1fr}.fingertip-section+ .fingertip-section{border-left:0;border-top:1px solid var(--line)}.fingertip-section{padding:16px 4px}}
