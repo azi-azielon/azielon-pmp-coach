@@ -669,7 +669,7 @@ function nextFourTasks(p,currentTasks=[]){
   if(out.length<4)add({id:'next:review',type:'review',label:'Repair',title:'Review weak concepts',detail:'Work through your review queue and retry missed questions.'});
   return out.slice(0,4);
 }
-function nextPlanPreviewRow(task){return `<article class="next-plan-row"><span class="next-plan-dot">○</span><div><div class="next-plan-meta"><span class="workspace-kicker">${escapeHtml(task.label)}</span><span>Need to study</span></div><h4>${escapeHtml(task.title)}</h4><p>${escapeHtml(task.detail||'')}</p></div><button class="text-btn" type="button" data-next-preview-open="${escapeHtml(task.type)}" data-next-preview-id="${escapeHtml(String(task.itemId||''))}">Open →</button></article>`}
+function nextPlanPreviewRow(task){return `<article class="next-plan-row"><span class="next-plan-dot">○</span><div><div class="next-plan-meta"><span class="workspace-kicker">${escapeHtml(task.label)}</span><span>Need to study</span></div><h4>${escapeHtml(task.title)}</h4><p>${escapeHtml(task.detail||'')}</p></div><div class="next-plan-actions"><button class="text-btn" type="button" data-next-preview-open="${escapeHtml(task.type)}" data-next-preview-id="${escapeHtml(String(task.itemId||''))}">Open →</button><button class="secondary next-plan-done-btn" type="button" data-next-preview-done="${escapeHtml(task.id)}">Done</button></div></article>`}
 function nextAfterTodayAction(p){
   const j=learnerJourneyState(p||{}),plan=p?.adaptive_plan||{},weak=plan?.weak_domains?.[0]?.domain||'';
   if(j.index===0){
@@ -688,17 +688,32 @@ function renderTodayPlanFromDb(p,tasks){
   const host=$('#dashboardWorkspace');if(!host)return;const plan=p?.adaptive_plan||{},daysLeft=Number(plan.days_until_exam||0),done=tasks.filter(t=>taskState(t)==='done').length,carried=tasks.filter(t=>t.carriedFrom).length,allDone=tasks.length>0&&done===tasks.length;
   const badge=daysLeft>0?`${daysLeft} day${daysLeft===1?'':'s'} to exam`:`${done}/${tasks.length} done`;
   if(allDone){
-    const nextTasks=nextFourTasks(p,tasks);
-    host.innerHTML=`${dashboardWorkspaceHeader('Today complete','',badge)}<section class="today-complete-state compact"><div class="today-complete-check">✓</div><div class="today-complete-copy"><span class="workspace-kicker">4/4 complete</span><h3>Next plan: 0/${nextTasks.length}</h3><p>Your next four items are ready. They begin as Need to study.</p></div></section><section class="next-plan-preview"><div class="next-plan-head"><div><span class="workspace-kicker">Next 4 tasks</span><h4>Continue in Learn</h4></div><button class="text-btn" type="button" data-dashboard-focus="plan">View full plan →</button></div><div class="next-plan-list">${nextTasks.map(nextPlanPreviewRow).join('')}</div></section>${completedTodayRows(tasks)}`;
+    host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','',badge)}<section class="today-finished-clean"><span class="today-complete-check">✓</span><div><span class="workspace-kicker">Today complete</span><h3>Congratulations!</h3><p>You completed everything currently assigned for today.</p></div></section>${completedTodayRows(tasks)}`;
     bindDashboardWorkspaceActions();return;
   }
   const rolloverNote=carried?`${carried} unfinished item${carried===1?' was':'s were'} carried forward first. `:'';
-  host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','',badge)}<div class="today-plan-summary"><div><span class="workspace-kicker">Today</span><b>${done}/${tasks.length} completed</b></div><div class="today-plan-progress"><i style="width:${tasks.length?Math.round(done/tasks.length*100):0}%"></i></div><small>${escapeHtml(rolloverNote+(plan.guidance||'Prioritize the next item in your plan.'))}</small></div><div class="today-plan-list">${tasks.length?tasks.map(todayTaskRow).join(''):'<div class="workspace-empty"><b>You are caught up for today.</b><p>Check your readiness or start a short practice set.</p></div>'}</div>`;
+  const addedBanner=state.todayTaskJustAdded?`<div class="today-added-banner"><span>✓</span><div><b>Congratulations!</b><small>Your next task is added for the day.</small></div></div>`:'';
+  host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','',badge)}${addedBanner}<div class="today-plan-summary"><div><span class="workspace-kicker">Today</span><b>${done}/${tasks.length} completed</b></div><div class="today-plan-progress"><i style="width:${tasks.length?Math.round(done/tasks.length*100):0}%"></i></div><small>${escapeHtml(rolloverNote+(plan.guidance||'Prioritize the next item in your plan.'))}</small></div><div class="today-plan-list">${tasks.length?tasks.map(todayTaskRow).join(''):'<div class="workspace-empty"><b>You are caught up for today.</b><p>Check your readiness or start a short practice set.</p></div>'}</div>`;
+  state.todayTaskJustAdded=false;
   bindDashboardWorkspaceActions();
+}
+async function appendOneNextTodayTask(p,tasks){
+  const next=nextFourTasks(p,tasks)[0];if(!next)return false;
+  const task={...next,view:next.type==='note'?'notes':next.type==='tricky'?'tricky':next.type==='diagram'?'diagrams':next.type==='practice'?'practice':next.type==='review'?'review':''};
+  await api('/api/study/daily-plan/import-local',{method:'POST',body:JSON.stringify({plans:[{plan_date:todayDateKey(),tasks:[{...task,status:'not_started'}]}]})});
+  const refreshed=await api(`/api/study/daily-plan?plan_date=${encodeURIComponent(todayDateKey())}`);
+  state.todayPlan=(refreshed.tasks||[]).map(hydrateDbTask).filter(Boolean);
+  state.todayTaskJustAdded=true;return true;
 }
 async function loadAndRenderTodayPlan(p){
   const host=$('#dashboardWorkspace');if(host)host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','')}<div class="workspace-empty"><p>Loading your plan…</p></div>`;
-  try{await syncDatabaseTodayPlan(p);renderTodayPlanFromDb(p,state.todayPlan||[])}catch(err){if(host)host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','')}<div class="workspace-empty"><b>Unable to sync your study plan.</b><p>${escapeHtml(err.message||'Please try again.')}</p></div>`}
+  try{
+    await syncDatabaseTodayPlan(p);
+    let tasks=state.todayPlan||[];
+    const allDone=tasks.length>0&&tasks.every(t=>taskState(t)==='done');
+    if(allDone){const added=await appendOneNextTodayTask(p,tasks);if(added)tasks=state.todayPlan||tasks;}
+    renderTodayPlanFromDb(p,tasks);
+  }catch(err){if(host)host.innerHTML=`${dashboardWorkspaceHeader('Today’s PMP Plan','')}<div class="workspace-empty"><b>Unable to sync your study plan.</b><p>${escapeHtml(err.message||'Please try again.')}</p></div>`}
 }
 async function setDailyTaskStatus(task,status){
   if(!task?.db_id)throw new Error('This task has not been saved to your account yet.');
