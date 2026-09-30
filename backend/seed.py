@@ -78,6 +78,53 @@ def seed_all(db: Session):
         for t in src:
             db.add(TrickyWord(id=t['id'], left_term=t.get('left'), right_term=t.get('right'), tags_json=json.dumps(t.get('tags',[])), body_json=json.dumps(t)))
     db.commit()
+    n=apply_content_updates(db)
+    if n:
+        print(f'[startup] Content update applied to {n} questions', flush=True)
+
+def apply_content_updates(db: Session):
+    """Idempotent: swap in revised stem/option/explanation text only where the live row still has one of
+    the known previous versions, so edits made in Instructor Studio are never overwritten."""
+    path=Path(__file__).resolve().parents[1]/'data'/'content_update_2026_09.json'
+    if not path.exists():
+        return 0
+    upd=json.loads(path.read_text(encoding='utf-8')).get('questions',{})
+    olds=lambda r:set(r['old'] if isinstance(r.get('old'),list) else [r.get('old')])
+    changed=0
+    for qid,ch in upd.items():
+        q=db.get(Question,qid)
+        if not q:
+            continue
+        dirty=False
+        st=ch.get('stem')
+        if st and q.stem in olds(st):
+            q.stem=st['new'];dirty=True
+        opts=ch.get('options')
+        if opts:
+            try:
+                cur=json.loads(q.options_json or '[]')
+            except Exception:
+                cur=[]
+            od=False
+            for o in cur:
+                r=opts.get(o.get('id'))
+                if r and o.get('text') in olds(r):
+                    o['text']=r['new'];od=True
+            if od:
+                q.options_json=json.dumps(cur);dirty=True
+        ca=ch.get('correctAnswer')
+        if ca:
+            try:
+                ex=json.loads(q.explanation_json or '{}')
+            except Exception:
+                ex={}
+            if isinstance(ex,dict) and ex.get('correctAnswer') in olds(ca):
+                ex['correctAnswer']=ca['new'];q.explanation_json=json.dumps(ex);dirty=True
+        if dirty:
+            changed+=1
+    if changed:
+        db.commit()
+    return changed
 
 def _slug(s):
     import re

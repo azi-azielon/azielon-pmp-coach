@@ -1,4 +1,4 @@
-from typing import Optional, List, Any
+from typing import Dict, Optional, List, Any
 from pydantic import BaseModel, EmailStr, Field
 
 class RegisterIn(BaseModel):
@@ -30,6 +30,8 @@ class PracticeCreateIn(BaseModel):
     feedback_mode: str = 'immediate'
     question_id: Optional[str] = None
     timer_minutes: Optional[int] = Field(default=None, ge=1, le=240)
+    # Daily plan: pick questions on the topics studied today, e.g. {"note": "BUS-01", "tricky": "TW-01", "diagram": "BED-001"}
+    related_to: Optional[Dict[str, str]] = None
 
 class AttemptIn(BaseModel):
     session_id: Optional[int] = None

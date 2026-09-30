@@ -646,6 +646,71 @@ def practice_availability(domain: str|None=None,delivery_approach: str|None=None
     focus_counts={k:sum(1 for item in rows if matches(item,{'review_focus'}) and item.id in sets[k]) for k in ('incorrect_now','last_session_incorrect','ever_missed','bookmarked')}
     return {'total':total,'base_total':len(rows),'by_type':facet('type','question_type'),'by_domain':facet('domain','domain'),'by_approach':facet('delivery_approach','delivery_approach'),'visual_questions_enabled':visual_enabled,'visual_count':visual_count,'review_focus_counts':focus_counts,'missed_count':focus_counts['ever_missed'],'bookmarked_count':focus_counts['bookmarked'],'selected':selected}
 
+
+# ---------- Topic-linked practice (daily plan) ----------
+import re as _re, math as _math
+_STOP=set("a an the and or of to in on for with by is are be as at from that this it its into than then what which who when should would could must may can project manager pm team teams work first next best most do does not no flow map grid chart diagram model ladder structure matrix guide infographic".split())
+def _toks(text):
+    return [w for w in _re.findall(r"[a-z][a-z\-]{2,}",(text or '').lower()) if w not in _STOP]
+_Q_INDEX={'built':False}
+def _question_index(db):
+    if _Q_INDEX['built']:
+        return _Q_INDEX
+    rows=db.query(Question.id,Question.primary_concept,Question.stem,Question.domain).all()
+    docs={};df={}
+    for qid,concept,stem,domain in rows:
+        bag={}
+        for w in _toks(concept):bag[w]=bag.get(w,0)+3.0
+        for w in _toks(stem):bag[w]=bag.get(w,0)+1.0
+        docs[qid]=(bag,domain)
+        for w in bag:df[w]=df.get(w,0)+1
+    n=max(1,len(docs))
+    _Q_INDEX.update(built=True,docs=docs,idf={w:_math.log(1+n/c) for w,c in df.items()})
+    return _Q_INDEX
+
+def _topic_text(db,kind,item_id):
+    if kind=='note':
+        t=db.get(TopicNote,item_id)
+        if not t:return '',None
+        b=json.loads(t.body_json or '{}')
+        return ' '.join([t.title or '',t.title or '',' '.join(b.get('triggerWords') or []),' '.join(b.get('keyRules') or [])[:600],b.get('summary') or '']),t.domain
+    if kind=='tricky':
+        t=db.get(TrickyWord,item_id)
+        if not t:return '',None
+        b=json.loads(t.body_json or '{}')
+        return ' '.join([t.left_term or '',t.right_term or '',t.left_term or '',t.right_term or '',b.get('leftMeaning') or '',b.get('rightMeaning') or '']),None
+    if kind=='diagram':
+        d=db.get(Diagram,item_id)
+        if not d:return '',None
+        b=json.loads(d.metadata_json or '{}')
+        return ' '.join([d.title or '',d.title or '',' '.join(b.get('triggerWords') or []),b.get('whatItIs') or '']),d.domain
+    return '',None
+
+def _related_question_ids(db,user,related,allowed_ids,count):
+    """Rank questions by how closely they match today's note / tricky pair / diagram.
+    Split the set evenly across topics, prefer questions the learner has not answered correctly."""
+    idx=_question_index(db);docs,idf=idx['docs'],idx['idf']
+    solved={qid for (qid,) in db.query(Attempt.question_id).filter(Attempt.user_id==user.id,Attempt.is_correct==True).distinct().all()}
+    topics=[(k,v) for k,v in (related or {}).items() if v and k in ('note','tricky','diagram')]
+    if not topics:return []
+    per=max(1,_math.ceil(count/len(topics)));picked=[]
+    for kind,item_id in topics:
+        text,domain=_topic_text(db,kind,item_id)
+        tv={}
+        for w in _toks(text):tv[w]=tv.get(w,0)+1.0
+        if not tv:continue
+        scored=[]
+        for qid,(bag,qdom) in docs.items():
+            if qid not in allowed_ids or qid in picked:continue
+            s=sum(min(tv[w],3.0)*bag[w]*idf.get(w,0) for w in tv if w in bag)
+            if s<=0:continue
+            if domain and qdom==domain:s*=1.15
+            if qid in solved:s*=0.35
+            scored.append((s,qid))
+        scored.sort(reverse=True)
+        picked+= [q for _,q in scored[:per]]
+    return picked[:count]
+
 @app.post('/api/practice/sessions')
 def create_practice(data: PracticeCreateIn, user: User = Depends(current_user), db: Session = Depends(get_db)):
     require_feature(user, db, 'practice', 'Your plan does not include practice access')
@@ -678,9 +743,18 @@ def create_practice(data: PracticeCreateIn, user: User = Depends(current_user), 
     items = query.all()
     if not items:
         raise HTTPException(404, 'No verified questions match those filters')
-    if not data.question_id:
-        random.shuffle(items)
-    chosen = items[:data.count]
+    ranked=_related_question_ids(db,user,data.related_to,{q.id for q in items},data.count) if data.related_to else []
+    if ranked:
+        by_id={q.id:q for q in items}
+        chosen=[by_id[i] for i in ranked if i in by_id]
+        if len(chosen)<data.count:
+            rest=[q for q in items if q.id not in set(ranked)];random.shuffle(rest)
+            chosen+=rest[:data.count-len(chosen)]
+        random.shuffle(chosen)
+    else:
+        if not data.question_id:
+            random.shuffle(items)
+        chosen = items[:data.count]
     filters = data.model_dump()
     filters['feedback_mode'] = feedback_mode
     session = PracticeSession(user_id=user.id, filters_json=json.dumps(filters), question_ids_json=json.dumps([q.id for q in chosen]))
@@ -1339,7 +1413,9 @@ def import_local_daily_plan(payload:dict,user:User=Depends(current_user),db:Sess
         for i,raw in enumerate((p.get('tasks') or [])[:12]):
             status=str(raw.get('status') or 'not_started')
             before=db.query(DailyStudyTask).filter(DailyStudyTask.plan_id==plan.id,DailyStudyTask.task_key==str(raw.get('id') or '')).first()
-            row=_daily_add_task(db,plan,user.id,raw,i,source_date=raw.get('carriedFrom'),status=status)
+            try: order=int(raw.get('sortOrder')) if raw.get('sortOrder') is not None else i
+            except Exception: order=i
+            row=_daily_add_task(db,plan,user.id,raw,order,source_date=raw.get('carriedFrom'),status=status)
             if row and not before: imported+=1
     db.commit()
     return {'ok':True,'imported':imported}
@@ -1378,7 +1454,7 @@ def sync_daily_plan(payload:dict,user:User=Depends(current_user),db:Session=Depe
             if _daily_native_done(db,user.id,task_type,str(item_id) if item_id is not None else None): continue
             _daily_add_task(db,plan,user.id,raw,order,source_date=None,status='not_started')
             keys.add(key);order+=1
-            if order>=4: break
+            if order>=10: break
         db.commit()
         existing=db.query(DailyStudyTask).filter(DailyStudyTask.plan_id==plan.id).order_by(DailyStudyTask.sort_order,DailyStudyTask.id).all()
     else:

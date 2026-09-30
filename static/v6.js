@@ -232,3 +232,197 @@
 })();
 /* Keep the current exam question visible in the one-line navigator */
 (function(){const nav=document.getElementById('examNavigator');if(!nav)return;new MutationObserver(()=>{const c=nav.querySelector('.current, .active, [aria-current="true"]');if(c)c.scrollIntoView({block:'nearest',inline:'center'})}).observe(nav,{subtree:true,attributes:true,attributeFilter:['class']})})();
+
+/* ---------- Daily plan practice: on today's topics, and it completes ---------- */
+(function(){
+  // 1) Attach today's note / tricky pair / diagram to the practice request so questions match what was studied.
+  if(typeof api==='function'){
+    const origApi=api;
+    window.api=function(path,opts){
+      if(state.v6RelatedTo&&path==='/api/practice/sessions'&&opts&&opts.method==='POST'){
+        try{const b=JSON.parse(opts.body||'{}');b.related_to=state.v6RelatedTo;opts={...opts,body:JSON.stringify(b)}}catch(e){}
+        state.v6RelatedTo=null;
+      }
+      return origApi.call(this,path,opts);
+    };
+  }
+  function todaysTopics(task){
+    const plan=state.todayPlan||[],out={};let i=task?plan.findIndex(t=>t.id===task.id):-1;
+    if(i<0)i=plan.findIndex(t=>t.type==='practice'&&taskState(t)!=='done');
+    for(let k=i-1;k>=0;k--){const t=plan[k];if(t.type==='practice'||t.type==='exam')break;if(['note','tricky','diagram'].includes(t.type)&&t.itemId&&!out[t.type])out[t.type]=String(t.itemId)}
+    return out;
+  }
+  // 2) Starting practice from Today: remember the task, use today's topics, mixed domains.
+  if(typeof openTodayTask==='function'){
+    const o=window.openTodayTask;
+    window.openTodayTask=async function(t){
+      if(t&&t.type==='practice'){
+        state.v6PracticeTask=t;const rel=todaysTopics(t);state.v6RelatedTo=Object.keys(rel).length?rel:null;
+        if(state.v6RelatedTo){t={...t,domain:'',focus:''}} // topic-matched set replaces the domain/missed filters
+      }else if(t&&t.type!=='practice'){state.v6PracticeTask=null}
+      return o.call(this,t);
+    };
+  }
+  document.addEventListener('click',e=>{const b=e.target.closest('#nav button');if(b&&b.dataset.view!=='practice'){state.v6PracticeTask=null}},true);
+  // 3) Session finished: mark today's practice task done and point to the next step.
+  if(typeof renderSessionComplete==='function'){
+    const orig=renderSessionComplete;
+    window.renderSessionComplete=async function(){
+      const sess=state.session,task=state.v6PracticeTask;
+      const r=await orig.apply(this,arguments);
+      if(!sess)return r;
+      let res=null;try{res=await api(`/api/practice/sessions/${sess.session_id}/results`)}catch(e){}
+      let planTask=task;
+      if(!planTask){planTask=(state.todayPlan||[]).find(x=>x.type==='practice'&&taskState(x)!=='done'&&(sess.total||0)>=Math.min(10,Number(x.count||10)))||null}
+      if(planTask&&taskState(planTask)!=='done'&&typeof setDailyTaskStatus==='function'){try{await setDailyTaskStatus(planTask,'done')}catch(e){}}
+      state.v6PracticeTask=null;
+      const card=document.getElementById('questionCard');if(!card)return r;
+      const acc=res&&res.accuracy!=null?Math.round(res.accuracy):null;
+      const verdict=acc==null?'':acc>=80?'Exam-ready accuracy on these topics.':acc>=65?'Close. Review the misses, then move on.':'These topics need another pass. Review each miss before moving on.';
+      const box=document.createElement('div');box.className='v6-session-done';
+      box.innerHTML=`<span class="v6-kicker">${planTask?'Today’s practice complete':'Session complete'}</span><h3>${res?`${res.correct} of ${res.total} correct`:'Answers saved'}${acc!=null?` <span>· ${acc}%</span>`:''}</h3>${verdict?`<p>${verdict}</p>`:''}<div class="v6-next-actions"><button class="v6-btn-gold" type="button" id="v6BackToday">Continue to next step →</button>${res&&res.correct<res.total?'<button class="v6-btn-quiet" type="button" id="v6ReviewMisses">Practice my misses</button>':''}</div>`;
+      const existing=card.querySelector('.session-summary');
+      if(existing){existing.prepend(box);existing.querySelector('h3:not(.v6-session-done h3)')?.remove()}else{card.innerHTML='';card.appendChild(box)}
+      const back=box.querySelector('#v6BackToday');back.onclick=async()=>{document.getElementById('sessionArea').classList.add('hidden');state.dashboardFocus='today';showView('dashboard');try{await loadProgress()}catch(e){}renderFeatureLaunchpad(state.lastProgress||{})};
+      const miss=box.querySelector('#v6ReviewMisses');if(miss)miss.onclick=()=>{const f=document.getElementById('pReviewFocus');if(f)f.value='last_session_incorrect';const c=document.getElementById('pCount');if(c)c.value=Math.min(10,(res.total-res.correct)||5);createPracticeSession()};
+      return r;
+    };
+  }
+})();
+
+/* ---------- Pacing engine: finish everything before exam day ---------- */
+(function(){
+  const MIN={note:20,tricky:10,diagram:12,question:2,exam:300}; // exam = 4 h sitting + 1 h review
+  const EXAM_TARGET=5,EXAM_PASS=80,REVIEW_DAYS=5;
+  const tierFull=()=>{const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return t==='full'||t.startsWith('full')||(typeof isStaff==='function'&&isStaff())};
+  const open=rows=>(rows||[]).filter(x=>['not_started','needs_review'].includes(x.studyStatus||'not_started'));
+  window.v6Pace=function(p){
+    p=p||state.lastProgress||{};const plan=p.adaptive_plan||{},prof=p.study_profile||{};
+    const days=plan.days_until_exam;const perWeek=Math.max(1,Math.min(7,Number(prof.study_days_per_week||plan.study_days_per_week||5)));
+    const left={note:open(state.notes).length,tricky:open(state.tricky).length,diagram:tierFull()?open(state.diagrams).length:0,
+      question:Math.max(0,Number(p.practice_bank_total||0)-Number(p.practice_unique_attempted||0))};
+    const hist=(p.exam_history||[]).filter(x=>x.total&&x.correct/x.total*100>=EXAM_PASS&&x.answered>=x.total*0.9);
+    const examsDone=Math.min(EXAM_TARGET,hist.length);const examsLeft=EXAM_TARGET-examsDone;
+    const out={blocksPerDay:1,perBlockQuestions:15,days,left,examsDone,examsLeft,examTarget:EXAM_TARGET,examPass:EXAM_PASS,perDay:{note:1,tricky:1,diagram:tierFull()?1:0,question:15},hoursPerDay:null,studyDays:null,learnDays:null,examEvery:null,status:'no-date'};
+    if(days==null||days<0)return out;
+    const studyDays=Math.max(1,Math.floor(days*perWeek/7));
+    // keep the final stretch for exams + review; learning must finish before it
+    const examDays=Math.min(studyDays-1,examsLeft*2);const learnDays=Math.max(1,studyDays-examDays-Math.min(REVIEW_DAYS,Math.floor(studyDays/6)));
+    const per=k=>left[k]?Math.max(1,Math.ceil(left[k]/learnDays)):0;
+    out.perDay={note:per('note'),tricky:per('tricky'),diagram:per('diagram'),question:Math.max(10,Math.min(60,Math.ceil(left.question/Math.max(1,studyDays-examsLeft))))};
+    const total=left.note*MIN.note+left.tricky*MIN.tricky+left.diagram*MIN.diagram+left.question*MIN.question+examsLeft*MIN.exam;
+    out.hoursPerDay=Math.max(0.5,Math.ceil(total/60/studyDays*2)/2);
+    out.studyDays=studyDays;out.learnDays=learnDays;out.examEvery=examsLeft?Math.max(1,Math.floor(examDays/examsLeft)):null;
+    out.learningDone=!left.note&&!left.tricky&&!left.diagram;
+    out.blocksPerDay=Math.max(1,out.perDay.note,out.perDay.tricky,out.perDay.diagram);
+    out.perBlockQuestions=Math.max(8,Math.min(30,Math.ceil(out.perDay.question/out.blocksPerDay)));
+    out.examPhase=out.learningDone||studyDays<=examDays+1;
+    out.status=out.hoursPerDay>6?'tight':out.hoursPerDay>3?'steady':'comfortable';
+    return out;
+  };
+
+  // Daily plan built from the pace: N topics, N tricky pairs, N diagrams, practice on those topics, and an exam when it's time.
+  // A study block = one topic note + one tricky pair + one diagram + questions on exactly those topics.
+  function buildBlock(p,n,exclude){
+    const pace=v6Pace(p),weak=p?.adaptive_plan?.weak_domains?.[0]?.domain||'';exclude=exclude||new Set();
+    const first=rows=>{let c=open(rows).filter(x=>!exclude.has(String(x.id)));if(weak){const w=c.find(x=>String(x.domain||'').toLowerCase()===weak.toLowerCase());if(w)return w}return c[0]||null};
+    const base=(n-1)*10,t=[];
+    const note=first(state.notes),tr=first(state.tricky),dg=pace.perDay.diagram?first(state.diagrams):null;
+    if(note)t.push({id:`note:${note.id}`,type:'note',itemId:note.id,label:'Read',title:note.title,detail:(note.keyRules||[])[0]||note.summary||'',view:'notes',reason:`Block ${n} · topic`,sortOrder:base+t.length});
+    if(tr)t.push({id:`tricky:${tr.id}`,type:'tricky',itemId:tr.id,label:'Compare',title:`${tr.left} vs ${tr.right}`,detail:typeof trickyDecisionText==='function'?trickyDecisionText(tr):'',view:'tricky',reason:`Block ${n} · tricky words`,sortOrder:base+t.length});
+    if(dg)t.push({id:`diagram:${dg.id}`,type:'diagram',itemId:dg.id,label:'Visualize',title:dg.title,detail:dg.whyItMatters||dg.whatItIs||'',view:'diagrams',reason:`Block ${n} · diagram`,sortOrder:base+t.length});
+    const q=pace.perBlockQuestions;
+    t.push({id:`practice:${todayDateKey()}:b${n}`,type:'practice',label:'Practice',title:t.length?`${q} questions on these ${t.length===1?'topic':'topics'}`:`${q} mixed questions`,detail:t.length?`Questions on ${t.map(x=>x.title).join(' · ')}.`:'Build coverage and speed.',view:'practice',count:q,focus:'',domain:'',reason:`Block ${n} · practice`,sortOrder:base+t.length});
+    if(n===1&&pace.examsLeft>0&&pace.examPhase){
+      const ex=(p?.exam_cards||[]).find(x=>!x.completed||(x.total&&x.correct/x.total*100<pace.examPass));
+      if(ex)t.push({id:`exam:${ex.exam_code}:${todayDateKey()}`,type:'exam',label:'Exam',title:`${ex.exam_name||'Full exam'} — aim for ${pace.examPass}%+`,detail:`${pace.examsDone} of ${pace.examTarget} exams passed at ${pace.examPass}%+.`,view:'exams',examKind:ex.kind||'mock',reason:'Exam stamina and pacing',sortOrder:base+t.length});
+    }
+    return t;
+  }
+  window.v6BlockCount=tasks=>(tasks||[]).filter(t=>t.type==='practice').length||1;
+  if(typeof buildFreshTodayTasks==='function')window.buildFreshTodayTasks=function(p){return buildBlock(p,1)};
+  // When a block is finished and the pace needs more today, add the next block.
+  if(typeof appendOneNextTodayTask==='function'){
+    window.appendOneNextTodayTask=async function(p,tasks){
+      const pace=v6Pace(p),done=v6BlockCount(tasks);
+      if(pace.hoursPerDay==null&&done>=1)return false;
+      if(done>=pace.blocksPerDay)return false;
+      const used=new Set((tasks||[]).map(t=>String(t.itemId||'')));
+      const next=buildBlock(p,done+1,used).filter(t=>t.type!=='exam');
+      if(next.length<=1&&!next.some(t=>t.type!=='practice')&&done>=1)return false;
+      await api('/api/study/daily-plan/import-local',{method:'POST',body:JSON.stringify({plans:[{plan_date:todayDateKey(),tasks:next.map(t=>({...t,status:'not_started'}))}]})});
+      const r=await api(`/api/study/daily-plan?plan_date=${encodeURIComponent(todayDateKey())}`);
+      state.todayPlan=(r.tasks||[]).map(hydrateDbTask).filter(Boolean);state.todayTaskJustAdded=true;return true;
+    };
+  }
+
+  // One quiet pacing line on Today, full breakdown on My Progress.
+  function paceLine(p){
+    const s=v6Pace(p);if(s.hoursPerDay==null)return'';
+    return `<p class="v6-pace">Study about <b>${s.hoursPerDay} h/day</b> on ${s.studyDays} study day${s.studyDays===1?'':'s'} to finish every topic and <b>${s.examTarget} exams at ${s.examPass}%+</b> before exam day <span>(${s.examsDone} of ${s.examTarget} done)</span>.</p>`;
+  }
+  const origToday=window.renderTodayPlanFromDb;
+  window.renderTodayPlanFromDb=function(p,tasks){
+    tasks=tasks||[];const blocks=[];let cur=[];
+    tasks.forEach(t=>{cur.push(t);if(t.type==='practice'||t.type==='exam'){blocks.push(cur);cur=[]}});if(cur.length)blocks.push(cur);
+    let idx=blocks.findIndex(b=>b.some(t=>taskState(t)!=='done'));if(idx<0)idx=blocks.length-1;
+    const shown=blocks.length?blocks[Math.max(0,idx)]:tasks;
+    origToday(p,shown);
+    const pace=v6Pace(p),total=Math.max(pace.blocksPerDay||1,blocks.filter(b=>b.some(t=>t.type==='practice')).length);
+    const cnt=document.querySelector('.v6-plan-count');if(cnt&&blocks.length){const d=shown.filter(t=>taskState(t)==='done').length;cnt.textContent=`Block ${Math.max(1,idx+1)} of ${total} · ${d} of ${shown.length} done`}
+    const head=document.querySelector('.v6-plan-head');if(head&&!document.querySelector('.v6-pace'))head.insertAdjacentHTML('afterend',paceLine(p));
+  };
+
+  function renderPacePanel(){
+    const host=document.querySelector('#progress [data-progress-panel="overview"]');if(!host)return;
+    let box=document.getElementById('v6PacePanel');if(!box){box=document.createElement('section');box.id='v6PacePanel';box.className='v6-pace-panel';host.appendChild(box)}
+    const s=v6Pace(state.lastProgress);
+    if(s.hoursPerDay==null){box.innerHTML=`<span class="v6-kicker">Your plan to exam day</span><p>Add your exam date under <b>My Plan</b> and Azielon will pace every topic, question and exam for you.</p>`;return}
+    const L=s.left,row=(label,left,per,unit)=>left?`<div><b>${left}</b><span>${label} left</span><small>${per} ${unit}/day</small></div>`:`<div class="is-done"><b>✓</b><span>${label}</span><small>complete</small></div>`;
+    const bars=Array.from({length:s.examTarget},(_,i)=>`<i class="${i<s.examsDone?'on':''}"></i>`).join('');
+    const tone={comfortable:'Comfortable pace.',steady:'Steady pace — keep it daily.',tight:'Tight timeline — consider more study days per week or moving your exam date.'}[s.status];
+    box.innerHTML=`<div class="v6-pace-head"><div><span class="v6-kicker">Your plan to exam day</span><h3>${s.hoursPerDay} hours a day · ${s.days} days left</h3><p>${tone} Based on ${s.studyDays} study days before your exam.</p></div><div class="v6-exam-goal"><span class="v6-kicker">Exams at ${s.examPass}%+</span><div class="v6-exam-bars">${bars}</div><small>${s.examsDone} of ${s.examTarget} · pass ${s.examTarget} before exam day</small></div></div><div class="v6-pace-grid">${row('Topic notes',L.note,s.perDay.note,'topic')}${row('Tricky words',L.tricky,s.perDay.tricky,'pair')}${tierFull()?row('Diagrams',L.diagram,s.perDay.diagram,'diagram'):''}${row('Practice questions',L.question,s.perDay.question,'questions')}</div><p class="v6-pace-note">Learning finishes about ${s.learnDays} study days in; after that, the plan schedules a full exam every ${s.examEvery||2} days until you have ${s.examTarget} scores at ${s.examPass}%+, with the final days for review.</p>`;
+  }
+  if(typeof renderCompactProgressDashboard==='function'){
+    const o=window.renderCompactProgressDashboard;window.renderCompactProgressDashboard=function(p){const r=o.apply(this,arguments);try{renderPacePanel()}catch(e){console.warn(e)}return r};
+  }
+})();
+
+/* ---------- Lesson-style explanations + readable matching review ---------- */
+(function(){
+  const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const LABELS=['Concept','Spot it','In this scenario','Why not the others','Remember'];
+  function lessonHTML(text){
+    const lines=String(text||'').split(/\n+/).map(s=>s.trim()).filter(Boolean);
+    return '<div class="v6-lesson">'+lines.map(l=>{
+      const m=l.match(/^([^:]{2,60}):\s*(.+)$/);
+      if(!m)return `<p>${esc(l)}</p>`;
+      const k=m[1].trim(),known=LABELS.includes(k);
+      return `<div class="v6-lesson-row ${known?'is-'+k.toLowerCase().replace(/\s+/g,'-'):'is-pair'}"><b>${esc(k)}</b><span>${esc(m[2])}</span></div>`;
+    }).join('')+'</div>';
+  }
+  window.v6LessonHTML=lessonHTML;
+  function upgrade(root){
+    (root||document).querySelectorAll('.feedback p:not([data-v6])').forEach(p=>{
+      const t=p.textContent||'';if(!/^Concept:/.test(t.trim()))return;
+      const d=document.createElement('div');d.innerHTML=lessonHTML(t);d.firstChild.dataset.v6='1';p.replaceWith(d.firstChild);
+    });
+  }
+  new MutationObserver(ms=>{for(const m of ms)if(m.addedNodes.length){upgrade(document.getElementById('app'));break}}).observe(document.getElementById('app')||document.body,{childList:true,subtree:true});
+  // Matching review: a table instead of raw JSON
+  if(typeof renderExamReview==='function'){
+    const orig=renderExamReview;
+    window.renderExamReview=function(i){
+      orig.apply(this,arguments);
+      try{
+        const x=state.examReviewResults.results[i];if(!x||x.question?.type!=='matching')return;
+        const pre=document.querySelector('#examReviewCard .review-pre');if(!pre)return;
+        const mine=x.selected?.matching_pairs||{},ans=x.answer||{};
+        const rows=Object.keys(ans).map(l=>{const ok=mine[l]===ans[l];return `<tr class="${ok?'ok':'no'}"><td>${esc(l)}</td><td>${mine[l]?esc(mine[l]):'<i>not answered</i>'}</td><td>${ok?'✓':esc(ans[l])}</td></tr>`}).join('');
+        const t=document.createElement('div');t.className='v6-match-review';
+        t.innerHTML=`<table><thead><tr><th>Item</th><th>Your match</th><th>Correct</th></tr></thead><tbody>${rows}</tbody></table>`;
+        pre.replaceWith(t);
+      }catch(e){}
+    };
+  }
+})();
