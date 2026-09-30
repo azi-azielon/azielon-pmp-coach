@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Live PMP Online Class | Azielon</title>
   <meta name="description" content="35-hour live PMP Certification Prep with Dr. Sonia Gandham. Tuesday–Friday, 8:00 AM–5:00 PM ET.">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,82 +10,129 @@
   <style>
     :root{
       --navy:#14213D;--ink:#1F2733;--muted:#626878;--gold:#B8862F;--gold-deep:#8F6219;--gold-soft:#D9B56A;
-      --ivory:#FBF8F1;--line:#E7DFCD;--line-soft:#F0EAD9;--green:#2F6B55;--red:#9B3B45;
+      --ivory:#FBF8F1;--paper:#FFFDF8;--line:#E7DFCD;--line-soft:#F0EAD9;--green:#2F6B55;--red:#9B3B45;
       --serif:'Cormorant Garamond',Georgia,serif;--sans:'Jost',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--ivory);-webkit-font-smoothing:antialiased;font-variant-numeric:lining-nums}
-    .page{min-height:100vh;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(440px,.95fr)}
-    .hero{background:var(--navy);color:#fff;padding:48px clamp(32px,5vw,72px);display:flex;flex-direction:column;justify-content:center;border-right:1px solid rgba(217,181,106,.22)}
-    .brand{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-size:24px;font-weight:600;letter-spacing:.02em}
-    .brand img{width:42px;height:42px;border-radius:8px}
-    .eyebrow{text-transform:uppercase;letter-spacing:.22em;color:var(--gold-soft);font-size:10.5px;font-weight:600;margin:36px 0 12px}
-    h1{font-family:var(--serif);font-weight:600;font-size:clamp(36px,3.4vw,52px);line-height:1.05;letter-spacing:-.01em;margin:0 0 16px;max-width:640px}
-    h1 em{font-style:italic;font-weight:500;color:var(--gold-soft)}
-    .lead{font-size:16px;line-height:1.65;color:#C9D0DD;max-width:600px;margin:0}
-    .facts{display:grid;grid-template-columns:repeat(3,1fr);margin:30px 0 22px;max-width:620px;border-top:1px solid rgba(217,181,106,.28);border-bottom:1px solid rgba(217,181,106,.28)}
-    .fact{padding:16px 18px 14px 0}
-    .fact+.fact{padding-left:18px;border-left:1px solid rgba(217,181,106,.2)}
-    .fact b{display:block;font-family:var(--serif);font-size:28px;font-weight:600;color:#fff;line-height:1.05}
-    .fact span{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#AAB3C4}
-    .bullets{display:grid;gap:9px;font-size:14px;color:#E7E1D2;list-style:none;margin:0;padding:0}
-    .bullets span{display:flex;gap:10px;align-items:baseline}
-    .quote{margin-top:28px;padding-top:18px;border-top:1px solid rgba(217,181,106,.25);max-width:620px;font-family:var(--serif);font-style:italic;font-size:18px;line-height:1.45;color:#EDE7DA}
-    .quote b{display:block;margin-top:10px;font-family:var(--sans);font-style:normal;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft)}
-    .form-side{background:var(--ivory);padding:48px clamp(24px,4vw,64px);display:flex;align-items:center}
-    .card{width:min(100%,560px);margin:auto}
-    .back{font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--gold-deep);font-weight:500}
-    .back:hover{text-decoration:underline;text-underline-offset:3px}
-    .form-side h2{font-family:var(--serif);font-weight:600;font-size:clamp(30px,2.6vw,40px);line-height:1.06;margin:18px 0 8px;color:var(--navy)}
-    .sub{font-size:14px;line-height:1.55;color:var(--muted);margin:0 0 22px}
-    .summary{display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:22px;background:#fff;border:1px solid var(--line);border-radius:12px}
-    .summary div{padding:12px 16px}
-    .summary div+div{border-left:1px solid var(--line)}
-    .summary b{display:block;font-family:var(--serif);font-size:22px;font-weight:600;color:var(--navy);line-height:1.1}
-    .summary span{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-    form{display:grid;gap:14px}
-    label{font-size:12px;font-weight:500;letter-spacing:.02em;color:var(--navy)}
-    input,select{width:100%;margin-top:6px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font:inherit;font-size:14px;color:var(--ink);background:#fff}
-    input:focus,select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(20,33,61,.08)}
+    html,body{margin:0;min-height:100%;font-family:var(--sans);color:var(--ink);background:var(--ivory);-webkit-font-smoothing:antialiased;font-variant-numeric:lining-nums}
+    body{overflow-x:hidden}
+    .page{min-height:100vh;display:grid;grid-template-columns:minmax(420px,.92fr) minmax(0,1.08fr)}
+    .register-side{background:var(--ivory);padding:24px clamp(24px,4vw,58px);display:flex;align-items:center;order:1}
+    .register-card{width:min(100%,560px);margin:auto}
+    .topline{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}
+    .brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:22px;font-weight:600;color:var(--navy);text-decoration:none}
+    .brand img{width:36px;height:36px;border-radius:8px}
+    .back{font-size:10px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--gold-deep);font-weight:600;white-space:nowrap}
+    .eyebrow{text-transform:uppercase;letter-spacing:.2em;color:var(--gold-deep);font-size:10px;font-weight:600;margin:0 0 7px}
+    h1{font-family:var(--serif);font-weight:600;font-size:clamp(31px,3vw,43px);line-height:1.02;margin:0;color:var(--navy);letter-spacing:-.01em}
+    .sub{font-size:13.5px;line-height:1.5;color:var(--muted);margin:7px 0 13px}
+    .quick-facts{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:13px}
+    .quick-facts span{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:10.5px;color:var(--navy);white-space:nowrap}
+    .quick-facts b{font-weight:600;margin-right:4px}
+    form{display:grid;gap:10px}
+    label{font-size:11px;font-weight:600;color:var(--navy)}
+    input,select{width:100%;margin-top:4px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:13px;color:var(--ink);background:#fff;min-height:42px}
+    input:focus,select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(20,33,61,.07)}
     input::placeholder{color:#A09A8C}
-    .help{font-size:11.5px;color:var(--muted);margin:-4px 0 0}
-    .secure{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);font-weight:500;margin:4px 0 0}
-    .message{font-size:12px;min-height:16px;color:var(--red)}
-    button{border:1px solid var(--navy);border-radius:999px;background:var(--navy);color:#F3E3BD;font:inherit;font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:15px 18px;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+    .form-note{display:flex;justify-content:space-between;gap:14px;align-items:center;font-size:10.5px;line-height:1.4;color:var(--muted)}
+    .secure{color:var(--green);font-weight:600;white-space:nowrap}
+    .message{font-size:11px;min-height:14px;color:var(--red)}
+    button{border:1px solid var(--navy);border-radius:999px;background:var(--navy);color:#F3E3BD;font:inherit;font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:13px 18px;cursor:pointer;transition:background .2s,border-color .2s,color .2s;min-height:44px}
     button:hover{background:var(--gold-deep);border-color:var(--gold-deep);color:#fff}
     button:disabled{opacity:.55;cursor:not-allowed}
-    .opt{font-weight:400;color:var(--muted)}
+    .legal{font-size:9.5px;color:#9A9486;text-align:center;margin:0;line-height:1.45}
     .legal a{color:var(--gold-deep)}
-    .legal{font-size:11px;color:#9A9486;text-align:center;margin:0;line-height:1.5}
+
+    .info-side{background:var(--navy);color:#fff;padding:38px clamp(32px,5vw,72px);display:flex;flex-direction:column;justify-content:center;order:2;border-left:1px solid rgba(217,181,106,.2)}
+    .info-side .eyebrow{color:var(--gold-soft);margin-bottom:10px}
+    .info-side h2{font-family:var(--serif);font-weight:600;font-size:clamp(34px,3.5vw,50px);line-height:1.05;margin:0 0 15px;max-width:640px}
+    .info-side h2 em{font-style:italic;font-weight:500;color:var(--gold-soft)}
+    .lead{font-size:15px;line-height:1.6;color:#C9D0DD;max-width:620px;margin:0}
+    .facts{display:grid;grid-template-columns:repeat(3,1fr);margin:26px 0 18px;max-width:620px;border-top:1px solid rgba(217,181,106,.28);border-bottom:1px solid rgba(217,181,106,.28)}
+    .fact{padding:14px 16px 12px 0}
+    .fact+.fact{padding-left:16px;border-left:1px solid rgba(217,181,106,.2)}
+    .fact b{display:block;font-family:var(--serif);font-size:26px;font-weight:600;color:#fff;line-height:1.05}
+    .fact span{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#AAB3C4}
+    .bullets{display:grid;gap:8px;font-size:13.5px;color:#E7E1D2;margin:0;padding:0;list-style:none}
+    .quote{margin-top:22px;padding-top:14px;border-top:1px solid rgba(217,181,106,.24);max-width:620px;font-family:var(--serif);font-style:italic;font-size:17px;line-height:1.45;color:#EDE7DA}
+    .quote b{display:block;margin-top:8px;font-family:var(--sans);font-style:normal;font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-soft)}
+
     @media(max-width:900px){
-      .page{grid-template-columns:1fr}.hero{padding:36px 26px;border-right:0;border-bottom:1px solid rgba(217,181,106,.22)}.form-side{padding:32px 22px}
+      .page{display:flex;flex-direction:column;min-height:100dvh}
+      .register-side{order:1;min-height:100dvh;padding:14px 18px calc(16px + env(safe-area-inset-bottom));align-items:flex-start}
+      .register-card{width:100%;max-width:620px;margin:0 auto}
+      .topline{margin-bottom:8px}
+      .brand{font-size:19px}.brand img{width:32px;height:32px}
+      .back{font-size:9px}
+      h1{font-size:32px}
+      .sub{font-size:12.5px;margin:5px 0 9px}
+      .quick-facts{gap:5px;margin-bottom:9px}.quick-facts span{padding:5px 8px;font-size:9.5px}
+      form{gap:7px}
+      label{font-size:10.5px}
+      input,select{margin-top:3px;min-height:40px;padding:9px 11px;font-size:12.5px}
+      .form-note{font-size:9.5px;gap:8px}
+      button{min-height:42px;padding:11px 14px;font-size:10.5px}
+      .legal{font-size:8.8px;line-height:1.35}
+      .message{font-size:10.5px;min-height:12px}
+      .info-side{order:2;padding:34px 22px;border-left:0;border-top:1px solid rgba(217,181,106,.2)}
+      .info-side h2{font-size:36px}.facts{margin:20px 0 15px}.lead{font-size:14px}
     }
-    @media(max-width:560px){.facts,.summary{grid-template-columns:1fr}.fact+.fact{border-left:0;padding-left:0;border-top:1px solid rgba(217,181,106,.2)}.summary div+div{border-left:0;border-top:1px solid var(--line)}.hero{padding:28px 20px}h1{font-size:34px}}
-    @media(max-height:820px) and (min-width:901px){
-      .page{height:100vh}.hero,.form-side{padding-top:28px;padding-bottom:28px}
-      .eyebrow{margin:22px 0 10px}h1{font-size:clamp(32px,3vw,44px);margin-bottom:12px}.lead{font-size:15px}
-      .facts{margin:18px 0 14px}.fact{padding:12px 16px 10px 0}.fact b{font-size:24px}
-      .bullets{gap:6px;font-size:13.5px}.quote{margin-top:16px;padding-top:12px;font-size:16.5px}
-      .form-side h2{margin:12px 0 6px}.sub{margin-bottom:14px}.summary{margin-bottom:14px}.summary div{padding:9px 14px}
-      form{gap:10px}input,select{padding:10px 12px}button{padding:13px 18px}
+    @media(max-width:560px){
+      .register-side{padding:12px 14px calc(14px + env(safe-area-inset-bottom))}
+      .topline{gap:8px}.brand span{display:none}
+      h1{font-size:29px}.eyebrow{font-size:8.8px;margin-bottom:5px}
+      .sub{font-size:12px;line-height:1.4}
+      .quick-facts{display:grid;grid-template-columns:repeat(3,1fr)}
+      .quick-facts span{justify-content:center;text-align:center;padding:5px 4px;font-size:9px}
+      .quick-facts b{margin-right:2px}
+      .form-note{display:block}.form-note .secure{display:block;margin-bottom:2px}
+      .info-side{padding:28px 18px}.info-side h2{font-size:32px}
+      .facts{grid-template-columns:1fr}.fact+.fact{border-left:0;padding-left:0;border-top:1px solid rgba(217,181,106,.2)}
     }
-    @media(max-height:760px) and (min-width:901px){
-      .help{display:none}.summary{display:none}.sub{margin-bottom:12px}
-    }
-    @media(max-height:680px) and (min-width:901px){
-      .bullets{display:none}.eyebrow{margin:14px 0 8px}.brand{font-size:20px}.brand img{width:34px;height:34px}
-      h1{font-size:clamp(28px,5vh,36px)}.lead{font-size:14px;line-height:1.5}.facts{margin:12px 0 10px}
-      .quote{margin-top:10px;font-size:15.5px}.form-side h2{font-size:28px;margin-top:8px}
-      form{gap:8px}label{font-size:11.5px}input,select{margin-top:4px;padding:8px 12px}.legal{font-size:10.5px}
+    @media(max-height:740px) and (max-width:900px){
+      .register-side{padding-top:8px}
+      .topline{margin-bottom:5px}
+      .brand img{width:28px;height:28px}.brand{font-size:18px}
+      h1{font-size:27px}.sub{font-size:11.5px;margin:4px 0 7px}.quick-facts{margin-bottom:7px}
+      input,select{min-height:36px;padding:7px 10px}form{gap:5px}
+      button{min-height:38px;padding:9px 12px}.legal{font-size:8px}.form-note{font-size:9px}
     }
   </style>
 </head>
 <body>
 <div class="page">
-  <section class="hero">
-    <div class="brand"><img src="/static/assets/azielon-logo.png" alt="Azielon">Azielon PMP Coach</div>
-    <div class="eyebrow">Live PMP Certification Prep</div>
-    <h1>Prepare for the PMP exam with <em>live, focused instruction.</em></h1>
+  <section class="register-side">
+    <div class="register-card">
+      <div class="topline">
+        <a class="brand" href="/"><img src="/static/assets/azielon-logo.png" alt="Azielon"><span>Azielon PMP Coach</span></a>
+        <a class="back" href="/">← Practice Coach</a>
+      </div>
+      <div class="eyebrow">Live PMP Certification Prep</div>
+      <h1>Reserve your seat</h1>
+      <p class="sub">Choose your Tuesday start date, register, then continue to secure payment.</p>
+      <div class="quick-facts" aria-label="Live PMP class details">
+        <span><b>$999</b> total</span>
+        <span><b>35 hours</b> live</span>
+        <span><b>Tue–Fri</b> 8 AM–5 PM ET</span>
+      </div>
+      <form id="livePmpForm">
+        <label>Name<input id="name" required autocomplete="name" placeholder="Full name"></label>
+        <label>Email<input id="email" type="email" required autocomplete="email" placeholder="you@email.com"></label>
+        <label>Class start date
+          <select id="classDate" required><option value="">Choose an available Tuesday</option></select>
+        </label>
+        <div class="form-note"><span class="secure">🔒 Secure payment via Autobooks</span><span>Holiday weeks are excluded automatically.</span></div>
+        <div id="message" class="message"></div>
+        <button id="payBtn" type="submit">Register &amp; Continue to Payment →</button>
+        <p class="legal">Your registration is saved before secure checkout. Your card statement may show Aziel LLC.</p>
+        <p class="legal" id="fallback" hidden>Having trouble? <a href="https://checkout.page/s/kjkWZa38InTkt">Continue to secure payment →</a></p>
+      </form>
+    </div>
+  </section>
+
+  <section class="info-side">
+    <div class="eyebrow">What you are registering for</div>
+    <h2>Prepare for the PMP exam with <em>live, focused instruction.</em></h2>
     <p class="lead">A 35-hour live online class designed to help working professionals understand PMP concepts, scenario reasoning, Agile/Hybrid decisions, and exam traps.</p>
     <div class="facts">
       <div class="fact"><b>$999</b><span>Total program price</span></div>
@@ -99,32 +146,6 @@
       <span>✓ Select your preferred Tuesday start date</span>
     </div>
     <div class="quote">“Ms. Sonia’s simple, relatable examples made complex PMP concepts easy to understand.”<b>— Julie J., PMP</b></div>
-  </section>
-
-  <section class="form-side">
-    <div class="card">
-      <a class="back" href="/">← PMP Practice Coach</a>
-      <h2>Reserve your seat</h2>
-      <p class="sub">Live PMP Online Class · 35 hours · $999 · Tue–Fri · 8:00 AM–5:00 PM ET. Pick your Tuesday start date, then pay securely.</p>
-      <div class="summary">
-        <div><b>$999</b><span>Total</span></div>
-        <div><b>35 hours</b><span>Live online</span></div>
-        <div><b>Tue–Fri</b><span>8 AM–5 PM ET</span></div>
-      </div>
-      <form id="livePmpForm">
-        <label>Name<input id="name" required autocomplete="name" placeholder="Full name"></label>
-        <label>Email<input id="email" type="email" required autocomplete="email" placeholder="you@email.com"></label>
-        <label>Class start date (Tuesday)
-          <select id="classDate" required><option value="">Choose an available Tuesday</option></select>
-        </label>
-        <p class="help">Only eligible Tuesdays are shown. Thanksgiving week and Christmas week are excluded automatically.</p>
-        <p class="secure">🔒 Secure online payment · Autobooks · $999</p>
-        <div id="message" class="message"></div>
-        <button id="payBtn" type="submit">Continue to Secure Online Payment →</button>
-        <p class="legal">We save your registration, then open the secure Autobooks checkout. On the checkout page, enter the same name you used here. Your card statement may show Aziel LLC.</p>
-        <p class="legal" id="fallback" hidden>Having trouble? <a href="https://checkout.page/s/kjkWZa38InTkt">Continue to secure payment →</a></p>
-      </form>
-    </div>
   </section>
 </div>
 <script>
@@ -162,12 +183,12 @@ $('#livePmpForm').onsubmit=async e=>{
     const text=await r.text(); let data={}; try{data=JSON.parse(text)}catch(_){}
     if(!r.ok) throw new Error((data&&data.detail&&(typeof data.detail==='string'?data.detail:'Please check your details and try again.'))||'We could not save your registration right now.');
     $('#message').style.color='#2F6B55';
-    $('#message').textContent='✓ Registration saved. Opening secure Autobooks payment…';
+    $('#message').textContent='✓ Registration saved. Opening secure payment…';
     setTimeout(()=>window.location.href=CHECKOUT_URL,500);
   }catch(err){
     $('#message').style.color='#9B3B45';
-    $('#message').textContent=(err&&err.message&&!/JSON|token|fetch/i.test(err.message)?err.message:'We could not save your registration right now.')+' You can still continue to payment below, and we will match your payment by name.';
-    btn.disabled=false;btn.textContent='Continue to Secure Online Payment →';$('#fallback').hidden=false;
+    $('#message').textContent=(err&&err.message&&!/JSON|token|fetch/i.test(err.message)?err.message:'We could not save your registration right now.')+' You can still continue to payment below.';
+    btn.disabled=false;btn.textContent='Register & Continue to Payment →';$('#fallback').hidden=false;
   }
 };
 </script>
