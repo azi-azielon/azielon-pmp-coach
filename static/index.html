@@ -161,7 +161,7 @@
     </section>
 
     <section class="view" id="notes">
-      <div class="section-intro compact-intro"><div><span class="eyebrow">Structured learning topics</span><h2>Topic Notes</h2><p>Study one concept at a time, mark your status, and continue with unfinished topics first.</p></div></div>
+      
       <div class="notes-toolbar">
         <div class="segmented" id="notesMode"><button class="active" data-note-mode="study">Study View</button><button data-note-mode="all">Browse All</button><button data-note-mode="needs_review">Needs Review</button></div>
         <div class="notes-toolbar-right"><select id="noteDomainSelect"><option value="">All domains</option><option>People</option><option>Process</option><option>Business Environment</option></select><input id="notesSearch" class="search compact-search" placeholder="Search notes…"/></div>
@@ -171,13 +171,13 @@
     </section>
 
     <section class="view" id="diagrams">
-      <div class="section-intro compact-intro"><div><span class="eyebrow">Visual learning library</span><h2>Diagrams & Models</h2><p>One diagram at a time. Study Mode prioritizes items you have not reviewed or marked Needs Review.</p></div></div>
+      
       <div class="diagram-toolbar"><div class="segmented"><button class="active" data-diagram-mode="study">Study Mode</button><button data-diagram-mode="needs_review">Needs Review</button></div><select id="diagramDomainSelect"><option value="">All domains</option><option>People</option><option>Process</option><option>Business Environment</option></select></div>
       <div id="diagramGrid" class="diagram-single"></div>
     </section>
 
     <section class="view" id="tricky">
-      <div class="section-intro compact-intro"><div><span class="eyebrow">High-confusion distinctions</span><h2>Tricky Words</h2><p>Study the distinction, exam trap, and memory hook one pair at a time.</p></div></div>
+      
       <div class="tricky-toolbar"><div class="segmented tricky-mode"><button class="active" data-tricky-mode="study">Study View</button><button data-tricky-mode="all">Browse All</button><button data-tricky-mode="needs_review">Marked for Review</button><button data-tricky-mode="flashcards">Flashcards</button></div><input id="trickySearch" class="search compact-search" placeholder="Search terms…"/></div><div id="trickyGrid" class="tricky-grid"></div>
     </section>
 
@@ -267,17 +267,14 @@
       </div>
 
       <div class="progress-tabpanel active" data-progress-panel="overview">
-        <section class="progress-clean-hero">
-          <div><span class="eyebrow">Exam focus</span><h2>My Progress</h2><p>Only what matters for your next study decision.</p></div>
-          <div class="progress-readiness-mini"><span>Readiness</span><b id="progressChipReadiness">0</b><small>/100</small></div>
-        </section>
+        <section class="progress-summary-line"><strong>Exam readiness</strong><span><b id="progressChipReadiness">0</b>/100</span></section>
         <section class="progress-kpi-row">
           <article><span>Practice accuracy</span><b id="pAccuracy">—</b><small>overall</small></article>
           <article><span>Questions practiced</span><b id="pPracticeAnswered">0</b><small>attempts</small></article>
           <article><span>Review queue</span><b id="pReviewCount">0</b><small>concepts</small></article>
           <article><span>Exams completed</span><b id="pCompletedExams">0</b><small>submitted</small></article>
         </section>
-        <section class="panel progress-next-panel">
+        <section class="progress-next-panel progress-flat-section">
           <div class="mini-panel-head"><div><span class="eyebrow">Next move</span><h3>Continue your plan</h3></div><span class="progress-label-pill accent" id="progressTodayBadge">Loading…</span></div>
           <p id="progressTodayGuide" class="small-note">Loading your next best step…</p>
           <div id="progressTodayList" class="progress-task-list"><p class="small-note">Loading today’s plan…</p></div>
@@ -285,7 +282,7 @@
       </div>
 
       <div class="progress-tabpanel" data-progress-panel="plan" hidden>
-        <section class="panel progress-plan-clean">
+        <section class="progress-plan-clean progress-flat-section">
           <div class="mini-panel-head"><div><span class="eyebrow">Current plan</span><h3 id="progressPlanName">Loading…</h3><p id="progressPlanDetail" class="small-note">Checking access dates…</p></div><div class="progress-overview-actions"><button class="secondary" id="progressManagePlan">Plans &amp; pricing</button><button id="editStudyPlanBtn" class="text-btn" type="button">Edit study plan</button></div></div>
           <div class="progress-plan-facts"><article><span>Days to exam</span><b id="progressDaysToExam">Set date</b><small id="progressPlanPhase">Foundation plan</small></article><article><span>Today</span><b id="progressTodayDone">0/0</b><small id="progressTodayCarry">No carryover</small></article><article><span>Weekly target</span><b id="progressWeeklyTarget">0 questions / week</b><small>adaptive</small></article></div>
           <form id="studyPlanForm" class="study-plan-form compact-study-plan hidden"><label>Exam date<input id="coachExamDate" type="date"></label><label>Hours / week<input id="coachWeeklyHours" type="number" min="1" max="40" step="0.5" value="7"></label><label>Study days / week<input id="coachStudyDays" type="number" min="1" max="7" value="5"></label><label>Minutes / session<input id="coachSessionMinutes" type="number" min="20" max="180" step="5" value="45"></label><div class="study-plan-actions"><button class="primary" type="submit">Save plan</button><button class="secondary" id="cancelStudyPlanBtn" type="button">Cancel</button></div><div id="studyPlanMessage" class="message"></div></form>
@@ -294,7 +291,7 @@
       </div>
 
       <div class="progress-tabpanel" data-progress-panel="weak" hidden>
-        <section class="panel progress-weak-clean">
+        <section class="progress-weak-clean progress-flat-section">
           <div class="mini-panel-head"><div><span class="eyebrow">Repair</span><h3>Weak areas to fix</h3></div><div><span class="small-note">Weakest domain</span><b id="progressWeakDomain">—</b></div></div>
           <div id="domainBars" class="progress-domain-bars"></div>
           <div class="progress-panel-block"><div class="progress-block-head"><span class="eyebrow">Reasoning patterns</span></div><div id="mistakePatterns" class="compact-pattern-list"><p class="small-note">Complete more questions to identify recurring patterns.</p></div></div>
@@ -303,7 +300,7 @@
       </div>
 
       <div class="progress-tabpanel" data-progress-panel="exams" hidden>
-        <section class="panel progress-exams-clean">
+        <section class="progress-exams-clean progress-flat-section">
           <div class="report-section-head"><div><span class="eyebrow">Prove</span><h3>Exam performance</h3></div><small id="progressBenchmarkNote"></small></div>
           <div id="examReportCards" class="exam-report-cards"></div>
           <div class="progress-exam-history"><span class="eyebrow">Recent exams</span><div id="examHistory" class="exam-history"><p class="small-note">No completed exams yet.</p></div></div>
