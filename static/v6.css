@@ -655,18 +655,18 @@ body.v6 .v6-match-review tr.no td:last-child{color:#1F5A48;font-weight:500}
 body.v6 .feedback .v6-lesson-row b,body.v6 #examReviewCard .v6-lesson-row b{font-size:10.5px!important;font-family:var(--v6-sans)!important;letter-spacing:.12em!important}
 body.v6 .feedback .v6-lesson-row.is-pair b,body.v6 #examReviewCard .v6-lesson-row.is-pair b{font-size:13.5px!important;letter-spacing:0!important}
 
-/* Done today (v6.3) */
-body.v6 .v6-donetoday{margin-top:10px;border-top:1px solid rgba(20,33,61,.08);padding-top:8px}
-body.v6 .v6-donetoday summary{cursor:pointer;list-style:none;font-size:13px;font-weight:600;color:var(--v6-navy);padding:4px 0;display:flex;gap:8px;align-items:center}
-body.v6 .v6-donetoday summary::-webkit-details-marker{display:none}
-body.v6 .v6-donetoday summary::before{content:'▸';color:var(--v6-gold);transition:transform .15s}
-body.v6 .v6-donetoday[open] summary::before{transform:rotate(90deg)}
-body.v6 .v6-donetoday summary span{font-weight:400;color:#6b7280}
-body.v6 .v6-done-list{max-height:220px;overflow:auto}
-body.v6 .v6-done-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(20,33,61,.05);font-size:13px}
-body.v6 .v6-done-tick{color:#2f7d4f;font-weight:700;width:14px}
-body.v6 .v6-done-type{color:var(--v6-gold);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;width:96px;flex:none}
-body.v6 .v6-done-title{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--v6-navy)}
-body.v6 .v6-done-score{color:#2f7d4f;font-weight:600;white-space:nowrap}
-body.v6 .v6-done-row .v6-task-open{padding:2px 6px;font-size:13px}
-@media (max-width:640px){body.v6 .v6-done-type{width:auto}}
+/* v6.3 */
+body.v6 .v6-tab-count{font-style:normal;font-size:11px;font-weight:700;background:var(--v6-gold);color:#fff;border-radius:9px;padding:1px 6px;margin-left:4px;vertical-align:1px}
+body.v6 .v6-done-score{color:#2f7d4f;font-weight:600;font-size:12px;margin-left:4px}
+body.v6 .v6-done-page .v6-task.is-done .v6-task-title{text-decoration:none;color:var(--v6-navy)}
+body.v6 .v6-done-page .v6-task-dot{color:#2f7d4f;border-color:#2f7d4f;display:inline-flex;align-items:center;justify-content:center;font-size:12px}
+body.v6 .v6-study-bar{display:flex!important;align-items:center;gap:10px;flex-wrap:wrap}
+body.v6 .v6-study-bar .is-complete{background:#E8F3EC!important;color:#2f7d4f!important;border-color:#BFDCC9!important;opacity:1!important}
+body.v6 .v6-study-next{margin-left:auto;border:1px solid var(--v6-navy);background:#fff;color:var(--v6-navy);font-weight:600;font-size:14px;padding:9px 16px;border-radius:10px;cursor:pointer}
+body.v6 .v6-study-next.is-ready{background:var(--v6-navy);color:#fff}
+body.v6 .v6-study-next:hover{filter:brightness(1.1)}
+body.v6 #examResults .v6-report-top{margin:10px 0 16px!important;display:flex;gap:10px;flex-wrap:wrap}
+body.v6 #examResults.v6-reviewing .exam-report-final{display:none!important}
+body.v6 #examResults .v6-review-back{margin-bottom:10px}
+body.v6 .v6-review-nav{margin:8px 0 14px!important;padding:0!important;border:0!important;display:flex;gap:10px;justify-content:flex-start}
+body.v6 #examResults.v6-reviewing ~ .v6-exam-back, body.v6 #exams:has(#examResults.v6-reviewing) > .v6-exam-back{display:none!important}

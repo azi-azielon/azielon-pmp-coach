@@ -42,7 +42,7 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
   }
 
   /* ---------- Home tabs: only the views that live on Home ---------- */
-  const HOME_TABS=[['today','Today'],['plan','Full plan'],['mistakes','Fix mistakes']];
+  const HOME_TABS=[['today','Today'],['done','Done today'],['plan','Full plan'],['mistakes','Fix mistakes']];
   window.renderFeatureLaunchpad=function(p){
     const host=q('#featureLaunchpad');if(!host)return;
     let focus=state.dashboardFocus||'today';
@@ -52,11 +52,11 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
       if(map[focus]&&state.currentView==='dashboard'){state.dashboardFocus='today';showView(map[focus]);return}
       focus='today';state.dashboardFocus='today';
     }
-    host.innerHTML=HOME_TABS.map(([k,t])=>`<button class="pmp-focus-tab ${focus===k?'active':''}" type="button" role="tab" aria-selected="${focus===k}" data-dashboard-focus="${k}"><span class="feature-launch-icon" aria-hidden="true">${typeof launchpadIcon==='function'?launchpadIcon(k):''}</span><span>${esc(t)}</span></button>`).join('');
+    host.innerHTML=HOME_TABS.map(([k,t])=>`<button class="pmp-focus-tab ${focus===k?'active':''}" type="button" role="tab" aria-selected="${focus===k}" data-dashboard-focus="${k}"><span class="feature-launch-icon" aria-hidden="true">${typeof launchpadIcon==='function'?launchpadIcon(k):''}</span><span>${esc(t)}${k==='done'&&typeof v6DoneTodayTasks==='function'&&v6DoneTodayTasks().length?` <em class="v6-tab-count">${v6DoneTodayTasks().length}</em>`:''}</span></button>`).join('');
     const ws=q('#dashboardWorkspace');if(ws)ws.classList.toggle('v6-today-host',focus==='today');
     const overall=q('#dashboardOverallPct');if(overall&&typeof learningOverview==='function')overall.textContent=learningOverview(p||{}).avg+'%';
     qa('[data-dashboard-focus]',host).forEach(b=>b.onclick=()=>{state.dashboardFocus=b.dataset.dashboardFocus;window.renderFeatureLaunchpad(p)});
-    renderDashboardWorkspace(focus,p);
+    if(focus==='done'&&typeof v6RenderDoneToday==='function'){v6RenderDoneToday()}else renderDashboardWorkspace(focus,p);
     renderGlobalStudyNav(p);
   };
 
@@ -193,6 +193,7 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
     const [view,modeKey,idxKey,rowsFn,renderFn,attr]=cfg;
     showView(view);
     setTimeout(()=>{
+      fromToday=true;
       state[modeKey]='study';let rows=rowsFn(),i=rows.findIndex(x=>String(x.id)===String(t.itemId));
       if(i<0){state[modeKey]='all';rows=rowsFn();i=Math.max(0,rows.findIndex(x=>String(x.id)===String(t.itemId)));state[modeKey]='study';
         if(kind==='note'&&typeof renderNotesSingle==='function'){renderNotesSingle(rows,i,true);fromToday=true;return}}
@@ -204,17 +205,46 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
   document.addEventListener('click',e=>{if(e.target.closest('#nav button'))fromToday=false},true);
   if(typeof setStudyStatus!=='function')return;
   const orig=setStudyStatus;
+  const KIND={
+    note:{list:'notes',btn:'noteReviewed',idx:'noteIndex',rows:()=>noteRows(),render:()=>renderNotes(),next:'Next topic'},
+    tricky:{list:'tricky',btn:'trickyReviewed',idx:'flashIndex',rows:()=>trickyRows(),render:()=>renderTricky(),next:'Next pair'},
+    diagram:{list:'diagrams',btn:'diagramReviewed',idx:'diagramIndex',rows:()=>diagramRows(),render:()=>renderDiagrams(),next:'Next diagram'}};
+  const curId={};
+  function backToToday(){fromToday=false;state.dashboardFocus='today';showView('dashboard');setTimeout(()=>{state.dashboardFocus='today';if(typeof loadProgress==='function')loadProgress().then(()=>renderFeatureLaunchpad(state.lastProgress||{})).catch(()=>renderFeatureLaunchpad(state.lastProgress||{}))},0)}
+  function goNext(type){
+    if(fromToday)return backToToday();
+    const k=KIND[type],rows=k.rows(),pos=rows.findIndex(x=>String(x.id)===String(curId[type]));
+    // A finished item drops out of the "to study" list, so the same position is already the next item.
+    state[k.idx]=pos>=0?(pos+1)%Math.max(1,rows.length):Math.min(state[k.idx]||0,Math.max(0,rows.length-1));
+    k.render();const v=document.querySelector('.view.active');if(v)v.scrollTop=0;
+  }
+  // One clear action bar under every note, tricky pair and diagram: [Review later] [Mark as done] [Next →]
+  function decorate(type,item){
+    const k=KIND[type],done=document.getElementById(k.btn);if(!done)return;
+    if(!item){const rows=k.rows();item=rows[Math.min(state[k.idx]||0,rows.length-1)]}
+    if(item)curId[type]=item.id;
+    const bar=done.parentElement;bar.classList.add('v6-study-bar');if(bar.querySelector('.v6-study-next'))return;
+    const isDone=done.classList.contains('is-complete');
+    done.textContent=isDone?'✓ Done':'Mark as done';done.disabled=isDone;
+    done.title='Saves this as studied. It counts toward your progress and Today’s plan.';
+    const nx=document.createElement('button');nx.type='button';nx.className='v6-study-next'+(isDone?' is-ready':'');
+    nx.textContent=(fromToday?'Back to Today':k.next)+' →';nx.onclick=()=>goNext(type);bar.appendChild(nx);
+  }
+  if(typeof renderNotesSingle==='function'){const o=renderNotesSingle;window.renderNotesSingle=function(rows,i,iso){const r=o.apply(this,arguments);try{decorate('note',rows&&rows[state.noteIndex])}catch(e){}return r}}
+  if(typeof renderTricky==='function'){const o=renderTricky;window.renderTricky=function(){const r=o.apply(this,arguments);try{decorate('tricky')}catch(e){}return r}}
+  if(typeof renderDiagrams==='function'){const o=renderDiagrams;window.renderDiagrams=async function(){const r=await o.apply(this,arguments);try{decorate('diagram')}catch(e){}return r}}
   window.setStudyStatus=async function(type,id,status){
-    const r=await orig.apply(this,arguments);
-    if(status!=='reviewed')return r;
-    if(fromToday){fromToday=false;state.dashboardFocus='today';showView('dashboard');setTimeout(()=>{state.dashboardFocus='today';if(typeof loadProgress==='function')loadProgress().then(()=>renderFeatureLaunchpad(state.lastProgress||{})).catch(()=>renderFeatureLaunchpad(state.lastProgress||{}))},0);return r}
-    // Browse mode keeps every item in the list, so step forward explicitly
-    try{
-      if(type==='note'&&state.noteMode==='all'){state.noteIndex=Math.min((state.noteIndex||0)+1,Math.max(0,noteRows().length-1));renderNotes()}
-      if(type==='tricky'&&state.trickyMode==='all'){state.flashIndex=Math.min((state.flashIndex||0)+1,Math.max(0,trickyRows().length-1));renderTricky()}
-      if(type==='diagram'&&state.diagramMode==='all'){state.diagramIndex=Math.min((state.diagramIndex||0)+1,Math.max(0,diagramRows().length-1));renderDiagrams()}
-    }catch(e){}
-    return r;
+    const k=KIND[type],btn=k&&document.getElementById(k.btn);
+    if(status!=='reviewed'||!btn)return orig.apply(this,arguments);
+    // Mark as done = save it as studied and stay on the page; Next moves on.
+    btn.disabled=true;btn.textContent='Saving…';
+    try{await api(`/api/study/items/${type}/${encodeURIComponent(id)}`,{method:'PUT',body:JSON.stringify({status})})}
+    catch(e){btn.disabled=false;btn.textContent='Mark as done';alert(e.message||'Could not save. Try again.');return}
+    const item=(state[k.list]||[]).find(x=>String(x.id)===String(id));if(item)item.studyStatus='reviewed';
+    curId[type]=id;btn.textContent='✓ Done';btn.classList.add('is-complete');
+    const art=btn.closest('article');const badge=art&&art.querySelector('.study-status-badge, .status-badge');if(badge){badge.textContent='Done';badge.className=badge.className.replace(/\bstatus-\S+/g,'')+' status-reviewed'}
+    const nx=btn.parentElement.querySelector('.v6-study-next');if(nx){nx.classList.add('is-ready');nx.focus({preventScroll:true})}
+    if(typeof loadStudySummary==='function')loadStudySummary().catch(()=>{});
   };
 })();
 
@@ -377,18 +407,6 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
     const pace=v6Pace(p),total=Math.max(pace.blocksPerDay||1,blocks.filter(b=>b.some(t=>t.type==='practice')).length);
     const cnt=document.querySelector('.v6-plan-count');if(cnt&&blocks.length){const d=shown.filter(t=>taskState(t)==='done').length;cnt.textContent=`${total<=8?`Block ${Math.max(1,idx+1)} of ${total}`:`Block ${Math.max(1,idx+1)} today`} · ${d} of ${shown.length} done`}
     const head=document.querySelector('.v6-plan-head');if(head&&!document.querySelector('.v6-pace'))head.insertAdjacentHTML('afterend',paceLine(p));
-    // Done today: every finished item from earlier blocks (current block's done items stay in the list above).
-    const earlier=blocks.slice(0,Math.max(0,idx)).flat().filter(t=>taskState(t)==='done');
-    const lastAllDone=blocks.length&&blocks[blocks.length-1].every(t=>taskState(t)==='done');
-    const doneAll=lastAllDone?tasks.filter(t=>taskState(t)==='done'):earlier;
-    const plan=document.querySelector('.v6-plan:not(.v6-upnext)');
-    if(plan&&doneAll.length){
-      const LBL={note:'Topic note',tricky:'Tricky words',diagram:'Diagram',practice:'Practice',exam:'Exam'};
-      const rows=doneAll.map(t=>{const sc=t.type==='practice'||t.type==='exam'?v6GetScore(t.id):'';
-        return `<div class="v6-done-row"><span class="v6-done-tick" aria-hidden="true">✓</span><span class="v6-done-type">${esc(LBL[t.type]||t.label||'Study')}</span><span class="v6-done-title" title="${esc(t.title)}">${esc(t.title)}</span>${sc?`<span class="v6-done-score">${esc(sc)}</span>`:''}${t.type==='practice'||t.type==='exam'?'':`<button class="v6-task-open" type="button" data-today-open="${esc(t.id)}">Review →</button>`}</div>`}).join('');
-      plan.insertAdjacentHTML('afterend',`<details class="v6-donetoday"${lastAllDone?' open':''}><summary>Done today <span>${doneAll.length} item${doneAll.length===1?'':'s'}</span></summary><div class="v6-done-list">${rows}</div></details>`);
-      bindDashboardWorkspaceActions();
-    }
   };
 
   function renderPacePanel(){
@@ -443,4 +461,73 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
       }catch(e){}
     };
   }
+})();
+
+
+/* ---------- v6.3: Done today tab ---------- */
+function v6DoneTodayTasks(){return (state.todayPlan||[]).filter(t=>taskState(t)==='done')}
+function v6RenderDoneToday(){
+  const host=document.getElementById('dashboardWorkspace');if(!host)return;host.classList.add('v6-today-host');
+  const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const LBL={note:'Topic note',tricky:'Tricky words',diagram:'Diagram',practice:'Practice',exam:'Exam'};
+  const done=v6DoneTodayTasks(),left=(state.todayPlan||[]).length-done.length;
+  const counts=['note','tricky','diagram','practice'].map(t=>[t,done.filter(x=>x.type===t).length]).filter(x=>x[1]);
+  const rows=done.map(t=>{const sc=(t.type==='practice'||t.type==='exam')?v6GetScore(t.id):'';const canReview=['note','tricky','diagram'].includes(t.type);
+    return `<div class="v6-task is-done"><span class="v6-task-dot" aria-hidden="true">✓</span><div class="v6-task-copy"><div class="v6-task-meta"><span class="v6-task-type">${esc(LBL[t.type]||t.label||'Study')}</span>${sc?`<span class="v6-done-score">· ${esc(sc)}</span>`:''}</div><p class="v6-task-title" title="${esc(t.title)}">${esc(t.title)}</p></div>${canReview?`<button class="v6-task-open" type="button" data-today-open="${esc(t.id)}">Review →</button>`:''}</div>`}).join('');
+  const summary=counts.length?counts.map(([t,n])=>`${n} ${({note:'topic',tricky:'tricky pair',diagram:'diagram',practice:'practice set'})[t]}${n===1?'':'s'}`).join(' · '):'';
+  host.innerHTML=`<div class="v6-home"><div class="v6-col"><section class="v6-card v6-plan v6-done-page"><div class="v6-plan-head"><h3>Done today</h3><span class="v6-plan-count">${done.length} finished${left>0?` · ${left} to go`:''}</span></div>${summary?`<p class="v6-pace">${summary}</p>`:''}<div class="v6-plan-list">${rows||'<p class="v6-task-flag" style="padding:14px 6px">Nothing finished yet today. Your first step is waiting on the <b>Today</b> tab.</p>'}</div>${left>0?'<div class="v6-next-actions" style="margin-top:14px"><button class="v6-btn-gold" type="button" data-dashboard-focus-go="today">Continue today’s plan →</button></div>':''}</section></div></div>`;
+  bindDashboardWorkspaceActions();
+  const go=host.querySelector('[data-dashboard-focus-go]');if(go)go.onclick=()=>{state.dashboardFocus='today';renderFeatureLaunchpad(state.lastProgress||{})};
+}
+
+/* ---------- v6.3: exam report: actions on top, answer review opens at the top ---------- */
+(function(){
+  if(typeof showExamResults==='function'){
+    const o=showExamResults;
+    window.showExamResults=async function(){
+      const r=await o.apply(this,arguments);
+      const area=document.getElementById('examResults');if(!area)return r;
+      const rep=area.querySelector('.exam-report-final'),acts=rep&&rep.querySelector('.report-actions'),head=rep&&rep.querySelector('.final-report-head');
+      if(acts&&head){head.after(acts);acts.classList.add('v6-report-top')}
+      area.classList.remove('v6-reviewing');const v=document.getElementById('exams');if(v)v.scrollTop=0;
+      return r;
+    };
+  }
+  if(typeof renderExamReview==='function'){
+    const o=renderExamReview;
+    window.renderExamReview=function(i){
+      const r=o.apply(this,arguments);
+      const area=document.getElementById('examResults'),card=document.getElementById('examReviewCard');
+      if(area&&card&&area.contains(card)){
+        area.classList.add('v6-reviewing');
+        if(!card.querySelector('.v6-review-back')){const b=document.createElement('button');b.type='button';b.className='v6-session-exit v6-review-back';b.textContent='← Back to exam report';b.onclick=()=>{area.classList.remove('v6-reviewing');card.innerHTML='';const v=document.getElementById('exams');if(v)v.scrollTop=0};card.prepend(b)}
+      }
+      if(card){const qc=card.querySelector('.question-card'),acts=qc&&qc.querySelector('.question-actions'),meta=qc&&qc.querySelector('.question-meta');if(acts&&meta){acts.classList.add('v6-review-nav');meta.after(acts)}}
+      const v=document.getElementById('exams');if(v)v.scrollTop=0;window.scrollTo(0,0);
+      return r;
+    };
+  }
+})();
+
+/* ---------- v6.3: practice summary: all actions in one row at the top ---------- */
+(function(){
+  if(typeof renderSessionComplete!=='function')return;
+  const o=renderSessionComplete;
+  window.renderSessionComplete=async function(){
+    const r=await o.apply(this,arguments);
+    const box=document.querySelector('#questionCard .v6-session-done'),acts=box&&box.querySelector('.v6-next-actions'),rev=document.getElementById('reviewAnswers');
+    if(acts&&rev){rev.className='v6-btn-quiet';rev.textContent='Review my answers';acts.appendChild(rev);
+      const sum=box.closest('.session-summary');if(sum)[...sum.children].forEach(ch=>{if(ch!==box)ch.remove()})}
+    return r;
+  };
+})();
+
+/* Practice answer review: Previous / Next at the top of the card */
+(function(){
+  if(typeof renderEndReview!=='function')return;
+  const o=renderEndReview;
+  window.renderEndReview=function(){const r=o.apply(this,arguments);
+    const qc=document.querySelector('#questionCard .question-card')||document.getElementById('questionCard'),acts=qc&&qc.querySelector('.question-actions'),meta=qc&&qc.querySelector('.question-meta');
+    if(acts&&meta){acts.classList.add('v6-review-nav');meta.after(acts)}
+    const v=document.querySelector('.view.active');if(v)v.scrollTop=0;return r};
 })();
