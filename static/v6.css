@@ -906,3 +906,15 @@ body.v6 .v7-dremember .v6-kicker{margin:0 0 2px}
 body.v6 .v7-dremember p{font-weight:600;color:var(--v6-navy)}
 body.v6 .diagram-viewer.has-lesson .diagram-study-meta{display:none!important}
 @media (max-width:900px){body.v6 .v7-drow{flex-direction:column}body.v6 .v7-dlesson{max-width:none;border-left:0;border-top:1px solid var(--v6-line);overflow:visible}body.v6 .v7-drow .diagram-stage{flex:none!important}}
+/* v7.6 notes */
+body.v6 .v7-note-example{margin:0 0 12px;padding:10px 14px;background:#F4F7FA;border-radius:10px}
+body.v6 .v7-note-example p{margin:3px 0 0;font-size:14px;line-height:1.5;color:#3F4758}
+body.v6 .v7-note-cue{margin:10px 0 0;font-size:13.5px;color:#4A5262}
+body.v6 .v7-note-cue b{color:var(--v6-gold-deep)}
+body.v6 .v7-note .note-summary{margin:0 0 10px!important;font-size:14.5px!important;line-height:1.5!important}
+body.v6 .v7-note .fingertip-columns{margin:0 0 10px!important}
+body.v6 .v7-note .fingertip-section{padding:10px 18px!important}
+body.v6 .v7-note .fingertip-section li{margin:0 0 4px!important;font-size:14px!important;line-height:1.4!important}
+body.v6 .v7-note .fingertip-rule{margin:0!important;padding:10px 16px!important}
+body.v6 .v7-note .fingertip-rule strong{font-size:16px!important}
+body.v6 .v7-note-example{margin:0 0 10px!important;padding:8px 14px!important}

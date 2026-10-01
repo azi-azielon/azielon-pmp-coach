@@ -1180,3 +1180,36 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
     return r;
   };
 })();
+
+/* ---------- v7.6: clearer topic notes and tricky words ---------- */
+(function(){
+  const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let RW=null,loading=null;
+  function load(){if(RW)return Promise.resolve(RW);if(!loading)loading=api('/api/study/rewrites').then(r=>{RW=r||{notes:{},tricky:{}};return RW}).catch(()=>{loading=null;return null});return loading}
+  // Apply a rewrite only while the original wording is untouched, so Instructor Studio edits always win.
+  function apply(){
+    if(!RW)return;
+    (state.notes||[]).forEach(n=>{if(n._rw)return;const r=RW.notes&&RW.notes[n.id];if(!r)return;if(String(n.summary||'')!==String(r.old||''))return;
+      Object.assign(n,{summary:r.summary,example:r.example,dos:r.dos,donts:r.donts,rule:r.rule,examCue:r.examCue,_rw:true})});
+    (state.tricky||[]).forEach(t=>{if(t._rw)return;const r=RW.tricky&&RW.tricky[t.id];if(!r)return;if(String(t.leftMeaning||'')!==String(r.old||''))return;
+      Object.assign(t,{hook:r.hook,leftMeaning:r.leftMeaning,rightMeaning:r.rightMeaning,leftScenarioCue:r.leftScenarioCue,rightScenarioCue:r.rightScenarioCue,leftMemory:r.leftMemory,rightMemory:r.rightMemory,trap:r.trap,memory:r.memory,_rw:true})});
+  }
+  window.v7ApplyRewrites=apply;
+  ['renderNotes','renderNotesSingle','renderTricky','renderTodayPlanFromDb','v6RenderFullPlan'].forEach(fn=>{if(typeof window[fn]!=='function')return;const o=window[fn];window[fn]=function(){try{apply()}catch(e){}return o.apply(this,arguments)}});
+  ['loadNotes','loadTricky'].forEach(fn=>{if(typeof window[fn]!=='function')return;const o=window[fn];window[fn]=async function(){await load();return o.apply(this,arguments)}});
+  if(state.token)load().then(()=>{try{apply()}catch(e){}});
+  // Note layout: what it is → a real example → do / don't → rule → exam cue
+  if(typeof noteDetailHtml==='function'){const o=window.noteDetailHtml;window.noteDetailHtml=function(n){
+    if(!n||!n._rw)return o.apply(this,arguments);
+    const li=a=>(a||[]).slice(0,4).map(x=>`<li>${esc(x)}</li>`).join('');
+    return `<div class="note-study-body fingertip-note v7-note">
+      <p class="note-summary fingertip-summary">${esc(n.summary)}</p>
+      <section class="v7-note-example"><span class="exam-section-kicker">In real life</span><p>${esc(n.example)}</p></section>
+      <div class="fingertip-columns">
+        <section class="fingertip-section do-section"><span class="exam-section-kicker">DO</span><ul>${li(n.dos)}</ul></section>
+        <section class="fingertip-section dont-section"><span class="exam-section-kicker">DON’T / EXAM TRAPS</span><ul>${li(n.donts)}</ul></section>
+      </div>
+      <section class="fingertip-rule"><span class="exam-section-kicker">RULE TO REMEMBER</span><strong>${esc(n.rule)}</strong></section>
+      <p class="v7-note-cue"><b>On the exam:</b> ${esc(n.examCue)}</p>
+    </div>`}}
+})();

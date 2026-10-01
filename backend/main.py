@@ -155,6 +155,12 @@ def _load_diagram_lessons():
     except Exception:
         return {}
 DIAGRAM_LESSONS=_load_diagram_lessons()
+def _load_study_rewrite():
+    try:
+        return json.loads((ROOT/'data'/'study_rewrite.json').read_text(encoding='utf-8'))
+    except Exception:
+        return {'notes':{},'tricky':{}}
+STUDY_REWRITE=_load_study_rewrite()
 MATCH_SETS=_load_match_sets()
 MATCH_BY_ID={m['id']:m for m in MATCH_SETS}
 EXAM_RULES={r['rule_id']:r for r in EXAM_CONTENT.get('rules',[])}
@@ -1496,6 +1502,15 @@ def match_set_result(set_id:str,payload:dict,user: User = Depends(current_user),
     row=_upsert_study_state(db,user.id,'match',set_id,status='mastered' if correct>=total else 'needs_review')
     row.review_count=(row.review_count or 0)+1; row.last_rating=f'{correct}/{total}'; db.commit(); db.refresh(row)
     return _state_payload(row)
+
+@app.get('/api/study/rewrites')
+def study_rewrites(user: User = Depends(current_user), db: Session = Depends(get_db)):
+    """Clearer learner-facing wording for topic notes and tricky words. The app applies an entry only while the
+    original text is unchanged, so edits made in Instructor Studio always win."""
+    require_paid_access(user,db)
+    feats=set(access_payload(user,db).get('features') or [])
+    if getattr(user,'role','') in ('admin','instructor','content_editor','reviewer'): feats|={'notes','tricky'}
+    return {'notes':STUDY_REWRITE.get('notes',{}) if 'notes' in feats else {},'tricky':STUDY_REWRITE.get('tricky',{}) if 'tricky' in feats else {}}
 
 @app.get('/api/study/states')
 def study_states(user: User = Depends(current_user), db: Session = Depends(get_db)):
