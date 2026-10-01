@@ -1,0 +1,709 @@
+{
+ "version": "1.2",
+ "lessons": {
+  "BED-001": {
+   "teaches": "How a business problem turns into a project, and why finishing the project is not yet the win.",
+   "readIt": [
+    "Start at the blue lightbulb box on the left: Business Need, a problem or opportunity.",
+    "Follow the arrows right: the green Business Case justifies the money, the purple gear delivers the solution.",
+    "Keep going past the gear. The yellow Benefits box and red Strategic Value star come after delivery.",
+    "Read the small text under each box to see what each link produces."
+   ],
+   "example": "Look at the purple Project Delivery box. It only produces outputs and deliverables. The yellow Benefits box, such as higher revenue or efficiency, sits one arrow later. So the PM plans for people to use the deliverable, not only to hand it over.",
+   "examUse": "When a question says the project finished on time but the expected benefits or value did not appear, think of this chain. Ask which link broke, often adoption.",
+   "trap": "Treating the purple Project Delivery box as the finish line; delivery success does not mean value was realized.",
+   "remember": "No adoption, no benefits. Deliverable is not value."
+  },
+  "BED-002": {
+   "teaches": "How to decide whether you make the call yourself or take it to someone with more authority.",
+   "readIt": [
+    "Begin at the red warning triangle on the left: a problem or issue appears.",
+    "Move right through the blue Assess box and the yellow Check Authority box. You analyze before anything else.",
+    "Stop at the green diamond: 'Do you have decision authority?' Yes goes right to Act.",
+    "No goes down to the purple Escalate box, then the 'Decision provided' arrow returns up to Act."
+   ],
+   "example": "Take the purple Escalate if Needed box. It names the sponsor, steering committee, or governance board. The PM brings the issue there with supporting information, gets a decision, and then follows the arrow back up to Act.",
+   "examUse": "When a question says the cost exceeds your approval threshold, or asks who should decide, think of this. Find the diamond: do you have the authority?",
+   "trap": "Jumping straight to the purple Escalate box and skipping Assess; PMI wants analysis before escalation.",
+   "remember": "Assess first. Escalate later, and only if you lack authority."
+  },
+  "BED-003": {
+   "teaches": "How to help people actually use a change, in five steps from listening to making it stick.",
+   "readIt": [
+    "Read the five colored boxes in the middle row, left to right, following the arrows.",
+    "Look above each box for what you do at that step.",
+    "Look below each box for the short quote. It is the attitude for that step.",
+    "Notice Train is fourth, not first. Listening, involving, and explaining all come before it."
+   ],
+   "example": "Take the blue Understand Resistance box. Above it says to identify concerns, barriers, and root causes. Below it says 'Listen and empathize.' So when employees refuse a new system, the PM first asks why, before sending more emails or scheduling training.",
+   "examUse": "When a question says users resist, or training was delivered but adoption remains low, think of this flow. Find the step that was skipped.",
+   "trap": "Confusing this people journey with integrated change control, which is the formal approval of changes to the plan.",
+   "remember": "Deployment is not adoption. Listen, involve, explain, train, reinforce."
+  },
+  "BED-004": {
+   "teaches": "How to handle a compliance requirement step by step, and what to do if the project is still not compliant.",
+   "readIt": [
+    "Start at box 1, top left, and follow the navy arrows through steps 1 to 4 across the top row.",
+    "Follow the arrow down to the second row: step 5 implements the approved change, step 6 documents it.",
+    "Stop at the gold diamond, Compliant? The green Yes arrow leads to the sage box, Continue the project.",
+    "The rose line, No — reassess, loops all the way back to step 2, Assess the impact."
+   ],
+   "example": "Look at box 3, Consult the legal or compliance expert. A new privacy rule appears mid-project. The PM does not guess what the rule means. The PM assesses the impact, then asks the expert before raising a change request in box 4.",
+   "examUse": "When a question mentions a new regulation, a legal requirement, or an audit finding, think of this flow: assess, consult the expert, then use change control.",
+   "trap": "Do not skip or delay compliance to protect the schedule or budget, even if the sponsor asks. Governance still applies.",
+   "remember": "Compliance is mandatory. Assess, consult, change, document, then check."
+  },
+  "BED-005": {
+   "teaches": "Which selection measure answers which question, and the decision rule that goes with each one.",
+   "readIt": [
+    "Read the three bold questions first; each panel answers one of them.",
+    "In the top panel, four cards (NPV, BCR, ROI, IRR) all answer: is it worth it?",
+    "Read each card top to bottom: name, plain meaning, then the colored tag with the rule.",
+    "Green tags say what wins; the blue tag says remember it; the red tag says ignore it."
+   ],
+   "example": "Find the NPV card in the top panel. It means today's value of future money, minus the cost. Its green tags say above 0 is good and higher wins, so between two projects you choose the one with the larger NPV.",
+   "examUse": "When a question asks which project to select, how soon the investment is recovered, or mentions money already spent, first match it to one of the three questions here.",
+   "trap": "Letting sunk cost sway the choice. Money already spent is ignored when deciding what to do next.",
+   "remember": "Higher wins for NPV, BCR, ROI, IRR. Shorter wins for payback.",
+   "title": "Project Selection Measures"
+  },
+  "BED-006": {
+   "teaches": "How to use AI on a project safely: check, protect, generate, verify, then let a person decide.",
+   "readIt": [
+    "Read the five tall columns left to right, following the colored arrows.",
+    "The first two columns, blue and green, happen before AI runs: check the data, check privacy.",
+    "The yellow brain is where AI works. The red column right after it verifies the result.",
+    "End at the purple person icon: a human makes the decision and is accountable."
+   ],
+   "example": "Take the red Validate Output column. It says to review results for accuracy, bias, and relevance. So if an AI tool forecasts a finish date, the PM compares it with the team's knowledge before sharing it with the sponsor.",
+   "examUse": "When a question says an AI tool recommends an action, or mentions sensitive data, bias, or privacy, think of this. Validate first; a human decides.",
+   "trap": "Treating the AI output as the final answer and skipping the red Validate step.",
+   "remember": "AI can recommend; humans remain accountable."
+  },
+  "BED-007": {
+   "teaches": "How to judge a project decision through three lenses at once: people, planet, and profit.",
+   "readIt": [
+    "Find the three big circles: green Planet on top, blue People left, yellow Profit right.",
+    "Read the three bullets inside each circle to see what that lens covers.",
+    "Look where two circles overlap: Bearable, Viable, Equitable. Each one satisfies only two lenses.",
+    "Land on the dark center where all three overlap: Sustainability."
+   ],
+   "example": "Look at the Viable overlap between Planet and Profit. A choice there is good for the environment and for finances, but it leaves out People. The PM would still ask how the community and the team are affected before recommending it.",
+   "examUse": "When a question says the cheapest option harms the environment or the community, or mentions long-term or lifecycle impact, think of this. Choose the option that balances all three.",
+   "trap": "Picking the lowest upfront cost when the scenario clearly raises social or environmental impact.",
+   "remember": "People + Planet + Profit = sustainable value."
+  },
+  "BED-008": {
+   "teaches": "How portfolios, programs, projects and operations fit together, and what success means for each one.",
+   "readIt": [
+    "Start at the navy Portfolio box at the top. It picks the right work to meet strategy.",
+    "Follow the lines down to two blue Program boxes and one stand-alone Project on the right.",
+    "Follow the gold arrow from that Project into the green Operations band: the project hands over its result.",
+    "Read the table at the bottom to compare how long each lasts and what success means."
+   ],
+   "example": "Look at the Project box on the right. It is temporary and creates a unique result. The gold arrow shows it handing that result over to Operations, the green band, which keeps the business running after the project closes.",
+   "examUse": "When a question asks whether work is a project, program, portfolio or operations, or mentions strategic alignment, benefits or ongoing work, use this map and its table.",
+   "trap": "Calling a program a big project. A program groups related projects to gain benefits you cannot get by managing them separately.",
+   "remember": "Portfolio picks, program groups, project builds, operations runs."
+  },
+  "PD-001": {
+   "teaches": "How people's needs stack up, and why lower needs must be met before higher ones motivate.",
+   "readIt": [
+    "Start at the wide pink bottom layer: Physiological, the basic survival needs.",
+    "Climb one layer at a time: blue Safety, yellow Belonging, green Esteem, purple Self-Actualization.",
+    "Follow each thin line out to the side box. It gives everyday examples for that layer.",
+    "Notice the layers get narrower. Fewer things motivate until the layers below are satisfied."
+   ],
+   "example": "Look at the blue Safety & Security layer. Its side box lists job security and fair treatment. If a team member fears being laid off, praise and awards from the green Esteem layer will not motivate them. The PM addresses the security worry first.",
+   "examUse": "When a question says morale is low or a team member is unmotivated, think of this. Look for clues like job security, feeling left out, or lack of recognition.",
+   "trap": "Offering recognition or growth when the scenario describes an unmet lower need, such as safety.",
+   "remember": "Survive, feel safe, belong, be respected, fulfill your potential."
+  },
+  "PD-002": {
+   "teaches": "How a team matures in five stages, and why conflict in stage two is normal.",
+   "readIt": [
+    "Start at the purple step 1 at bottom left: Forming, with orientation and uncertainty.",
+    "Follow the curved arrows up the staircase: Storming, Norming, Performing, Adjourning.",
+    "Read the short line under each name. It tells you what the team feels like.",
+    "Check the Exam Tip box at the bottom: name the stage before choosing a response."
+   ],
+   "example": "Look at the red step 2, Storming, with the lightning bolt. It says conflict and role tension. So when two members argue about who owns a task, the PM does not panic. The PM coaches, mediates, and sets ground rules.",
+   "examUse": "When a question says a new team is arguing, or a new member joined a high-performing team, think of this. Identify the stage first.",
+   "trap": "Reading Storming as failure. Also, the staircase only climbs, but a team can slip back when members change.",
+   "remember": "Storming is normal. Know the stage before you respond."
+  },
+  "PD-003": {
+   "teaches": "How to sort stakeholders by power and interest so you know how much attention each one needs.",
+   "readIt": [
+    "Start with the two arrows: interest runs left to right, power runs bottom to top, both low to high.",
+    "Look at the gold box, top right: high power and high interest means Manage closely. The Sponsor sits here.",
+    "Top left is Keep satisfied: powerful but not very interested, like a senior executive in another division.",
+    "Bottom row: End users are Keep informed, and the General public is Monitor."
+   ],
+   "example": "Find the Sponsor dot in the gold Manage closely box. The sponsor has high power and high interest, so the PM meets with them often, involves them in key decisions, and never lets them be surprised.",
+   "examUse": "When a question asks how to prioritize or classify stakeholders by their influence, authority, or level of concern, think of this grid and pick the quadrant's strategy.",
+   "trap": "Do not ignore the Monitor box. Low power and low interest still gets watched, because people can move to another box.",
+   "remember": "High power, high interest: manage closely. Everyone else gets less, never zero."
+  },
+  "PD-004": {
+   "teaches": "How to compare each stakeholder's current engagement with the level you need, so you can see the gap to close.",
+   "readIt": [
+    "Read the legend at the top first: outlined C is where they are now, solid D is where you need them.",
+    "Read the column names left to right, from Unaware to Leading. Support grows as you move right.",
+    "Pick one row and follow the arrow from C to D. The arrow is the gap you must close.",
+    "Find the gold arrow in the Regulator row. It is the longest, so it is the biggest gap."
+   ],
+   "example": "Look at the Regulator row. C sits under Unaware and D sits under Neutral, joined by the gold arrow marked biggest gap. The PM plans early briefings so the regulator learns about the project and does not block it later.",
+   "examUse": "When a question mentions current and desired engagement levels, a resistant or unaware stakeholder, or gaps in the stakeholder engagement plan, think of this matrix.",
+   "trap": "Thinking everyone must reach Leading. The Operations manager only needs to reach Neutral, and the Team lead is already there.",
+   "remember": "C is now, D is the goal, the arrow is your work."
+  },
+  "PD-005": {
+   "teaches": "How five ways of handling conflict compare, based on concern for yourself and concern for others.",
+   "readIt": [
+    "Read the two axes: concern for others runs up and down, concern for self runs left to right.",
+    "Go to the green top-right box with the star: Collaborate, high on both.",
+    "Find the yellow Compromise box in the dead center. It is medium on both.",
+    "Check the other three corners: Smooth top-left, Withdraw bottom-left, Force bottom-right."
+   ],
+   "example": "Take the yellow Compromise box in the middle. It says both sides give something up. If two leads split a tester's time half and half, nobody gets what they fully need. The PM would rather find the root cause, which is Collaborate.",
+   "examUse": "When a question says two team members disagree and asks the best approach, think of this. Look for the answer that addresses the root cause with both parties.",
+   "trap": "Choosing compromise and calling it win-win. Compromise settles; only collaboration solves the problem.",
+   "remember": "Collaborate solves. Compromise settles."
+  },
+  "PD-006": {
+   "teaches": "Where a project manager's influence comes from, and which sources PMI prefers.",
+   "readIt": [
+    "Look at the two large top boxes with stars: Expert and Referent. Both say 'Commonly PMP-Favored'.",
+    "Read their one-line meanings: knowledge and competence, then respect and relationships.",
+    "Drop to the three smaller boxes: Legitimate, Reward, Coercive. These come with the position.",
+    "Note the red warning triangle on Coercive. It is the ability to penalize."
+   ],
+   "example": "Look at the purple Referent Power box. It says respect and relationships. A PM with no formal authority over a team can still get cooperation because people trust and respect them. The PM builds that trust through fairness and follow-through.",
+   "examUse": "When a question says the PM has no formal authority, or asks which type of power is best to use, think of this. Favor expert and referent.",
+   "trap": "Mixing up expert and referent: expert is what you know, referent is how people regard you.",
+   "remember": "PMI prefers earned power (expert, referent) over granted power."
+  },
+  "PD-007": {
+   "teaches": "How a RACI matrix shows who does the work and who owns the result for every task.",
+   "readIt": [
+    "Read the legend at the top first: R does the work, A owns the result, C gives input, I is told.",
+    "Pick one task on the left and read across the row to see each role's letter.",
+    "Find the gold A squares: every row has exactly one, so one person owns each task.",
+    "Navy R squares show who does the work. The pale C and I squares are supporting roles."
+   ],
+   "example": "Look at the row Define requirements. The Business analyst has the navy R, so they do the work. The Project manager has the gold A, so they own the result. The Team lead is consulted and the Sponsor is kept informed.",
+   "examUse": "When a question says team members are confused about roles, duplicate work, or nobody owns a task, think RACI. It is a responsibility assignment matrix.",
+   "trap": "Mixing up R and A. Several people can be Responsible, but only one person can be Accountable for a task.",
+   "remember": "One gold A per row. Two owners means no owner."
+  },
+  "PD-008": {
+   "teaches": "How the number of communication paths grows much faster than the number of people.",
+   "readIt": [
+    "Start at the formula box, top left: n times n minus 1, divided by 2.",
+    "Check the Examples table: team size on the left, channels on the right.",
+    "Look at the blue bar chart. Each bar is taller than the last by a bigger jump.",
+    "Read the red Key Takeaway box: more people means many more paths."
+   ],
+   "example": "Look at the table rows for 4 and 8. A team of 4 has 6 channels. Double the team to 8 and channels jump to 28, not 12. So when a team grows, the PM updates the communications plan.",
+   "examUse": "When a question says team members were added and asks how many channels, or how many more, think of this. Count the PM in n.",
+   "trap": "Forgetting to include yourself in n, or giving the new total when the question asks for the increase.",
+   "remember": "n times (n minus 1), divided by 2. People add, channels multiply."
+  },
+  "PD-009": {
+   "teaches": "How the three Scrum roles and the sprint events fit together in one repeating cycle.",
+   "readIt": [
+    "Read the top row first: Product Owner, Scrum Master, Developers. One line says what each does.",
+    "Move to the Sprint Flow row. Follow the arrows left to right from Product Backlog.",
+    "Notice the red Daily Scrum box above the Sprint with looping arrows. It repeats every day.",
+    "After the Sprint come two different meetings: yellow Sprint Review, then teal Retrospective."
+   ],
+   "example": "Compare the yellow Sprint Review and teal Retrospective boxes. Review inspects the product with stakeholders. Retrospective improves the team's process. So if the team keeps missing handoffs, the fix belongs in the Retrospective.",
+   "examUse": "When a question says stakeholders want to see the increment, or the team wants to improve how it works, think of this. Demo means Review; process means Retrospective.",
+   "trap": "Swapping the Review and the Retrospective, or having the Scrum Master assign the team's daily tasks.",
+   "remember": "Review = product. Retro = process."
+  },
+  "PD-010": {
+   "teaches": "How power, legitimacy, and urgency combine to show which stakeholders need your attention first.",
+   "readIt": [
+    "Start with the three circle names: Power, Legitimacy, and Urgency. Each circle is one attribute.",
+    "Use the key on the right: palest areas have one attribute, darker areas two, gold has all three.",
+    "Find the gold center, Definitive. These stakeholders have all three attributes and come first.",
+    "Read the overlaps: Dominant, Dangerous, and Dependent have two attributes. Dormant, Discretionary, and Demanding have one."
+   ],
+   "example": "Look at Dangerous, where the Power and Urgency circles overlap. This stakeholder can force things and wants action now, but has no legitimate claim. The PM watches them carefully and engages early so they do not disrupt the project.",
+   "examUse": "When a question mentions a stakeholder's power, legitimacy, and urgency, or asks which stakeholder to address first in a large community, think salience model.",
+   "trap": "Confusing it with the power/interest grid. Salience uses three attributes in circles, not two axes in a square.",
+   "remember": "Count the circles: one is low, two is medium, three is Definitive."
+  },
+  "PD-011": {
+   "teaches": "How an OBS shows which department in the organization is responsible for each work package.",
+   "readIt": [
+    "Start at the navy Organization box at the top. It is the whole company.",
+    "Move down to the three white boxes: Engineering, Marketing, Finance. These are company departments, not the project team.",
+    "Look at the gold boxes under each department. Those are the work packages that department is responsible for.",
+    "Read the gold note on the left: WBS is what is delivered, OBS is which department does it."
+   ],
+   "example": "Look under Engineering. Two gold work packages hang there: Home page and Contact form. That means Engineering is the department responsible for both. If the Contact form falls behind, the PM works with Engineering's manager, because those people report to that department.",
+   "examUse": "When a question asks which department or organizational unit is responsible for a work package, or mentions a functional manager, think of the OBS.",
+   "trap": "Do not confuse it with the WBS. The WBS breaks down deliverables. The OBS breaks down the organization.",
+   "remember": "WBS = what is delivered. OBS = which department does it."
+  },
+  "PD-012": {
+   "teaches": "How the project manager's authority grows as the organization moves from functional to projectized.",
+   "readIt": [
+    "Read the five names along the baseline, from Functional on the left to Projectized on the right.",
+    "Compare the navy bars. Bar height is the project manager's authority, and the gold words above name the level.",
+    "Read the white words on each bar: Expediter / coordinator on the first two, Project manager on the rest.",
+    "Check the row of boxes below to see who controls the budget and people in each structure."
+   ],
+   "example": "Look at Balanced matrix, the middle bar. Authority is low to moderate, the role is called Project manager, and the box below says Shared. So the PM negotiates with the functional manager for people and money.",
+   "examUse": "When a question describes who controls the budget or resources, or says the PM has little authority, find the matching bar to name the structure.",
+   "trap": "Assuming every matrix gives the PM real power. In a weak matrix the functional manager still controls budget and people.",
+   "remember": "Taller bar, more authority. Projectized is the tallest."
+  },
+  "PD-013": {
+   "teaches": "Shows how a message travels from sender to receiver, and why feedback proves it was understood.",
+   "readIt": [
+    "Follow the five white boxes left to right: Sender, Encode, Message / Channel, Decode, Receiver.",
+    "Look up at the red Noise / Barriers box. Its arrow drops into the middle of the message.",
+    "Trace the gold curved arrow underneath. It runs back from Receiver to Sender: that is feedback.",
+    "Read the Key Idea box at the bottom: message sent is not message understood."
+   ],
+   "example": "Look at the red Noise / Barriers box. It lists jargon, assumptions, and tech issues. If the PM emails a client using technical terms, the client may decode it wrongly. The PM asks the client to repeat it back, closing the gold feedback loop.",
+   "examUse": "When a question says a stakeholder misunderstood, did not receive, or misread a message, think of this. Look for the answer that confirms understanding.",
+   "trap": "Thinking the job ends when you hit send. The sender is responsible for making the message clear and confirming it landed.",
+   "remember": "Sent is not understood. Close the gold loop."
+  },
+  "PD-014": {
+   "teaches": "How five well-known motivation theories differ, and what the project manager does with each one.",
+   "readIt": [
+    "Read the five card names first: Maslow, Herzberg, McGregor, McClelland and Vroom.",
+    "Look at the small picture in each card. It shows the whole theory in one shape.",
+    "Read the gold line at the bottom of each card: What the PM does.",
+    "Notice the gold highlights: Basic in Maslow's stack and Theory Y in McGregor's card."
+   ],
+   "example": "Look at the Herzberg card. The blue bar says Hygiene factors, like pay and conditions, only prevent unhappiness. The green bar says Motivators, like recognition and growth, create satisfaction. So the PM fixes hygiene problems first, then adds recognition and growth.",
+   "examUse": "When a question asks why a pay raise did not motivate the team, or how to reward or recognize a team member, match the clue to one of these five cards.",
+   "trap": "Mixing up Herzberg and Maslow. Herzberg has two kinds of factors; Maslow has five levels, with Basic at the bottom.",
+   "remember": "Ask what motivates this person first, then pick the reward."
+  },
+  "PD-015": {
+   "teaches": "How to choose one of four leadership styles based on a person's skill and confidence on a task.",
+   "readIt": [
+    "Read the arrows first: directive behavior grows left to right, supportive behavior grows bottom to top.",
+    "Start at the gold dot in S1 Directing, bottom right, for a D1 person: new, eager, low skill.",
+    "Follow the gold path up to S2 Coaching, across to S3 Supporting, then down to S4 Delegating.",
+    "Each blue bar names the person that style fits, from D1 to D4."
+   ],
+   "example": "Look at S2 Coaching, top right. The blue bar says D2: some skill, losing confidence. The PM still gives clear direction on what and how, but also listens and encourages so the person does not give up.",
+   "examUse": "When a question describes a new team member, an expert who feels unsure, or asks which leadership style fits, match the person's D level to the S style.",
+   "trap": "Delegating to someone who is eager but new. Enthusiasm is not skill, so a D1 person needs Directing.",
+   "remember": "Direct, coach, support, delegate: your style follows the person's growth."
+  },
+  "PD-016": {
+   "teaches": "How five decision-making styles line up from the leader deciding alone to the team deciding.",
+   "readIt": [
+    "Read the two end labels first: less team participation and faster on the left, more participation on the right.",
+    "Follow the arrow through the five circles. The blue dot grows as the team takes a bigger part.",
+    "Read each name and its short meaning, from Leader decides to Team decides.",
+    "Use the three Choose by boxes at the bottom to see when to move left, move right, or escalate."
+   ],
+   "example": "Look at Consensus, the fourth circle. It means everyone can support the decision, even if it was not their first choice. It sits near the right end, so it brings more buy-in but takes longer than a Majority vote.",
+   "examUse": "When a question asks how the team should decide, or mentions urgency, buy-in, commitment, or a decision beyond the PM's authority, picture this line and pick the stop.",
+   "trap": "Treating consensus as a majority vote. Majority is more than half; consensus means everyone can support it.",
+   "remember": "Urgent: move left. Need buy-in: move right. Not yours: escalate."
+  },
+  "PRD-001": {
+   "teaches": "Shows where your product ends and which outside people and systems connect to it.",
+   "readIt": [
+    "Start in the middle: the blue Proposed System / Product box. That is what you are building.",
+    "Notice the dashed line around it, labeled System Boundary. Everything inside is your scope.",
+    "Look at the six colored boxes around it. They are outside people and systems.",
+    "Read the arrow labels. Each one names what passes in or out."
+   ],
+   "example": "Look at the pink Payment Gateway box on the right. A Payment Request arrow goes out and a Payment Status arrow comes back. The gateway is outside the boundary, so the team builds only the connection, not the gateway itself.",
+   "examUse": "When a question asks about scope boundary, external interfaces, or how the product interacts with other systems and users, think of the context diagram.",
+   "trap": "Confusing it with a flowchart. A context diagram shows who touches the system, not the step-by-step order of work.",
+   "remember": "Context = what surrounds and touches the system."
+  },
+  "PRD-002": {
+   "teaches": "Shows how to sort the possible causes of one problem into groups, so you find the root cause.",
+   "readIt": [
+    "Start at the fish head on the right: Recurring Defects. That is the problem.",
+    "Follow the spine left. Six big bones branch off: Methods, People, Materials, Machines, Measurements, Environment.",
+    "Read the two small lines on each bone. These are possible causes in that group.",
+    "Ask why for each cause until the team reaches the real root."
+   ],
+   "example": "Look at the green People bone. It lists Insufficient training and Human error. If the team agrees training is the likely cause of the recurring defects, the PM arranges training and then checks whether defects drop.",
+   "examUse": "When a question says the cause of a defect is unknown and the team must find the root cause or brainstorm causes, think fishbone.",
+   "trap": "Expecting it to rank causes. Fishbone only lists possible causes; a Pareto chart shows which one matters most.",
+   "remember": "Fishbone = why did this happen?"
+  },
+  "PRD-003": {
+   "teaches": "How to spot the few causes that create most of the problems, so you fix those first.",
+   "readIt": [
+    "Start at the left: bars are sorted tallest first. Requirements changes caused 120 of the 300 problems.",
+    "Follow the gold line. It is a running total, read against the percent axis on the right.",
+    "Find the dashed 80% line. The gold line crosses it at the third bar, at 83%.",
+    "The three navy bars are the vital few. The two pale bars matter far less."
+   ],
+   "example": "Requirements changes (120), Defects (80) and Communication gaps (50) add up to 250 of 300 problems, which is 83%. The PM puts improvement effort into those three causes before spending time on Vendor delays or Testing gaps.",
+   "examUse": "When a question asks which cause to tackle first, or mentions the 80/20 rule, prioritizing defects, or the vital few, think of this chart.",
+   "trap": "A plain bar chart is not a Pareto chart. Pareto bars are sorted tallest first and carry a cumulative percent line.",
+   "remember": "Tallest bars first: a few causes create most of the problems."
+  },
+  "PRD-004": {
+   "teaches": "Shows whether a process is stable over time or something unusual has gone wrong.",
+   "readIt": [
+    "Find the green dashed Center Line near 35. That is the average result.",
+    "Find the two red dashed lines: Upper Control Limit above, Lower Control Limit below.",
+    "Follow the blue dots left to right, sample 1 to 15. Most stay between the red lines.",
+    "Stop at the red dot at sample 13. It sits above the upper limit."
+   ],
+   "example": "Look at sample 13, the red dot labeled Out of Control (Special Cause). It jumps to about 57, above the upper limit near 51. Something unusual happened, so the PM investigates the cause before changing the process.",
+   "examUse": "When a question says a measurement is outside the control limits, or asks if a process is stable or in control, think control chart.",
+   "trap": "Mixing up control limits with specification limits. Control limits come from the process; specification limits come from the customer.",
+   "remember": "Control chart = is the process stable?"
+  },
+  "PRD-005": {
+   "teaches": "Shows how often results fall into each number range, so you see the shape of the data.",
+   "readIt": [
+    "Read the bottom axis: five value ranges, from 0–10 up to 40–50.",
+    "Read the left axis: Frequency, meaning how many results fell in that range.",
+    "Look at the number on each bar: 5, 15, 25, 12, 5.",
+    "Step back and see the shape: one hill, with the peak in the middle."
+   ],
+   "example": "Look at the tall purple bar for 20–30. It reaches 25, so most results land in that range. Only 5 fall in 0–10 and 5 in 40–50. The PM sees that results cluster in the middle, with few extreme values.",
+   "examUse": "When a question asks about the distribution, spread, or frequency of quality data, with no ranking of causes, think histogram.",
+   "trap": "Confusing it with a Pareto chart. Histogram bars stay in number order; they are not sorted biggest first.",
+   "remember": "Histogram = the shape of the data."
+  },
+  "PRD-006": {
+   "teaches": "Shows whether two things move together, by plotting one against the other.",
+   "readIt": [
+    "Read the bottom axis, Variable A, then the left axis, Variable B. Both run 0 to 100.",
+    "Each blue dot is one observation with a value for both variables.",
+    "Look at the overall pattern. The dots climb from bottom left to top right.",
+    "Read the green note: dots rising together suggest a positive correlation."
+   ],
+   "example": "Look at the dot near A = 20, B = 22, then the dot near A = 94, B = 91. As A grows, B grows too. If A were training hours and B test scores, the PM would look deeper at training.",
+   "examUse": "When a question asks whether two variables are related, or uses the words correlation or relationship between two factors, think scatter diagram.",
+   "trap": "Assuming one thing causes the other. A scatter diagram shows they move together, not why.",
+   "remember": "Scatter = do they move together? Correlation is not cause."
+  },
+  "PRD-007": {
+   "teaches": "Shows how to rank risks by how likely they are and how much they would hurt.",
+   "readIt": [
+    "Read the left side: Probability, from Very Low (1) at the bottom to Very High (5).",
+    "Read the bottom: Impact, from Very Low (1) on the left to Very High (5).",
+    "Notice the colors: green in the bottom left is low concern, red in the top right is urgent.",
+    "Find the four dots: Minor Rework, Scope Change, Vendor Delay, Data Loss."
+   ],
+   "example": "Look at Data Loss in the top right red square. It is Very High probability and Very High impact, 5 × 5. The PM deals with it first and plans a response right away. Minor Rework, in the green, can go on a watch list.",
+   "examUse": "When a question asks which risk to address first, or mentions prioritizing risks, probability and impact, or qualitative risk analysis, think of this grid.",
+   "trap": "Calling it quantitative analysis. This grid uses ratings like high and low, not dollar amounts or simulations.",
+   "remember": "Risk matrix = how likely and how big?"
+  },
+  "PRD-008": {
+   "teaches": "Shows which uncertain factor could change the project result the most.",
+   "readIt": [
+    "Find the dashed line in the middle at 0. Bars stretch left and right from it.",
+    "Left of the line decreases the outcome. Right of the line increases it.",
+    "Read the factor names down the left side, from Requirements Volatility to Budget Changes.",
+    "Compare bar lengths. The longest bar is on top, which makes the tornado shape."
+   ],
+   "example": "Look at the top blue bar, Requirements Volatility. It stretches from about −28% to +32%, the widest swing on the chart. The PM focuses risk planning there first, because changes in requirements move the outcome more than anything else.",
+   "examUse": "When a question mentions sensitivity analysis, or asks which risk or variable has the greatest effect on the outcome, think tornado diagram.",
+   "trap": "Confusing it with the probability-impact grid. A tornado compares how much each factor swings the result; it does not show probability.",
+   "remember": "Tornado = what shakes the outcome most. Longest bar on top."
+  },
+  "PRD-009": {
+   "teaches": "Shows how to compare two choices by working out what each is worth on average.",
+   "readIt": [
+    "Start at the blue Decision Node on the left. Two paths leave it: Build In-House and Outsource.",
+    "Follow each path to its two outcome boxes. Each shows a probability and a dollar amount.",
+    "Multiply probability by dollars for each outcome, then add the two results.",
+    "Compare the two boxes on the right: $64,000 and $74,000. That is the EMV."
+   ],
+   "example": "Follow the purple Outsource path. Success is 80% × $90,000 = $72,000. Minor Gain is 20% × $10,000 = $2,000. Together that is $74,000, higher than Build In-House at $64,000. On money alone, the PM chooses Outsource.",
+   "examUse": "When a question gives options with probabilities and dollar amounts, such as make-or-buy, and asks for the expected monetary value, think decision tree.",
+   "trap": "Picking the biggest payoff ($120,000) without multiplying by its probability. Always multiply first, then add each branch.",
+   "remember": "EMV = probability × impact. Multiply, add, then compare."
+  },
+  "PRD-010": {
+   "teaches": "Shows the order of activities and which chain of them sets the project's finish date.",
+   "readIt": [
+    "Start at the green Start box. Two paths leave it, one red and one blue.",
+    "Each circle is an activity. The letter is its name; 3d means three days.",
+    "Add the days along the red path: A, B, D, F = 14 days.",
+    "Add the blue path: C, E, F = 7 days. The longer one is the critical path."
+   ],
+   "example": "Look at activity B, 5 days, on the red path. If B slips by two days, the whole project finishes two days late. So the PM watches B closely. Activity C on the blue path has spare time.",
+   "examUse": "When a question says an activity is delayed and asks about the finish date, float, or which activities to crash, think of the critical path.",
+   "trap": "Picking the path with the most activities. The critical path is the longest in duration, not the busiest-looking.",
+   "remember": "Critical path = longest path, zero float."
+  },
+  "PRD-011": {
+   "teaches": "How to tell if a sprint is on pace by comparing work remaining with the ideal line.",
+   "readIt": [
+    "Start top left: the sprint begins with 40 story points remaining on day 0.",
+    "The dashed navy line is the ideal pace, falling steadily to 0 on day 10.",
+    "The rose line is actual work remaining. Follow it down to Today: day 6.",
+    "Read the gold gap at day 6: actual 24, ideal 16, so 8 points behind."
+   ],
+   "example": "At Today: day 6 the ideal line says 16 points should remain, but the rose line shows 24. The gold bar is that gap: 8 points behind. The team talks about what is slowing them down and what can be done about it.",
+   "examUse": "When a question shows work remaining during a sprint, or asks if the team is on track, ahead or behind, think burndown chart.",
+   "trap": "Reading it upside down. On a burndown, the actual line above the ideal line means behind, not ahead.",
+   "remember": "Burndown counts what is LEFT. Above the line is behind."
+  },
+  "PRD-012": {
+   "teaches": "How a burnup chart shows work done climbing toward total scope, and shows when scope changes.",
+   "readIt": [
+    "Start with the navy Total scope line: it sits flat at 100 points.",
+    "At sprint 4 the navy line steps up to 120. That step is Scope added: +20.",
+    "Follow the sage Completed line as it climbs to 70 done at Now: sprint 5.",
+    "The gold bar is the gap between 70 and 120: 50 points to go."
+   ],
+   "example": "At Now: sprint 5 the team has 70 points done. The scope line is at 120 because 20 points were added at sprint 4. The gold gap shows 50 points to go, and everyone can see that 20 of them are new scope.",
+   "examUse": "When a question mentions scope added during a release, progress toward a release goal, or showing scope change to stakeholders, think burnup chart.",
+   "trap": "Confusing it with a burndown. A burndown shows work left and can hide added scope. A burnup shows it as a step.",
+   "remember": "Burnup: done line climbs, scope line steps. Both are visible."
+  },
+  "PRD-013": {
+   "teaches": "How to spot where work is piling up by watching colored bands grow over time.",
+   "readIt": [
+    "Start at the legend on the right: pink is Backlog, yellow In Progress, blue Testing, green Done.",
+    "Read left to right, Week 1 to Week 6. Each band's height is how many items sit in that state.",
+    "Find the yellow double arrow near Week 4. That band got thicker, so work is waiting there.",
+    "Look at the green band on top. Steady growth means work keeps getting finished."
+   ],
+   "example": "Look at the yellow In Progress band around Week 4. It is much thicker than in Week 1, so the team started more work than it finished. The PM helps the team stop starting new items and clear the stuck ones first.",
+   "examUse": "When a question mentions a bottleneck, growing WIP (work in progress), or a Kanban team that starts a lot but finishes little, think of this chart.",
+   "trap": "Do not read it like a burndown chart; a burndown shows work remaining, this shows work sitting in each state.",
+   "remember": "Wider bands = work waiting."
+  },
+  "PRD-014": {
+   "teaches": "How a team sees all its work and limits how much is started at once.",
+   "readIt": [
+    "Read the four columns left to right: To Do, In Progress, Review, Done. Each card is one work item.",
+    "Find the yellow tag 'WIP Limit: 3' under In Progress. Only three cards may sit there.",
+    "Count the In Progress cards: three. The column is full, so nothing new can start yet.",
+    "Follow the blue arrow at the bottom. Work is pulled to the right only when space opens."
+   ],
+   "example": "In Progress holds Develop feature, Run unit tests and Update documentation, which is the limit of three. 'Design solution' must wait in To Do. The team finishes one card first, then pulls the next.",
+   "examUse": "When a question says too much work is started, the WIP limit is exceeded, or work is blocked, think of this. Finish work before starting more.",
+   "trap": "A board alone is not Kanban; Scrum teams use boards too. The WIP limit and pull make it Kanban.",
+   "remember": "Kanban hates traffic jams."
+  },
+  "PRD-015": {
+   "teaches": "How a requested change moves through seven steps before anyone is allowed to build it.",
+   "readIt": [
+    "Follow the numbered circles 1 to 7 from left to right along the arrows.",
+    "Stop at box 2, Impact Analysis. It comes before the request goes for a decision.",
+    "Look at box 4, the gold one with people. The CCB (change control board) approves, rejects or defers.",
+    "Notice Implement is box 6. Plans are updated and people told (box 5) before work starts."
+   ],
+   "example": "Take box 2, Impact Analysis. A sponsor asks for a new report. Before saying yes, the PM checks what it does to scope, schedule, cost, quality, resources and risk, then writes the change request with those findings.",
+   "examUse": "When a question says the customer or sponsor requests a change and asks what to do first, think of this. Look for: analyze impact, change request, CCB.",
+   "trap": "Implementing first because a sponsor or senior person asked; even their request goes through the steps.",
+   "remember": "Analyze before approve; approve before implement."
+  },
+  "PRD-016": {
+   "teaches": "Where a risk stops being a 'maybe' and becomes an issue that needs fixing now.",
+   "readIt": [
+    "Start in the blue top band, tagged 'Before it happens'. Four boxes: identify, analyze, respond, monitor.",
+    "Find the red 'Risk Occurs' tag in the middle. That is the moment the maybe becomes real.",
+    "Follow the red arrow into the pink band, 'After it happens': log the issue, resolve, track.",
+    "Compare the first box in each band: Risk Register on top, Issue Log below."
+   ],
+   "example": "Look at the red 'Risk Occurs' tag. Say a vendor delay was a risk, and now the vendor is late. The PM records it in the issue log, assigns an owner, fixes it, and also updates the risk register.",
+   "examUse": "When a question says a risk has occurred, materialized, or is already impacting the project, think of this. Emerging or 'could happen' means risk register; confirmed means issue log.",
+   "trap": "Keeping a problem that already happened only in the risk register instead of logging it as an issue.",
+   "remember": "Risk may happen; issue has happened."
+  },
+  "PRD-017": {
+   "teaches": "How five trigger words point you to the right project document: WHY, AUTHORITY, HOW, APPROVED, TRACK.",
+   "readIt": [
+    "Read the gold words across the top, left to right: WHY, AUTHORITY, HOW, APPROVED, TRACK.",
+    "Under each gold word, read the cream boxes. Those are the documents that answer that word.",
+    "Follow the arrows between the cards. They show the order the documents usually appear in a project.",
+    "Read the line under the chain: a change to a baseline needs an approved change request."
+   ],
+   "example": "Look at the APPROVED card. It holds the baselines for scope, schedule, and cost. These are the approved targets the PM measures against. The PM cannot change one alone. It takes an approved change request, as the line under the chain says.",
+   "examUse": "When a question asks which document justifies the investment, gives the PM authority, or records an approved target, find the trigger word first, then pick the document.",
+   "trap": "Do not mix up a plan and a baseline. A plan says HOW. A baseline is the APPROVED target.",
+   "remember": "Plan = HOW. Baseline = APPROVED. Register or log = TRACK."
+  },
+  "PRD-018": {
+   "teaches": "How to read a schedule as bars on a calendar: what happens when, and what waits on what.",
+   "readIt": [
+    "Read the task names down the left and the weeks W1 to W10 across the top.",
+    "Each bar's length is how long the task takes. Green fill is work already done.",
+    "Follow the arrows. Each one means the earlier task must finish before the next one starts.",
+    "The gold Today line sits at the end of W5. The diamond in W10 is the Go-live milestone."
+   ],
+   "example": "Development runs W5 to W7 and is one-third green, exactly up to the Today line, so it is on track. Testing and Training both wait on Development and then run side by side in W8 and W9.",
+   "examUse": "When a question asks for a schedule view showing task durations, progress to date, or status for the team, think of the Gantt (bar) chart.",
+   "trap": "A milestone chart shows only the diamonds, not the bars. Executives get milestones; the team gets the Gantt chart.",
+   "remember": "Bars show how long, arrows show what waits, diamonds mark milestones."
+  },
+  "PRD-019": {
+   "teaches": "How two ways of shortening a schedule differ: one costs money, the other adds risk.",
+   "readIt": [
+    "Look at the blue left panel, Crashing. One bar, Build Feature X, shrinks from 10 days to 6.",
+    "Look at the gold right panel, Fast-Tracking. Design and Development now overlap instead of running one after another.",
+    "Read the Cost impact and Risk impact rows under each panel. Crashing raises cost; fast-tracking raises risk.",
+    "Finish with the 'When to use' rows: extra budget for crashing, work that can overlap for fast-tracking."
+   ],
+   "example": "In the Crashing panel, Build Feature X drops from 10 days to 6 because people or overtime were added. That costs more money. The PM uses it only on critical-path work, since crashing other tasks does not finish the project sooner.",
+   "examUse": "When a question says the schedule must be shortened and additional budget is available, think crashing. With no extra money, think fast-tracking and its rework risk.",
+   "trap": "Crashing a task that is not on the critical path adds cost but does not shorten the project.",
+   "remember": "Crashing = add resources and cost. Fast-tracking = overlap and risk."
+  },
+  "PRD-020": {
+   "teaches": "How to compare earned value with planned value and actual cost to see schedule and cost status.",
+   "readIt": [
+    "Find the Today line at month 6. All three curves are read at that line.",
+    "Navy is planned value (PV), heading to BAC $500K. Sage is earned value (EV). Rose is actual cost (AC).",
+    "The navy bracket joins EV $240K to PV $300K: schedule variance is −$60K, behind.",
+    "The rose bracket joins EV $240K to AC $320K: cost variance is −$80K, over budget."
+   ],
+   "example": "At Today, the sage EV dot is at $240K. The plan said $300K of work by now, so SV is −$60K and SPI is 0.80. The work cost $320K, so CV is −$80K and CPI is 0.75. The project is behind and over budget.",
+   "examUse": "When a question gives PV, EV and AC, or asks if a project is behind schedule or over budget, start from EV and compare.",
+   "trap": "Comparing AC with PV. That is not a variance. Both formulas start with EV: EV minus PV, and EV minus AC.",
+   "remember": "EV comes first. Negative variance or an index below 1 is bad."
+  },
+  "PRD-021": {
+   "teaches": "How to compare money actually spent with the approved spending plan over time.",
+   "readIt": [
+    "Start with the navy S-curve. It is the cost baseline: planned spending, month by month.",
+    "Follow it to the top right. It ends at the budget at completion, $500K.",
+    "Now look at the rose line. It is actual cost, and it runs above the plan.",
+    "At month 6 the gold bar marks the gap: $380K spent against $300K planned."
+   ],
+   "example": "At month 6 the plan said $300K and the project has spent $380K, so spending is $80K above plan. The PM does not call this cost variance yet. First find earned value, then compute earned value minus actual cost.",
+   "examUse": "When a question mentions the S-curve, cost baseline, time-phased budget, or comparing actual spending with the plan, think of this picture.",
+   "trap": "Actual cost minus planned spending is not cost variance. Cost variance always needs earned value: CV = EV − AC.",
+   "remember": "Baseline is the approved spending plan. Actuals are measured against it."
+  },
+  "PRD-022": {
+   "teaches": "How a project is split, level by level, into deliverables small enough to estimate, assign and track.",
+   "readIt": [
+    "Start at the navy box on top: 1.0 Company website is the whole project.",
+    "Follow the lines down to the four white boxes: the major deliverables, numbered 1.1 to 1.4.",
+    "Drop to the gold boxes: these are work packages, the lowest level, each named as a thing.",
+    "Read the numbers: 1.3.2 sits under 1.3, which sits under 1.0."
+   ],
+   "example": "Look at 1.3 Build. Its two gold work packages are 1.3.1 Home page and 1.3.2 Contact form. Together they make up all of Build in this picture. The project manager can estimate, assign and track each one.",
+   "examUse": "When a question mentions decomposition, work packages, or asks what is in scope, think of this tree. If the work is not in the WBS, it is not in the project.",
+   "trap": "Reading the tree left to right as a schedule. The WBS shows what is delivered, not the order of work.",
+   "remember": "WBS = what, not when. Children add up to 100% of the parent."
+  },
+  "PRD-023": {
+   "teaches": "How to read a risk register: one row per risk, with its rating, planned response, and owner.",
+   "readIt": [
+    "Start with the navy header: Risk, Probability, Impact, Score, Response, Owner.",
+    "Read the highlighted gold row left to right. It is one complete risk, from description to owner.",
+    "Look at the Score tags: rose High, gold Medium, sage Low. Rose gets attention first.",
+    "See the green opportunity tag in the last row. A risk can be good news too."
+   ],
+   "example": "Read the first row. Key supplier may deliver late: probability High, impact High, so the score is a rose High. The response is Mitigate: add a second supplier. The owner is the Procurement lead, who carries out that response.",
+   "examUse": "When a question says something may happen, could occur, or is uncertain, think of the risk register. Check that the risk has a response and an owner.",
+   "trap": "MAY happen goes in the risk register. HAS happened is an issue and goes in the issue log.",
+   "remember": "MAY happen: risk register. HAS happened: issue log."
+  },
+  "PRD-024": {
+   "teaches": "How to follow a process step by step, including its yes-or-no decision points.",
+   "readIt": [
+    "Look at the legend in the middle first: oval is start or end, rectangle a step, diamond a decision.",
+    "Begin at the dark Start oval on the left and follow the arrows to the right.",
+    "At each gold diamond, pick Yes or No. 'No' at the first one loops back for more information.",
+    "At the second diamond, Yes leads to Implement and No leads to Communicate decision. Both reach End."
+   ],
+   "example": "Take the first diamond, 'Is the request complete?'. If No, the arrow drops to 'Request additional information' and loops back to the first step. The request moves on to impact analysis only when the answer is Yes.",
+   "examUse": "When a question asks for a tool that shows the sequence of steps, decision points, or where a process breaks down, think flowchart.",
+   "trap": "Confusing it with a context diagram, which shows a system and who interacts with it, not step order.",
+   "remember": "Flowchart = what happens next?"
+  },
+  "PRD-025": {
+   "teaches": "How to measure schedule delay in months instead of dollars, using earned schedule.",
+   "readIt": [
+    "Start at the blue dot: now is month 8, and earned value is below the navy planned line.",
+    "Follow the dashed line left until it meets the planned value line at the gold dot.",
+    "Drop straight down to the time axis. That is earned schedule: 6.5 months.",
+    "The red strip from 6.5 to 8 is the delay: 1.5 months behind."
+   ],
+   "example": "At month 8 the team has earned $325K. The plan expected that amount at month 6.5, so ES is 6.5 months. SPI(t) is 6.5 ÷ 8 = 0.81, and SV(t) is 6.5 − 8 = −1.5 months.",
+   "examUse": "When a question asks how far behind the project is in time, or gives ES and AT, think of earned schedule: SPI(t) and SV(t).",
+   "trap": "Regular SV is EV − PV, measured in dollars. SV(t) is ES − AT, measured in time. Do not mix the two.",
+   "remember": "Slide left to the plan line, drop down, read the month."
+  },
+  "PRD-026": {
+   "teaches": "How quality costs split into money spent to avoid defects and money lost because of defects.",
+   "readIt": [
+    "Start at the top: Total Cost of Quality splits into two big boxes with two arrows.",
+    "Green box on the left, Cost of Conformance: money spent to get it right (prevention, appraisal).",
+    "Pink box on the right, Cost of Nonconformance: money lost when things go wrong (internal, external failure).",
+    "Read the four white lists left to right. Costs get more painful as you move right."
+   ],
+   "example": "Look at 'Rework' under Internal Failure and 'Warranty' under External Failure. Both come from defects, but rework is caught before the customer sees it. The PM invests in Training and Testing on the green side to shrink both.",
+   "examUse": "When a question mentions training, inspection, rework, scrap or warranty claims and asks what type of cost it is, think of this. Ask who found the defect.",
+   "trap": "Mixing up appraisal (checking the work, like testing) with prevention (stopping defects before they exist, like training).",
+   "remember": "Pay a little to prevent, or pay a lot to fix."
+  },
+  "PRD-027": {
+   "teaches": "How a team uses the story points it finished in past sprints to plan the next sprint.",
+   "readIt": [
+    "Start with the bars: each one is a sprint, and its number is the story points finished.",
+    "Look at the three navy bars, sprints 6 to 8: 40, 38 and 42.",
+    "Follow the gold dashed line across them. Their average is 40.",
+    "End at the pale dashed bar for sprint 9: the team plans about 40 points."
+   ],
+   "example": "Sprints 6, 7 and 8 finished 40, 38 and 42 points. Add them to get 120, divide by 3, and the average is 40. So the team pulls about 40 points of work into sprint 9, not 50.",
+   "examUse": "When a question asks how much work a team can take into the next sprint, or mentions capacity, forecasting or story points completed, think velocity.",
+   "trap": "Velocity is not a performance score. Comparing teams by velocity is wrong, because each team sizes story points differently.",
+   "remember": "Recent average in, next sprint plan out. One team only."
+  },
+  "PRD-028": {
+   "teaches": "How big ideas are split into smaller pieces and kept in one list the product owner orders.",
+   "readIt": [
+    "Start on the left at the navy Product vision box and follow the arrows down.",
+    "The boxes get narrower: Epic, Feature, User story, Task. Each one is a smaller piece.",
+    "On the right, the product backlog is one list. Green rows on top are small, detailed and ready.",
+    "Lower rows are larger and vague. The gold arrow shows feedback after each sprint leading to reorder."
+   ],
+   "example": "Look at the gold loop arrow on the right. After each sprint the team gets feedback. The product owner then weighs value, risk, dependencies and effort, the four gold chips, and reorders the list so the most valuable items sit on top.",
+   "examUse": "When a question asks who prioritizes the backlog, what the team works on next, or mentions backlog refinement, think of this ordered list and the product owner.",
+   "trap": "Thinking the project manager or the team orders the backlog. The product owner owns the order.",
+   "remember": "Vision down to tasks. One list, product owner orders, top is ready."
+  },
+  "PRD-029": {
+   "teaches": "How cost risk moves from the seller to the buyer as you go from fixed price to cost reimbursable contracts.",
+   "readIt": [
+    "Read the three brackets on top: fixed price, time and materials, cost reimbursable.",
+    "Scan the six boxes left to right; the line under each name says how the seller is paid.",
+    "Look at the blue wedge: the seller's cost risk is thickest under FFP and thins to the right.",
+    "Look at the gold wedge: the buyer's cost risk starts thin and is thickest under CPFF."
+   ],
+   "example": "Take FFP on the far left: one price, no matter what. The blue wedge is thickest there, so the seller absorbs any cost overrun. A buyer picks FFP when the scope is clear enough to price with confidence.",
+   "examUse": "When a question says the scope is well defined, or unclear, or asks who bears the risk of a cost overrun, picture this row and the two wedges.",
+   "trap": "Thinking fixed price is always safest. It only works when scope is clear; unclear scope calls for cost reimbursable.",
+   "remember": "Left: seller carries the risk. Right: buyer carries the risk.",
+   "title": "Contract Types and Cost Risk"
+  },
+  "PRD-030": {
+   "teaches": "How to choose between predictive, agile, and hybrid by comparing them on the same five questions.",
+   "readIt": [
+    "Read the three colored headers first: navy Predictive, sage Agile, gold Hybrid.",
+    "Go down the bold labels on the left: Requirements, Planning, Change, Delivery, Best when.",
+    "Read across one row at a time to compare the three approaches on that one question.",
+    "Finish on the bottom row, Best when. It tells you which approach fits the situation."
+   ],
+   "example": "Find the Change row. Under navy Predictive it says formal change control. Under sage Agile it says expected; reorder the backlog. So on an agile team, a new request goes to the product owner to prioritize, not through a change control board.",
+   "examUse": "When a question describes stable requirements, unclear or changing requirements, or a mix of both, think of this table and match the approach to the Best when row.",
+   "trap": "Hybrid is not a weaker agile. It is a deliberate mix for a project that has both kinds of work.",
+   "remember": "Stable: predictive. Uncertain: agile. Mixed: hybrid."
+  }
+ }
+}

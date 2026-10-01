@@ -149,6 +149,12 @@ def _load_match_sets():
         return json.loads((ROOT/'data'/'match_sets.json').read_text(encoding='utf-8')).get('sets',[])
     except Exception:
         return []
+def _load_diagram_lessons():
+    try:
+        return json.loads((ROOT/'data'/'diagram_lessons.json').read_text(encoding='utf-8')).get('lessons',{})
+    except Exception:
+        return {}
+DIAGRAM_LESSONS=_load_diagram_lessons()
 MATCH_SETS=_load_match_sets()
 MATCH_BY_ID={m['id']:m for m in MATCH_SETS}
 EXAM_RULES={r['rule_id']:r for r in EXAM_CONTENT.get('rules',[])}
@@ -1733,6 +1739,9 @@ def diagrams(domain: str|None=None, q: str|None=None, user: User = Depends(curre
     out=[]
     for d in rows:
         body=json.loads(d.metadata_json); body['imageFile']=d.image_file; _st=_study_state_map(db,user.id,'diagram').get(('diagram',d.id)); body['studyStatus']=_st.status if _st else 'not_started'
+        if DIAGRAM_LESSONS.get(d.id):
+            body['lesson']=DIAGRAM_LESSONS[d.id]
+            if DIAGRAM_LESSONS[d.id].get('title'): body['title']=DIAGRAM_LESSONS[d.id]['title']
         if q and q.lower() not in json.dumps(body).lower(): continue
         out.append(body)
     return out

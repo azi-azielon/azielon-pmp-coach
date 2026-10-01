@@ -1153,3 +1153,30 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
     return r;
   };
 })();
+
+/* ---------- v7.3: every diagram comes with a short walk-through ---------- */
+(function(){
+  if(typeof renderDiagrams!=='function')return;const o=window.renderDiagrams;
+  const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  window.renderDiagrams=async function(){
+    const r=await o.apply(this,arguments);
+    try{
+      const viewer=document.querySelector('#diagramGrid .diagram-viewer'),stage=viewer&&viewer.querySelector('.diagram-stage');
+      if(stage&&!viewer.querySelector('.v7-drow')){
+        const rows=diagramRows(),d=rows[Math.min(state.diagramIndex||0,rows.length-1)],L=d&&d.lesson;
+        if(L){
+          const row=document.createElement('div');row.className='v7-drow';stage.parentNode.insertBefore(row,stage);row.appendChild(stage);
+          const side=document.createElement('aside');side.className='v7-dlesson';
+          side.innerHTML=`<span class="v6-kicker">What this picture teaches</span><p class="v7-dteach">${esc(L.teaches)}</p>
+            <span class="v6-kicker">How to read it</span><ol>${(L.readIt||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ol>
+            <span class="v6-kicker">Try it on the picture</span><p>${esc(L.example)}</p>
+            <span class="v6-kicker">On the exam</span><p>${esc(L.examUse)}</p>
+            <p class="v7-dtrap"><b>Watch out:</b> ${esc(L.trap)}</p>
+            <div class="v7-dremember"><span class="v6-kicker">Remember</span><p>${esc(L.remember)}</p></div>`;
+          row.appendChild(side);viewer.classList.add('has-lesson');
+        }
+      }
+    }catch(e){console.warn(e)}
+    return r;
+  };
+})();

@@ -888,3 +888,21 @@ body.v6 .v7-concept-opts li b{flex:none;width:14px;color:#2f7d4f}
 body.v6 .v7-concept-opts li.ok{border-color:#BFDCC9;background:#F3F9F5;color:#1F5A48;font-weight:500}
 body.v6 .v7-concept-item > .secondary{margin-top:10px;height:36px!important;padding:0 14px!important;font-size:13px!important}
 body.v6.v7-exam-running #examQuestionCard{padding:0 2px 2px!important}
+/* v7.3 diagram walk-through */
+body.v6 .v7-drow{display:flex;flex:1 1 auto;min-height:0;gap:0}
+body.v6 .v7-drow .diagram-stage{flex:1.35 1 0!important;min-width:0}
+body.v6 .v7-dlesson{flex:1 1 0;min-width:260px;max-width:440px;overflow:auto;padding:12px 16px;border-left:1px solid var(--v6-line);font-size:13px;line-height:1.42;color:#3F4758}
+body.v6 .v7-dlesson .v6-kicker{margin:9px 0 2px}
+body.v6 .v7-dlesson .v6-kicker:first-child{margin-top:0}
+body.v6 .v7-dlesson p{margin:0}
+body.v6 .v7-dteach{font-size:14.5px!important;font-weight:600;color:var(--v6-navy)!important;line-height:1.4!important}
+body.v6 .v7-dlesson ol{margin:0;padding-left:18px}
+body.v6 .v7-dlesson ol li{margin:0 0 4px;padding-left:2px}
+body.v6 .v7-dlesson ol li::marker{color:var(--v6-gold-deep);font-weight:700}
+body.v6 .v7-dtrap{margin-top:10px!important;font-size:13px}
+body.v6 .v7-dtrap b{color:#B5483B}
+body.v6 .v7-dremember{margin-top:10px;padding:8px 12px;border-left:3px solid var(--v6-gold);background:#FBF6EA;border-radius:0 8px 8px 0}
+body.v6 .v7-dremember .v6-kicker{margin:0 0 2px}
+body.v6 .v7-dremember p{font-weight:600;color:var(--v6-navy)}
+body.v6 .diagram-viewer.has-lesson .diagram-study-meta{display:none!important}
+@media (max-width:900px){body.v6 .v7-drow{flex-direction:column}body.v6 .v7-dlesson{max-width:none;border-left:0;border-top:1px solid var(--v6-line);overflow:visible}body.v6 .v7-drow .diagram-stage{flex:none!important}}
