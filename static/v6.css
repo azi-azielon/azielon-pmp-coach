@@ -752,3 +752,16 @@ body.v6 .v6-m-result{flex-wrap:wrap;align-items:center}
 body.v6 .v6-m-actions-top{margin:0 0 0 auto!important}
 body.v6 .v6-m-actions-top button{height:36px!important;padding:0 14px!important;font-size:13px!important}
 body.v6 .v6-m-remember{margin:0 0 12px}
+/* v6.6 exam date bar */
+body.v6 .v6-datebar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 0 12px;margin-bottom:10px;border-bottom:1px solid var(--v6-line)}
+body.v6 .v6-datebar .v6-kicker{margin:0}
+body.v6 .v6-datebar-text{font-size:14px;color:#4A5262}
+body.v6 .v6-datebar-text b{color:var(--v6-navy)}
+body.v6 .v6-datebar-ok{font-style:normal;color:#2f7d4f;font-weight:600;margin-left:6px}
+body.v6 .v6-datebar-btn{all:unset;cursor:pointer;font-size:13px;font-weight:600;color:var(--v6-gold-deep);border-bottom:1px solid currentColor}
+body.v6 .v6-datebar-form{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+body.v6 .v6-datebar-form[hidden]{display:none}
+body.v6 .v6-datebar-form label{font-size:12.5px;color:#5B6475;display:flex;align-items:center;gap:6px}
+body.v6 .v6-datebar-form input,body.v6 .v6-datebar-form select{height:34px;border:1px solid var(--v6-line);border-radius:8px;padding:0 8px;font-size:13.5px;background:#fff}
+body.v6 .v6-datebar-form button{height:34px!important;padding:0 14px!important;font-size:13px!important}
+body.v6 .v6-datebar-msg{font-size:12.5px;color:#B5483B}

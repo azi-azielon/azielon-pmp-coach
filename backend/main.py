@@ -1209,6 +1209,14 @@ def _concept_key(value: str):
     import re as _re
     return _re.sub(r'[^a-z0-9]+','-',(value or '').strip().lower()).strip('-')[:120] or 'general'
 
+def _naive_utc(dt):
+    """Compare timestamps safely whether the database returns naive or timezone-aware values."""
+    if dt is None or not isinstance(dt, datetime): return None
+    if dt.tzinfo is not None:
+        from datetime import timezone as _tz
+        return dt.astimezone(_tz.utc).replace(tzinfo=None)
+    return dt
+
 def _concept_review_payload(user: User, db: Session):
     """Build one deduplicated review card per concept across practice, exams, marks, and study content."""
     items={}
@@ -1224,8 +1232,31 @@ def _concept_review_payload(user: User, db: Session):
         existing={'note':4,'diagram':4,'tricky':4,'match':4,'practice':3,'exam':2}.get(x.get('action_type'),0)
         if ref_type and priority>existing:
             x['action_type']=ref_type; x['action_id']=ref_id; x['exam_code']=exam_code
+        signal_at=_naive_utc(signal_at)
         if signal_at and (x['last_signal_at'] is None or signal_at>x['last_signal_at']): x['last_signal_at']=signal_at
 
+    # Each source is read on its own so one bad record cannot break the whole review list.
+    try:
+        _concept_review_practice(user,db,add)
+    except Exception as e:
+        print('concept review: practice section failed:',repr(e))
+        try: db.rollback()
+        except Exception: pass
+    try:
+        _concept_review_exams(user,db,add)
+    except Exception as e:
+        print('concept review: exam section failed:',repr(e))
+        try: db.rollback()
+        except Exception: pass
+    try:
+        _concept_review_study(user,db,add)
+    except Exception as e:
+        print('concept review: study section failed:',repr(e))
+        try: db.rollback()
+        except Exception: pass
+    return _concept_review_rows(user,db,items)
+
+def _concept_review_practice(user,db,add):
     # Practice: only questions whose latest practice answer remains incorrect.
     review_sets=_practice_review_sets(user.id,db)
     incorrect_ids=review_sets.get('incorrect_now',set())
@@ -1234,6 +1265,8 @@ def _concept_review_payload(user: User, db: Session):
             last=db.query(Attempt).filter(Attempt.user_id==user.id,Attempt.question_id==q.id).order_by(Attempt.created_at.desc(),Attempt.id.desc()).first()
             add(q.primary_concept or q.domain or 'Practice concept','Practice',domain=q.domain,incorrect=1,ref_type='practice',ref_id=q.id,signal_at=last.created_at if last else None)
 
+
+def _concept_review_exams(user,db,add):
     # Exams: aggregate incorrect answers and learner marks by concept, never duplicate cards.
     sessions=db.query(ExamSession).filter(ExamSession.user_id==user.id).order_by(ExamSession.id.desc()).all()
     for s in sessions:
@@ -1242,12 +1275,18 @@ def _concept_review_payload(user: User, db: Session):
             for a in db.query(ExamAttempt).filter(ExamAttempt.exam_session_id==s.id,ExamAttempt.is_correct==False).all():
                 q=EXAM_QUESTIONS.get(a.question_id) or {}
                 add(q.get('topic') or q.get('domain') or 'Exam concept',exam_name,domain=q.get('domain'),incorrect=1,ref_type='exam',ref_id=a.question_id,exam_code=s.exam_code,signal_at=a.updated_at or a.created_at)
-        try: marked=set(json.loads(s.marked_json or '[]'))
+        try:
+            raw=json.loads(s.marked_json or '[]')
+            raw=raw.keys() if isinstance(raw,dict) else raw
+            marked={(m.get('question_id') or m.get('id')) if isinstance(m,dict) else m for m in (raw or [])}
+            marked={str(m) for m in marked if m}
         except Exception: marked=set()
         for qid in marked:
             q=EXAM_QUESTIONS.get(qid) or {}
             add(q.get('topic') or q.get('domain') or 'Exam concept',exam_name,domain=q.get('domain'),marked=1,ref_type='exam',ref_id=qid,exam_code=s.exam_code,signal_at=s.updated_at or s.started_at)
 
+
+def _concept_review_study(user,db,add):
     # Explicit Needs Review from learning content.
     needs=db.query(StudyItemState).filter(StudyItemState.user_id==user.id,StudyItemState.status=='needs_review').all()
     for st in needs:
@@ -1264,18 +1303,21 @@ def _concept_review_payload(user: User, db: Session):
             m=MATCH_BY_ID.get(st.content_id)
             if m: add(m['title'],'Match the Following',domain=m.get('domain'),needs_review=1,ref_type='match',ref_id=m['id'],signal_at=st.updated_at)
 
+
+def _concept_review_rows(user,db,items):
     # A concept can be marked reviewed once. It stays hidden until a newer signal occurs.
     concept_states={x.content_id:x for x in db.query(StudyItemState).filter(StudyItemState.user_id==user.id,StudyItemState.content_type=='concept').all()}
     rows=[]
     for key,x in items.items():
         st=concept_states.get(key)
-        if st and st.status in {'reviewed','mastered'} and x.get('last_signal_at') and st.updated_at and st.updated_at>=x['last_signal_at']:
+        st_at=_naive_utc(st.updated_at) if st else None
+        if st and st.status in {'reviewed','mastered'} and x.get('last_signal_at') and st_at and st_at>=x['last_signal_at']:
             continue
         x['sources']=sorted(x['sources'])
         x['reason_total']=x['incorrect_count']+x['marked_count']+x['needs_review_count']
         x['last_signal_at']=x['last_signal_at'].isoformat() if x.get('last_signal_at') else None
         rows.append(x)
-    rows.sort(key=lambda x:(-x['incorrect_count'],-x['marked_count'],-x['needs_review_count'],x['concept'].lower()))
+    rows.sort(key=lambda x:(-x['incorrect_count'],-x['marked_count'],-x['needs_review_count'],str(x['concept']).lower()))
     return rows
 
 @app.get('/api/review/concepts')

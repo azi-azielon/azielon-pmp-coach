@@ -400,7 +400,7 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
   // One quiet pacing line on Today, full breakdown on My Progress.
   function paceLine(p){
     const s=v6Pace(p);if(s.hoursPerDay==null)return'';
-    return `<p class="v6-pace">Study about <b>${s.hoursPerDay} h/day</b> on ${s.studyDays} study day${s.studyDays===1?'':'s'} to finish every topic and <b>${s.examTarget} exams at ${s.examPass}%+</b> before exam day <span>(${s.examsDone} of ${s.examTarget} done)</span>.</p>`;
+    return `<p class="v6-pace">Study about <b>${s.hoursPerDay} h/day</b> on ${s.studyDays} study day${s.studyDays===1?'':'s'} to finish every topic and <b>${s.examTarget} exams at ${s.examPass}%+</b> before exam day <span>(${s.examsDone} of ${s.examTarget} done)</span>. <button type="button" class="v6-datebar-btn" data-go-plan>Change exam date</button></p>`;
   }
   const origToday=window.renderTodayPlanFromDb;
   window.renderTodayPlanFromDb=function(p,tasks){
@@ -692,3 +692,43 @@ function v6BlockTopicText(task){
     return o.apply(this,arguments);
   };
 })();
+
+/* ---------- v6.6: Full plan tab + change exam date ---------- */
+function v6ExamDateBar(p){
+  p=p||state.lastProgress||{};const prof=p.study_profile||{},s=v6Pace(p);
+  const esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const d=prof.exam_date?new Date(prof.exam_date+'T12:00:00'):null;
+  const nice=d?d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}):'Not set';
+  const days=prof.study_days_per_week||5;
+  const summary=d?`<b>${esc(nice)}</b> · ${s.days} days left${s.hoursPerDay!=null?` · about <b>${s.hoursPerDay} h</b> a day on ${days} days a week`:''}`:'<b>Add your exam date</b> so the plan can pace itself.';
+  return `<div class="v6-datebar" id="v6DateBar"><span class="v6-kicker">Exam date</span><span class="v6-datebar-text">${summary}</span><button type="button" class="v6-datebar-btn" data-datebar-edit>${d?'Change date':'Set date'}</button>
+    <form class="v6-datebar-form" hidden><label>Exam date <input type="date" name="d" required min="${todayDateKey()}" value="${esc(prof.exam_date||'')}"></label><label>Study days a week <select name="w">${[3,4,5,6,7].map(n=>`<option ${n==days?'selected':''}>${n}</option>`).join('')}</select></label><button type="submit" class="primary">Save &amp; re-plan</button><button type="button" class="secondary" data-datebar-cancel>Cancel</button><span class="v6-datebar-msg"></span></form></div>`;
+}
+function v6BindDateBar(root){
+  const bar=(root||document).querySelector('#v6DateBar');if(!bar)return;
+  const f=bar.querySelector('form'),ed=bar.querySelector('[data-datebar-edit]');
+  ed.onclick=()=>{f.hidden=false;ed.hidden=true;bar.querySelector('.v6-datebar-text').hidden=true};
+  bar.querySelector('[data-datebar-cancel]').onclick=()=>{f.hidden=true;ed.hidden=false;bar.querySelector('.v6-datebar-text').hidden=false};
+  f.onsubmit=async e=>{e.preventDefault();const msg=f.querySelector('.v6-datebar-msg'),btn=f.querySelector('[type=submit]');btn.disabled=true;msg.textContent='Saving…';
+    const prof=(state.lastProgress||{}).study_profile||{};
+    try{await api('/api/coach/profile',{method:'PUT',body:JSON.stringify({exam_date:f.d.value,study_days_per_week:Number(f.w.value),weekly_hours:prof.weekly_hours||8,session_minutes:prof.session_minutes||45})});
+      await loadProgress();msg.textContent='';
+      const s=v6Pace(state.lastProgress);
+      if(typeof renderFeatureLaunchpad==='function'&&state.currentView==='dashboard')renderFeatureLaunchpad(state.lastProgress||{});
+      if(state.currentView==='progress'&&typeof renderCompactProgressDashboard==='function')renderCompactProgressDashboard(state.lastProgress);
+      const nb=document.querySelector('#v6DateBar .v6-datebar-text');if(nb)nb.insertAdjacentHTML('beforeend',` <em class="v6-datebar-ok">✓ Plan updated${s.hoursPerDay!=null?`: ${s.hoursPerDay} h a day`:''}</em>`);
+    }catch(err){btn.disabled=false;msg.textContent=err.message||'Could not save.'}};
+}
+(function(){
+  if(typeof renderFeatureLaunchpad!=='function')return;const o=window.renderFeatureLaunchpad;
+  window.renderFeatureLaunchpad=function(p){
+    const r=o.apply(this,arguments);const focus=state.dashboardFocus||'today';const host=document.getElementById('dashboardWorkspace');
+    if(focus==='plan'&&host){if(typeof renderFullPlan==='function')renderFullPlan(p||state.lastProgress||{});host.insertAdjacentHTML('afterbegin',v6ExamDateBar(p));v6BindDateBar(host)}
+    return r;
+  };
+  // My Progress: the same exam-date bar above the pace panel
+  if(typeof renderCompactProgressDashboard==='function'){const oc=window.renderCompactProgressDashboard;window.renderCompactProgressDashboard=function(p){const r=oc.apply(this,arguments);
+    try{const panel=document.getElementById('v6PacePanel');if(panel){document.getElementById('v6DateBar')?.remove();panel.insertAdjacentHTML('beforebegin',v6ExamDateBar(p));v6BindDateBar(panel.parentElement)}}catch(e){}return r}}
+})();
+
+document.addEventListener('click',e=>{const b=e.target.closest('[data-go-plan]');if(!b)return;state.dashboardFocus='plan';if(state.currentView!=='dashboard')showView('dashboard');renderFeatureLaunchpad(state.lastProgress||{});setTimeout(()=>document.querySelector('#v6DateBar [data-datebar-edit]')?.click(),50)});
