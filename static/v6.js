@@ -308,17 +308,19 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
       let res=null;try{res=await api(`/api/practice/sessions/${sess.session_id}/results`)}catch(e){}
       let planTask=task;
       if(!planTask){planTask=(state.todayPlan||[]).find(x=>x.type==='practice'&&taskState(x)!=='done'&&(sess.total||0)>=Math.min(10,Number(x.count||10)))||null}
-      if(planTask&&taskState(planTask)!=='done'&&typeof setDailyTaskStatus==='function'){try{await setDailyTaskStatus(planTask,'done')}catch(e){}}
+      const withMatch=planTask&&typeof v6StartMatchQueue==='function'&&typeof hasFeature==='function'&&hasFeature('match');
+      if(withMatch){try{localStorage.setItem('v6pq:'+planTask.id,'1')}catch(e){}}
+      else if(planTask&&taskState(planTask)!=='done'&&typeof setDailyTaskStatus==='function'){try{await setDailyTaskStatus(planTask,'done')}catch(e){}}
       state.v6PracticeTask=null;
       const card=document.getElementById('questionCard');if(!card)return r;
       const acc=res&&res.accuracy!=null?Math.round(res.accuracy):null;
       if(planTask&&res)v6SetScore(planTask.id,`${res.correct}/${res.total}${acc!=null?` · ${acc}%`:''}`);
       const verdict=acc==null?'':acc>=80?'Exam-ready accuracy on these topics.':acc>=65?'Close. Review the misses, then move on.':'These topics need another pass. Review each miss before moving on.';
       const box=document.createElement('div');box.className='v6-session-done';
-      box.innerHTML=`<span class="v6-kicker">${planTask?'Today’s practice complete':'Session complete'}</span><h3>${res?`${res.correct} of ${res.total} correct`:'Answers saved'}${acc!=null?` <span>· ${acc}%</span>`:''}</h3>${verdict?`<p>${verdict}</p>`:''}<div class="v6-next-actions"><button class="v6-btn-gold" type="button" id="v6BackToday">Continue to next step →</button>${res&&res.correct<res.total?'<button class="v6-btn-quiet" type="button" id="v6ReviewMisses">Practice my misses</button>':''}</div>`;
+      box.innerHTML=`<span class="v6-kicker">${planTask?'Today’s practice complete':'Session complete'}</span><h3>${res?`${res.correct} of ${res.total} correct`:'Answers saved'}${acc!=null?` <span>· ${acc}%</span>`:''}</h3>${verdict?`<p>${verdict}</p>`:''}<div class="v6-next-actions"><button class="v6-btn-gold" type="button" id="v6BackToday">${withMatch?'Next: 2 match sets on these topics →':'Continue to next step →'}</button>${res&&res.correct<res.total?'<button class="v6-btn-quiet" type="button" id="v6ReviewMisses">Practice my misses</button>':''}</div>`;
       const existing=card.querySelector('.session-summary');
       if(existing){existing.prepend(box);existing.querySelector('h3:not(.v6-session-done h3)')?.remove()}else{card.innerHTML='';card.appendChild(box)}
-      const back=box.querySelector('#v6BackToday');back.onclick=async()=>{document.getElementById('sessionArea').classList.add('hidden');state.dashboardFocus='today';showView('dashboard');try{await loadProgress()}catch(e){}renderFeatureLaunchpad(state.lastProgress||{})};
+      const back=box.querySelector('#v6BackToday');back.onclick=async()=>{if(withMatch){document.getElementById('sessionArea').classList.add('hidden');const ok=await v6StartMatchQueue(planTask,v6BlockTopicText(planTask));if(ok)return;try{await setDailyTaskStatus(planTask,'done')}catch(e){}}document.getElementById('sessionArea').classList.add('hidden');state.dashboardFocus='today';showView('dashboard');try{await loadProgress()}catch(e){}renderFeatureLaunchpad(state.lastProgress||{})};
       const miss=box.querySelector('#v6ReviewMisses');if(miss)miss.onclick=()=>{const f=document.getElementById('pReviewFocus');if(f)f.value='last_session_incorrect';const c=document.getElementById('pCount');if(c)c.value=Math.min(10,(res.total-res.correct)||5);createPracticeSession()};
       return r;
     };
@@ -371,7 +373,7 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
     if(tr)t.push({id:`tricky:${tr.id}`,type:'tricky',itemId:tr.id,label:'Compare',title:`${tr.left} vs ${tr.right}`,detail:typeof trickyDecisionText==='function'?trickyDecisionText(tr):'',view:'tricky',reason:`Block ${n} · tricky words`,sortOrder:base+t.length});
     if(dg)t.push({id:`diagram:${dg.id}`,type:'diagram',itemId:dg.id,label:'Visualize',title:dg.title,detail:dg.whyItMatters||dg.whatItIs||'',view:'diagrams',reason:`Block ${n} · diagram`,sortOrder:base+t.length});
     const q=pace.perBlockQuestions;
-    t.push({id:`practice:${todayDateKey()}:b${n}`,type:'practice',label:'Practice',title:t.length?`${q} questions on these ${t.length===1?'topic':'topics'}`:`${q} mixed questions`,detail:t.length?`Questions on ${t.map(x=>x.title).join(' · ')}.`:'Build coverage and speed.',view:'practice',count:q,focus:'',domain:'',reason:`Block ${n} · practice`,sortOrder:base+t.length});
+    t.push({id:`practice:${todayDateKey()}:b${n}`,type:'practice',label:'Practice',title:(t.length?`${q} questions on these ${t.length===1?'topic':'topics'}`:`${q} mixed questions`)+(typeof hasFeature==='function'&&hasFeature('match')?' + 2 match sets':''),detail:t.length?`Questions on ${t.map(x=>x.title).join(' · ')}.`:'Build coverage and speed.',view:'practice',count:q,focus:'',domain:'',reason:`Block ${n} · practice`,sortOrder:base+t.length});
     if(n===1&&pace.examsLeft>0&&pace.examPhase){
       const ex=(p?.exam_cards||[]).find(x=>!x.completed||(x.total&&x.correct/x.total*100<pace.examPass));
       if(ex)t.push({id:`exam:${ex.exam_code}:${todayDateKey()}`,type:'exam',label:'Exam',title:`${ex.exam_name||'Full exam'} — aim for ${pace.examPass}%+`,detail:`${pace.examsDone} of ${pace.examTarget} exams passed at ${pace.examPass}%+.`,view:'exams',examKind:ex.kind||'mock',reason:'Exam stamina and pacing',sortOrder:base+t.length});
@@ -570,4 +572,123 @@ function v6RenderDoneToday(){
       else if(sid()){const st=await api(`/api/exam-sessions/${sid()}/status`);if(st&&st.remaining_seconds!=null)state.examSession.remaining_seconds=Math.max(1,st.remaining_seconds)}
     }catch(e){}
     return o.apply(this,arguments)}}
+})();
+
+/* ---------- v6.5: Match the Following ---------- */
+(function(){
+  const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const THEMES=[['all','All'],['agile','Agile & Scrum'],['documents','Documents & flow'],['ownership','Who owns what'],['flows','Process flows'],['people','People & leadership'],['tools','Tools & techniques'],['risk_procurement','Risk & procurement'],['business','Business environment']];
+  const THEME_LABEL=Object.fromEntries(THEMES);
+  const host=()=>document.getElementById('matchHost');
+  const M=state.v6Match={sets:null,theme:'all',play:null,queue:null};
+  const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+  const canMatch=()=>typeof hasFeature==='function'&&hasFeature('match');
+  async function loadSets(force){if(M.sets&&!force)return M.sets;M.sets=await api('/api/match-sets');return M.sets}
+  window.v6LoadMatchSets=loadSets;
+
+  // Topic-linked choice: rank sets by word overlap with today's block topics.
+  const STOP=new Set('the a an and or of to in on for vs with by is are be as at from this that what which who your into each its it how when why not do does'.split(' '));
+  const toks=s=>String(s||'').toLowerCase().replace(/[^a-z0-9 ]+/g,' ').split(/\s+/).filter(w=>w.length>2&&!STOP.has(w));
+  window.v6PickMatchSets=function(topicText,n=2){
+    const want=new Set(toks(topicText));const sets=M.sets||[];
+    const scored=sets.map(s=>{const bag=toks([s.title,s.prompt,(s.keywords||[]).join(' '),s.pairs.map(p=>p.left).join(' ')].join(' '));let sc=0;bag.forEach(w=>{if(want.has(w))sc++});(s.keywords||[]).forEach(k=>{if(String(topicText).toLowerCase().includes(k.toLowerCase()))sc+=3});
+      if(s.studyStatus==='mastered')sc-=4;return {s,sc:sc+Math.random()*0.5}});
+    scored.sort((a,b)=>b.sc-a.sc);return scored.slice(0,n).map(x=>x.s);
+  };
+
+  function statusDot(s){return s.studyStatus==='mastered'?'<span class="v6-m-dot is-done" title="Mastered">✓</span>':s.studyStatus==='needs_review'?'<span class="v6-m-dot is-retry" title="Try again">↻</span>':'<span class="v6-m-dot" aria-hidden="true"></span>'}
+  function renderList(){
+    const h=host();if(!h)return;const sets=M.sets||[];
+    const rows=sets.filter(s=>M.theme==='all'||s.theme===M.theme);
+    const mastered=sets.filter(s=>s.studyStatus==='mastered').length,retry=sets.filter(s=>s.studyStatus==='needs_review').length;
+    const next=sets.find(s=>s.studyStatus==='needs_review')||sets.find(s=>s.studyStatus==='not_started');
+    h.innerHTML=`<div class="v6-m-top"><p class="v6-m-intro">The exam asks these as drag-and-drop matching. Pair each term with what it does, who owns it, or what comes next.</p><span class="v6-m-count"><b>${mastered}</b> of ${sets.length} mastered${retry?` · ${retry} to retry`:''}</span>${next?`<button class="primary v6-m-next" type="button" data-m-open="${esc(next.id)}">${next.studyStatus==='needs_review'?'Retry':'Start'}: ${esc(next.title)} →</button>`:''}</div>
+      <div class="v6-m-chips" role="tablist">${THEMES.map(([k,t])=>{const n=k==='all'?sets.length:sets.filter(s=>s.theme===k).length;return `<button type="button" class="${M.theme===k?'active':''}" data-m-theme="${k}">${esc(t)} <span>${n}</span></button>`}).join('')}</div>
+      <div class="v6-m-list">${rows.map(s=>`<button type="button" class="v6-m-row" data-m-open="${esc(s.id)}">${statusDot(s)}<span class="v6-m-title">${esc(s.title)}</span><span class="v6-m-theme">${esc(THEME_LABEL[s.theme]||'')}</span><span class="v6-m-meta">${s.pairs.length} pairs${s.lastScore?` · last ${esc(s.lastScore)}`:''}</span><span class="v6-m-go">${s.studyStatus==='mastered'?'Practice again':s.studyStatus==='needs_review'?'Retry':'Start'} →</span></button>`).join('')}</div>`;
+    h.querySelectorAll('[data-m-theme]').forEach(b=>b.onclick=()=>{M.theme=b.dataset.mTheme;renderList()});
+    h.querySelectorAll('[data-m-open]').forEach(b=>b.onclick=()=>openSet(b.dataset.mOpen));
+  }
+
+  function openSet(id){
+    const s=(M.sets||[]).find(x=>x.id===id);if(!s)return;
+    M.play={set:s,order:shuffle(s.pairs.map((p,i)=>i)),pick:{},active:0,checked:false};
+    renderPlay();
+  }
+  window.v6OpenMatchSet=async function(id){showView('match');await loadSets();openSet(id)};
+
+  function renderPlay(){
+    const h=host(),P=M.play;if(!h||!P)return;const s=P.set,n=s.pairs.length;
+    const used=new Set(Object.values(P.pick));const filled=Object.keys(P.pick).length;
+    const q=M.queue;const qline=q?`<span class="v6-m-q">Today’s practice · match set ${q.i+1} of ${q.ids.length}</span>`:'';
+    let res='';
+    if(P.checked){
+      const right=s.pairs.filter((p,i)=>P.pick[i]===i).length;P.score=right;
+      res=`<div class="v6-m-result ${right===n?'is-perfect':''}"><b>${right} of ${n} correct</b><span>${right===n?'You have this one. ✓':'Read the lesson under each pair, then try again.'}</span><div class="v6-m-actions v6-m-actions-top">${right<n?'<button type="button" class="secondary" data-m-retry>Try again</button>':''}<button type="button" class="primary" data-m-continue>${q?(q.i+1<q.ids.length?'Next match set →':'Finish practice step →'):'Next set →'}</button></div></div>`;
+    }
+    h.innerHTML=`<div class="v6-m-play">
+      <div class="v6-m-head"><button type="button" class="v6-session-exit" data-m-back>${q?'← Today':'← All sets'}</button>${qline}<span class="v6-kicker">${esc(THEME_LABEL[s.theme]||'')} · ${esc(s.domain)}${s.approach&&s.approach!=='Mixed'?' · '+esc(s.approach):''}</span><h2>${esc(s.title)}</h2><p>${esc(s.prompt)}${P.checked?'':' Tap a term, then tap its match.'}</p></div>
+      ${res}${P.checked?`<div class="v6-m-remember"><span class="v6-kicker">Remember</span><p>${esc(s.remember)}</p></div>`:''}
+      <div class="v6-m-board ${P.checked?'is-checked':''}">
+        <div class="v6-m-left">${s.pairs.map((p,i)=>{const pk=P.pick[i];const ok=P.checked&&pk===i,bad=P.checked&&pk!==i;
+          return `<div class="v6-m-pair ${P.active===i&&!P.checked?'is-active':''} ${ok?'is-ok':''} ${bad?'is-bad':''}" data-m-left="${i}" role="button" tabindex="0"><span class="v6-m-term">${esc(p.left)}</span><span class="v6-m-slot">${pk!=null?esc(s.pairs[pk].right):'<i>Choose a match</i>'}</span>${P.checked?`<span class="v6-m-mark">${ok?'✓':'✗'}</span>`:''}${P.checked?`<div class="v6-m-lesson">${bad?`<b>Correct match:</b> ${esc(p.right)}<br>`:''}${esc(p.lesson)}</div>`:''}</div>`}).join('')}</div>
+        ${P.checked?'':`<div class="v6-m-right">${P.order.map(j=>`<button type="button" class="v6-m-opt ${used.has(j)?'is-used':''}" data-m-right="${j}">${esc(s.pairs[j].right)}</button>`).join('')}</div>`}
+      </div>
+      ${P.checked?'':`<div class="v6-m-actions"><button type="button" class="secondary" data-m-clear ${filled?'':'disabled'}>Clear</button><button type="button" class="primary" data-m-check ${filled===n?'':'disabled'}>Check answers</button></div>`}
+    </div>`;
+    const v=document.getElementById('match');if(v)v.scrollTop=0;
+    h.querySelector('[data-m-back]').onclick=()=>{if(q){M.queue=null;backToToday()}else{M.play=null;renderList()}};
+    if(!P.checked){
+      h.querySelectorAll('[data-m-left]').forEach(el=>{const f=()=>{const i=+el.dataset.mLeft;if(P.pick[i]!=null&&P.active===i){delete P.pick[i]}P.active=i;renderPlay()};el.onclick=f;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f()}}});
+      h.querySelectorAll('[data-m-right]').forEach(el=>el.onclick=()=>{const j=+el.dataset.mRight;
+        for(const k in P.pick)if(P.pick[k]===j)delete P.pick[k];
+        P.pick[P.active]=j;const nextEmpty=s.pairs.findIndex((_,i)=>P.pick[i]==null);P.active=nextEmpty<0?P.active:nextEmpty;renderPlay()});
+      const cl=h.querySelector('[data-m-clear]');if(cl)cl.onclick=()=>{P.pick={};P.active=0;renderPlay()};
+      const ck=h.querySelector('[data-m-check]');if(ck)ck.onclick=async()=>{P.checked=true;renderPlay();
+        try{const r=await api(`/api/match-sets/${encodeURIComponent(s.id)}/result`,{method:'POST',body:JSON.stringify({correct:P.score,total:n})});s.studyStatus=r.status;s.lastScore=r.last_rating;s.attempts=r.review_count}catch(e){}
+        if(q)q.scores.push([P.score,n]);};
+    }else{
+      const rt=h.querySelector('[data-m-retry]');if(rt)rt.onclick=()=>{if(q)q.scores.pop();openSet(s.id)};
+      h.querySelector('[data-m-continue]').onclick=()=>{
+        if(q){q.i++;if(q.i<q.ids.length)return openSet(q.ids[q.i]);return finishQueue()}
+        const list=(M.sets||[]).filter(x=>M.theme==='all'||x.theme===M.theme);const i=list.findIndex(x=>x.id===s.id);
+        const nxt=list.slice(i+1).find(x=>x.studyStatus!=='mastered')||list.find(x=>x.studyStatus!=='mastered'&&x.id!==s.id);
+        if(nxt)openSet(nxt.id);else{M.play=null;renderList()}
+      };
+    }
+  }
+
+  function backToToday(){state.dashboardFocus='today';showView('dashboard');if(typeof loadProgress==='function')loadProgress().then(()=>renderFeatureLaunchpad(state.lastProgress||{})).catch(()=>{})}
+  async function finishQueue(){
+    const q=M.queue;M.queue=null;M.play=null;
+    if(q&&q.task&&typeof setDailyTaskStatus==='function'){try{await setDailyTaskStatus(q.task,'done')}catch(e){}}
+    if(q&&q.task){const m=q.scores.reduce((a,[c,t])=>[a[0]+c,a[1]+t],[0,0]);const prev=v6GetScore(q.task.id);v6SetScore(q.task.id,(prev?prev+' · ':'')+`match ${m[0]}/${m[1]}`);try{localStorage.removeItem('v6pq:'+q.task.id)}catch(e){}}
+    backToToday();
+  }
+  // Start the match part of today's practice step.
+  window.v6StartMatchQueue=async function(task,topicText){
+    try{await loadSets()}catch(e){return false}
+    const picks=v6PickMatchSets(topicText,2);if(!picks.length)return false;
+    M.queue={task,ids:picks.map(x=>x.id),i:0,scores:[]};showView('match');openSet(M.queue.ids[0]);return true;
+  };
+
+  if(typeof showView==='function'){const o=window.showView;window.showView=function(id){const r=o.apply(this,arguments);
+    if(id==='match'&&state.currentView==='match'){if(!M.play){if(M.sets)renderList();const hh=host();if(hh&&!M.sets)hh.innerHTML='<p class="v6-task-flag" style="padding:16px 0">Loading match sets…</p>';loadSets(true).then(()=>{if(!M.play)renderList()}).catch(err=>{const hh2=host();if(hh2)hh2.innerHTML=`<p class="v6-task-flag">${esc(err.message||'Could not load match sets.')}</p>`})}}
+    return r}}
+  // "Review concept" on a match item opens that set.
+  if(typeof window.openConceptSource==='function'){const o=window.openConceptSource;window.openConceptSource=async function(type,id){if(type==='match')return v6OpenMatchSet(id);return o.apply(this,arguments)}}
+})();
+
+/* Practice step = questions, then 2 match sets on the same topics */
+function v6BlockTopicText(task){
+  const plan=state.todayPlan||[];const i=plan.findIndex(t=>t.id===task.id);const out=[];
+  for(let k=i-1;k>=0;k--){const t=plan[k];if(t.type==='practice'||t.type==='exam')break;const it=t.item||{};out.push(t.title,it.title,it.summary,(it.keyRules||[]).join(' '),it.left,it.right,it.whatItIs)}
+  return out.filter(Boolean).join(' ')||String(task.detail||task.title||'');
+}
+(function(){
+  if(typeof openTodayTask!=='function')return;const o=window.openTodayTask;
+  window.openTodayTask=async function(t){
+    let resume=false;try{resume=t&&t.type==='practice'&&localStorage.getItem('v6pq:'+t.id)==='1'}catch(e){}
+    if(resume&&typeof hasFeature==='function'&&hasFeature('match')){const ok=await v6StartMatchQueue(t,v6BlockTopicText(t));if(ok)return}
+    return o.apply(this,arguments);
+  };
 })();

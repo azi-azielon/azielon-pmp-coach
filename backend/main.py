@@ -144,6 +144,13 @@ def _load_exam_content():
 EXAM_CONTENT=_load_exam_content()
 EXAM_DEFS={e['code']:e for e in EXAM_CONTENT.get('exams',[])}
 EXAM_QUESTIONS={q['id']:q for q in EXAM_CONTENT.get('questions',[])}
+def _load_match_sets():
+    try:
+        return json.loads((ROOT/'data'/'match_sets.json').read_text(encoding='utf-8')).get('sets',[])
+    except Exception:
+        return []
+MATCH_SETS=_load_match_sets()
+MATCH_BY_ID={m['id']:m for m in MATCH_SETS}
 EXAM_RULES={r['rule_id']:r for r in EXAM_CONTENT.get('rules',[])}
 EXAM_QUESTION_IDS={}
 for _q in EXAM_CONTENT.get('questions',[]):
@@ -1213,8 +1220,8 @@ def _concept_review_payload(user: User, db: Session):
         if source: x['sources'].add(source)
         if domain and not x.get('domain'): x['domain']=domain
         # Prefer direct study content, then targeted practice, then exam.
-        priority={'note':4,'diagram':4,'tricky':4,'practice':3,'exam':2}.get(ref_type,0)
-        existing={'note':4,'diagram':4,'tricky':4,'practice':3,'exam':2}.get(x.get('action_type'),0)
+        priority={'note':4,'diagram':4,'tricky':4,'match':4,'practice':3,'exam':2}.get(ref_type,0)
+        existing={'note':4,'diagram':4,'tricky':4,'match':4,'practice':3,'exam':2}.get(x.get('action_type'),0)
         if ref_type and priority>existing:
             x['action_type']=ref_type; x['action_id']=ref_id; x['exam_code']=exam_code
         if signal_at and (x['last_signal_at'] is None or signal_at>x['last_signal_at']): x['last_signal_at']=signal_at
@@ -1253,6 +1260,9 @@ def _concept_review_payload(user: User, db: Session):
         elif st.content_type=='tricky':
             obj=db.get(TrickyWord,st.content_id)
             if obj: add(f'{obj.left_term} vs. {obj.right_term}','Tricky Words',needs_review=1,ref_type='tricky',ref_id=obj.id,signal_at=st.updated_at)
+        elif st.content_type=='match':
+            m=MATCH_BY_ID.get(st.content_id)
+            if m: add(m['title'],'Match the Following',domain=m.get('domain'),needs_review=1,ref_type='match',ref_id=m['id'],signal_at=st.updated_at)
 
     # A concept can be marked reviewed once. It stays hidden until a newer signal occurs.
     concept_states={x.content_id:x for x in db.query(StudyItemState).filter(StudyItemState.user_id==user.id,StudyItemState.content_type=='concept').all()}
@@ -1310,6 +1320,25 @@ def _upsert_study_state(db: Session, user_id:int, content_type:str, content_id:s
 def _state_payload(row):
     return {'content_type':row.content_type,'content_id':row.content_id,'status':row.status,'review_count':row.review_count or 0,'last_rating':row.last_rating,'last_reviewed_at':row.last_reviewed_at.isoformat() if row.last_reviewed_at else None,'next_due_at':row.next_due_at.isoformat() if row.next_due_at else None}
 
+@app.get('/api/match-sets')
+def match_sets(user: User = Depends(current_user), db: Session = Depends(get_db)):
+    require_feature(user, db, 'match', 'Match the Following is included with Standard or Premium')
+    _guard_no_active_real_mock(user, db)
+    states=_study_state_map(db,user.id,'match'); out=[]
+    for m in MATCH_SETS:
+        st=states.get(('match',m['id']))
+        out.append({**m,'studyStatus':st.status if st else 'not_started','lastScore':st.last_rating if st else None,'attempts':st.review_count or 0 if st else 0})
+    return out
+
+@app.post('/api/match-sets/{set_id}/result')
+def match_set_result(set_id:str,payload:dict,user: User = Depends(current_user), db: Session = Depends(get_db)):
+    require_feature(user, db, 'match', 'Match the Following is included with Standard or Premium')
+    if set_id not in MATCH_BY_ID: raise HTTPException(404,'Match set not found')
+    correct=int(payload.get('correct') or 0); total=max(1,int(payload.get('total') or 1))
+    row=_upsert_study_state(db,user.id,'match',set_id,status='mastered' if correct>=total else 'needs_review')
+    row.review_count=(row.review_count or 0)+1; row.last_rating=f'{correct}/{total}'; db.commit(); db.refresh(row)
+    return _state_payload(row)
+
 @app.get('/api/study/states')
 def study_states(user: User = Depends(current_user), db: Session = Depends(get_db)):
     require_paid_access(user,db)
@@ -1318,7 +1347,7 @@ def study_states(user: User = Depends(current_user), db: Session = Depends(get_d
 @app.put('/api/study/items/{content_type}/{content_id}')
 def study_item_update(content_type:str,content_id:str,payload:dict,user:User=Depends(current_user),db:Session=Depends(get_db)):
     require_paid_access(user,db)
-    if content_type not in {'note','diagram','tricky','rule','concept'}: raise HTTPException(400,'Invalid content type')
+    if content_type not in {'note','diagram','tricky','rule','concept','match'}: raise HTTPException(400,'Invalid content type')
     row=_upsert_study_state(db,user.id,content_type,content_id,status=str(payload.get('status') or 'not_started'))
     return _state_payload(row)
 

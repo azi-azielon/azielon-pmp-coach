@@ -1,0 +1,3581 @@
+{
+ "version": "1.1",
+ "sets": [
+  {
+   "id": "MT-001",
+   "theme": "agile",
+   "title": "Scrum events: what each one produces",
+   "prompt": "Match each Scrum event or activity with the output it produces.",
+   "domain": "Process",
+   "approach": "Agile",
+   "keywords": [
+    "scrum",
+    "sprint planning",
+    "daily scrum",
+    "sprint review",
+    "sprint retrospective",
+    "backlog refinement",
+    "increment",
+    "sprint goal"
+   ],
+   "pairs": [
+    {
+     "left": "Sprint planning",
+     "right": "A goal for the timebox, selected items, and a plan to deliver them",
+     "lesson": "Planning ends with three things: the Sprint Goal, the chosen backlog items, and the developers' plan. If a question asks where the Sprint Backlog is born, it is here."
+    },
+    {
+     "left": "Daily scrum",
+     "right": "An adjusted plan for the next day toward the sprint goal",
+     "lesson": "This is a planning event for developers, not a status report to the PM. The output is a revised plan; detailed problem-solving happens right after, with only the people needed."
+    },
+    {
+     "left": "Sprint review",
+     "right": "An updated product backlog shaped by stakeholder feedback on the increment",
+     "lesson": "Stakeholders see working product and give feedback, and the product owner adjusts the backlog. Trap: it is a working session, not a sign-off ceremony or a slide show."
+    },
+    {
+     "left": "Sprint retrospective",
+     "right": "Actionable improvements to how the team works, carried into the next cycle",
+     "lesson": "The retro inspects people, process, tools, and the definition of done. Its output is improvement actions the team owns, so look for it when a question mentions repeating team problems."
+    },
+    {
+     "left": "Backlog refinement",
+     "right": "Clearer, smaller, estimated items that are ready for upcoming work",
+     "lesson": "Refinement is an ongoing activity, not a formal Scrum event. The product owner and developers split, clarify, and size items so future planning goes smoothly."
+    },
+    {
+     "left": "The Sprint",
+     "right": "A done, usable increment that meets the agreed quality standard",
+     "lesson": "The Sprint is the container for every other event. Whatever else happens, each one should end with at least one usable increment that meets the definition of done."
+    }
+   ],
+   "remember": "Plan (goal + backlog) → Daily (adjusted plan) → Review (updated backlog) → Retro (improvements) → Next Sprint"
+  },
+  {
+   "id": "MT-002",
+   "theme": "agile",
+   "title": "Timeboxes and sprint boundaries",
+   "prompt": "Match each timebox concept with the rule or reason behind it.",
+   "domain": "Process",
+   "approach": "Agile",
+   "keywords": [
+    "timebox",
+    "sprint length",
+    "cadence",
+    "sprint cancellation",
+    "sprint goal",
+    "product owner",
+    "velocity"
+   ],
+   "pairs": [
+    {
+     "left": "Timebox",
+     "right": "A fixed maximum duration that forces focus and value-based choices",
+     "lesson": "A timebox caps time and lets scope flex. On the exam, extending a sprint to finish work is the wrong move; the team finishes what it can and re-plans."
+    },
+    {
+     "left": "Consistent sprint length",
+     "right": "A steady cadence that makes velocity useful for forecasting",
+     "lesson": "Changing sprint length every cycle breaks the rhythm and makes past velocity meaningless. Teams adjust length only between sprints, after reflecting in a retrospective."
+    },
+    {
+     "left": "Sprint cancellation",
+     "right": "Allowed only by the product owner when the goal becomes obsolete",
+     "lesson": "Cancelling is rare and belongs to the product owner alone. A tough sprint or a nervous stakeholder is not a reason; an obsolete goal after a market shift is."
+    },
+    {
+     "left": "Unfinished items at timebox end",
+     "right": "Go back to the product backlog for the product owner to reorder",
+     "lesson": "Almost done is not done. Unfinished items are not counted in velocity and are not shown as complete; they return to the backlog and compete again on value."
+    },
+    {
+     "left": "Scope during the sprint",
+     "right": "Clarified or renegotiated with the product owner while protecting the goal",
+     "lesson": "The Sprint Backlog is not frozen. Developers adapt it as they learn, but they protect the Sprint Goal and do not quietly add side-door work."
+    }
+   ],
+   "remember": "Time is fixed, scope flexes. Same length every sprint. Only the PO cancels. Almost done = not done."
+  },
+  {
+   "id": "MT-003",
+   "theme": "agile",
+   "title": "Which framework fits this work?",
+   "prompt": "Match each work situation with the approach and signature practice that fits it best.",
+   "domain": "Process",
+   "approach": "Mixed",
+   "keywords": [
+    "scrum",
+    "kanban",
+    "xp",
+    "safe",
+    "hybrid",
+    "wip limits",
+    "pair programming",
+    "pi planning",
+    "tailoring"
+   ],
+   "pairs": [
+    {
+     "left": "Unpredictable stream of support tickets",
+     "right": "Kanban: continuous pull flow with WIP limits, no fixed sprints",
+     "lesson": "Variable, interrupt-driven demand suits flow rather than sprints. Her memory line: Kanban hates traffic jams, so stop starting and start finishing."
+    },
+    {
+     "left": "Many teams building one large solution",
+     "right": "SAFe: teams align objectives together in program increment planning",
+     "lesson": "When the scenario mentions an agile release train, many teams, or enterprise alignment, think SAFe. The release train engineer facilitates PI planning across teams."
+    },
+    {
+     "left": "Code quality and frequent releases critical",
+     "right": "XP: pair programming, test-first coding, and continuous integration",
+     "lesson": "XP is agile with a strict gym trainer. Engineering-practice words like TDD, refactoring, pairing, or CI point straight to Extreme Programming."
+    },
+    {
+     "left": "Complex product needing regular inspection",
+     "right": "Scrum: fixed sprints ending with a review and a retrospective",
+     "lesson": "Scrum lives by the calendar. Cadence, defined roles, and inspect-and-adapt events make it a fit for complex products where feedback each cycle matters."
+    },
+    {
+     "left": "Fixed-spec hardware plus evolving app",
+     "right": "Hybrid: predictive phases for one part, iterations for the other",
+     "lesson": "Hybrid is intentional tailoring, not confusion. Stable, regulated components go predictive; uncertain, feedback-driven components go adaptive, with integrated governance."
+    }
+   ],
+   "remember": "Scrum gives rhythm • Kanban gives flow • XP gives engineering discipline • SAFe gives scale • Hybrid gives fit"
+  },
+  {
+   "id": "MT-004",
+   "theme": "agile",
+   "title": "Agile metrics: the question each answers",
+   "prompt": "Match each agile metric with the question it answers.",
+   "domain": "Process",
+   "approach": "Agile",
+   "keywords": [
+    "velocity",
+    "burndown chart",
+    "burnup chart",
+    "cycle time",
+    "lead time",
+    "throughput",
+    "agile metrics",
+    "kanban"
+   ],
+   "pairs": [
+    {
+     "left": "Velocity",
+     "right": "How many story points does this team finish per sprint?",
+     "lesson": "Velocity is a Scrum team's planning and forecasting aid. Trap: it never compares teams or rates individuals, and it is the wrong pick when the scenario says Kanban."
+    },
+    {
+     "left": "Burndown chart",
+     "right": "How much planned work still remains before the end date?",
+     "lesson": "A burndown slopes down toward zero. It shows remaining work, so it can hide scope growth; that is why some teams prefer a burnup."
+    },
+    {
+     "left": "Burnup chart",
+     "right": "How much is complete, and has the total scope grown?",
+     "lesson": "A burnup shows completed work rising toward a separate total-scope line. If the top line climbs, scope was added, which a burndown alone can mask."
+    },
+    {
+     "left": "Cycle time",
+     "right": "How long does an item take once work actually starts?",
+     "lesson": "Cycle time starts when someone pulls the item into progress. It measures the team's own process speed, a core Kanban flow measure."
+    },
+    {
+     "left": "Lead time",
+     "right": "How long does a customer wait from request to delivery?",
+     "lesson": "Lead time starts the moment the request is made, so it includes queue time before work begins. Customers feel lead time; teams control cycle time."
+    },
+    {
+     "left": "Throughput",
+     "right": "How many work items get finished in each time period?",
+     "lesson": "Throughput counts finished items, not points. It is Kanban's natural partner to velocity: Scrum equals sprint and velocity, Kanban equals flow and throughput."
+    }
+   ],
+   "remember": "Velocity = points/sprint • Burndown = remains • Burnup = done • Cycle = once started • Lead = request to delivery • Throughput = items finished"
+  },
+  {
+   "id": "MT-005",
+   "theme": "agile",
+   "title": "Reading agile charts: what the pattern means",
+   "prompt": "Match each chart pattern with what it most likely tells you.",
+   "domain": "Process",
+   "approach": "Agile",
+   "keywords": [
+    "cumulative flow diagram",
+    "burndown chart",
+    "burnup chart",
+    "velocity",
+    "lead time",
+    "cycle time",
+    "bottleneck",
+    "scope creep"
+   ],
+   "pairs": [
+    {
+     "left": "One CFD band keeps widening",
+     "right": "Work is piling up in that stage, signaling a bottleneck",
+     "lesson": "In a cumulative flow diagram, a widening band means items enter a stage faster than they leave. Look there first, then swarm or adjust WIP limits."
+    },
+    {
+     "left": "Burndown line stays flat",
+     "right": "Little work is reaching done, so investigate blockers or oversized items",
+     "lesson": "A flat burndown can mean impediments, items too big to finish, or work not being marked done. The servant leader response is to investigate, not to blame."
+    },
+    {
+     "left": "Burnup total-scope line rises",
+     "right": "New work is being added to the release faster than planned",
+     "lesson": "When the scope line on a burnup climbs, the finish date moves even if the team is productive. Talk with the product owner about trade-offs."
+    },
+    {
+     "left": "Velocity swings wildly each sprint",
+     "right": "Estimates or team capacity are unstable, so forecasts are unreliable",
+     "lesson": "Erratic velocity often comes from changing team membership, inconsistent sizing, or carryover. Discuss causes in the retrospective rather than pressuring for higher numbers."
+    },
+    {
+     "left": "Lead time grows, cycle time steady",
+     "right": "Items are waiting longer in the queue before anyone starts them",
+     "lesson": "If the work itself takes the same time but customers wait longer, the delay is before work begins. Fix intake, prioritization, or WIP, not the developers' speed."
+    }
+   ],
+   "remember": "Widening band = bottleneck • Flat burndown = stuck • Rising scope line = added work • Lead up, cycle flat = queue"
+  },
+  {
+   "id": "MT-006",
+   "theme": "agile",
+   "title": "Agile estimating: when to use which",
+   "prompt": "Match each agile estimating practice with the situation where it fits best.",
+   "domain": "Process",
+   "approach": "Agile",
+   "keywords": [
+    "story points",
+    "planning poker",
+    "affinity estimating",
+    "t-shirt sizing",
+    "velocity",
+    "relative estimating",
+    "release planning"
+   ],
+   "pairs": [
+    {
+     "left": "Planning poker",
+     "right": "A few refined stories where hidden assumptions need open discussion",
+     "lesson": "Everyone reveals a card at once, then the high and low estimators explain. The value is the conversation that surfaces assumptions, not just the number."
+    },
+    {
+     "left": "Affinity estimating",
+     "right": "A large backlog that must be sized quickly by grouping similar items",
+     "lesson": "Teams silently place many items along a scale, then adjust together. Pick it when the scenario stresses speed and volume rather than precision on a few stories."
+    },
+    {
+     "left": "T-shirt sizing",
+     "right": "Early epic or roadmap sizing where only coarse buckets are needed",
+     "lesson": "Small, medium, large, extra-large is enough when details are unknown. It supports early roadmap and release conversations before stories are refined."
+    },
+    {
+     "left": "Story points",
+     "right": "Team needs a sizing unit that stays stable whoever does the work",
+     "lesson": "Points are relative and team-specific. Trap: converting them to hours or comparing them across teams destroys their meaning."
+    },
+    {
+     "left": "Velocity-based forecasting",
+     "right": "Projecting how many sprints the remaining backlog will likely need",
+     "lesson": "Divide remaining points by average velocity to forecast a release range. Use a range, and re-forecast every sprint as real data arrives."
+    }
+   ],
+   "remember": "Few stories + talk = Poker • Many items fast = Affinity • Early and rough = T-shirt • Relative size = Points • When will we finish? = Velocity"
+  },
+  {
+   "id": "MT-007",
+   "theme": "agile",
+   "title": "Ready, done, criteria: the question each answers",
+   "prompt": "Match each agile quality agreement with the question it answers.",
+   "domain": "Process",
+   "approach": "Agile",
+   "keywords": [
+    "definition of ready",
+    "definition of done",
+    "acceptance criteria",
+    "sprint goal",
+    "product goal",
+    "user story",
+    "quality"
+   ],
+   "pairs": [
+    {
+     "left": "Definition of ready",
+     "right": "Can the team sensibly pull this item into the next sprint?",
+     "lesson": "Ready means you are dressed for the wedding. Items are understood, sized, and testable. It is an optional team agreement, not an official Scrum commitment."
+    },
+    {
+     "left": "Definition of done",
+     "right": "Does every increment meet our shared quality and completeness standard?",
+     "lesson": "Done means you actually got married. It applies to every item, is owned by the whole Scrum team, and is never relaxed to finish faster."
+    },
+    {
+     "left": "Acceptance criteria",
+     "right": "Does this particular story behave the way the business expects?",
+     "lesson": "Criteria are story-specific conditions, usually written with the product owner. A story must satisfy both its own criteria and the shared done standard."
+    },
+    {
+     "left": "Sprint goal",
+     "right": "Why is this sprint's work valuable as one coherent whole?",
+     "lesson": "The goal gives focus and flexibility: developers can renegotiate individual items while still achieving it. It is created during sprint planning by the Scrum team."
+    },
+    {
+     "left": "Product goal",
+     "right": "What long-term objective is the whole backlog working toward?",
+     "lesson": "This is the commitment for the product backlog, owned by the product owner. Sprint goals are stepping stones toward it."
+    }
+   ],
+   "remember": "Ready = can we START? • Done = can we STOP? • Criteria = does THIS story work? • Sprint goal = why this sprint? • Product goal = where the product is heading"
+  },
+  {
+   "id": "MT-008",
+   "theme": "agile",
+   "title": "Servant leadership: what to do now",
+   "prompt": "Match each team situation with the servant leader's best response.",
+   "domain": "People",
+   "approach": "Agile",
+   "keywords": [
+    "servant leadership",
+    "scrum master",
+    "impediment",
+    "self-organizing team",
+    "coaching",
+    "velocity",
+    "product owner",
+    "daily scrum"
+   ],
+   "pairs": [
+    {
+     "left": "Team blocked by another department",
+     "right": "Help remove the obstacle, escalating only after local attempts fail",
+     "lesson": "Removing impediments is the classic servant leader move. Resolve low, escalate high only when needed; calling the sponsor first is a common wrong answer."
+    },
+    {
+     "left": "Stakeholder hands work straight to developers",
+     "right": "Redirect the request to the product owner for backlog ordering",
+     "lesson": "No side-door work. The servant leader protects the team's focus and routes new ideas through the backlog front door so value decides priority."
+    },
+    {
+     "left": "Team asks for daily task assignments",
+     "right": "Coach the team to self-manage and choose its own work",
+     "lesson": "The PMP favors leadership over micromanagement. Assigning every task undermines ownership; coaching builds a team that plans and commits for itself."
+    },
+    {
+     "left": "Manager ranks people by velocity",
+     "right": "Educate leaders that this measure supports team planning, not appraisal",
+     "lesson": "Using team metrics to judge individuals invites inflated estimates and kills collaboration. The servant leader teaches the right use rather than complying silently."
+    },
+    {
+     "left": "Standup turns into status reporting",
+     "right": "Facilitate so developers plan the next day together toward the goal",
+     "lesson": "When the daily event becomes a report to a leader, coach the team back to its purpose: inspecting progress and adapting their own plan."
+    }
+   ],
+   "remember": "Serve first: remove impediments • protect focus • coach self-management • teach right metrics • facilitate, don't command"
+  },
+  {
+   "id": "MT-009",
+   "theme": "agile",
+   "title": "Delivery units: MVP, MMF, spike, increment",
+   "prompt": "Match each agile delivery unit with what it is.",
+   "domain": "Process",
+   "approach": "Agile",
+   "keywords": [
+    "mvp",
+    "mmf",
+    "spike",
+    "increment",
+    "epic",
+    "user story",
+    "value delivery",
+    "product backlog"
+   ],
+   "pairs": [
+    {
+     "left": "MVP",
+     "right": "Smallest release built to test a business hypothesis with real users",
+     "lesson": "A minimum viable product is about learning: build just enough to validate an assumption. Trap: it is not a low-quality first draft."
+    },
+    {
+     "left": "MMF",
+     "right": "Smallest set of functionality that delivers real value when released",
+     "lesson": "A minimum marketable feature is about earning value, not just learning. Exam hint: MVP tests whether to build; MMF is the smallest piece worth releasing."
+    },
+    {
+     "left": "Spike",
+     "right": "Short, timeboxed research to reduce uncertainty before estimating",
+     "lesson": "Use a spike when the team cannot size a story because of a technical or design unknown. Its output is knowledge, often a better estimate."
+    },
+    {
+     "left": "Increment",
+     "right": "Usable, done work that adds to everything delivered before it",
+     "lesson": "Each one must meet the definition of done and work with all prior increments. Several may be created within one sprint."
+    },
+    {
+     "left": "Epic",
+     "right": "Large body of work too big for one sprint, split into smaller pieces",
+     "lesson": "Epics sit between roadmap features and stories. They get decomposed during refinement until each piece fits comfortably in a sprint."
+    },
+    {
+     "left": "User story",
+     "right": "Small, testable slice of value written from a customer's viewpoint",
+     "lesson": "Classic form: As a role, I want a capability, so that a benefit. Pair it with acceptance criteria so everyone knows when it works."
+    }
+   ],
+   "remember": "Vision → Roadmap → Epic → Feature → Story → Acceptance criteria. MVP = learn • MMF = earn • Spike = explore"
+  },
+  {
+   "id": "MT-010",
+   "theme": "documents",
+   "title": "From business need to approved baselines",
+   "prompt": "Match each early document with what is decided or established at that step.",
+   "domain": "Business Environment",
+   "approach": "Predictive",
+   "keywords": [
+    "business case",
+    "benefits management plan",
+    "project charter",
+    "project management plan",
+    "baseline",
+    "sponsor",
+    "initiating",
+    "planning"
+   ],
+   "pairs": [
+    {
+     "left": "Business case",
+     "right": "Leaders judge whether the investment is worth funding at all",
+     "lesson": "WHY family. It holds the business need, options, and value. If costs double and leaders ask whether to continue, this is the document they revisit."
+    },
+    {
+     "left": "Benefits management plan",
+     "right": "Defines how, when, and by whom expected benefits will be measured",
+     "lesson": "It travels with the business case and keeps going after the project closes. Benefit owners use it to confirm the value actually arrived."
+    },
+    {
+     "left": "Project charter",
+     "right": "The sponsor formally authorizes the work and names the PM",
+     "lesson": "AUTHORITY family. It turns a justified idea into an authorized project and grants the PM power to use organizational resources."
+    },
+    {
+     "left": "Project management plan",
+     "right": "Subsidiary plans are integrated into one roadmap for managing the work",
+     "lesson": "HOW family. It brings together scope, schedule, cost, quality, risk, and other plans, plus the baselines, in one approved document."
+    },
+    {
+     "left": "Performance measurement baseline",
+     "right": "Integrated scope, schedule, and cost targets approved for measuring performance",
+     "lesson": "APPROVED family. Actuals and forecasts are compared against it. It changes only through approved change requests, never because performance slipped."
+    }
+   ],
+   "remember": "Need → Business Case (WHY) → Charter (AUTHORITY) → PM Plan (HOW) → Baselines (APPROVED) → Track"
+  },
+  {
+   "id": "MT-011",
+   "theme": "documents",
+   "title": "Requirements to traceability: what feeds what",
+   "prompt": "Match each scope document with what it feeds into next.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "stakeholder register",
+    "requirements documentation",
+    "project scope statement",
+    "wbs",
+    "rtm",
+    "scope baseline",
+    "collect requirements",
+    "traceability"
+   ],
+   "pairs": [
+    {
+     "left": "Stakeholder register",
+     "right": "Tells the team whom to involve when eliciting requirements",
+     "lesson": "You cannot collect requirements without knowing who holds them. The register lists stakeholders, their interest, and influence, so it feeds requirements elicitation."
+    },
+    {
+     "left": "Requirements documentation",
+     "right": "Supplies the needs that shape deliverables and traceability rows",
+     "lesson": "Each documented requirement should become part of the scope and get a traceability entry. Unrecorded needs become surprise change requests later."
+    },
+    {
+     "left": "Project scope statement",
+     "right": "Provides the deliverables that get decomposed into work packages",
+     "lesson": "It sets boundaries, exclusions, and acceptance criteria. Decomposing its deliverables is exactly what Create WBS does."
+    },
+    {
+     "left": "Work breakdown structure",
+     "right": "Joins its dictionary and the statement to form the approved scope baseline",
+     "lesson": "Scope baseline equals scope statement plus WBS plus WBS dictionary. Once approved, its content changes only through change control."
+    },
+    {
+     "left": "Requirements traceability matrix",
+     "right": "Links each requirement to tests used before customer acceptance",
+     "lesson": "TRACE family. It carries a requirement from origin to deliverable to test to status, so it supports Validate Scope and proves nothing was missed."
+    }
+   ],
+   "remember": "WHO (stakeholders) → WHAT (requirements) → BOUNDARIES (scope statement) → STRUCTURE (WBS) → TRACE (RTM)"
+  },
+  {
+   "id": "MT-012",
+   "theme": "documents",
+   "title": "Trigger words: which document to open",
+   "prompt": "Match each trigger word with the document it should make you think of.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "trigger words",
+    "risk register",
+    "issue log",
+    "rtm",
+    "wbs dictionary",
+    "change log",
+    "contract",
+    "document families"
+   ],
+   "pairs": [
+    {
+     "left": "MAY HAPPEN",
+     "right": "Risk register entry with probability, impact, owner, and response",
+     "lesson": "Words like may, might, possible, or uncertain point to a risk. Log and analyze it before acting; it is not yet a problem to resolve."
+    },
+    {
+     "left": "HAPPENED",
+     "right": "Issue log entry with owner, action, and target resolution date",
+     "lesson": "Words like already, currently, or discovered mean the event is real. Manage it as an issue now, and update related risk information too."
+    },
+    {
+     "left": "TRACE",
+     "right": "Matrix linking each requirement to its origin, deliverable, and test",
+     "lesson": "When the scenario asks which test proves a requirement was met, or where a requirement came from, open the RTM."
+    },
+    {
+     "left": "DETAIL",
+     "right": "Dictionary entry describing a work package's criteria, owner, and milestones",
+     "lesson": "The WBS gives structure; its dictionary gives the detail behind each box. Structure, detail, trace is her three-word chant."
+    },
+    {
+     "left": "CHANGE STATUS",
+     "right": "Log showing which requests were approved, rejected, or deferred",
+     "lesson": "The change log records outcomes; the change management plan describes the process. Trap: logging a request does not approve it."
+    },
+    {
+     "left": "SELLER",
+     "right": "Signed agreement stating legal obligations, price, and remedies",
+     "lesson": "Any question about what a vendor must do or be paid goes to the contract. The PM manages seller performance but cannot rewrite its terms alone."
+    }
+   ],
+   "remember": "MAY HAPPEN → Risk Register • HAPPENED → Issue Log • TRACE → RTM • DETAIL → WBS Dictionary • CHANGE STATUS → Change Log • SELLER → Contract"
+  },
+  {
+   "id": "MT-013",
+   "theme": "documents",
+   "title": "How each document type may change",
+   "prompt": "Match each type of project document with how it is allowed to change.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "management plan",
+    "baseline",
+    "risk register",
+    "forecast",
+    "contract",
+    "work performance report",
+    "change control",
+    "pm authority"
+   ],
+   "pairs": [
+    {
+     "left": "Subsidiary management plan",
+     "right": "Revised through governance when the way we manage must change",
+     "lesson": "Plans are the HOW family and sit in the yellow zone: the PM can propose updates, but changes follow the plan's own governance."
+    },
+    {
+     "left": "Cost baseline",
+     "right": "Moves only after an authorized change request is approved",
+     "lesson": "Baselines are red zone. Poor CPI is never a reason to rebaseline; analyze, forecast, and use change control only for real authorized changes."
+    },
+    {
+     "left": "Risk register",
+     "right": "Updated freely by the PM and owners as reality shifts",
+     "lesson": "Living records are green zone. Adding risks, updating ratings, and recording responses is normal ongoing work, no approval needed."
+    },
+    {
+     "left": "Estimate at completion",
+     "right": "Recalculated from actual performance whenever new data arrives",
+     "lesson": "Forecasts move with reality; baselines move with approval. A worse EAC is information to act on, not a change to the approved budget."
+    },
+    {
+     "left": "Contract",
+     "right": "Amended only through its change clause with procurement authority",
+     "lesson": "Contracts are legal documents. Even when the PM agrees with a seller, contract changes need the authorized contract change process and possibly project change control."
+    },
+    {
+     "left": "Work performance report",
+     "right": "Reissued each cycle to communicate analyzed status to stakeholders",
+     "lesson": "Reports are the COMMUNICATE family. Data is raw, information is analyzed, reports are packaged and sent to the people who need them."
+    }
+   ],
+   "remember": "Living documents evolve. Plans follow governance. Baselines and contracts change only through authorized approval."
+  },
+  {
+   "id": "MT-014",
+   "theme": "documents",
+   "title": "Which document to check first",
+   "prompt": "Match each scenario with the document the PM should check first.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "change management plan",
+    "communications management plan",
+    "business case",
+    "scope baseline",
+    "team charter",
+    "contract",
+    "project documents"
+   ],
+   "pairs": [
+    {
+     "left": "Who can approve this change?",
+     "right": "Change management plan, which sets authority levels and thresholds",
+     "lesson": "Before routing a request, check the defined process. Not every change goes to a CCB; the plan says who decides what and at which threshold."
+    },
+    {
+     "left": "Stakeholder wants weekly email updates",
+     "right": "Communications management plan, which lists who gets what and when",
+     "lesson": "Communication preferences live in the plan. Check it, then update it through normal governance if the stakeholder's need is legitimate."
+    },
+    {
+     "left": "Costs doubled; still worth doing?",
+     "right": "Business case, which justifies whether the investment still makes sense",
+     "lesson": "Worth-it questions are WHY questions. The sponsor revisits the business case to decide whether to continue, change, or stop."
+    },
+    {
+     "left": "Is this request in scope?",
+     "right": "Scope baseline, holding the approved statement, WBS, and dictionary",
+     "lesson": "Check the approved scope before saying yes or no. If it is outside, it becomes a change request, not quiet extra work."
+    },
+    {
+     "left": "Member keeps ignoring meeting norms",
+     "right": "Team charter, holding the ground rules the team agreed together",
+     "lesson": "Go back to the team's own agreements first and talk privately with the person. Escalating to a manager is not the first step."
+    },
+    {
+     "left": "Vendor demands extra payment",
+     "right": "Contract, which states agreed price, terms, and change clauses",
+     "lesson": "Review the agreement before negotiating. Contract first, document everything, negotiate before escalating."
+    }
+   ],
+   "remember": "FIRST = check the right document: Process? Plan. Worth it? Business case. In scope? Baseline. Team norms? Team charter. Seller? Contract."
+  },
+  {
+   "id": "MT-015",
+   "theme": "documents",
+   "title": "Procurement asks and seller answers",
+   "prompt": "Match each procurement item with what the seller sends back or what happens with it.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "rfi",
+    "rfq",
+    "rfp",
+    "ifb",
+    "source selection criteria",
+    "bidder conference",
+    "procurement",
+    "seller response"
+   ],
+   "pairs": [
+    {
+     "left": "RFI",
+     "right": "Seller returns an information response about its capabilities; no award yet",
+     "lesson": "A request for information explores the market early. Nobody wins a contract from an RFI; it helps the buyer shape later solicitation."
+    },
+    {
+     "left": "RFQ",
+     "right": "Seller returns a price quotation for clearly specified items",
+     "lesson": "Use it when specs are clear and price is the main comparison. Trap: an RFQ is wrong for complex work where the approach matters."
+    },
+    {
+     "left": "RFP",
+     "right": "Seller returns a proposal describing its solution approach, value, and price",
+     "lesson": "Use it when the problem is complex and you want vendors to propose how. Info, solution, price: RFI, RFP, RFQ."
+    },
+    {
+     "left": "IFB",
+     "right": "Seller returns a formal sealed offer against fixed, comparable specifications",
+     "lesson": "An invitation for bid suits well-defined work where offers can be compared directly. The seller's response is called a bid."
+    },
+    {
+     "left": "Source selection criteria",
+     "right": "Buyer's weighted yardstick for scoring every seller response fairly",
+     "lesson": "Written by the buyer before responses arrive. Trap: lowest price is not automatically best, and a sponsor's favorite vendor still gets scored on the criteria."
+    },
+    {
+     "left": "Bidder conference",
+     "right": "Buyer answers all prospective sellers' questions together and equally",
+     "lesson": "It keeps the process fair so no seller gets inside information. Clarifications are shared with every bidder."
+    }
+   ],
+   "remember": "Buyer asks. Seller responds. Both sign. INFO → RFI • PRICE → RFQ • SOLUTION → RFP • FORMAL BID → IFB"
+  },
+  {
+   "id": "MT-016",
+   "theme": "documents",
+   "title": "Procurement documents: what each holds",
+   "prompt": "Match each procurement document with what it holds.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "procurement management plan",
+    "bid documents",
+    "proposal",
+    "agreement",
+    "contract",
+    "seller performance",
+    "procurement file",
+    "buyer",
+    "seller"
+   ],
+   "pairs": [
+    {
+     "left": "Procurement management plan",
+     "right": "How this project will buy goods and services, from start to finish",
+     "lesson": "A HOW-family subsidiary plan written by the PM with procurement input. When a question asks how purchasing is run or who may sign, look here first."
+    },
+    {
+     "left": "Bid documents",
+     "right": "The request package sent out so vendors can prepare responses",
+     "lesson": "RFI, RFQ, RFP and IFB are all bid documents, issued by the buyer. Trap: they invite offers; nothing is binding yet and no seller is chosen."
+    },
+    {
+     "left": "Seller proposal",
+     "right": "A vendor's written answer describing its approach, price, and qualifications",
+     "lesson": "Written by each seller, never by the buyer, and scored against source selection criteria. Trap: a proposal is only an offer until both sides sign."
+    },
+    {
+     "left": "Agreement",
+     "right": "Legally binding record of obligations, price, terms, and remedies",
+     "lesson": "Also called the contract: the SELLER family. Signed by people with authority on both sides. Changes follow its change clause; the PM cannot rewrite terms alone."
+    },
+    {
+     "left": "Seller performance evaluation",
+     "right": "Buyer's documented review of how well a vendor actually delivered",
+     "lesson": "Prepared by the buyer during Control Procurements. It records quality, timeliness and cooperation, and shapes whether that vendor stays on qualified seller lists."
+    },
+    {
+     "left": "Procurement file",
+     "right": "Complete indexed set of contract records archived at closure",
+     "lesson": "Contracts, amendments, invoices, claims and correspondence kept together. It is archived into organizational process assets and supports audits or later disputes."
+    }
+   ],
+   "remember": "Plan (how we buy) → Bid documents (buyer asks) → Proposal (seller answers) → Agreement (both sign) → Performance review → File (archive)"
+  },
+  {
+   "id": "MT-017",
+   "theme": "documents",
+   "title": "Inside the WBS: decomposition levels",
+   "prompt": "Match each WBS element or rule with what it means.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "wbs",
+    "work package",
+    "control account",
+    "planning package",
+    "deliverable",
+    "activity",
+    "100% rule",
+    "decomposition"
+   ],
+   "pairs": [
+    {
+     "left": "Deliverable",
+     "right": "Unique, verifiable product or result shown at an upper level",
+     "lesson": "WBS elements are nouns, not verbs. Deliverables are decomposed until the pieces are small enough to estimate and manage."
+    },
+    {
+     "left": "Control account",
+     "right": "Management point where scope, budget, and actual cost are compared",
+     "lesson": "It sits above work packages and is where earned value is often measured. Each one belongs to a single responsible manager."
+    },
+    {
+     "left": "Work package",
+     "right": "Lowest level, where cost and duration are estimated and managed",
+     "lesson": "It is the bottom of the WBS. Exam trap: work packages are not activities; they are decomposed into activities during schedule planning."
+    },
+    {
+     "left": "Planning package",
+     "right": "Placeholder with known scope but no detailed activities yet",
+     "lesson": "This is rolling wave planning inside predictive work. It sits under a control account and gets detailed as information arrives."
+    },
+    {
+     "left": "Activity",
+     "right": "Scheduled action decomposed from the lowest element, outside the structure",
+     "lesson": "Activities live in the activity list and schedule, not in the WBS. Verb phrases like pour the slab signal an activity."
+    },
+    {
+     "left": "100% rule",
+     "right": "Children together capture all the work and only that work",
+     "lesson": "Nothing missing, nothing extra. If work is not in the WBS, it is not in the project scope; extra work such as gold plating sits outside the approved scope."
+    }
+   ],
+   "remember": "Scope statement → Deliverable → Control account → Work package → Activity (schedule). Structure, detail, trace."
+  },
+  {
+   "id": "MT-018",
+   "theme": "documents",
+   "title": "Closing documents and what they capture",
+   "prompt": "Match each closing document with what it captures or where it goes.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "final report",
+    "lessons learned register",
+    "lessons learned repository",
+    "acceptance",
+    "transition",
+    "procurement closure",
+    "closing"
+   ],
+   "pairs": [
+    {
+     "left": "Acceptance records",
+     "right": "Formal sign-off proving the customer agreed the criteria were met",
+     "lesson": "Verified is internal; accepted is formal. These records come from Validate Scope and are required before closure can be completed."
+    },
+    {
+     "left": "Final report",
+     "right": "Summary of scope, schedule, cost, quality, and benefit results versus objectives",
+     "lesson": "It tells the story of the whole project for the sponsor and organization, including whether the business need was met."
+    },
+    {
+     "left": "Lessons learned register",
+     "right": "Living record updated throughout, then moved to organizational assets",
+     "lesson": "Do not wait until the end. Capture lessons after milestones, apply them immediately, and archive the register at closing."
+    },
+    {
+     "left": "Lessons learned repository",
+     "right": "Organizational knowledge base that future teams search during planning",
+     "lesson": "It is an organizational process asset, not a project document. The register feeds it; new projects draw from it."
+    },
+    {
+     "left": "Operations handover documents",
+     "right": "Move the product, support duties, and knowledge to the receiving owners",
+     "lesson": "Transfer is a real step: training, support agreements, and documentation so operations can sustain the product and benefits."
+    },
+    {
+     "left": "Procurement closure records",
+     "right": "Confirm seller work accepted, claims settled, and agreement formally ended",
+     "lesson": "Each contract is closed per its terms. Open claims must be settled, ideally by negotiation, before the procurement is formally closed."
+    }
+   ],
+   "remember": "Complete → Accept → Transfer → Learn → Close. Register is living; repository is forever."
+  },
+  {
+   "id": "MT-019",
+   "theme": "ownership",
+   "title": "Change requests: who does each step",
+   "prompt": "Match each step of the change request journey with who does it and how.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "change request",
+    "change control board",
+    "impact analysis",
+    "change log",
+    "change management plan",
+    "sponsor",
+    "baseline"
+   ],
+   "pairs": [
+    {
+     "left": "Raising a change request",
+     "right": "Any stakeholder may submit one in writing through the process",
+     "lesson": "Anyone can raise a change, including team members and customers. Verbal requests should be documented so they can be analyzed properly."
+    },
+    {
+     "left": "Impact analysis",
+     "right": "PM and team assess effects on scope, time, cost, and risk",
+     "lesson": "The CCB is a judge, not an investigator. The PM brings a fully analyzed request with options; analyze with the team before going to the board."
+    },
+    {
+     "left": "Making the decision",
+     "right": "CCB or designated authority per the defined thresholds",
+     "lesson": "The change management plan names who decides. Small changes may sit within PM authority; baseline changes usually go to the board."
+    },
+    {
+     "left": "Recording the outcome",
+     "right": "Approved, rejected, or deferred status is written in the log",
+     "lesson": "Every decision gets recorded, including rejections. The log tracks status; it does not grant approval by itself."
+    },
+    {
+     "left": "Updating plans and baselines",
+     "right": "PM revises affected documents only after approval is granted",
+     "lesson": "Update first, then implement and communicate. Changing the baseline before approval is a classic wrong answer."
+    },
+    {
+     "left": "Sponsor-requested change",
+     "right": "Follows the same formal process; seniority grants no bypass",
+     "lesson": "Even the sponsor submits a change request. The PM analyzes impact and routes it properly rather than simply complying."
+    }
+   ],
+   "remember": "Request → Analyze → Decide → Record → Update plans → Communicate → Implement → Monitor. Anyone raises • PM analyzes • CCB decides • Log records"
+  },
+  {
+   "id": "MT-020",
+   "theme": "ownership",
+   "title": "Plans, baselines, reserves: who controls them",
+   "prompt": "Match each planning item with who controls changes to it or its use.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "project management plan",
+    "performance measurement baseline",
+    "contingency reserve",
+    "management reserve",
+    "forecast",
+    "sponsor",
+    "change control board"
+   ],
+   "pairs": [
+    {
+     "left": "Project management plan",
+     "right": "PM develops it with the team; sponsor and key stakeholders approve",
+     "lesson": "The PM integrates all subsidiary plans, but approval comes from the people with authority. After approval, changes follow integrated change control."
+    },
+    {
+     "left": "Performance measurement baseline",
+     "right": "Changes only after the change board approves a formal request",
+     "lesson": "The PM cannot rebaseline alone, even if the PM created it. Protected does not mean impossible; it means authorized."
+    },
+    {
+     "left": "Contingency reserve",
+     "right": "PM may apply it to identified risks as the plan allows",
+     "lesson": "It covers known-unknowns and is inside the cost baseline. Using it for a planned risk response does not need a baseline change."
+    },
+    {
+     "left": "Management reserve",
+     "right": "Released by management for unforeseen work, then the baseline is updated",
+     "lesson": "It covers unknown-unknowns and sits outside the cost baseline. Using it requires management approval and a change to the baseline."
+    },
+    {
+     "left": "Estimate at completion",
+     "right": "PM updates it from actual performance without needing approval",
+     "lesson": "Forecasts are the PM's to maintain. Sharing a worse forecast honestly is required; changing the budget to match it is not allowed."
+    }
+   ],
+   "remember": "PM develops • Stakeholders approve • CCB guards baselines • PM uses contingency • Management releases reserve • PM forecasts"
+  },
+  {
+   "id": "MT-021",
+   "theme": "ownership",
+   "title": "RACI roles in practice",
+   "prompt": "Match each RACI role or rule with what it means for a task.",
+   "domain": "People",
+   "approach": "Mixed",
+   "keywords": [
+    "raci",
+    "responsibility assignment matrix",
+    "responsible",
+    "accountable",
+    "consulted",
+    "informed",
+    "roles and responsibilities"
+   ],
+   "pairs": [
+    {
+     "left": "Responsible",
+     "right": "Does the work to complete the task; there may be several",
+     "lesson": "R is the doer. Many people can share it. Trap: the person doing the work is not automatically the one who answers for the result."
+    },
+    {
+     "left": "Accountable",
+     "right": "The single person who answers for the result and signs off",
+     "lesson": "Only one A per task, so ownership is never ambiguous. The A may delegate the work but not the ownership."
+    },
+    {
+     "left": "Consulted",
+     "right": "Gives input before or during the work in two-way conversation",
+     "lesson": "These are subject experts or affected parties whose opinion is sought. Too many C's slow everything down."
+    },
+    {
+     "left": "Informed",
+     "right": "Kept up to date on progress or decisions in one-way updates",
+     "lesson": "They need to know, not to contribute. Use this to plan push communications without inviting them to every meeting."
+    },
+    {
+     "left": "Two people marked A",
+     "right": "Ownership is unclear, so fix the matrix to one name",
+     "lesson": "Two A's on one row is a design flaw that causes finger-pointing. Resolve it with the stakeholders and update the matrix."
+    }
+   ],
+   "remember": "R = does it • A = owns it (only one!) • C = asked before • I = told after"
+  },
+  {
+   "id": "MT-022",
+   "theme": "ownership",
+   "title": "Governance bodies and PMO types",
+   "prompt": "Match each governance body or PMO type with its role and level of control.",
+   "domain": "Business Environment",
+   "approach": "Predictive",
+   "keywords": [
+    "pmo",
+    "supportive pmo",
+    "controlling pmo",
+    "directive pmo",
+    "steering committee",
+    "change control board",
+    "governance"
+   ],
+   "pairs": [
+    {
+     "left": "Supportive PMO",
+     "right": "Offers templates, training, and lessons; low control over projects",
+     "lesson": "Supportive equals Help. It acts as a resource library and coach, and project managers are free to choose whether to use its materials."
+    },
+    {
+     "left": "Controlling PMO",
+     "right": "Requires compliance with methods, templates, and audits; moderate control",
+     "lesson": "Controlling equals Rules. It checks that projects follow standards and may review or audit them, but it does not run them."
+    },
+    {
+     "left": "Directive PMO",
+     "right": "Directly manages projects and assigns project managers; high control",
+     "lesson": "Directive equals Runs. Project managers report to it, so it holds the most control of the three types."
+    },
+    {
+     "left": "Steering committee",
+     "right": "Senior group setting direction and deciding matters beyond PM thresholds",
+     "lesson": "Escalate here when budget, strategy, or cross-project decisions exceed the PM's authority, such as overruns beyond contingency."
+    },
+    {
+     "left": "Change control board",
+     "right": "Formally reviews requests and approves, rejects, or defers them",
+     "lesson": "The board decides on changes as defined in the change management plan. It does not investigate; the PM brings an analyzed request."
+    }
+   ],
+   "remember": "Supportive = Help • Controlling = Rules • Directive = Runs • Steering committee = direction • CCB = change decisions"
+  },
+  {
+   "id": "MT-023",
+   "theme": "ownership",
+   "title": "Who to go to: the right door",
+   "prompt": "Match each situation with who the PM should go to and how.",
+   "domain": "People",
+   "approach": "Mixed",
+   "keywords": [
+    "escalation",
+    "functional manager",
+    "sponsor",
+    "steering committee",
+    "scrum master",
+    "team charter",
+    "governance",
+    "contract"
+   ],
+   "pairs": [
+    {
+     "left": "Functional manager reclaims your resource",
+     "right": "Negotiate with that manager first; senior management if still unresolved",
+     "lesson": "In a matrix, the functional manager owns the person. Discuss impact and priorities directly before taking it higher."
+    },
+    {
+     "left": "Decision exceeds your authority",
+     "right": "Sponsor or the governance path defined for that decision",
+     "lesson": "Do not make an unauthorized decision, and do not freeze. Check the escalation path and bring the right authority in with analysis."
+    },
+    {
+     "left": "Overrun beyond contingency",
+     "right": "Steering committee or management that controls the reserve",
+     "lesson": "Once contingency is spent, the PM lacks authority to fund more. Present the analysis and options to whoever holds management reserve."
+    },
+    {
+     "left": "Team blocked by outside dependency",
+     "right": "Scrum master or PM works to remove it, escalating only if needed",
+     "lesson": "Resolve low first. If the team can fix it, they do; if facilitation helps, the servant leader steps in; outside authority comes last."
+    },
+    {
+     "left": "Teammate keeps breaking ground rules",
+     "right": "Talk privately first, referring to the team's agreed norms",
+     "lesson": "Never go to the functional manager first for a team behavior issue. Private conversation, then coaching, then formal escalation if unresolved."
+    },
+    {
+     "left": "Seller disputes contract terms",
+     "right": "Negotiate per the agreement, then its dispute clause and procurement authority",
+     "lesson": "Contract first. Notify in writing, negotiate in good faith, then use ADR or the contract's escalation steps; litigation is last."
+    }
+   ],
+   "remember": "Problem → Assess → Check owner → Act at lowest level → Escalate only when needed, to the right door"
+  },
+  {
+   "id": "MT-024",
+   "theme": "ownership",
+   "title": "Who verifies, who accepts",
+   "prompt": "Match each role with its part in getting a deliverable verified or accepted.",
+   "domain": "Process",
+   "approach": "Hybrid",
+   "keywords": [
+    "validate scope",
+    "control quality",
+    "acceptance",
+    "verified deliverable",
+    "product owner",
+    "definition of done",
+    "customer"
+   ],
+   "pairs": [
+    {
+     "left": "Quality control team",
+     "right": "Inspects and tests outputs against specifications; an internal check only",
+     "lesson": "Control Quality produces verified deliverables. Passing internal tests does not mean the customer has accepted anything."
+    },
+    {
+     "left": "Customer or sponsor",
+     "right": "Formally signs off that acceptance criteria were met",
+     "lesson": "Validate Scope is where formal acceptance happens, with the authorized party. Their sign-off turns a verified deliverable into an accepted one."
+    },
+    {
+     "left": "Product owner",
+     "right": "Decides whether sprint work meets the stated story criteria",
+     "lesson": "On agile work, the product owner represents the customer's view of value and judges whether items fulfil their criteria."
+    },
+    {
+     "left": "Project manager",
+     "right": "Facilitates and records acceptance but cannot sign for the customer",
+     "lesson": "The PM organizes the review and keeps the records. Claiming acceptance on the customer's behalf is a trap answer."
+    },
+    {
+     "left": "Developers",
+     "right": "Build quality in so each sprint item meets the team's shared standard",
+     "lesson": "Developers are accountable for building quality in. Items that miss the definition of done are not shown as complete."
+    },
+    {
+     "left": "Buyer's contracting authority",
+     "right": "Confirms seller deliverables are accepted before closing the agreement",
+     "lesson": "For procured work, formal acceptance of seller deliverables follows the contract and is required before procurement closure."
+    }
+   ],
+   "remember": "Create → Control Quality (verified) → Validate Scope (accepted) → Transition. Verified is internal; accepted is formal."
+  },
+  {
+   "id": "MT-025",
+   "theme": "ownership",
+   "title": "Mid-sprint: who may change what",
+   "prompt": "Match each agile item with who may change it and when.",
+   "domain": "Process",
+   "approach": "Agile",
+   "keywords": [
+    "product backlog",
+    "sprint backlog",
+    "sprint goal",
+    "definition of done",
+    "sprint length",
+    "product owner",
+    "developers",
+    "scrum team"
+   ],
+   "pairs": [
+    {
+     "left": "Product backlog order",
+     "right": "Product owner may reorder anytime; others influence but cannot dictate",
+     "lesson": "Stakeholders, including executives, bring requests to the product owner. Nobody else reorders the list directly."
+    },
+    {
+     "left": "Sprint backlog plan",
+     "right": "Developers adapt it daily as they learn, protecting the goal",
+     "lesson": "This belongs to the developers. The product owner does not assign tasks inside it, and the Scrum Master does not own it either."
+    },
+    {
+     "left": "Sprint goal",
+     "right": "Fixed for the sprint; if obsolete, the product owner cancels",
+     "lesson": "The goal is the sprint's anchor. Scope can be renegotiated around it, but swapping the goal mid-sprint means cancelling and re-planning."
+    },
+    {
+     "left": "Definition of done",
+     "right": "Scrum team may strengthen it; never relaxed to finish faster",
+     "lesson": "Owned by the whole Scrum team, or set by the organization as a minimum. Lowering quality to hit a date is the classic trap."
+    },
+    {
+     "left": "Sprint length",
+     "right": "Scrum team adjusts it between sprints, never during one",
+     "lesson": "Changing cadence is a retrospective decision. Extending the current sprint to finish work breaks the timebox."
+    }
+   ],
+   "remember": "PO = WHAT/WHY (backlog order) • Developers = HOW (sprint plan) • Scrum team = standards (DoD, cadence)"
+  },
+  {
+   "id": "MT-026",
+   "theme": "ownership",
+   "title": "Who authors each document",
+   "prompt": "Match each document with who creates it.",
+   "domain": "Process",
+   "approach": "Mixed",
+   "keywords": [
+    "business case",
+    "project charter",
+    "project management plan",
+    "team charter",
+    "procurement statement of work",
+    "seller proposal",
+    "author"
+   ],
+   "pairs": [
+    {
+     "left": "Business case",
+     "right": "Prepared on the business side before the project exists",
+     "lesson": "It is a pre-project business document. The PM may help update it later, but it is owned outside the project by the sponsor or business."
+    },
+    {
+     "left": "Project charter",
+     "right": "Issued by the sponsor or initiator from outside the team",
+     "lesson": "The PM may help draft it, but issuing authority sits with someone who can fund and authorize the work."
+    },
+    {
+     "left": "Project management plan",
+     "right": "Developed by the PM with the team, then approved by stakeholders",
+     "lesson": "The PM integrates the plan and does not write it alone. Involving the team builds better estimates and commitment."
+    },
+    {
+     "left": "Team charter",
+     "right": "Created by the team members together, facilitated rather than imposed",
+     "lesson": "Values, norms, decision rules, and conflict process belong to the team. Imposed rules get ignored; agreed rules get followed."
+    },
+    {
+     "left": "Procurement SOW",
+     "right": "Written by the buyer's team from the approved scope",
+     "lesson": "The buyer describes the work it wants. Sellers never write the statement they are bidding against."
+    },
+    {
+     "left": "Seller proposal",
+     "right": "Written by each vendor in response to the buyer's request",
+     "lesson": "Buyer asks, seller responds. The proposal answers an RFP with the seller's solution, approach, and price."
+    }
+   ],
+   "remember": "Business decides WHY • Sponsor issues AUTHORITY • PM + team plan HOW • Team writes its norms • Buyer asks, seller answers"
+  },
+  {
+   "id": "MT-027",
+   "theme": "ownership",
+   "title": "Risk roles: who does what",
+   "prompt": "Match each role with its responsibility for project risk.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "risk register",
+    "risk owner",
+    "risk action owner",
+    "risk management plan",
+    "sponsor",
+    "risk appetite",
+    "escalate"
+   ],
+   "pairs": [
+    {
+     "left": "Project manager",
+     "right": "Leads the overall process and keeps the register current",
+     "lesson": "The PM manages the risk process and the register, but does not personally own every individual risk."
+    },
+    {
+     "left": "Risk owner",
+     "right": "Watches triggers and carries out the agreed response for an assigned risk",
+     "lesson": "Every important risk needs a named owner. If nobody owns the risk, everybody assumes somebody else is watching it."
+    },
+    {
+     "left": "Risk action owner",
+     "right": "Performs a specific task assigned within an agreed response",
+     "lesson": "Larger responses can have several actions. The owner of the risk coordinates them; action owners do the individual pieces."
+    },
+    {
+     "left": "Project team members",
+     "right": "Identify new uncertainties continuously, not only in workshops",
+     "lesson": "Risk identification is iterative and everyone's job. Raise a possible threat as soon as it is noticed, then log and analyze it."
+    },
+    {
+     "left": "Sponsor",
+     "right": "Sets tolerance levels and receives risks beyond project authority",
+     "lesson": "When a risk is outside the project's scope or authority, escalate it to the sponsor or program, who then owns the decision."
+    }
+   ],
+   "remember": "PM runs the process • Owner watches and responds • Action owner does the task • Team identifies • Sponsor takes escalations"
+  },
+  {
+   "id": "MT-028",
+   "theme": "flows",
+   "title": "Change control: the detailed path",
+   "prompt": "Match each step of the detailed change control path with what happens at that step.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "change request",
+    "integrated change control",
+    "change control board",
+    "impact analysis",
+    "change log",
+    "baseline",
+    "change management plan",
+    "approved change"
+   ],
+   "pairs": [
+    {
+     "left": "Clarify",
+     "right": "Pin down exactly what is being asked, by whom, and why",
+     "lesson": "Before any analysis, make sure you understand the request itself. A customer asking for something is a trigger to clarify and analyze, never a reason to implement on the spot."
+    },
+    {
+     "left": "Impact analysis",
+     "right": "Evaluate effects on scope, schedule, cost, risk, quality and value",
+     "lesson": "Her ripple flow applies here: Scope → Schedule → Cost → Resources → Risk → Value. The PM analyzes and brings options to the decision makers; the PM does not decide alone."
+    },
+    {
+     "left": "Decision",
+     "right": "Board or named authority approves, rejects, or defers the request",
+     "lesson": "Who decides is written in the change management plan, often a change control board. Rejected requests still get recorded in the change log so the history is traceable."
+    },
+    {
+     "left": "Update plans/baselines",
+     "right": "Bring the approved documents and targets in line with the authorized change",
+     "lesson": "Only an approved change may touch a baseline. Trap: updating the baseline first, or rebaselining just to hide a poor CPI. Baselines are the APPROVED family."
+    },
+    {
+     "left": "Communicate",
+     "right": "Tell the team and affected stakeholders what changed and when",
+     "lesson": "Follow the communications management plan so everyone works from the new version. Skipping this step is how teams keep building to an outdated requirement."
+    },
+    {
+     "left": "Implement approved change",
+     "right": "Team performs the authorized work and results are tracked against the new plan",
+     "lesson": "Implementation happens only after authorization. In an agile setting the same idea shows up as a reprioritized backlog item rather than a board decision."
+    }
+   ],
+   "remember": "Change identified → Clarify → Impact analysis → Formal approval path → Decision → Update plans/baselines → Communicate → Implement → Monitor (hook: Request → Analyze → Authorize → Update → Implement → Watch)"
+  },
+  {
+   "id": "MT-029",
+   "theme": "flows",
+   "title": "Risk to issue: the life of a risk",
+   "prompt": "Match each step of the risk flow with what happens at that step.",
+   "domain": "Process",
+   "approach": "Mixed",
+   "keywords": [
+    "risk register",
+    "issue log",
+    "risk owner",
+    "trigger",
+    "probability and impact",
+    "risk response",
+    "monitor risks",
+    "workaround"
+   ],
+   "pairs": [
+    {
+     "left": "Identify risk",
+     "right": "Record an uncertain future event with its cause, effect, and owner",
+     "lesson": "Identified risks go into the risk register with an owner. Trap: something already happening is not a risk; it belongs in the issue log right away."
+    },
+    {
+     "left": "Analyze",
+     "right": "Rate probability and impact to decide which ones deserve attention",
+     "lesson": "Qualitative analysis (probability and impact matrix) ranks them; quantitative analysis such as Monte Carlo or EMV puts numbers on the important few. Analysis comes before choosing a response."
+    },
+    {
+     "left": "Plan response",
+     "right": "Choose avoid, transfer, mitigate, accept or escalate and name an owner",
+     "lesson": "Opportunities use exploit, enhance, share, accept or escalate. Each response has an owner, may draw on contingency reserve, and can create secondary risks to watch."
+    },
+    {
+     "left": "Monitor triggers",
+     "right": "Watch warning signs and check that planned actions still work",
+     "lesson": "Monitor Risks runs all project long: track triggers, review residual and secondary risks, and identify new risks in reviews and retrospectives."
+    },
+    {
+     "left": "Risk occurs",
+     "right": "The event has happened, so it is now handled as an issue",
+     "lesson": "Her rule: once it happens, it becomes an issue. Carry out the planned response or a workaround. Trap: jumping to a contract claim or rebaselining first."
+    },
+    {
+     "left": "Update registers",
+     "right": "Close or revise the risk entry and the issue log, then capture lessons",
+     "lesson": "Close or update the risk entry, open or update the issue entry, and capture the lesson. These are TRACK documents the PM keeps current without board approval."
+    }
+   ],
+   "remember": "Identify → Analyze → Plan response → Monitor triggers → Occurs = Issue → Update both records (Risk → Analyze → Respond → Monitor → Issue)"
+  },
+  {
+   "id": "MT-030",
+   "theme": "flows",
+   "title": "Stakeholder and conflict flow, step by step",
+   "prompt": "Match each step of the stakeholder and conflict flow with what the project manager does at that step.",
+   "domain": "People",
+   "approach": "Mixed",
+   "keywords": [
+    "stakeholder",
+    "conflict",
+    "active listening",
+    "collaborate",
+    "problem solve",
+    "escalation",
+    "engagement",
+    "team charter"
+   ],
+   "pairs": [
+    {
+     "left": "Understand",
+     "right": "Listen first and learn each party's concerns, facts, and interests",
+     "lesson": "Her golden rule: collaborate before escalating, and that starts with talking to the person. Use active listening, paraphrase, ask clarifying questions and acknowledge emotions before proposing any fix."
+    },
+    {
+     "left": "Assess",
+     "right": "Judge the effect on scope, schedule, relationships and project goals",
+     "lesson": "Check the stakeholder register, engagement matrix and team charter. Is this a real project impact? Remember personality is the least common source of conflict."
+    },
+    {
+     "left": "Collaborate",
+     "right": "Bring the people involved together to work out a shared solution",
+     "lesson": "Collaborate/problem solve is PMI's default win-win mode. The PM facilitates while the people who own the problem help solve it, which builds commitment."
+    },
+    {
+     "left": "Act",
+     "right": "Carry out the agreed action and update the relevant documents",
+     "lesson": "Agreed actions need an owner and a date. Update the issue log, stakeholder engagement plan or team charter so the agreement actually sticks."
+    },
+    {
+     "left": "Monitor",
+     "right": "Follow up to confirm the agreement holds and engagement improves",
+     "lesson": "Monitor Stakeholder Engagement compares current with desired engagement. One conversation is not a resolution; check back and adjust your approach."
+    },
+    {
+     "left": "Escalate",
+     "right": "Raise to sponsor or functional manager only when beyond PM authority",
+     "lesson": "Escalation is the last step, not the first. Trap answers send a team conflict straight to the sponsor or HR before the PM has tried to resolve it."
+    }
+   ],
+   "remember": "Understand → Assess → Collaborate → Act → Monitor → Escalate"
+  },
+  {
+   "id": "MT-031",
+   "theme": "flows",
+   "title": "Closing a project: the full checklist",
+   "prompt": "Match each step of the detailed closing flow with what happens at that step.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "close project",
+    "closure criteria",
+    "final report",
+    "acceptance",
+    "transition",
+    "close procurements",
+    "lessons learned",
+    "release resources",
+    "organizational process assets"
+   ],
+   "pairs": [
+    {
+     "left": "Confirm closure criteria",
+     "right": "Check that the exit conditions in the charter and plan are met",
+     "lesson": "Exit criteria come from the charter and project management plan. Even a project terminated early is closed formally, with the reason documented."
+    },
+    {
+     "left": "Obtain formal acceptance",
+     "right": "Customer or sponsor signs off that deliverables meet agreed criteria",
+     "lesson": "Accepted deliverables come from Validate Scope. Trap: passing internal testing means verified, not accepted. Acceptance always comes from the customer or sponsor."
+    },
+    {
+     "left": "Transition deliverables",
+     "right": "Hand the product to operations or the customer with support knowledge",
+     "lesson": "This is the Transfer step in her short flow. Plan training, documentation and support early; benefits usually appear after handover, owned by operations."
+    },
+    {
+     "left": "Close procurements",
+     "right": "Verify seller work, settle payments and claims, and end contracts",
+     "lesson": "Contracts are closed before the project is. Settle open claims, ideally by negotiation, and use a procurement audit to capture what worked with each seller."
+    },
+    {
+     "left": "Final report",
+     "right": "Summarize performance on scope, schedule, cost, quality and benefits",
+     "lesson": "The final report tells the project's story to the sponsor. Lessons learned are finalized and archived to organizational process assets at the same time."
+    },
+    {
+     "left": "Release resources",
+     "right": "Free people, equipment and facilities once their work is truly done",
+     "lesson": "Release after acceptance and knowledge capture, not before, because you need people for lessons learned. Recognizing the team fits Tuckman's Adjourning stage."
+    }
+   ],
+   "remember": "Confirm criteria → Accept → Transition → Close contracts → Final report → Lessons/archive → Release resources → Formal closure (hook: Confirm → Accept → Transfer → Close → Archive)"
+  },
+  {
+   "id": "MT-032",
+   "theme": "flows",
+   "title": "Procurement flow from need to closure",
+   "prompt": "Match each step of the procurement flow with what happens at that step.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "procurement",
+    "make-or-buy",
+    "statement of work",
+    "bidder conference",
+    "source selection criteria",
+    "control procurements",
+    "contract",
+    "claims"
+   ],
+   "pairs": [
+    {
+     "left": "Make-or-buy analysis",
+     "right": "Decide whether to do the work internally or buy it from outside",
+     "lesson": "Part of Plan Procurement Management. Weigh cost, capability, risk and confidentiality. The make-or-buy decision drives every later step in the procurement flow."
+    },
+    {
+     "left": "Procurement SOW",
+     "right": "Describe the purchased work in enough detail for sellers to price it",
+     "lesson": "The buyer writes it, derived from the scope baseline. A vague statement of work leads to poor bids and later claims. It goes out with the RFQ, RFP or IFB."
+    },
+    {
+     "left": "Bidder conference",
+     "right": "Give every prospective seller the same information and answers together",
+     "lesson": "The point is fairness and shared understanding before bids are due. Trap: answering one seller privately. Questions and answers are shared with all bidders."
+    },
+    {
+     "left": "Evaluate proposals",
+     "right": "Score responses against source selection criteria to choose a seller",
+     "lesson": "Criteria are set before responses arrive. Her trap: lowest price is not always best for complex work. RFQ suits a clear, price-only comparison."
+    },
+    {
+     "left": "Control Procurements",
+     "right": "Manage the seller relationship, performance, payments and contract changes",
+     "lesson": "The contract governs. Contract changes go through the contract change control system, and only the authorized buyer can change the contract. Negotiate before escalating."
+    },
+    {
+     "left": "Close Procurements",
+     "right": "Confirm accepted deliverables, resolve claims, and formally complete the agreement",
+     "lesson": "Settle claims (negotiation first), make final payments, archive records and run a procurement audit. In PMBOK 6 this closure sits inside Control Procurements."
+    }
+   ],
+   "remember": "Plan → Make-or-buy → SOW → Solicit → Bidder conference → Evaluate → Select → Contract → Control → Close (Define clearly • Select fairly • Monitor actively • Change formally • Close cleanly)"
+  },
+  {
+   "id": "MT-033",
+   "theme": "flows",
+   "title": "Compliance flow: the question at each step",
+   "prompt": "Match each step of the compliance flow with the question the project manager asks at that step.",
+   "domain": "Business Environment",
+   "approach": "Hybrid",
+   "keywords": [
+    "compliance",
+    "regulation",
+    "legal",
+    "governance",
+    "subject matter expert",
+    "mandatory",
+    "backlog",
+    "audit"
+   ],
+   "pairs": [
+    {
+     "left": "Confirm applicability",
+     "right": "Does this new law or standard actually cover our project?",
+     "lesson": "Not every regulation in the news touches your project, so check first. Once it does apply, her rule kicks in: mandatory beats optional."
+    },
+    {
+     "left": "Assess impact",
+     "right": "What will it change in our scope, schedule, cost and risk?",
+     "lesson": "Impact assessment shows the size of the work, not whether to do it. Compliance is never traded away because it is expensive or late."
+    },
+    {
+     "left": "Consult experts",
+     "right": "What do legal, compliance or specialist advisors say it requires?",
+     "lesson": "The PM is not the lawyer. Bring in legal, the compliance office or SMEs to interpret the requirement before deciding the response."
+    },
+    {
+     "left": "Determine required changes",
+     "right": "Which specific work, controls or requirements must we now add?",
+     "lesson": "Turn the rule into concrete project work: new requirements, controls, tests or documents. In agile, these items rise to the top of the backlog or join the definition of done."
+    },
+    {
+     "left": "Update plans/backlog",
+     "right": "Has the new work gone through change control into our approved documents?",
+     "lesson": "Even mandatory work goes through the change process so baselines and the RTM stay accurate. Mandatory means no debate on whether, not skipping governance."
+    },
+    {
+     "left": "Measure compliance",
+     "right": "Can we prove we meet it with evidence, testing or an audit?",
+     "lesson": "Compliance must be demonstrable. Keep evidence, run audits or checks, and keep monitoring because regulations change over time."
+    }
+   ],
+   "remember": "Requirement emerges → Confirm applicability → Assess impact → Consult experts → Determine changes → Update plans/backlog → Implement → Measure compliance (hook: Law → Applies? → Impact → Expert → Change → Comply)"
+  },
+  {
+   "id": "MT-034",
+   "theme": "flows",
+   "title": "Quality flow: plan, build, check, accept",
+   "prompt": "Match each step of the quality flow with what happens at that step.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "quality management plan",
+    "quality metrics",
+    "manage quality",
+    "control quality",
+    "verified deliverables",
+    "validate scope",
+    "defect repair",
+    "quality audit"
+   ],
+   "pairs": [
+    {
+     "left": "Plan Quality Management",
+     "right": "Decide which standards apply and how they will be met and checked",
+     "lesson": "Produces the quality management plan and metrics. Remember cost of quality: prevention is cheaper than inspection, and inspection is cheaper than defects reaching the customer."
+    },
+    {
+     "left": "Define quality metrics",
+     "right": "Set measurable targets such as defect rate or response time",
+     "lesson": "A metric states exactly what is measured and the tolerance. Without it, Control Quality has nothing objective to check against."
+    },
+    {
+     "left": "Manage Quality",
+     "right": "Audit processes and improve how work is done to prevent defects",
+     "lesson": "This is quality assurance: process-focused, using audits and process improvement. Trap: it does not inspect the deliverable itself, that is Control Quality."
+    },
+    {
+     "left": "Control Quality",
+     "right": "Inspect and test the outputs to produce verified deliverables",
+     "lesson": "Internal check of correctness, usually by the team or QC. Its output, verified deliverables, is the input to Validate Scope."
+    },
+    {
+     "left": "Correct defects",
+     "right": "Repair nonconforming items, find the root cause, and recheck them",
+     "lesson": "Defect repair is a type of change request. Use root cause analysis such as fishbone or five whys so the defect does not come back."
+    },
+    {
+     "left": "Validate Scope",
+     "right": "Customer or sponsor formally signs off on the verified work",
+     "lesson": "External acceptance. Order matters: Control Quality first (correct), then Validate Scope (accepted). Accepted deliverables later feed Close Project."
+    }
+   ],
+   "remember": "Plan Quality → Define metrics → Manage Quality → Control Quality → Correct defects → Verify → Validate Scope (hook: Plan quality → Build quality → Check quality → Accept quality)"
+  },
+  {
+   "id": "MT-035",
+   "theme": "flows",
+   "title": "Issue escalation path",
+   "prompt": "Match each step of the issue path with what happens at that step.",
+   "domain": "Process",
+   "approach": "Mixed",
+   "keywords": [
+    "issue log",
+    "issue",
+    "root cause",
+    "owner",
+    "escalation",
+    "threshold",
+    "sponsor",
+    "resolution"
+   ],
+   "pairs": [
+    {
+     "left": "Record in issue log",
+     "right": "Capture the problem, date raised and its impact as soon as it appears",
+     "lesson": "An issue is a problem happening now, so it goes in the issue log, not the risk register. The PM keeps this TRACK document current without board approval."
+    },
+    {
+     "left": "Analyze root cause",
+     "right": "Find why it happened and what it affects before fixing it",
+     "lesson": "Fixing symptoms lets the problem return. Use data, five whys or a fishbone, and check knock-on effects on scope, schedule and cost."
+    },
+    {
+     "left": "Assign an owner",
+     "right": "Give one named person accountability and a target date",
+     "lesson": "Every issue entry has a single owner and due date. Unowned issues are the ones that drift until they become crises."
+    },
+    {
+     "left": "Resolve within authority",
+     "right": "Team or PM applies a fix using their own decision rights",
+     "lesson": "Most issues are solved inside the team. In agile, the team owns its own blockers first and the scrum master removes what the team cannot."
+    },
+    {
+     "left": "Escalate beyond tolerance",
+     "right": "Raise to sponsor or governance when impact exceeds agreed thresholds",
+     "lesson": "Escalate only when the fix is outside your authority or the impact breaks agreed tolerances. Trap: escalating before analyzing or trying to resolve."
+    },
+    {
+     "left": "Close the log entry",
+     "right": "Confirm the fix worked, then record the outcome and lessons",
+     "lesson": "Monitor before closing: the fix must actually work. Then update the issue log and lessons learned register so others benefit."
+    }
+   ],
+   "remember": "Issue occurs → Log → Analyze → Assign owner → Resolve → Escalate only if beyond authority → Monitor → Close (hook: Log → Understand → Own → Fix → Watch → Close)"
+  },
+  {
+   "id": "MT-036",
+   "theme": "flows",
+   "title": "Benefits flow: from need to value",
+   "prompt": "Match each step of the benefits flow with what happens at that step.",
+   "domain": "Business Environment",
+   "approach": "Mixed",
+   "keywords": [
+    "benefits management plan",
+    "business case",
+    "benefit owner",
+    "outputs",
+    "outcomes",
+    "benefits realization",
+    "kpi",
+    "value"
+   ],
+   "pairs": [
+    {
+     "left": "Define expected benefits",
+     "right": "Business case states the measurable gains that justify the investment",
+     "lesson": "The business case is the WHY family. It is written before the charter and revisited at gates to check the investment is still worth it."
+    },
+    {
+     "left": "Benefits management plan",
+     "right": "A formal document setting when and how the gains will be realized and sustained",
+     "lesson": "Usually developed by the sponsor with the PM's help. It names targets, timing, metrics and owners, and often covers time after project closure."
+    },
+    {
+     "left": "Set measures and owners",
+     "right": "Assign a benefit owner and pick the KPI that proves each gain",
+     "lesson": "A benefit owner, often in the business or operations, is accountable for realizing it. Without a KPI, nobody can prove the benefit arrived."
+    },
+    {
+     "left": "Deliver outputs",
+     "right": "Project produces the deliverables, such as a new app or process",
+     "lesson": "Outputs are what you build. Trap: finishing deliverables on time does not by itself mean the project created value."
+    },
+    {
+     "left": "Create outcomes",
+     "right": "Users adopt the product and their capability or behavior changes",
+     "lesson": "Outcomes need adoption, so organizational change work such as training and reinforcement matters here. No adoption, no outcome."
+    },
+    {
+     "left": "Measure benefits",
+     "right": "Track KPIs, often after closure, to confirm the promised gains appeared",
+     "lesson": "Benefits often show up after handover, so ownership transitions to operations. Compare actual results with the business case targets."
+    }
+   ],
+   "remember": "Define benefits → Benefits plan → Measures/owners → Outputs → Outcomes → Measure benefits → Transition ownership (Output → Outcome → Benefit → Value)"
+  },
+  {
+   "id": "MT-037",
+   "theme": "people",
+   "title": "Tuckman in real life: read the moment",
+   "prompt": "Match each team moment with the stage it signals and the project manager's best move.",
+   "domain": "People",
+   "approach": "Mixed",
+   "keywords": [
+    "tuckman",
+    "forming",
+    "storming",
+    "norming",
+    "performing",
+    "adjourning",
+    "team development",
+    "team charter",
+    "ground rules"
+   ],
+   "pairs": [
+    {
+     "left": "Kickoff, roles still unclear",
+     "right": "Forming: give direction, clarify goals and roles, start the team charter",
+     "lesson": "Polite and uncertain is the signal. The PM is more directive here. Her first action for a new team: build or review the team charter together."
+    },
+    {
+     "left": "Members argue over technical approach",
+     "right": "Storming: coach, mediate and enforce ground rules rather than avoiding it",
+     "lesson": "Storming is necessary and normal; performance dips before it recovers. Trap answers replace a member or escalate. Coach through it and use collaborate/problem solve."
+    },
+    {
+     "left": "Team drafts its own working agreements",
+     "right": "Norming: reinforce the agreements and encourage shared ownership",
+     "lesson": "Working agreements emerging is the classic Norming sign. The PM steps back a little, supports, and reinforces collaboration and trust."
+    },
+    {
+     "left": "Team self-organizes and hits its goals",
+     "right": "Performing: delegate, empower, and focus on clearing impediments",
+     "lesson": "A high-performing team needs less direction, not more. Micromanaging now is a wrong answer; servant leadership and impediment removal fit best."
+    },
+    {
+     "left": "Final deliverable has been accepted",
+     "right": "Adjourning: recognize contributions, capture lessons, release people",
+     "lesson": "Celebrate and recognize, finalize lessons learned, and release resources properly. Adjourning was added later to Tuckman's original four stages."
+    },
+    {
+     "left": "Two new members join mid-project",
+     "right": "Expect a slide back to Storming: onboard deliberately, revisit the charter",
+     "lesson": "Teams can regress when membership changes. Re-run onboarding, revisit the team charter together, and expect a short performance dip."
+    }
+   ],
+   "remember": "Forming → Storming → Norming → Performing → Adjourning (direct → coach → support → delegate → celebrate; new members = possible reset)"
+  },
+  {
+   "id": "MT-038",
+   "theme": "people",
+   "title": "Motivation theories: putting them to work",
+   "prompt": "Match each motivation theory with how a project manager would apply it.",
+   "domain": "People",
+   "approach": "Mixed",
+   "keywords": [
+    "motivation",
+    "maslow",
+    "herzberg",
+    "mcclelland",
+    "theory x",
+    "theory y",
+    "vroom",
+    "expectancy",
+    "theory z",
+    "hygiene factors"
+   ],
+   "pairs": [
+    {
+     "left": "Maslow's hierarchy",
+     "right": "Find the lowest unmet need, such as belonging for an isolated remote member",
+     "lesson": "Lower needs come first: physiological, safety, social, esteem, self-actualization. Example: an isolated remote member has a social gap, so praise for esteem alone will not fix it."
+    },
+    {
+     "left": "Herzberg's two-factor theory",
+     "right": "Fix pay and conditions to stop complaints, then add growth to truly motivate",
+     "lesson": "Hygiene factors like salary and conditions only prevent dissatisfaction. Motivators like recognition, responsibility and growth create satisfaction. A raise alone rarely motivates for long."
+    },
+    {
+     "left": "McClelland's acquired needs",
+     "right": "Give achievers stretch goals, affiliators team roles, power-seekers leadership chances",
+     "lesson": "People have a dominant need for achievement, affiliation or power. Match the assignment to the person's dominant need instead of treating everyone the same."
+    },
+    {
+     "left": "McGregor's Theory X and Y",
+     "right": "Assume people want to do good work and give autonomy over tight control",
+     "lesson": "Theory X assumes people dislike work and need control; Theory Y assumes they are self-motivated. PMI and agile teams lean strongly toward Y."
+    },
+    {
+     "left": "Vroom's expectancy theory",
+     "right": "Make sure effort can lead to results and the reward is actually valued",
+     "lesson": "Effort → Performance → Reward. If people think the target is impossible or do not value the reward, motivation collapses. Check all three links."
+    },
+    {
+     "left": "Ouchi's Theory Z",
+     "right": "Build long-term commitment through group decisions and care for wellbeing",
+     "lesson": "Rooted in Japanese management: long-term employment, collective decision-making and concern for the whole person. Think loyalty and shared ownership over time."
+    }
+   ],
+   "remember": "Maslow = lowest need first • Herzberg = hygiene vs motivators • McClelland = achieve/affiliate/power • X/Y = control vs trust • Vroom = effort → performance → valued reward • Z = long-term + collective"
+  },
+  {
+   "id": "MT-039",
+   "theme": "people",
+   "title": "Conflict modes: when each one fits",
+   "prompt": "Match each conflict resolution mode with the situation where it is the right choice.",
+   "domain": "People",
+   "approach": "Mixed",
+   "keywords": [
+    "conflict",
+    "collaborate",
+    "problem solve",
+    "compromise",
+    "smooth",
+    "accommodate",
+    "force",
+    "withdraw",
+    "thomas-kilmann"
+   ],
+   "pairs": [
+    {
+     "left": "Collaborate/problem solve",
+     "right": "Time allows and both sides need a lasting win-win answer",
+     "lesson": "PMI's default and usually the best exam answer: confront the problem, address root cause, and build a solution both sides fully own."
+    },
+    {
+     "left": "Compromise/reconcile",
+     "right": "Deadline is tight and equal-power parties accept a partial win",
+     "lesson": "Both sides give something up, so it is partial or lose-lose. Trap: splitting a feature 50/50 is compromise, not collaboration."
+    },
+    {
+     "left": "Smooth/accommodate",
+     "right": "The relationship matters more than the small point in dispute",
+     "lesson": "Emphasizes agreement and downplays differences. It keeps harmony but is temporary, so the underlying issue may come back."
+    },
+    {
+     "left": "Force/direct",
+     "right": "A safety, legal or ethics emergency needs an immediate decision",
+     "lesson": "Win-lose and damaging if overused. Reserve it for urgent, non-negotiable situations where there is no time to collaborate."
+    },
+    {
+     "left": "Withdraw/avoid",
+     "right": "Emotions run high and a short cool-down will help everyone",
+     "lesson": "Generally the weakest choice. Acceptable only to let tempers cool or when the issue will resolve itself; never as a way to dodge a real problem."
+    }
+   ],
+   "remember": "Collaborate (time + both matter) > Compromise (deadline) > Smooth (relationship) > Force (emergency) > Withdraw (cool-down)"
+  },
+  {
+   "id": "MT-040",
+   "theme": "people",
+   "title": "Power types: spot them in action",
+   "prompt": "Match each type of power with the example that shows it in use.",
+   "domain": "People",
+   "approach": "Mixed",
+   "keywords": [
+    "power",
+    "legitimate",
+    "formal authority",
+    "reward",
+    "coercive",
+    "expert",
+    "referent",
+    "informational",
+    "influence"
+   ],
+   "pairs": [
+    {
+     "left": "Formal (legitimate)",
+     "right": "PM assigns tasks citing authority granted in the project charter",
+     "lesson": "Positional power from the role, granted by the charter or org structure. It disappears if the PM changes roles and is weak in functional or weak matrix organizations."
+    },
+    {
+     "left": "Reward",
+     "right": "PM offers a bonus or public recognition for hitting the milestone",
+     "lesson": "Positional power to give something people value. Works best when the reward is something the person actually values, which ties back to Vroom."
+    },
+    {
+     "left": "Coercive",
+     "right": "PM threatens a poor performance review if the deadline slips",
+     "lesson": "Power through fear or punishment. Her notes call it the worst and a last resort; it damages trust and team performance."
+    },
+    {
+     "left": "Expert",
+     "right": "Team follows the PM's advice because she has solved this problem before",
+     "lesson": "Earned power from knowledge and skill. PMI favors it, with referent, because it works even without formal authority in a matrix. Her notes rank it best."
+    },
+    {
+     "left": "Referent",
+     "right": "Team backs the PM because they respect and trust her personally",
+     "lesson": "Earned power from relationships, respect and charisma. Strong emotional intelligence builds it over time; her notes rate it second best."
+    },
+    {
+     "left": "Informational",
+     "right": "PM sways decisions because she controls key data and reports",
+     "lesson": "Power from controlling access to information. Not one of French and Raven's original five; added later by Raven. Sharing information openly is the PMI-friendly stance."
+    }
+   ],
+   "remember": "Granted: Formal • Reward • Coercive  |  Earned: Expert • Referent  |  Plus: Informational (controls the data)"
+  },
+  {
+   "id": "MT-041",
+   "theme": "people",
+   "title": "Leadership styles: what you would see",
+   "prompt": "Match each leadership style with the behavior you would observe from a leader using it.",
+   "domain": "People",
+   "approach": "Mixed",
+   "keywords": [
+    "leadership style",
+    "servant leadership",
+    "situational leadership",
+    "transformational",
+    "transactional",
+    "laissez-faire",
+    "directive",
+    "hersey-blanchard"
+   ],
+   "pairs": [
+    {
+     "left": "Servant",
+     "right": "Removes impediments and shields the team so it can deliver",
+     "lesson": "PMBOK 7's preferred style. Not passive: the leader actively unblocks, listens and empowers within boundaries. Total hands-off behavior is laissez-faire instead."
+    },
+    {
+     "left": "Situational",
+     "right": "Adjusts direction and support to each person's skill and commitment",
+     "lesson": "Hersey-Blanchard: directing, coaching, supporting, delegating. The same leader shifts style as the team or individual matures."
+    },
+    {
+     "left": "Transformational",
+     "right": "Inspires with a compelling vision and encourages fresh ideas",
+     "lesson": "Leads through purpose and inspiration, pushing innovation and change. Spot it when the leader rallies people around a bigger why."
+    },
+    {
+     "left": "Transactional",
+     "right": "Sets clear targets and ties rewards or consequences to results",
+     "lesson": "Management by exception and structured rewards; short-term focus. It can be right for clearly defined, routine work."
+    },
+    {
+     "left": "Laissez-faire",
+     "right": "Steps back fully and lets a mature, expert team decide",
+     "lesson": "Not automatically bad: right only for a mature, expert, self-sufficient team. Using it with a new team is a wrong answer."
+    },
+    {
+     "left": "Directive",
+     "right": "Tells people exactly what to do and how during a crisis",
+     "lesson": "Close, explicit direction. Fits a brand-new, inexperienced team or an emergency; overusing it with a capable team kills ownership."
+    }
+   ],
+   "remember": "Fit, not ranking: Servant (unblock) • Situational (adjust) • Transformational (inspire) • Transactional (reward) • Laissez-faire (step back) • Directive (tell)"
+  },
+  {
+   "id": "MT-042",
+   "theme": "people",
+   "title": "Emotional intelligence in everyday behavior",
+   "prompt": "Match each emotional intelligence component with the behavior that demonstrates it.",
+   "domain": "People",
+   "approach": "Mixed",
+   "keywords": [
+    "emotional intelligence",
+    "self-awareness",
+    "self-regulation",
+    "self-management",
+    "empathy",
+    "social skill",
+    "goleman",
+    "relationship management"
+   ],
+   "pairs": [
+    {
+     "left": "Self-awareness",
+     "right": "Notices her own rising frustration during a tense status meeting",
+     "lesson": "Recognizing your own emotions as they happen. Trap: noticing is self-awareness; acting to calm down is self-regulation."
+    },
+    {
+     "left": "Self-regulation",
+     "right": "Pauses and calms down before replying to a harsh email",
+     "lesson": "Also called self-management: controlling disruptive emotions and impulses. A PM who regulates first chooses a better conflict mode."
+    },
+    {
+     "left": "Motivation",
+     "right": "Stays driven by the goal itself despite repeated setbacks",
+     "lesson": "In Goleman's five-component model, inner drive and optimism beyond money or status. The four-domain model folds this into self-management."
+    },
+    {
+     "left": "Empathy",
+     "right": "Senses a quiet member is worried and gently asks about it",
+     "lesson": "Reading others' emotions; the four-domain model calls it social awareness. It powers active listening and spotting trouble early."
+    },
+    {
+     "left": "Social skill",
+     "right": "Builds rapport and guides two leads toward agreement",
+     "lesson": "Relationship management: using the other components to influence, resolve conflict and build teams. It is how referent power grows."
+    }
+   ],
+   "remember": "Self (notice → regulate → motivate) then Others (empathy → social skill): recognize before you regulate"
+  },
+  {
+   "id": "MT-043",
+   "theme": "people",
+   "title": "Power/interest grid: engagement strategy",
+   "prompt": "Match each stakeholder position on the power/interest grid with the engagement strategy for it.",
+   "domain": "People",
+   "approach": "Mixed",
+   "keywords": [
+    "power/interest grid",
+    "stakeholder",
+    "manage closely",
+    "keep satisfied",
+    "keep informed",
+    "monitor",
+    "stakeholder engagement plan",
+    "stakeholder register"
+   ],
+   "pairs": [
+    {
+     "left": "High power, high interest",
+     "right": "Manage closely: involve in key decisions and engage often",
+     "lesson": "Key players such as the sponsor or a major customer. Full partnership, frequent two-way engagement and early involvement in decisions."
+    },
+    {
+     "left": "High power, low interest",
+     "right": "Keep satisfied: short summaries, no detail overload",
+     "lesson": "Think a senior executive outside the project. Give enough attention to keep support; watch for interest rising, which moves them to manage closely."
+    },
+    {
+     "left": "Low power, high interest",
+     "right": "Keep informed: regular updates and genuinely listen to input",
+     "lesson": "End users or local community groups. Their input still matters and they can spot problems early; they can also influence those with power."
+    },
+    {
+     "left": "Low power, low interest",
+     "right": "Monitor: minimal effort, check periodically for changes",
+     "lesson": "Minimum effort is not zero effort. Every stakeholder gets baseline awareness, and positions can shift over time, so re-check the grid."
+    }
+   ],
+   "remember": "High/High = Manage closely • High/Low = Keep satisfied • Low/High = Keep informed • Low/Low = Monitor (know the ACTION, not just the box)"
+  },
+  {
+   "id": "MT-044",
+   "theme": "people",
+   "title": "Developing people: pick the right tool",
+   "prompt": "Match each people-development tool with the situation it fits best.",
+   "domain": "People",
+   "approach": "Mixed",
+   "keywords": [
+    "training",
+    "coaching",
+    "mentoring",
+    "feedback",
+    "recognition",
+    "skill gap",
+    "career development",
+    "performance"
+   ],
+   "pairs": [
+    {
+     "left": "Training",
+     "right": "Several members lack a skill the new platform requires",
+     "lesson": "Formal, structured learning for a skill gap, often for a group. Her rule: skill gap goes to training. Budget it in the resource plan."
+    },
+    {
+     "left": "Coaching",
+     "right": "A capable member's performance on one skill has slipped",
+     "lesson": "Short-term, structured, goal-focused, one-to-one. A coach need not share the person's field. Address performance privately first, escalate only if unresolved."
+    },
+    {
+     "left": "Mentoring",
+     "right": "A junior analyst wants guidance on their next five years",
+     "lesson": "Long-term, informal and career-focused, usually with a senior person who walked a similar path. ECO tasks call out acting on mentoring opportunities."
+    },
+    {
+     "left": "Feedback",
+     "right": "A member just ran a workshop that needs specific improvements",
+     "lesson": "Specific, timely comments on observed behavior, given privately when corrective. It is input for growth, not a formal development program."
+    },
+    {
+     "left": "Recognition",
+     "right": "A member's extra effort rescued last week's milestone",
+     "lesson": "Most effective when specific, timely and matched to what the person values. Public recognition suits some people; others prefer a private thank-you."
+    }
+   ],
+   "remember": "Skill gap → Training • Performance → Coaching • Career → Mentoring • Moment → Feedback • Win → Recognition"
+  },
+  {
+   "id": "MT-045",
+   "theme": "people",
+   "title": "Remote teams: trust and safety practices",
+   "prompt": "Match each practice with the problem it solves on a virtual team.",
+   "domain": "People",
+   "approach": "Agile",
+   "keywords": [
+    "virtual team",
+    "distributed team",
+    "psychological safety",
+    "team agreements",
+    "retrospective",
+    "time zones",
+    "trust",
+    "video conferencing"
+   ],
+   "pairs": [
+    {
+     "left": "Core overlap hours",
+     "right": "Time zones leave no shared window for live collaboration",
+     "lesson": "Agree a few hours when everyone is online for ceremonies and quick decisions. Her notes: establish working-hour overlap and time zone awareness."
+    },
+    {
+     "left": "Video-first meetings",
+     "right": "Tone and intent keep getting lost in long email threads",
+     "lesson": "Her order of richness: video beats audio, which beats email. Use richer channels for sensitive or complex conversations."
+    },
+    {
+     "left": "Virtual ice-breakers",
+     "right": "Remote members barely know each other as people",
+     "lesson": "Trust grows from personal connection. Short social moments help build the belonging Maslow describes for isolated members."
+    },
+    {
+     "left": "Visible team agreements",
+     "right": "Members clash over response times and meeting norms",
+     "lesson": "A team charter or working agreement, created by the team and posted where everyone sees it, settles norms before they become conflicts."
+    },
+    {
+     "left": "Blameless retrospectives",
+     "right": "Incident reviews keep turning into finger-pointing sessions",
+     "lesson": "Focus on the process, not the person. Psychological safety lets problems surface early, which PMI strongly favors."
+    },
+    {
+     "left": "Leader admits own mistakes",
+     "right": "Team believes the PM expects flawless work from everyone",
+     "lesson": "When the leader models candor, others feel safe to raise risks and errors. Servant leaders build safety by example, not by announcement."
+    }
+   ],
+   "remember": "Over-communicate • Overlap hours • Video > audio > email • Visible agreements • Blame the process, not the person"
+  },
+  {
+   "id": "MT-046",
+   "theme": "tools",
+   "title": "Quality tools: the question each answers",
+   "prompt": "Match each quality tool with the question it helps the team answer.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "quality tools",
+    "check sheet",
+    "flowchart",
+    "pareto chart",
+    "fishbone",
+    "control chart",
+    "scatter diagram",
+    "root cause",
+    "manage quality",
+    "control quality"
+   ],
+   "pairs": [
+    {
+     "left": "Check sheet",
+     "right": "How many times is each type of defect showing up?",
+     "lesson": "A simple tally form used while inspecting. It collects the raw counts that later feed a Pareto chart or histogram. Think: gather the data first."
+    },
+    {
+     "left": "Flowchart",
+     "right": "Where in our process steps could errors or delays creep in?",
+     "lesson": "Maps the sequence of steps, decisions, and handoffs. Use it to spot rework loops and weak handoffs before defects happen. Prevention mindset."
+    },
+    {
+     "left": "Pareto chart",
+     "right": "Which few causes are producing most of our problems?",
+     "lesson": "Bars sorted largest to smallest with a cumulative line, the 80/20 rule. It does not find causes; it ranks them so you fix the vital few first."
+    },
+    {
+     "left": "Fishbone diagram",
+     "right": "What are all the possible causes behind this one effect?",
+     "lesson": "Also called Ishikawa or cause-and-effect. The team brainstorms causes by category. Trap: Fishbone lists causes, Pareto prioritizes them, 5 Whys drills deeper."
+    },
+    {
+     "left": "Control chart",
+     "right": "Is this process stable and running within its limits over time?",
+     "lesson": "Shows data against upper and lower control limits. Seven points in a row on one side of the mean signals a problem even inside the limits."
+    },
+    {
+     "left": "Scatter diagram",
+     "right": "Do two variables move together, and how strongly?",
+     "lesson": "Plots one variable against another, such as training hours versus defects. A tight pattern suggests correlation, but correlation alone does not prove cause."
+    }
+   ],
+   "remember": "Count it (check sheet) → Map it (flowchart) → Brainstorm causes (fishbone) → Rank causes (Pareto) → Watch stability (control chart) → Test relationships (scatter)"
+  },
+  {
+   "id": "MT-047",
+   "theme": "tools",
+   "title": "Estimating techniques: when to reach for each",
+   "prompt": "Match each estimating technique with the situation where it is the best choice.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "estimating",
+    "analogous",
+    "parametric",
+    "three-point",
+    "pert",
+    "bottom-up",
+    "expert judgment",
+    "duration estimate",
+    "cost estimate",
+    "historical data"
+   ],
+   "pairs": [
+    {
+     "left": "Analogous",
+     "right": "Very early, little detail, and a similar past project exists",
+     "lesson": "Top-down, fastest, least accurate. Uses actual results from a similar past project. Exam clue: charter stage, sponsor wants a quick rough number."
+    },
+    {
+     "left": "Parametric",
+     "right": "Reliable unit rate and quantity data are available",
+     "lesson": "Rate times quantity, such as cost per square foot times square feet. Accuracy depends on how good the underlying rate is."
+    },
+    {
+     "left": "Three-point (PERT)",
+     "right": "High uncertainty and you want best and worst cases weighed",
+     "lesson": "Uses optimistic, most likely, and pessimistic values. Beta formula is (O + 4M + P) ÷ 6. Good when risk makes a single-point estimate misleading."
+    },
+    {
+     "left": "Bottom-up",
+     "right": "Work is fully decomposed and the highest accuracy is required",
+     "lesson": "Estimate each work package, then roll up. Slowest but most accurate. Needs a detailed WBS, so it is not possible very early."
+    },
+    {
+     "left": "Expert judgment",
+     "right": "Novel work where specialists' experience must fill data gaps",
+     "lesson": "Draws on people who have done similar work. Often combined with other techniques. Trap: it is a supplement, not an excuse to skip analysis."
+    }
+   ],
+   "remember": "Analogous = similar past project • Parametric = rate × quantity • PERT = (O + 4M + P) ÷ 6 • Bottom-up = add up the pieces • Expert = specialists fill gaps"
+  },
+  {
+   "id": "MT-048",
+   "theme": "tools",
+   "title": "Schedule fixes: spot the trigger words",
+   "prompt": "Match each schedule technique with the situation that calls for it.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "schedule compression",
+    "crashing",
+    "fast-tracking",
+    "resource leveling",
+    "resource smoothing",
+    "lead",
+    "lag",
+    "critical path",
+    "float",
+    "schedule network"
+   ],
+   "pairs": [
+    {
+     "left": "Crashing",
+     "right": "Date must come earlier and extra budget is available",
+     "lesson": "Add resources to critical-path activities to shorten them. Increases cost. Trap: crashing a non-critical activity does not shorten the project at all."
+    },
+    {
+     "left": "Fast-tracking",
+     "right": "Date must come earlier, no extra money, rework risk acceptable",
+     "lesson": "Run activities in parallel that were planned in sequence. No added cost, but more risk of rework. Works only where the logic is discretionary."
+    },
+    {
+     "left": "Resource leveling",
+     "right": "Shared specialist is overbooked and the end date may slip",
+     "lesson": "Adjusts start and finish dates to fix resource conflicts. It can change the critical path and extend the schedule. Use when resources are the binding limit."
+    },
+    {
+     "left": "Resource smoothing",
+     "right": "Workload is uneven but the finish date must not move",
+     "lesson": "Evens out resource peaks only within available float. The critical path and end date stay the same. Memory: smoothing stays inside float."
+    },
+    {
+     "left": "Lead",
+     "right": "Successor can safely start a few days before predecessor finishes",
+     "lesson": "Overlaps linked activities, for example testing starts three days before coding ends. Shown as negative time on the dependency. Adds some rework risk."
+    },
+    {
+     "left": "Lag",
+     "right": "A required waiting period must pass between linked activities",
+     "lesson": "Inserts delay on a dependency, like concrete curing two days before framing. It is not float; the wait is built into the logic."
+    }
+   ],
+   "remember": "Money available → crash • No money → fast-track • Resource conflict → level (date can move) • Uneven load → smooth (date fixed)"
+  },
+  {
+   "id": "MT-049",
+   "theme": "tools",
+   "title": "Dependencies and precedence logic",
+   "prompt": "Match each dependency type or precedence relationship with its defining rule.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "dependencies",
+    "mandatory",
+    "discretionary",
+    "external",
+    "finish-to-start",
+    "start-to-start",
+    "finish-to-finish",
+    "hard logic",
+    "soft logic",
+    "sequence activities"
+   ],
+   "pairs": [
+    {
+     "left": "Mandatory",
+     "right": "Hard logic required by physics, law, or contract; cannot be reordered",
+     "lesson": "You must pour the foundation before building walls. These links are never removed when fast-tracking because the sequence is unavoidable."
+    },
+    {
+     "left": "Discretionary",
+     "right": "Soft logic based on best practice; team may change the order",
+     "lesson": "Preferred sequence from experience. These are the links you can relax when fast-tracking. Document why they exist so nobody removes them blindly."
+    },
+    {
+     "left": "External",
+     "right": "Relies on parties outside the project, like regulators or vendors",
+     "lesson": "The project team does not control it, such as a permit approval. Track these closely as risks because the PM cannot simply speed them up."
+    },
+    {
+     "left": "Finish-to-start (FS)",
+     "right": "The next activity waits until the previous one is complete",
+     "lesson": "The most common relationship and the default in most network diagrams. Example: approve design, then begin construction."
+    },
+    {
+     "left": "Start-to-start (SS)",
+     "right": "The next activity may begin once the previous one has begun",
+     "lesson": "Both can run in parallel after the first starts, often with a lag. Example: editing starts two days after writing starts."
+    },
+    {
+     "left": "Finish-to-finish (FF)",
+     "right": "The next activity cannot be complete until the previous one is",
+     "lesson": "Endings are linked, not beginnings. Example: testing cannot finish until development finishes. Start-to-finish is the rare trap answer."
+    }
+   ],
+   "remember": "Mandatory = must • Discretionary = prefer • External = outside control • FS is the default; SF is the rare trap"
+  },
+  {
+   "id": "MT-050",
+   "theme": "tools",
+   "title": "EVM measures: the question behind each",
+   "prompt": "Match each earned value measure with the question it answers for the project manager.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "earned value",
+    "planned value",
+    "actual cost",
+    "schedule variance",
+    "cpi",
+    "spi",
+    "evm",
+    "cost performance",
+    "schedule performance",
+    "status report"
+   ],
+   "pairs": [
+    {
+     "left": "Planned value (PV)",
+     "right": "How much work, in dollars, did we plan to finish by now?",
+     "lesson": "The authorized budget for work scheduled to date. PV tells where I planned to be. Its total at the end equals BAC."
+    },
+    {
+     "left": "Earned value (EV)",
+     "right": "How much budgeted work, in dollars, have we truly completed?",
+     "lesson": "Value of work actually done, measured in budget terms. EV tells where I really am. Every EVM formula starts from EV."
+    },
+    {
+     "left": "Actual cost (AC)",
+     "right": "What have we really spent to complete the work so far?",
+     "lesson": "Actual money spent for the work performed. AC tells what the journey has cost. Never compare AC with PV directly; compare with EV."
+    },
+    {
+     "left": "Schedule variance (SV)",
+     "right": "How many dollars of work are we ahead of or behind?",
+     "lesson": "SV = EV − PV. Negative means behind schedule. It is measured in money, which surprises students, and returns to zero at project end."
+    },
+    {
+     "left": "Cost performance index (CPI)",
+     "right": "How much value are we earning for each dollar spent?",
+     "lesson": "CPI = EV ÷ AC. Below 1.0 means over budget. A CPI of 0.80 means only 80 cents of value for every dollar spent."
+    },
+    {
+     "left": "Schedule performance index (SPI)",
+     "right": "At what rate are we progressing compared with the plan?",
+     "lesson": "SPI = EV ÷ PV. Below 1.0 means behind schedule. Use with the critical path, because SPI alone can hide late critical work."
+    }
+   ],
+   "remember": "Plan it (PV) → Earn it (EV) → Spend it (AC) → Compare it (CV, SV, CPI, SPI) → Forecast it (EAC)"
+  },
+  {
+   "id": "MT-051",
+   "theme": "tools",
+   "title": "EVM forecasts: which formula when",
+   "prompt": "Match each forecasting formula with the situation in which you would use it.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "eac",
+    "etc",
+    "vac",
+    "tcpi",
+    "forecasting",
+    "estimate at completion",
+    "budget at completion",
+    "variance at completion",
+    "cpi",
+    "earned value"
+   ],
+   "pairs": [
+    {
+     "left": "EAC = BAC ÷ CPI",
+     "right": "Current cost efficiency is expected to continue for the remaining work",
+     "lesson": "The typical-variance formula. If today's overspending pattern will persist, scale the whole budget by CPI. Most common exam default when nothing else is said."
+    },
+    {
+     "left": "EAC = AC + (BAC−EV)",
+     "right": "Past variance was a one-time event; remaining work goes to plan",
+     "lesson": "The atypical formula. Spent money stays spent, and the rest of the work costs what was originally budgeted. Clue words: unusual, one-time, will not recur."
+    },
+    {
+     "left": "EAC = AC + (BAC−EV)/(CPI×SPI)",
+     "right": "Both cost and schedule pressure will shape the rest of the spending",
+     "lesson": "Used when a hard deadline means poor schedule performance will also drive cost, for example overtime to recover. Usually the most pessimistic forecast when both indices are below 1.0."
+    },
+    {
+     "left": "EAC = AC + bottom-up ETC",
+     "right": "Original estimates are no longer valid, so remaining work is re-estimated",
+     "lesson": "When assumptions were flawed, re-estimate what is left from the bottom up and add it to what has been spent. ETC itself means money still needed."
+    },
+    {
+     "left": "VAC = BAC − EAC",
+     "right": "Sponsor wants to know the expected budget gap at the finish",
+     "lesson": "Positive is good, negative means finishing over budget. If BAC is $1M and EAC is $1.2M, VAC is −$200K."
+    },
+    {
+     "left": "TCPI",
+     "right": "Asks what efficiency the remaining work needs to hit a target",
+     "lesson": "(BAC − EV) ÷ (BAC − AC) to hit BAC. Above 1.0 means you must work harder than before. Use EAC in the denominator once BAC is unrealistic."
+    }
+   ],
+   "remember": "BAC = original • EAC = forecast • ETC = what's left • VAC = final gap • TCPI = effort needed"
+  },
+  {
+   "id": "MT-052",
+   "theme": "tools",
+   "title": "Cost of quality: where the money goes",
+   "prompt": "Match each cost of quality category with an example of spending in it.",
+   "domain": "Process",
+   "approach": "Mixed",
+   "keywords": [
+    "cost of quality",
+    "prevention",
+    "appraisal",
+    "internal failure",
+    "external failure",
+    "conformance",
+    "nonconformance",
+    "rework",
+    "warranty",
+    "quality management"
+   ],
+   "pairs": [
+    {
+     "left": "Prevention costs",
+     "right": "Training the team and writing standards before any work begins",
+     "lesson": "Cost of conformance spent to stop defects from being created. PMI prefers prevention over inspection; more prevention usually lowers total failure cost."
+    },
+    {
+     "left": "Appraisal costs",
+     "right": "Testing, inspections, and audits to measure whether work conforms",
+     "lesson": "Also cost of conformance, spent to find defects. Inspection still matters to confirm results, but it is not the first quality mindset."
+    },
+    {
+     "left": "Internal failure costs",
+     "right": "Rework and scrap caught by the team before the customer sees it",
+     "lesson": "Cost of nonconformance found inside the project. Painful but cheaper than letting the defect escape to the customer."
+    },
+    {
+     "left": "External failure costs",
+     "right": "Warranty claims, recalls, and lost reputation after delivery",
+     "lesson": "Cost of nonconformance found by the customer. Usually the most damaging because it hits trust, safety, and compliance, not just money."
+    }
+   ],
+   "remember": "Conformance = Prevention + Appraisal • Nonconformance = Internal + External failure • Prevent before you inspect"
+  },
+  {
+   "id": "MT-053",
+   "theme": "tools",
+   "title": "Group techniques: read the clue",
+   "prompt": "Match each data-gathering or decision technique with the clue that points to it on the exam.",
+   "domain": "Process",
+   "approach": "Mixed",
+   "keywords": [
+    "brainstorming",
+    "nominal group technique",
+    "delphi",
+    "multicriteria decision analysis",
+    "decision tree",
+    "monte carlo",
+    "data gathering",
+    "decision making",
+    "emv",
+    "simulation"
+   ],
+   "pairs": [
+    {
+     "left": "Brainstorming",
+     "right": "Need lots of ideas quickly, quantity first, no judging yet",
+     "lesson": "Free-flowing idea generation in a group. Volume over structure. Often followed by an affinity diagram or nominal group voting to organize the ideas."
+    },
+    {
+     "left": "Nominal group technique",
+     "right": "Ideas generated silently, shared round-robin, then ranked by vote",
+     "lesson": "Brainstorming plus structured silent ranking. The voting step is the clue. Gives quieter members an equal voice."
+    },
+    {
+     "left": "Delphi technique",
+     "right": "Experts must stay anonymous so strong voices cannot sway others",
+     "lesson": "Anonymous questionnaires go out in multiple rounds through a facilitator until opinions converge. Trap: a focus group is face-to-face; Delphi is anonymous."
+    },
+    {
+     "left": "Multicriteria decision analysis",
+     "right": "Options are scored against weighted criteria in a matrix",
+     "lesson": "Use when choosing between vendors, designs, or approaches using several factors such as cost, risk, and quality, each with a weight."
+    },
+    {
+     "left": "Decision tree analysis",
+     "right": "Choosing between paths using probabilities and payoffs at each branch",
+     "lesson": "Calculates expected monetary value for each branch, then picks the best. Clue: a build-versus-buy choice with percentages and dollar outcomes."
+    },
+    {
+     "left": "Monte Carlo simulation",
+     "right": "Thousands of computer runs show odds of hitting the overall date",
+     "lesson": "A quantitative risk tool that models the whole project using ranges. Output is a probability curve, such as 80 percent confidence of finishing by June."
+    }
+   ],
+   "remember": "Ideas → Brainstorm • Rank → Nominal group • Anonymous → Delphi • Weighted options → Multicriteria • Branches + EMV → Decision tree • Whole-project odds → Monte Carlo"
+  },
+  {
+   "id": "MT-054",
+   "theme": "tools",
+   "title": "Communication methods: know the weak spot",
+   "prompt": "Match each communication method with its main weakness the project manager must manage.",
+   "domain": "People",
+   "approach": "Mixed",
+   "keywords": [
+    "communication methods",
+    "interactive",
+    "push",
+    "pull",
+    "osmotic",
+    "communications management plan",
+    "stakeholders",
+    "confirm understanding",
+    "email",
+    "knowledge repository"
+   ],
+   "pairs": [
+    {
+     "left": "Interactive",
+     "right": "Hard to schedule across many people and time zones; capture decisions afterward",
+     "lesson": "Meetings, calls, video conferences. Best for complex or sensitive topics because understanding is confirmed in real time. Record decisions in minutes."
+    },
+    {
+     "left": "Push",
+     "right": "Sent does not mean read or understood; confirm critical messages",
+     "lesson": "Emails, memos, reports sent to specific people. Exam trap: if confirmed understanding was required, push alone was the wrong choice."
+    },
+    {
+     "left": "Pull",
+     "right": "Recipients may never look, so it suits large audiences, not urgent news",
+     "lesson": "Intranets, wikis, knowledge bases that people visit at their own pace. Great for reference material and large groups, poor for must-know-now messages."
+    },
+    {
+     "left": "Osmotic",
+     "right": "Remote members miss what colocated teammates overhear",
+     "lesson": "Information absorbed by sitting together in an agile team room. Distributed teams must replace it with open video channels and team chat."
+    }
+   ],
+   "remember": "Must confirm it → Interactive • Must send it → Push • Many need it sometime → Pull • Overhear it → Osmotic"
+  },
+  {
+   "id": "MT-055",
+   "theme": "risk_procurement",
+   "title": "Threat responses: what changes afterward",
+   "prompt": "Match each threat response with what it changes about the risk.",
+   "domain": "Process",
+   "approach": "Mixed",
+   "keywords": [
+    "threat responses",
+    "avoid",
+    "transfer",
+    "mitigate",
+    "accept",
+    "escalate",
+    "risk owner",
+    "risk register",
+    "plan risk responses",
+    "contingency"
+   ],
+   "pairs": [
+    {
+     "left": "Avoid",
+     "right": "Probability drops to zero because the plan is changed to remove it",
+     "lesson": "Eliminate the threat by changing scope, schedule, or approach, like dropping an unproven technology. Only response that removes the threat completely."
+    },
+    {
+     "left": "Transfer",
+     "right": "Financial impact shifts to a third party; the risk still exists",
+     "lesson": "Insurance, warranties, fixed-price contracts. The buyer pays a premium, and the threat itself does not disappear. Memory: insurance = transfer."
+    },
+    {
+     "left": "Mitigate",
+     "right": "Chance or impact is lowered, but some exposure stays with the project",
+     "lesson": "Extra testing, prototypes, redundant suppliers. Proactive action taken now. Trap: a fallback plan used after it occurs is contingency, not mitigation."
+    },
+    {
+     "left": "Accept",
+     "right": "Nothing is reduced; the team acknowledges it and watches it",
+     "lesson": "Passive acceptance does nothing; active acceptance sets aside contingency reserve. Used when no cost-effective response exists or the threat is small."
+    },
+    {
+     "left": "Escalate",
+     "right": "Ownership moves above the project manager to a higher authority",
+     "lesson": "Use when the threat is outside project scope or beyond the PM's authority. Once accepted by the program or portfolio owner, it is no longer tracked by the project."
+    }
+   ],
+   "remember": "Threats = A-M-T-A + Escalate • Avoid = eliminate • Mitigate = reduce • Transfer = shift • Accept = acknowledge"
+  },
+  {
+   "id": "MT-056",
+   "theme": "risk_procurement",
+   "title": "Opportunity responses: example actions",
+   "prompt": "Match each opportunity response with an action that shows it.",
+   "domain": "Process",
+   "approach": "Mixed",
+   "keywords": [
+    "opportunity responses",
+    "exploit",
+    "share",
+    "enhance",
+    "accept",
+    "escalate",
+    "positive risk",
+    "risk register",
+    "plan risk responses",
+    "risk owner"
+   ],
+   "pairs": [
+    {
+     "left": "Exploit",
+     "right": "Assign the top engineer so the early-finish bonus is guaranteed",
+     "lesson": "Make the opportunity certain, raising probability to 100 percent. The opportunity version of avoid. Clue words: ensure, guarantee, lock in."
+    },
+    {
+     "left": "Share",
+     "right": "Form a joint venture with a partner to capture a new market",
+     "lesson": "Give part ownership to a third party better able to seize it. The opportunity version of transfer. Both sides gain from the upside."
+    },
+    {
+     "left": "Enhance",
+     "right": "Add training to raise the chance the team finishes early",
+     "lesson": "Increase probability or impact without making it certain. The opportunity version of mitigate. Clue words: increase, improve the odds."
+    },
+    {
+     "left": "Accept",
+     "right": "Welcome the windfall if it arrives, but take no special action",
+     "lesson": "Acknowledge the opportunity and do nothing proactive. Fine for small upsides or when pursuing them costs more than they return."
+    },
+    {
+     "left": "Escalate",
+     "right": "Pass it to the portfolio owner because it sits beyond the project",
+     "lesson": "The opportunity is real but outside project scope or PM authority. Hand it to the right level so the organization can still benefit."
+    }
+   ],
+   "remember": "Opportunities = E-E-S-A + Escalate • Exploit = make it happen • Enhance = increase • Share = partner • Accept = acknowledge"
+  },
+  {
+   "id": "MT-057",
+   "theme": "risk_procurement",
+   "title": "Risk, issue, assumption, or constraint?",
+   "prompt": "Match each term with the statement that shows it.",
+   "domain": "Process",
+   "approach": "Mixed",
+   "keywords": [
+    "risk",
+    "issue",
+    "assumption",
+    "constraint",
+    "trigger",
+    "risk register",
+    "issue log",
+    "assumption log",
+    "uncertainty",
+    "risk vs issue"
+   ],
+   "pairs": [
+    {
+     "left": "Risk",
+     "right": "The vendor might deliver the servers two weeks late",
+     "lesson": "Uncertain future event that could help or hurt. Clue words: may, might, could, potential. Lives in the risk register with an owner."
+    },
+    {
+     "left": "Issue",
+     "right": "The vendor's servers did not arrive on the agreed date",
+     "lesson": "It has already happened and needs action now. Lives in the issue log. Risk is the storm forecast; issue is standing in the rain."
+    },
+    {
+     "left": "Assumption",
+     "right": "We believe the vendor will deliver on time, though unproven",
+     "lesson": "Treated as true for planning without proof. Record it in the assumption log and validate it, because a false assumption becomes a risk."
+    },
+    {
+     "left": "Constraint",
+     "right": "Contract requires all servers installed before the fiscal year ends",
+     "lesson": "A fixed limit the project must work within, such as a date, budget, or regulation. Not uncertain, so it is not a risk."
+    },
+    {
+     "left": "Trigger",
+     "right": "The factory warns the vendor of a parts shortage this week",
+     "lesson": "An early warning sign that a risk is about to occur. The risk owner watches for it and launches the planned response."
+    }
+   ],
+   "remember": "Assumption (believed) → Risk (may happen) → Trigger (warning sign) → Issue (has happened) • Constraint = fixed limit"
+  },
+  {
+   "id": "MT-058",
+   "theme": "risk_procurement",
+   "title": "Reserves and risk tolerance terms",
+   "prompt": "Match each risk term with its meaning.",
+   "domain": "Process",
+   "approach": "Mixed",
+   "keywords": [
+    "residual risk",
+    "secondary risk",
+    "contingency reserve",
+    "management reserve",
+    "risk appetite",
+    "risk threshold",
+    "known unknowns",
+    "unknown unknowns",
+    "cost baseline",
+    "escalation"
+   ],
+   "pairs": [
+    {
+     "left": "Residual risk",
+     "right": "Exposure left over after the planned response is carried out",
+     "lesson": "Expected to remain even when the response works. Record it and accept it, often with contingency. Not a new risk, just what is left."
+    },
+    {
+     "left": "Secondary risk",
+     "right": "New exposure created by carrying out a response",
+     "lesson": "Example: hiring a second vendor to mitigate delay introduces coordination risk. Analyze it like any other risk and log it."
+    },
+    {
+     "left": "Contingency reserve",
+     "right": "Money or time for identified risks, controlled by the PM",
+     "lesson": "Covers known unknowns and is inside the cost baseline. The PM can use it per the risk management plan without a change request."
+    },
+    {
+     "left": "Management reserve",
+     "right": "Funds for unforeseen work, held outside the baseline by management",
+     "lesson": "Covers unknown unknowns. Using it requires management approval and a change request because it adds to the cost baseline."
+    },
+    {
+     "left": "Risk appetite",
+     "right": "How much uncertainty the organization will accept in pursuit of reward",
+     "lesson": "A broad, qualitative attitude set by leaders. A startup may have high appetite; a hospital usually low. It shapes risk thresholds."
+    },
+    {
+     "left": "Risk threshold",
+     "right": "Measurable exposure level above which a risk needs action or escalation",
+     "lesson": "Turns appetite into numbers, such as any risk over $50K goes to the sponsor. Defined in the risk management plan."
+    }
+   ],
+   "remember": "Residual = left over • Secondary = newly created • Contingency = known unknowns (PM) • Management reserve = unknown unknowns (management)"
+  },
+  {
+   "id": "MT-059",
+   "theme": "risk_procurement",
+   "title": "Risk analysis tools: what each produces",
+   "prompt": "Match each risk analysis tool with what it produces.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "qualitative risk analysis",
+    "quantitative risk analysis",
+    "probability and impact matrix",
+    "emv",
+    "monte carlo",
+    "tornado diagram",
+    "sensitivity analysis",
+    "risk data quality",
+    "prioritize risks",
+    "risk report"
+   ],
+   "pairs": [
+    {
+     "left": "Probability and impact matrix",
+     "right": "Places each risk in high, medium, or low priority zones",
+     "lesson": "Qualitative tool. Answers which risks matter most. Fast and subjective, done for nearly every project before any numeric modeling."
+    },
+    {
+     "left": "Risk data quality assessment",
+     "right": "A judgment of how reliable and complete each risk's information is",
+     "lesson": "Qualitative. If the data is weak, the ranking is weak. Clue: team doubts the accuracy of the risk information before prioritizing."
+    },
+    {
+     "left": "Risk urgency assessment",
+     "right": "Flags risks needing action soon because their window is short",
+     "lesson": "Qualitative. A risk can be medium score but urgent if its trigger is close. Urgency is one of the extra dimensions alongside probability and impact."
+    },
+    {
+     "left": "Expected monetary value (EMV)",
+     "right": "A probability-weighted dollar figure, such as 30% × $100K",
+     "lesson": "Quantitative. Positive for opportunities, negative for threats. It is an average expected value, not a guarantee."
+    },
+    {
+     "left": "Monte Carlo simulation",
+     "right": "Odds of meeting the overall date or budget from thousands of runs",
+     "lesson": "Quantitative and done on the whole project, not single risks. Output is an S-curve showing confidence levels."
+    },
+    {
+     "left": "Tornado diagram",
+     "right": "Bars ranking which risks swing the project result the most",
+     "lesson": "Quantitative sensitivity analysis. The widest bar on top has the biggest influence on the outcome. Focus responses there first."
+    }
+   ],
+   "remember": "Qualitative asks 'Which risks matter most?' → Quantitative asks 'How much could they affect us?' (quantitative is not always required)"
+  },
+  {
+   "id": "MT-060",
+   "theme": "risk_procurement",
+   "title": "Contract types: when each fits",
+   "prompt": "Match each contract type with the situation where it fits best.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "contract types",
+    "firm fixed price",
+    "fpif",
+    "fp-epa",
+    "cpff",
+    "cpaf",
+    "time and materials",
+    "procurement strategy",
+    "cost risk",
+    "buyer",
+    "seller"
+   ],
+   "pairs": [
+    {
+     "left": "Firm fixed price (FFP)",
+     "right": "Scope is clear and stable; buyer wants total price certainty",
+     "lesson": "Seller carries the most cost risk. Trap: vague scope under fixed price still creates disputes and change requests."
+    },
+    {
+     "left": "Fixed price incentive fee (FPIF)",
+     "right": "Defined scope, plus a bonus for hitting measurable targets",
+     "lesson": "Price is capped with a ceiling, and the seller earns extra for beating cost or performance goals. Risk shared but leaning to the seller."
+    },
+    {
+     "left": "Fixed price with EPA (FP-EPA)",
+     "right": "Multi-year deal exposed to inflation or commodity price swings",
+     "lesson": "Price adjusts by an agreed index such as a cost of steel index. Protects both sides over long periods."
+    },
+    {
+     "left": "Cost plus fixed fee (CPFF)",
+     "right": "Uncertain scope, and seller's profit is agreed upfront and never varies",
+     "lesson": "Buyer reimburses allowable costs plus a set fee. Buyer carries the cost risk; seller has little incentive to save."
+    },
+    {
+     "left": "Cost plus award fee (CPAF)",
+     "right": "Complex work where the buyer judges performance subjectively",
+     "lesson": "Buyer reimburses costs, and the award fee is decided by the buyer's assessment. The decision usually cannot be appealed."
+    },
+    {
+     "left": "Time and materials (T&M)",
+     "right": "Short, urgent staff help needed before scope can be defined",
+     "lesson": "Hourly rates plus materials. Buyer carries risk unless capped. Set a not-to-exceed limit and track hours tightly."
+    }
+   ],
+   "remember": "Fixed price = seller carries cost risk • Cost reimbursable = buyer carries cost risk • T&M = watch scope and hours"
+  },
+  {
+   "id": "MT-061",
+   "theme": "risk_procurement",
+   "title": "Seller selection: buyer's toolkit",
+   "prompt": "Match each seller selection term with its purpose.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "screening",
+    "source selection criteria",
+    "bidder conference",
+    "independent cost estimate",
+    "qualified sellers",
+    "negotiation",
+    "seller selection",
+    "procurement"
+   ],
+   "pairs": [
+    {
+     "left": "Screening system",
+     "right": "Pass-fail filter that drops vendors missing a minimum requirement",
+     "lesson": "Applied before detailed scoring, for example a required license or security clearance. Sellers who fail are dropped, so scoring effort goes only to viable proposals."
+    },
+    {
+     "left": "Bidder conference",
+     "right": "Meeting where all prospective sellers hear identical answers",
+     "lesson": "Ensures fairness: no seller gets inside information. Answers are shared in writing with everyone. Trap: never answer one seller privately."
+    },
+    {
+     "left": "Source selection criteria",
+     "right": "Approved yardsticks used to score and rank seller proposals",
+     "lesson": "Includes capability, technical approach, risk, price, and past performance. Lowest price is not always best value."
+    },
+    {
+     "left": "Independent cost estimate",
+     "right": "Buyer's own figure used to sanity-check the sellers' prices",
+     "lesson": "Prepared internally or by an outside estimator. A big gap with proposals suggests the SOW was unclear or sellers misunderstood."
+    },
+    {
+     "left": "Qualified sellers list",
+     "right": "Pre-screened vendors already vetted for capability",
+     "lesson": "Kept in organizational process assets. Speeds solicitation, but still requires fair, documented evaluation."
+    },
+    {
+     "left": "Negotiation",
+     "right": "Settles final terms and price with the preferred seller before signing",
+     "lesson": "Happens after evaluation and before award. The aim is a fair, clear agreement both sides understand, not squeezing the seller; agreed terms then go into the contract."
+    }
+   ],
+   "remember": "Screen (pass/fail) → Score (criteria) → Sanity-check (independent estimate) → Negotiate → Award • Bidder conference keeps it fair"
+  },
+  {
+   "id": "MT-062",
+   "theme": "risk_procurement",
+   "title": "Claims and disputes: the escalation ladder",
+   "prompt": "Match each step of handling a contract claim with what happens in it.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "claims",
+    "disputes",
+    "negotiation",
+    "alternative dispute resolution",
+    "adr",
+    "mediation",
+    "arbitration",
+    "litigation",
+    "contract",
+    "control procurements"
+   ],
+   "pairs": [
+    {
+     "left": "Notify in writing",
+     "right": "Contested change is formally raised with facts and supporting evidence",
+     "lesson": "Follow the notice clause in the contract. Document impact on cost, time, or scope. Undocumented complaints carry little weight."
+    },
+    {
+     "left": "Negotiate",
+     "right": "Buyer and seller try to settle the disagreement directly in good faith",
+     "lesson": "PMI's preferred first resolution. Review the contract, discuss, and document every communication. Most claims end here."
+    },
+    {
+     "left": "Escalate per contract",
+     "right": "Moves to higher management levels named in the agreement",
+     "lesson": "Follow the escalation path written in the contract, not personal relationships. Still before any outside party is involved."
+    },
+    {
+     "left": "Mediation",
+     "right": "Neutral third party helps both sides reach a voluntary agreement",
+     "lesson": "A form of alternative dispute resolution (ADR). The mediator suggests but cannot impose a decision."
+    },
+    {
+     "left": "Arbitration",
+     "right": "Neutral party hears both sides and issues a usually binding decision",
+     "lesson": "Also ADR, but more formal than mediation. Faster and private compared with court. Check whether the contract makes it binding."
+    },
+    {
+     "left": "Litigation",
+     "right": "Court case; the last resort after other paths fail",
+     "lesson": "Costly, slow, and damaging to relationships. PMP trap: never jump to suing or terminating first unless severity or contract requires it."
+    }
+   ],
+   "remember": "Notify → Negotiate → Escalate → ADR (mediation, arbitration) → Litigation • Contract first, document everything, negotiate before escalating"
+  },
+  {
+   "id": "MT-063",
+   "theme": "risk_procurement",
+   "title": "Clean procurement closure flow",
+   "prompt": "Match each step of closing a procurement with what happens in it.",
+   "domain": "Process",
+   "approach": "Predictive",
+   "keywords": [
+    "close procurement",
+    "procurement closure",
+    "formal acceptance",
+    "final payment",
+    "claims",
+    "records management",
+    "seller performance",
+    "lessons learned",
+    "contract",
+    "sow"
+   ],
+   "pairs": [
+    {
+     "left": "Verify",
+     "right": "Delivered work is checked against the SOW and acceptance criteria",
+     "lesson": "Inspection before acceptance. Do not rely on the seller's word that all is done; compare against the contract terms."
+    },
+    {
+     "left": "Accept",
+     "right": "Buyer formally signs off on the deliverables in writing",
+     "lesson": "Formal written acceptance from the authorized person. Without it the contract is not complete, regardless of what was shipped."
+    },
+    {
+     "left": "Resolve",
+     "right": "Defects, punch-list items, and open claims are settled or transferred",
+     "lesson": "Never close with unresolved obligations. Open claims are settled or formally transferred before the contract is closed."
+    },
+    {
+     "left": "Pay",
+     "right": "Final invoice is reviewed and the last payment is released",
+     "lesson": "Payment follows acceptance and invoice review, not before. Paying first removes the buyer's leverage."
+    },
+    {
+     "left": "Archive",
+     "right": "Contracts, amendments, claims, and invoices are filed for the record",
+     "lesson": "Procurement records may be needed for audits or future disputes. Part of organizational process assets."
+    },
+    {
+     "left": "Lessons",
+     "right": "Seller performance and procurement insights are captured for reuse",
+     "lesson": "Feeds the lessons learned register and future qualified seller lists. Procurement closure can happen before project closure."
+    }
+   ],
+   "remember": "Verify → Accept → Resolve → Pay → Archive → Lessons • Do not just file it away"
+  },
+  {
+   "id": "MT-064",
+   "theme": "business",
+   "title": "Governance: who decides what",
+   "prompt": "Match each governance role or body with the decision it typically owns.",
+   "domain": "Business Environment",
+   "approach": "Mixed",
+   "keywords": [
+    "governance",
+    "sponsor",
+    "steering committee",
+    "change control board",
+    "pmo",
+    "portfolio",
+    "decision rights",
+    "escalation",
+    "authority",
+    "project manager"
+   ],
+   "pairs": [
+    {
+     "left": "Sponsor",
+     "right": "Provides funding and owns the business case for this project",
+     "lesson": "The executive champion. Approves the charter and handles escalations beyond PM authority. If the business case weakens, consult the sponsor."
+    },
+    {
+     "left": "Steering committee",
+     "right": "Senior cross-department group giving direction at gates and trade-offs",
+     "lesson": "Brings together leaders from affected areas for major direction decisions and phase-gate reviews. Not involved in day-to-day work."
+    },
+    {
+     "left": "Change control board (CCB)",
+     "right": "Approves or rejects requested changes to the project baselines",
+     "lesson": "Formally chartered group named in the change management plan. The PM analyzes impact first; the CCB decides."
+    },
+    {
+     "left": "PMO",
+     "right": "Sets project standards, templates, and reporting across the organization",
+     "lesson": "Can be supportive, controlling, or directive. Provides governance, training, and oversight, but usually does not approve individual changes."
+    },
+    {
+     "left": "Portfolio board",
+     "right": "Selects, prioritizes, and funds projects based on strategic fit",
+     "lesson": "Decides which projects start, continue, or stop. Portfolio = strategy. A project losing alignment may be cancelled here."
+    },
+    {
+     "left": "Project manager",
+     "right": "Makes day-to-day decisions within delegated authority and tolerances",
+     "lesson": "Manages within the authority granted by the charter. Assess and act within limits; escalate only when outside that authority."
+    }
+   ],
+   "remember": "Governance = Authority • Ask: sponsor, steering committee, CCB, PMO, portfolio board, or PM? Check authority, then act within it"
+  },
+  {
+   "id": "MT-065",
+   "theme": "business",
+   "title": "External change and compliance: first moves",
+   "prompt": "Match each business environment situation with the project manager's best first response.",
+   "domain": "Business Environment",
+   "approach": "Mixed",
+   "keywords": [
+    "compliance",
+    "regulation",
+    "external environment",
+    "pestle",
+    "business case",
+    "change control",
+    "audit",
+    "market conditions",
+    "impact assessment",
+    "governance"
+   ],
+   "pairs": [
+    {
+     "left": "New regulation announced mid-project",
+     "right": "Assess impact with legal or compliance experts, then use change control",
+     "lesson": "Compliance is mandatory, but do not change the project instantly. Assess, consult the subject matter expert, route through change control, then update plans."
+    },
+    {
+     "left": "Team wants to skip safety documentation",
+     "right": "Refuse; complete the required records even if the schedule suffers",
+     "lesson": "Mandatory beats optional. Compliance cannot be traded for cost or schedule. You follow the rule, then capture the lesson."
+    },
+    {
+     "left": "Audit finds missing traceability records",
+     "right": "Correct the records, document the fix, and remove the root cause",
+     "lesson": "Compliance flow: assess, correct, document, prevent recurrence. Blaming the team or hiding the gap are both wrong answers."
+    },
+    {
+     "left": "Competitor launches a rival product",
+     "right": "Review the business case and benefits with the sponsor before continuing",
+     "lesson": "The market shift may change value. Do not continue just because the charter was approved; reassess alignment with the sponsor and governance."
+    },
+    {
+     "left": "Supplier prices jump from inflation",
+     "right": "Analyze cost impact, check contract terms, and inform the sponsor",
+     "lesson": "Economic change hits the budget. Look at the contract, such as an economic price adjustment clause, assess reserves, then raise a change request if needed."
+    },
+    {
+     "left": "Organization adopts new sustainability goals",
+     "right": "Work out how the goals apply and add them to planning criteria",
+     "lesson": "Not explicitly in scope does not mean the project can ignore organizational strategy. Assess and incorporate relevant criteria through proper channels."
+    }
+   ],
+   "remember": "Calculate/Assess → Interpret → Check governance/compliance → Decide → Monitor • Compliance: Assess → Consult SME → Correct → Document → Prevent recurrence"
+  },
+  {
+   "id": "MT-066",
+   "theme": "business",
+   "title": "Value chain: one CRM project traced",
+   "prompt": "For a company rolling out a new CRM system, match each value term with its example.",
+   "domain": "Business Environment",
+   "approach": "Mixed",
+   "keywords": [
+    "output",
+    "outcome",
+    "benefit",
+    "value",
+    "benefits owner",
+    "benefits management plan",
+    "benefits realization",
+    "business case",
+    "value delivery",
+    "adoption"
+   ],
+   "pairs": [
+    {
+     "left": "Output",
+     "right": "Configured system installed, tested, and handed to the sales team",
+     "lesson": "The tangible deliverable the project produces. Accepting an output does not guarantee anyone uses it or that value follows."
+    },
+    {
+     "left": "Outcome",
+     "right": "Sales reps now log every customer call in the new tool",
+     "lesson": "The change in behavior or capability that the output enables. Adoption is the bridge from output to outcome."
+    },
+    {
+     "left": "Benefit",
+     "right": "Customer retention rises eight percent within the first year",
+     "lesson": "Measurable gain from the outcome, often realized after project closure. Tracked against targets in the benefits management plan."
+    },
+    {
+     "left": "Value",
+     "right": "Organization is stronger overall: more revenue, loyalty, and strategic edge",
+     "lesson": "The overall worth to stakeholders, weighing benefits against cost and risk. Value is the reason the project exists."
+    },
+    {
+     "left": "Benefits owner",
+     "right": "Sales vice president who tracks retention gains after handover",
+     "lesson": "Usually a business or operational leader, not the PM. Keeps measuring benefits long after the project team has disbanded."
+    },
+    {
+     "left": "Benefits management plan",
+     "right": "Defines targets, timing, metrics, and who measures each gain",
+     "lesson": "Created early alongside the business case and used to judge whether expected value actually happened."
+    }
+   ],
+   "remember": "Output (we built it) → Outcome (they use it) → Benefit (it pays off) → Value (it was worth it)"
+  },
+  {
+   "id": "MT-067",
+   "theme": "business",
+   "title": "Financial measures: the decision rule",
+   "prompt": "Match each financial measure with the rule a selection committee applies to it.",
+   "domain": "Business Environment",
+   "approach": "Predictive",
+   "keywords": [
+    "npv",
+    "irr",
+    "bcr",
+    "payback period",
+    "opportunity cost",
+    "sunk cost",
+    "project selection",
+    "business case",
+    "roi",
+    "discount rate"
+   ],
+   "pairs": [
+    {
+     "left": "Net present value (NPV)",
+     "right": "Positive dollar figure today means the project creates value",
+     "lesson": "Discounts future cash flows to today's dollars. Higher positive NPV preferred. NPV already accounts for project life, so do not adjust for years again."
+    },
+    {
+     "left": "Internal rate of return (IRR)",
+     "right": "Pick the higher percentage, as long as it beats the hurdle rate",
+     "lesson": "The discount rate at which NPV equals zero. IRR is a percentage; NPV is money. When they conflict, NPV usually wins."
+    },
+    {
+     "left": "Benefit-cost ratio (BCR)",
+     "right": "Above 1.0 means benefits outweigh costs; higher is better",
+     "lesson": "Benefits divided by costs. A BCR of 1.5 returns $1.50 per dollar spent. Do not confuse with ROI, which uses net benefit."
+    },
+    {
+     "left": "Payback period",
+     "right": "Shorter is better, but cash after break-even is ignored",
+     "lesson": "Measures speed of recovering the investment, not total lifetime value. Useful when cash or risk is tight."
+    },
+    {
+     "left": "Opportunity cost",
+     "right": "Value of the best alternative given up by choosing this one",
+     "lesson": "If you pick project A worth $500K over project B worth $400K, the opportunity cost is $400K."
+    },
+    {
+     "left": "Sunk cost",
+     "right": "Ignore it; money already spent should not drive future choices",
+     "lesson": "Gone money. The trap is continuing a failing project because so much has been spent. Evaluate future value instead."
+    }
+   ],
+   "remember": "ROI = Return • NPV = Value • IRR = Rate • Payback = Time • Opportunity cost = Lost alternative • Sunk cost = Gone money"
+  },
+  {
+   "id": "MT-068",
+   "theme": "business",
+   "title": "Change models: what each focuses on",
+   "prompt": "Match each organizational change model with what it focuses on.",
+   "domain": "Business Environment",
+   "approach": "Mixed",
+   "keywords": [
+    "organizational change",
+    "adkar",
+    "kotter",
+    "satir",
+    "transition model",
+    "bridges",
+    "lewin",
+    "adoption",
+    "resistance",
+    "change management"
+   ],
+   "pairs": [
+    {
+     "left": "ADKAR",
+     "right": "One person at a time builds understanding, willingness, skill, and lasting habit",
+     "lesson": "Prosci's model focuses on one person at a time. Find the first blocked step: training will not help someone who lacks desire."
+    },
+    {
+     "left": "Kotter's 8-step process",
+     "right": "Leaders build urgency and a coalition, then anchor change in culture",
+     "lesson": "Organization-wide, top-down sequence: urgency, coalition, vision, communicate, remove obstacles, quick wins, build on change, anchor it."
+    },
+    {
+     "left": "Satir change model",
+     "right": "Performance dips into chaos after a foreign element, then recovers higher",
+     "lesson": "Late status quo, foreign element, chaos, transforming idea, practice and integration, new status quo. Expect the productivity dip; it is normal, not a sign of failure."
+    },
+    {
+     "left": "Bridges' transition model",
+     "right": "People pass through an ending, a neutral zone, then a new beginning",
+     "lesson": "Separates the external change from the internal psychological transition. Leaders must help people let go before they can embrace the new."
+    },
+    {
+     "left": "Lewin's three-stage model",
+     "right": "Unfreeze the current state, make the change, refreeze it as the norm",
+     "lesson": "Simple and classic. The refreeze stage is why reinforcement matters; without it people slide back to old habits."
+    }
+   ],
+   "remember": "ADKAR = the individual • Kotter = the organization's leaders • Satir = the performance curve • Bridges = the emotional transition • Lewin = unfreeze → change → refreeze"
+  },
+  {
+   "id": "MT-069",
+   "theme": "business",
+   "title": "Org structures: who controls the team",
+   "prompt": "Match each organizational structure with who controls the project's resources and budget.",
+   "domain": "Business Environment",
+   "approach": "Predictive",
+   "keywords": [
+    "organizational structure",
+    "functional",
+    "weak matrix",
+    "balanced matrix",
+    "strong matrix",
+    "projectized",
+    "functional manager",
+    "pm authority",
+    "resource availability",
+    "budget control"
+   ],
+   "pairs": [
+    {
+     "left": "Functional",
+     "right": "Work stays inside one department, whose head controls people and budget",
+     "lesson": "Team members report to their department head and project work is done within that department. The PM role, if any, is part-time with little or no authority."
+    },
+    {
+     "left": "Weak matrix",
+     "right": "Cross-department team; functional managers keep the budget, PM mostly coordinates",
+     "lesson": "PM has low authority, often acting part-time as an expediter or coordinator. Resource conflicts go to the functional manager first."
+    },
+    {
+     "left": "Balanced matrix",
+     "right": "PM and department managers share control of budget and people",
+     "lesson": "Power shared, so negotiation is constant. Two-boss situations are common; agree on priorities early."
+    },
+    {
+     "left": "Strong matrix",
+     "right": "Full-time PM controls most of the budget; staff still have home departments",
+     "lesson": "PM authority is moderate to high and often sits in a PMO. Team members return to their departments after the project."
+    },
+    {
+     "left": "Projectized",
+     "right": "PM controls budget and a dedicated full-time team with no home department",
+     "lesson": "PM has high to almost total authority. Team may have nowhere to go when the project ends, so plan release carefully."
+    }
+   ],
+   "remember": "Functional → Weak → Balanced → Strong → Projectized • PM power grows left to right; functional manager power shrinks"
+  },
+  {
+   "id": "MT-070",
+   "theme": "business",
+   "title": "Life cycles: choose by the clue",
+   "prompt": "Match each development life cycle with the situation that best calls for it.",
+   "domain": "Process",
+   "approach": "Mixed",
+   "keywords": [
+    "life cycle",
+    "predictive",
+    "iterative",
+    "incremental",
+    "adaptive",
+    "hybrid",
+    "development approach",
+    "tailoring",
+    "requirements stability",
+    "feedback"
+   ],
+   "pairs": [
+    {
+     "left": "Predictive",
+     "right": "Requirements are stable and well known, and change is costly",
+     "lesson": "Plan upfront, control to the baseline. Example: building a bridge to a fixed regulatory design. Know it and control it."
+    },
+    {
+     "left": "Iterative",
+     "right": "Solution is unclear, so the same prototype is refined through repeated cycles",
+     "lesson": "Improve the same thing until it is right. Iterative remodels the same kitchen. Focus is learning and refinement, not early delivery."
+    },
+    {
+     "left": "Incremental",
+     "right": "Customer wants usable pieces early, each adding to what already works",
+     "lesson": "Add usable parts in sequence. Incremental adds one room at a time. Clue: new working features delivered regularly."
+    },
+    {
+     "left": "Adaptive",
+     "right": "Needs keep changing, and frequent customer feedback steers each cycle",
+     "lesson": "Agile approaches combine iterative and incremental with ongoing feedback. Learn and adapt. Clue: high uncertainty and evolving requirements."
+    },
+    {
+     "left": "Hybrid",
+     "right": "Some parts are fixed and regulated while others are uncertain and evolving",
+     "lesson": "Intentionally blend approaches by need, such as predictive hardware with adaptive software. Not a default 50/50 compromise; it must be justified."
+    }
+   ],
+   "remember": "Stable = Predictive • Refine = Iterative • Add parts = Incremental • Changing = Adaptive • Mixed = Hybrid"
+  },
+  {
+   "id": "MT-071",
+   "theme": "business",
+   "title": "EEF or OPA: sort the example",
+   "prompt": "Match each example with the explanation of whether it is an EEF or an OPA and why.",
+   "domain": "Business Environment",
+   "approach": "Mixed",
+   "keywords": [
+    "eef",
+    "opa",
+    "enterprise environmental factors",
+    "organizational process assets",
+    "templates",
+    "lessons learned",
+    "regulations",
+    "organizational culture",
+    "historical information",
+    "inputs"
+   ],
+   "pairs": [
+    {
+     "left": "Government safety regulation",
+     "right": "EEF: an outside legal rule the project must obey",
+     "lesson": "Enterprise environmental factors are conditions not under the team's control. Fast test: government regulation? EEF."
+    },
+    {
+     "left": "Company risk register template",
+     "right": "OPA: a reusable form from the organization's process library",
+     "lesson": "Organizational process assets are the company's own plans, processes, and knowledge. Fast test: company template? OPA."
+    },
+    {
+     "left": "Organizational culture",
+     "right": "EEF: internal climate and values shaping how work gets done",
+     "lesson": "EEFs can be internal too. Culture, structure, and governance style are internal EEFs, not process assets."
+    },
+    {
+     "left": "Lessons learned repository",
+     "right": "OPA: stored knowledge from past projects ready for reuse",
+     "lesson": "Historical information and lessons learned are part of the corporate knowledge base. Check it during planning, update it during closure."
+    },
+    {
+     "left": "Market conditions",
+     "right": "EEF: external economic situation affecting cost, demand, and suppliers",
+     "lesson": "External EEF. Competition, pricing, and supplier availability influence the project, but the PM cannot change them."
+    },
+    {
+     "left": "Change control procedure",
+     "right": "OPA: a defined company process for handling requested modifications",
+     "lesson": "Policies and procedures are OPAs. The project follows and may tailor them, and can suggest improvements for future projects."
+    }
+   ],
+   "remember": "EEF = the environment you operate within • OPA = the organization's own knowledge and processes • Regulation → EEF • Template → OPA"
+  },
+  {
+   "id": "MT-072",
+   "theme": "business",
+   "title": "Responsible AI and sustainability: PM actions",
+   "prompt": "Match each AI or sustainability concern with what the project manager should do about it.",
+   "domain": "Business Environment",
+   "approach": "Mixed",
+   "keywords": [
+    "responsible ai",
+    "hallucination",
+    "bias",
+    "model drift",
+    "data privacy",
+    "human oversight",
+    "sustainability",
+    "greenwashing",
+    "lifecycle cost",
+    "esg"
+   ],
+   "pairs": [
+    {
+     "left": "AI hallucination",
+     "right": "Validate AI-generated facts against trusted sources before anyone uses them",
+     "lesson": "Hallucinations sound plausible but are wrong. AI can draft and recommend; humans check and stay accountable for what goes out."
+    },
+    {
+     "left": "Algorithmic bias",
+     "right": "Review outputs for unfair patterns and test with diverse data",
+     "lesson": "Bias is systematic unfairness in data or decisions. Ignoring it because output is fast is a classic wrong answer."
+    },
+    {
+     "left": "Model drift",
+     "right": "Monitor accuracy over time and retrain when real data shifts",
+     "lesson": "A model that worked at launch can degrade as conditions change. Assign ownership for ongoing monitoring after handover."
+    },
+    {
+     "left": "Confidential data in prompts",
+     "right": "Use only approved tools and remove sensitive information first",
+     "lesson": "Protect data first. Pasting client or personal data into an unapproved public tool breaks privacy and security policies."
+    },
+    {
+     "left": "Greenwashing",
+     "right": "Back every environmental claim with measured, verifiable evidence",
+     "lesson": "Overstating green credentials damages trust and can breach regulations. ESG reporting needs real data, not marketing language."
+    },
+    {
+     "left": "Lifecycle impact",
+     "right": "Compare total long-term cost, waste, and energy, not just purchase price",
+     "lesson": "Sustainability is environmental, social, and economic. A cheaper option that wastes energy and breaks often may fail every dimension."
+    }
+   ],
+   "remember": "AI: Protect data → Validate output → Human decides • Sustainability: Evaluate lifecycle impact → Balance value, cost, risk → Think long term"
+  }
+ ]
+}
