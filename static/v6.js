@@ -1130,3 +1130,26 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
   if(typeof showView==='function'){const o=window.showView;window.showView=function(){const r=o.apply(this,arguments);sync();return r}}
   sync();
 })();
+
+/* ---------- v7.2: Diagrams — finished ones stay reachable ---------- */
+(function(){
+  if(typeof renderDiagrams!=='function')return;const o=window.renderDiagrams;
+  window.renderDiagrams=async function(){
+    const r=await o.apply(this,arguments);
+    try{
+      const grid=document.getElementById('diagramGrid'),empty=grid&&grid.querySelector('.empty-state');
+      if(empty&&state.diagramMode!=='all'){
+        const dom=document.getElementById('diagramDomainSelect')?.value||'';
+        const inDom=(state.diagrams||[]).filter(d=>!dom||d.domain===dom);
+        const done=inDom.filter(d=>['reviewed','mastered'].includes(d.studyStatus)).length;
+        if(inDom.length){
+          empty.innerHTML=state.diagramMode==='study'&&done===inDom.length
+            ?`<h3>All ${inDom.length} ${dom?dom+' ':''}diagrams studied ✓</h3><p>Nothing new is waiting here. You can look at them again any time.</p><button type="button" class="primary" data-diagram-all>View these diagrams again →</button>`
+            :`<h3>Nothing marked for review.</h3><p>${inDom.length} ${dom?dom+' ':''}diagrams are available.</p><button type="button" class="primary" data-diagram-all>View all ${inDom.length} diagrams →</button>`;
+          empty.querySelector('[data-diagram-all]').onclick=()=>document.querySelector('[data-diagram-mode="all"]')?.click();
+        }
+      }
+    }catch(e){}
+    return r;
+  };
+})();
