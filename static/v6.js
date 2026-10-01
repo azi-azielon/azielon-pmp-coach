@@ -211,8 +211,15 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
     diagram:{list:'diagrams',btn:'diagramReviewed',idx:'diagramIndex',rows:()=>diagramRows(),render:()=>renderDiagrams(),next:'Next diagram'}};
   const curId={};
   function backToToday(){fromToday=false;state.dashboardFocus='today';showView('dashboard');setTimeout(()=>{state.dashboardFocus='today';if(typeof loadProgress==='function')loadProgress().then(()=>renderFeatureLaunchpad(state.lastProgress||{})).catch(()=>renderFeatureLaunchpad(state.lastProgress||{}))},0)}
-  function goNext(type){
-    if(fromToday)return backToToday();
+  async function goNext(type){
+    if(fromToday){
+      // From Today the system drives: finish this step, then open the next one.
+      const k=KIND[type],id=curId[type],item=(state[k.list]||[]).find(x=>String(x.id)===String(id));
+      if(item&&!['reviewed','mastered'].includes(item.studyStatus)){try{await api(`/api/study/items/${type}/${encodeURIComponent(id)}`,{method:'PUT',body:JSON.stringify({status:'reviewed'})});item.studyStatus='reviewed'}catch(e){alert(e.message||'Could not save. Try again.');return}}
+      const nxt=typeof v7NextTask==='function'?v7NextTask(`${type}:${id}`):null;
+      if(nxt){fromToday=false;return openTodayTask(nxt)}
+      return backToToday();
+    }
     const k=KIND[type],rows=k.rows(),pos=rows.findIndex(x=>String(x.id)===String(curId[type]));
     // A finished item drops out of the "to study" list, so the same position is already the next item.
     state[k.idx]=pos>=0?(pos+1)%Math.max(1,rows.length):Math.min(state[k.idx]||0,Math.max(0,rows.length-1));
@@ -228,7 +235,10 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
     done.textContent=isDone?'✓ Done':'Mark as done';done.disabled=isDone;
     done.title='Saves this as studied. It counts toward your progress and Today’s plan.';
     const nx=document.createElement('button');nx.type='button';nx.className='v6-study-next'+(isDone?' is-ready':'');
-    nx.textContent=(fromToday?'Back to Today':k.next)+' →';nx.onclick=()=>goNext(type);bar.appendChild(nx);
+    if(fromToday){const nt=typeof v7NextTask==='function'?v7NextTask(`${type}:${item?item.id:''}`):null;const lab=nt?({note:'Topic note',tricky:'Tricky words',diagram:'Diagram',practice:'Practice',exam:'Mock exam'}[nt.type]||'Next step'):'';
+      done.hidden=true;nx.classList.add('is-ready');nx.textContent=nt?`Done — next: ${lab} →`:'Done — back to Today →'}
+    else nx.textContent=k.next+' →';
+    nx.onclick=()=>{nx.disabled=true;Promise.resolve(goNext(type)).finally(()=>{nx.disabled=false})};bar.appendChild(nx);
   }
   if(typeof renderNotesSingle==='function'){const o=renderNotesSingle;window.renderNotesSingle=function(rows,i,iso){const r=o.apply(this,arguments);try{decorate('note',rows&&rows[state.noteIndex])}catch(e){}return r}}
   if(typeof renderTricky==='function'){const o=renderTricky;window.renderTricky=function(){const r=o.apply(this,arguments);try{decorate('tricky')}catch(e){}return r}}
@@ -700,9 +710,9 @@ function v6ExamDateBar(p){
   const d=prof.exam_date?new Date(prof.exam_date+'T12:00:00'):null;
   const nice=d?d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}):'Not set';
   const days=prof.study_days_per_week||5;
-  const summary=d?`<b>${esc(nice)}</b> · ${s.days} days left${s.hoursPerDay!=null?` · about <b>${s.hoursPerDay} h</b> a day on ${days} days a week`:''}`:'<b>Add your exam date</b> so the plan can pace itself.';
+  const summary=d?`<b>${esc(nice)}</b> · ${s.days} days left${s.hoursPerDay!=null?` · about <b>${typeof v7Hrs==='function'?v7Hrs(s.dailyMin):s.hoursPerDay+' h'}</b> a day, ${days} days a week`:''}`:'<b>Add your exam date</b> so the plan can pace itself.';
   return `<div class="v6-datebar" id="v6DateBar"><span class="v6-kicker">Exam date</span><span class="v6-datebar-text">${summary}</span><button type="button" class="v6-datebar-btn" data-datebar-edit>${d?'Change date':'Set date'}</button>
-    <form class="v6-datebar-form" hidden><label>Exam date <input type="date" name="d" required min="${todayDateKey()}" value="${esc(prof.exam_date||'')}"></label><label>Study days a week <select name="w">${[3,4,5,6,7].map(n=>`<option ${n==days?'selected':''}>${n}</option>`).join('')}</select></label><button type="submit" class="primary">Save &amp; re-plan</button><button type="button" class="secondary" data-datebar-cancel>Cancel</button><span class="v6-datebar-msg"></span></form></div>`;
+    <form class="v6-datebar-form" hidden><label>Exam date <input type="date" name="d" required min="${todayDateKey()}" value="${esc(prof.exam_date||'')}"></label><label>Study days a week <select name="w">${[3,4,5,6,7].map(n=>`<option ${n==days?'selected':''}>${n}</option>`).join('')}</select></label><label>Study time a day <select name="m">${[[60,'1 hour'],[90,'1.5 hours'],[120,'2 hours'],[150,'2.5 hours'],[180,'3 hours']].map(([v,t])=>`<option value="${v}" ${v==(s.capMin||120)?'selected':''}>${t}</option>`).join('')}</select></label><button type="submit" class="primary">Save &amp; re-plan</button><button type="button" class="secondary" data-datebar-cancel>Cancel</button><span class="v6-datebar-msg"></span></form></div>`;
 }
 function v6BindDateBar(root){
   const bar=(root||document).querySelector('#v6DateBar');if(!bar)return;
@@ -711,12 +721,12 @@ function v6BindDateBar(root){
   bar.querySelector('[data-datebar-cancel]').onclick=()=>{f.hidden=true;ed.hidden=false;bar.querySelector('.v6-datebar-text').hidden=false};
   f.onsubmit=async e=>{e.preventDefault();const msg=f.querySelector('.v6-datebar-msg'),btn=f.querySelector('[type=submit]');btn.disabled=true;msg.textContent='Saving…';
     const prof=(state.lastProgress||{}).study_profile||{};
-    try{await api('/api/coach/profile',{method:'PUT',body:JSON.stringify({exam_date:f.d.value,study_days_per_week:Number(f.w.value),weekly_hours:prof.weekly_hours||8,session_minutes:prof.session_minutes||45})});
+    try{await api('/api/coach/profile',{method:'PUT',body:JSON.stringify({exam_date:f.d.value,study_days_per_week:Number(f.w.value),weekly_hours:prof.weekly_hours||8,session_minutes:Number(f.m.value)||120})});
       await loadProgress();msg.textContent='';
       const s=v6Pace(state.lastProgress);
       if(typeof renderFeatureLaunchpad==='function'&&state.currentView==='dashboard')renderFeatureLaunchpad(state.lastProgress||{});
       if(state.currentView==='progress'&&typeof renderCompactProgressDashboard==='function')renderCompactProgressDashboard(state.lastProgress);
-      const nb=document.querySelector('#v6DateBar .v6-datebar-text');if(nb)nb.insertAdjacentHTML('beforeend',` <em class="v6-datebar-ok">✓ Plan updated${s.hoursPerDay!=null?`: ${s.hoursPerDay} h a day`:''}</em>`);
+      const nb=document.querySelector('#v6DateBar .v6-datebar-text');if(nb)nb.insertAdjacentHTML('beforeend',` <em class="v6-datebar-ok">✓ Plan updated</em>`);
     }catch(err){btn.disabled=false;msg.textContent=err.message||'Could not save.'}};
 }
 (function(){
@@ -828,9 +838,8 @@ function v6RenderReadyPanel(p){
   const draw=cc=>{
     const checks=v6ReadyChecks(p,cc),met=checks.filter(c=>c.ok).length;
     const s=typeof v6Pace==='function'?v6Pace(p):{};const weeks=s.days?Math.max(1,s.days/7):null;
-    const hoursLine=B?(()=>{const rem=Math.max(0,B.target-studied);const pct=Math.min(100,Math.round(studied/B.target*100));
-      return `<div class="v6-ready-hours"><div><span class="v6-kicker">Prep hours</span><p><b>~${studied} h</b> of about <b>${B.target} h</b> recommended for: ${B.label} (${B.min}–${B.max} h)${weeks&&rem?` · about ${Math.ceil(rem/weeks)} h a week to exam day`:''}</p><div class="v6-ready-bar"><i style="width:${pct}%"></i></div><small>Estimated from what you have finished in the app. <button type="button" class="v6-datebar-btn" data-bg-change>Change background</button></small></div></div>`})()
-      :`<div class="v6-ready-hours"><span class="v6-kicker">Prep hours</span><p>What is your project management background? We will set your target study hours.</p><div class="v6-bg-pick">${Object.entries(V6_BG).map(([k,v])=>`<button type="button" data-bg="${k}"><b>${v.label}</b><span>${v.min}–${v.max} hours</span></button>`).join('')}</div></div>`;
+    const hoursLine=B?`<div class="v6-ready-hours"><span class="v6-kicker">Total preparation</span><p>People with your background (${B.label}) usually prepare for <b>${B.min}–${B.max} hours in total</b>. That includes your PMP class, this study plan and your mock exams — not extra time on top.</p><small><button type="button" class="v6-datebar-btn" data-bg-change>Change background</button></small></div>`
+      :`<div class="v6-ready-hours"><span class="v6-kicker">Prep hours</span><p>What is your project management background? It tells you how much total preparation is typical.</p><div class="v6-bg-pick">${Object.entries(V6_BG).map(([k,v])=>`<button type="button" data-bg="${k}"><b>${v.label}</b><span>${v.min}–${v.max} hours</span></button>`).join('')}</div></div>`;
     box.innerHTML=`<div class="v6-ready-head"><div><span class="v6-kicker">Ready to book your exam?</span><h3>${met===5?'Yes — you meet all 5 checks. ✓':`${met} of 5 checks met`}</h3><p>Book the real exam when all five are green. These are Azielon coaching benchmarks; PMI does not publish a passing score.</p></div></div>${hoursLine}<ul class="v6-ready-list">${checks.map(c=>`<li class="${c.ok?'ok':''}"><span>${c.ok?'✓':''}</span><div><b>${c.title}</b><small>${c.detail}</small></div></li>`).join('')}</ul>`;
     box.querySelectorAll('[data-bg]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{await api('/api/coach/background',{method:'PUT',body:JSON.stringify({background:b.dataset.bg})});await loadProgress();v6RenderReadyPanel(state.lastProgress)}catch(e){b.disabled=false;alert(e.message||'Could not save')}});
     const ch=box.querySelector('[data-bg-change]');if(ch)ch.onclick=()=>{p={...p,study_profile:{...(p.study_profile||{}),background:null}};const hb=box.querySelector('.v6-ready-hours');hb.outerHTML=`<div class="v6-ready-hours"><span class="v6-kicker">Prep hours</span><p>What is your project management background?</p><div class="v6-bg-pick">${Object.entries(V6_BG).map(([k,v])=>`<button type="button" data-bg="${k}" class="${k===bg?'active':''}"><b>${v.label}</b><span>${v.min}–${v.max} hours</span></button>`).join('')}</div></div>`;box.querySelectorAll('[data-bg]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{await api('/api/coach/background',{method:'PUT',body:JSON.stringify({background:b.dataset.bg})});await loadProgress();v6RenderReadyPanel(state.lastProgress)}catch(e){b.disabled=false}})};
@@ -870,4 +879,254 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
     const f=state.conceptReviewFilter||'all';if(f!==lastFilter){page=0;lastFilter=f}
     const r=await o.apply(this,arguments);try{paint()}catch(e){}return r;
   };
+})();
+
+/* ================= v7: a calmer plan and a Today page that drives ================= */
+(function(){
+  const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const MIN={note:5,tricky:4,diagram:3,question:1.5,match:3,exam:240};
+  const EXAM_TARGET=5,EXAM_PASS=80,REVIEW_DAYS=5,Q_MIN=5,Q_MAX=12;
+  const has=f=>typeof hasFeature==='function'?hasFeature(f):true;
+  const tierFull=()=>{const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return (t==='full'||t.startsWith('full')||(typeof isStaff==='function'&&isStaff()))&&has('diagrams')};
+  const open=rows=>(rows||[]).filter(x=>['not_started','needs_review'].includes(x.studyStatus||'not_started'));
+  const half=h=>Math.max(0.5,Math.round(h*2)/2);
+  const hrs=m=>{const h=m/60;return h<1?`${Math.max(5,Math.round(m/5)*5)} min`:`${Math.round(h*2)/2} h`};
+  window.v7Hrs=hrs;
+
+  /* ---- Pace: a daily study time people can keep (default 2 h), exams counted separately ---- */
+  window.v6Pace=function(p){
+    p=p||state.lastProgress||{};const plan=p.adaptive_plan||{},prof=p.study_profile||{};
+    const days=plan.days_until_exam;const perWeek=Math.max(1,Math.min(7,Number(prof.study_days_per_week||plan.study_days_per_week||5)));
+    const capMin=[60,90,120,150,180].includes(Number(prof.session_minutes))?Number(prof.session_minutes):120;
+    const left={note:has('notes')?open(state.notes).length:0,tricky:has('tricky')?open(state.tricky).length:0,diagram:tierFull()?open(state.diagrams).length:0,
+      question:Math.max(0,Number(p.practice_bank_total||0)-Number(p.practice_unique_attempted||0))};
+    const hist=(p.exam_history||[]).filter(x=>x.total&&x.correct/x.total*100>=EXAM_PASS&&x.answered>=x.total*0.9&&(x.counts_for_target===undefined||x.counts_for_target));
+    const examsDone=Math.min(EXAM_TARGET,hist.length),examsLeft=EXAM_TARGET-examsDone;
+    const matchMin=has('match')?2*MIN.match:0;
+    const fixed=(left.note?MIN.note:0)+(left.tricky?MIN.tricky:0)+(left.diagram?MIN.diagram:0)+matchMin;
+    const out={capMin,blocksPerDay:1,perBlockQuestions:8,days,left,examsDone,examsLeft,examTarget:EXAM_TARGET,examPass:EXAM_PASS,perDay:{note:1,tricky:1,diagram:tierFull()?1:0,question:8},hoursPerDay:null,studyDays:null,learnDays:null,examEvery:null,status:'no-date',
+      mins:{note:left.note*MIN.note,tricky:left.tricky*MIN.tricky,diagram:left.diagram*MIN.diagram},examHours:{min3:Math.round(3*MIN.exam/60),all:Math.round(EXAM_TARGET*MIN.exam/60),each:MIN.exam/60}};
+    out.learningDone=!left.note&&!left.tricky&&!left.diagram;
+    if(days==null||days<0){out.dailyMin=fixed+8*MIN.question;return out}
+    const studyDays=Math.max(1,Math.floor(days*perWeek/7));
+    const review=Math.min(REVIEW_DAYS,Math.floor(studyDays/6));
+    const examDays=Math.min(examsLeft*2,Math.max(studyDays>1?1:0,Math.floor(studyDays*0.4)));
+    const learnDays=Math.min(studyDays,Math.max(1,Math.ceil(studyDays*0.6),studyDays-examDays-review));
+    const most=Math.max(left.note,left.tricky,left.diagram);
+    const needBlocks=Math.max(1,Math.ceil(most/learnDays));            // blocks a day to cover every topic
+    const maxBlocks=Math.max(1,Math.floor(capMin/(fixed+Q_MIN*MIN.question)));   // blocks that fit in the daily time
+    const blocks=Math.min(needBlocks,maxBlocks);
+    const q=Math.max(Q_MIN,Math.min(Q_MAX,Math.floor((capMin/blocks-fixed)/MIN.question)));
+    const dailyMin=blocks*(fixed+q*MIN.question);
+    out.blocksPerDay=blocks;out.perBlockQuestions=q;out.dailyMin=dailyMin;out.hoursPerDay=half(dailyMin/60);
+    out.studyDays=studyDays;out.learnDays=learnDays;
+    out.perDay={note:left.note?blocks:0,tricky:left.tricky?blocks:0,diagram:left.diagram?blocks:0,question:blocks*q};
+    out.coversAll=needBlocks<=maxBlocks;out.covered=Math.min(most,blocks*learnDays);out.most=most;
+    out.fullHours=half(needBlocks*(fixed+Q_MIN*MIN.question)/60);       // what covering everything would take
+    out.questionsPlanned=Math.min(left.question,blocks*q*studyDays);out.mins.question=out.questionsPlanned*MIN.question;
+    out.mins.total=out.mins.note+out.mins.tricky+out.mins.diagram+out.mins.question;
+    out.examEvery=examsLeft?Math.max(1,Math.floor(Math.max(1,studyDays-learnDays)/examsLeft)):null;
+    out.examsFit=Math.min(examsLeft,Math.max(1,studyDays-learnDays+Math.floor(learnDays/3)));
+    out.examPhase=out.learningDone||studyDays<=examDays+1;
+    out.status=out.coversAll?'comfortable':'partial';
+    return out;
+  };
+
+  /* ---- Blocks: topic → tricky words → diagram → practice, always in that order ---- */
+  const ORDER=['note','tricky','diagram','practice'];
+  window.v7Blocks=function(tasks){
+    const q={note:[],tricky:[],diagram:[],practice:[]},rest=[];
+    (tasks||[]).forEach(t=>{(q[t.type]||rest).push(t)});
+    ORDER.forEach(k=>q[k].sort((a,b)=>(taskState(b)==='done')-(taskState(a)==='done')));
+    const blocks=[];while(ORDER.some(k=>q[k].length)){const b=ORDER.map(k=>q[k].shift()).filter(Boolean);blocks.push(b)}
+    rest.forEach(t=>blocks.push([t]));return blocks;
+  };
+  window.v7NextTask=function(afterId){return (state.todayPlan||[]).find(t=>t.id!==afterId&&taskState(t)!=='done')||null};
+
+  function makeTask(type,item,n){
+    if(type==='note')return {id:`note:${item.id}`,type,itemId:item.id,label:'Read',title:item.title,detail:(item.keyRules||[])[0]||item.summary||'',view:'notes',reason:`Block ${n} · topic`};
+    if(type==='tricky')return {id:`tricky:${item.id}`,type,itemId:item.id,label:'Compare',title:`${item.left} vs ${item.right}`,detail:typeof trickyDecisionText==='function'?trickyDecisionText(item):'',view:'tricky',reason:`Block ${n} · tricky words`};
+    return {id:`diagram:${item.id}`,type,itemId:item.id,label:'Visualize',title:item.title,detail:item.whyItMatters||item.whatItIs||'',view:'diagrams',reason:`Block ${n} · diagram`};
+  }
+  function practiceTask(p,n,topics){const q=v6Pace(p).perBlockQuestions;const uid=`${todayDateKey()}:b${n}:${Date.now().toString(36).slice(-4)}`;
+    return {id:`practice:${uid}`,type:'practice',label:'Practice',title:`${q} questions${has('match')?' + 2 match sets':''}`,detail:topics.length?`On ${topics.join(' · ')}`:'Mixed questions to build coverage.',view:'practice',count:q,focus:'',domain:'',reason:`Block ${n} · practice`}}
+  function pick(rows,exclude,weak){const c=open(rows).filter(x=>!exclude.has(String(x.id)));if(weak){const w=c.find(x=>String(x.domain||'').toLowerCase()===weak.toLowerCase());if(w)return w}return c[0]||null}
+  function buildBlock(p,n,exclude){
+    const weak=p?.adaptive_plan?.weak_domains?.[0]?.domain||'';exclude=exclude||new Set();const t=[];
+    const note=has('notes')?pick(state.notes,exclude,weak):null,tr=has('tricky')?pick(state.tricky,exclude,''):null,dg=tierFull()?pick(state.diagrams,exclude,note?note.domain:weak):null;
+    if(note)t.push(makeTask('note',note,n));if(tr)t.push(makeTask('tricky',tr,n));if(dg)t.push(makeTask('diagram',dg,n));
+    t.push(practiceTask(p,n,t.map(x=>x.title)));
+    const pace=v6Pace(p);
+    if(n===1&&pace.examsLeft>0&&pace.examPhase){const ex=(p?.exam_cards||[]).find(x=>!x.completed);
+      if(ex)t.push({id:`exam:${ex.exam_code}:${todayDateKey()}`,type:'exam',label:'Exam',title:`${ex.exam_name||'Full mock exam'}`,detail:`Aim for ${pace.examPass}%+. Allow about 4 hours.`,view:'exams',examKind:ex.kind||'mock',reason:'Mock exam'})}
+    return t.map((x,i)=>({...x,sortOrder:(n-1)*10+i}));
+  }
+  async function ensureContent(){
+    const jobs=[];
+    if(has('notes')&&!(state.notes||[]).length&&typeof loadNotes==='function')jobs.push(loadNotes().catch(()=>{}));
+    if(has('tricky')&&!(state.tricky||[]).length)jobs.push(api('/api/tricky-words').then(r=>{state.tricky=r}).catch(()=>{}));
+    if(has('diagrams')&&!(state.diagrams||[]).length)jobs.push(api('/api/diagrams').then(r=>{state.diagrams=r}).catch(()=>{}));
+    if(jobs.length)await Promise.all(jobs);
+  }
+  async function importTasks(tasks){
+    await api('/api/study/daily-plan/import-local',{method:'POST',body:JSON.stringify({plans:[{plan_date:todayDateKey(),tasks:tasks.map(t=>({...t,status:'not_started'}))}]})});
+    const r=await api(`/api/study/daily-plan?plan_date=${encodeURIComponent(todayDateKey())}`);
+    state.todayPlan=(r.tasks||[]).map(hydrateDbTask).filter(Boolean);
+  }
+  // Every block gets its topic, tricky pair, diagram and practice — fill in whatever is missing.
+  async function healPlan(p){
+    const tasks=state.todayPlan||[];if(!tasks.length)return;
+    const cnt=k=>tasks.filter(t=>t.type===k).length;const n=Math.max(cnt('note'),cnt('tricky'),cnt('diagram'),cnt('practice'));
+    const used=new Set(tasks.map(t=>String(t.itemId||'')));const add=[];
+    const want={note:has('notes')?state.notes:null,tricky:has('tricky')?state.tricky:null,diagram:tierFull()?state.diagrams:null};
+    for(const k of ['note','tricky','diagram']){if(!want[k])continue;for(let i=cnt(k);i<n;i++){const it=pick(want[k],used,'');if(!it)break;used.add(String(it.id));add.push(makeTask(k,it,i+1))}}
+    for(let i=cnt('practice');i<n;i++)add.push(practiceTask(p,i+1,[]));
+    if(add.length){try{await importTasks(add)}catch(e){}}
+  }
+  if(typeof buildFreshTodayTasks==='function')window.buildFreshTodayTasks=function(p){return buildBlock(p,1)};
+  window.v7AddBlock=async function(p,force){
+    const blocks=v7Blocks(state.todayPlan||[]).filter(b=>b.some(t=>t.type==='practice'));const pace=v6Pace(p);
+    if(!force&&blocks.length>=pace.blocksPerDay)return false;
+    const used=new Set((state.todayPlan||[]).map(t=>String(t.itemId||'')));
+    const next=buildBlock(p,blocks.length+1,used).filter(t=>t.type!=='exam');
+    if(!next.some(t=>t.type!=='practice')&&!force)return false;
+    await importTasks(next);state.todayPlan=v7Blocks(state.todayPlan).flat();return true;
+  };
+  window.appendOneNextTodayTask=async function(p){return v7AddBlock(p,false)};
+  if(typeof loadAndRenderTodayPlan==='function'){
+    window.loadAndRenderTodayPlan=async function(p){
+      const host=document.getElementById('dashboardWorkspace');
+      try{
+        await ensureContent();
+        await syncDatabaseTodayPlan(p);
+        await healPlan(p);
+        state.todayPlan=v7Blocks(state.todayPlan||[]).flat();
+        const tasks=state.todayPlan;
+        if(tasks.length&&tasks.every(t=>taskState(t)==='done'))await v7AddBlock(p,false);
+        renderTodayPlanFromDb(p,state.todayPlan);
+      }catch(err){if(host)host.innerHTML=`<div class="workspace-empty"><b>Unable to load your study plan.</b><p>${esc(err.message||'Please try again.')}</p></div>`}
+    };
+  }
+
+  /* ---- Today: one step, one button ---- */
+  const T={note:{label:'Topic note',verb:'Read',cta:'Start reading'},tricky:{label:'Tricky words',verb:'Compare',cta:'Compare the terms'},diagram:{label:'Diagram',verb:'Study',cta:'Open the diagram'},practice:{label:'Practice',verb:'Practice',cta:'Start practice'},exam:{label:'Mock exam',verb:'Take',cta:'Start the exam'},review:{label:'Fix mistakes',verb:'Review',cta:'Review now'}};
+  const baseToday=window.renderTodayPlanFromDb;
+  window.renderTodayPlanFromDb=function(p,tasks){
+    tasks=tasks||[];baseToday(p,tasks);
+    const col=document.querySelector('#dashboardWorkspace .v6-home > .v6-col');if(!col)return;
+    const blocks=v7Blocks(tasks);const pace=v6Pace(p);
+    let bi=blocks.findIndex(b=>b.some(t=>taskState(t)!=='done'));const allDone=bi<0;if(allDone)bi=blocks.length-1;
+    const block=blocks[bi]||[];const next=block.find(t=>taskState(t)!=='done');
+    const studyBlocks=blocks.filter(b=>b.some(t=>t.type==='practice')).length;const totalBlocks=Math.max(pace.blocksPerDay||1,studyBlocks);
+    const doneBlocks=blocks.filter(b=>b.every(t=>taskState(t)==='done')).length;
+    const quiet=pace.hoursPerDay!=null?`<p class="v7-quiet">About <b>${hrs(pace.dailyMin)}</b> of study today · ${pace.days} days to your exam</p>`:'';
+    let html='';
+    if(!tasks.length){html=`<section class="v7-now"><span class="v6-kicker">Today</span><h2>Your plan is being prepared</h2><p>Open any section in the menu to start.</p></section>`}
+    else if(allDone){
+      html=`<section class="v7-now is-done"><span class="v6-kicker">Today</span><h2>You are done for today ✓</h2><p>${doneBlocks} study block${doneBlocks===1?'':'s'} finished. Come back tomorrow for the next one.</p><div class="v7-actions"><button type="button" class="secondary" data-v7-more>Do one more block →</button></div></section>${quiet}`;
+    }else{
+      const i=block.indexOf(next),meta=T[next.type]||{label:next.label||'Study',verb:'',cta:'Start'};const st=taskState(next);
+      const detail=next.type==='practice'?(()=>{const names=block.filter(t=>t.type!=='practice').map(t=>t.title);return names.length?`On ${names.join(' · ')}`:(next.detail||'')})():(next.detail||'');
+      const steps=block.map((t,k)=>{const d=taskState(t)==='done',cur=t===next;const m=T[t.type]||{label:t.label||'Step'};
+        return d?`<button type="button" class="v7-step is-done" data-today-open="${esc(t.id)}" title="Review: ${esc(t.title)}"><i>✓</i>${esc(m.label)}</button>`:`<span class="v7-step ${cur?'is-now':''}"><i>${k+1}</i>${esc(m.label)}</span>`}).join('<span class="v7-step-line" aria-hidden="true"></span>');
+      html=`<section class="v7-now"><span class="v6-kicker">Step ${i+1} of ${block.length}${totalBlocks>1?` · Block ${bi+1} of ${Math.max(totalBlocks,bi+1)}`:''}</span>
+        <h2>${esc(next.type==='practice'?`Practice: ${next.title}`:`${meta.verb}: ${next.title}`)}</h2>${detail?`<p>${esc(detail)}</p>`:''}
+        <div class="v7-actions"><button type="button" class="primary v7-go" data-today-open="${esc(next.id)}">${st==='in_progress'?'Continue':meta.cta} →</button></div>
+        <div class="v7-steps">${steps}</div></section>${quiet}`;
+    }
+    col.innerHTML=html;
+    if(typeof bindDashboardWorkspaceActions==='function')bindDashboardWorkspaceActions();
+    const more=col.querySelector('[data-v7-more]');if(more)more.onclick=async()=>{more.disabled=true;more.textContent='Adding…';try{const ok=await v7AddBlock(p,true);if(ok)renderTodayPlanFromDb(p,state.todayPlan);else{more.textContent='Nothing left to add ✓'}}catch(e){more.disabled=false;more.textContent='Do one more block →'}};
+  };
+
+  /* ---- My Progress: plan in plain hours, mock exams listed separately ---- */
+  function panel(p){
+    const box=document.getElementById('v6PacePanel');if(!box)return;const s=v6Pace(p);
+    const row=(label,left,min,unit)=>left?`<div><b>${hrs(min)}</b><span>${label}</span><small>${left} ${unit} left</small></div>`:`<div class="is-done"><b>✓</b><span>${label}</span><small>complete</small></div>`;
+    const bars=Array.from({length:s.examTarget},(_,i)=>`<i class="${i<s.examsDone?'on':''}"></i>`).join('');
+    const exams=`<div class="v7-exams"><span class="v6-kicker">Mock exams · planned separately</span><p>Allow about <b>${s.examHours.each} hours for each full mock exam</b>. Take at least 3 before your test (about ${s.examHours.min3} hours) and all ${s.examTarget} if you can (about ${s.examHours.all} hours). Aim for ${s.examPass}%+.</p><div class="v6-exam-bars">${bars}</div><small>${s.examsDone} of ${s.examTarget} at ${s.examPass}%+</small></div>`;
+    if(s.hoursPerDay==null){box.innerHTML=`<span class="v6-kicker">Your study plan</span><p>Add your exam date and the plan will pace itself — about ${hrs(s.dailyMin)} a day.</p>${exams}`;return}
+    const head=s.learningDone?'Topics complete — keep practicing':`About ${hrs(s.dailyMin)} a day`;
+    const sub=s.learningDone?`Practice a little each day and take your mock exams. ${s.days} days to your exam.`:s.coversAll?`That covers every topic before your exam, ${s.studyDays} study days away. One short block at a time.`:`At ${hrs(s.dailyMin)} a day you will cover ${s.covered} of ${s.most} topics before your exam. To cover them all, study about ${s.fullHours} h a day or move your exam date.`;
+    box.innerHTML=`<div class="v6-pace-head"><div><span class="v6-kicker">Your study plan</span><h3>${head}</h3><p>${sub}</p></div></div>
+      <div class="v6-pace-grid">${has('notes')?row('Topic notes',s.left.note,s.mins.note,'topics'):''}${has('tricky')?row('Tricky words',s.left.tricky,s.mins.tricky,'pairs'):''}${tierFull()?row('Diagrams',s.left.diagram,s.mins.diagram,'diagrams'):''}${row('Practice',s.questionsPlanned,s.mins.question,'questions')}<div class="v7-total"><b>${hrs(s.mins.total)}</b><span>Total study time</span><small>mock exams not included</small></div></div>${exams}`;
+  }
+  if(typeof renderCompactProgressDashboard==='function'){const o=window.renderCompactProgressDashboard;window.renderCompactProgressDashboard=function(p){const r=o.apply(this,arguments);try{panel(p||state.lastProgress||{})}catch(e){console.warn(e)}return r}}
+
+  /* ---- Concept Mastery: lead with "10 concepts, then 10 questions" ---- */
+  if(typeof openExamSetup==='function'){const o=window.openExamSetup;window.openExamSetup=function(code){const r=o.apply(this,arguments);
+    const box=document.getElementById('examSetup'),grid=box&&box.querySelector('.mode-grid'),rec=grid&&grid.querySelector('[data-mode="block_rules"]');
+    if(rec){rec.classList.add('v7-recommended');rec.innerHTML='<em>Recommended</em><b>Learn, then answer</b><span>Review 10 concepts, then answer the 10 questions on them. Repeats for all 180.</span>';grid.prepend(rec);
+      const all=grid.querySelector('[data-mode="review_all"]');if(all)all.innerHTML='<b>All concepts first</b><span>Study all 180 concepts, then take the exam</span>';
+      const mock=grid.querySelector('[data-mode="real_mock"]');if(mock)mock.innerHTML='<b>Real mock</b><span>No concepts shown · 180 questions, timed · answers at the end</span>';
+      const ro=grid.querySelector('#rulesOnlyBtn');if(ro)ro.innerHTML='<b>Concepts only</b><span>Browse the 180 concepts without starting an exam</span>';
+      const h=box.querySelector('h3');if(h)h.textContent='How do you want to take this exam?'}
+    return r}}
+  if(typeof renderRules==='function'){const o=window.renderRules;window.renderRules=function(rules,title,onContinue){
+    title=String(title||'').replace(/Review these 10 rules/,'review these 10 concepts, then answer 10 questions on them').replace(/180 rules/,'180 concepts');
+    const r=o.call(this,rules,title,onContinue);const b=document.getElementById('rulesContinue');if(b)b.textContent='I have reviewed these — start the questions →';
+    const area=document.getElementById('ruleReviewArea');if(area&&b){const head=area.querySelector('.rule-review-head');if(head){const top=b.cloneNode(true);top.id='rulesContinueTop';top.classList.remove('wide');top.onclick=()=>b.click();head.appendChild(top)}}
+    const v=document.getElementById('exams');if(v)v.scrollTop=0;return r}}
+})();
+
+/* ---- Full plan: mark done / undo right in the list ---- */
+(function(){
+  const LIST={note:'notes',tricky:'tricky',diagram:'diagrams'};
+  document.addEventListener('click',async e=>{const b=e.target.closest('[data-plan-mark]');if(!b)return;const type=b.dataset.planType,id=b.dataset.planId,to=b.dataset.planMark;b.disabled=true;
+    try{await api(`/api/study/items/${type}/${encodeURIComponent(id)}`,{method:'PUT',body:JSON.stringify({status:to})});const it=(state[LIST[type]]||[]).find(x=>String(x.id)===String(id));if(it)it.studyStatus=to;if(typeof loadStudySummary==='function')loadStudySummary().catch(()=>{});v6RenderFullPlan(state.lastProgress)}catch(err){b.disabled=false;alert(err.message||'Could not save.')}});
+  const o=window.v6RenderFullPlan;if(typeof o!=='function')return;
+  window.v6RenderFullPlan=function(p){const r=o.apply(this,arguments);
+    document.querySelectorAll('#dashboardWorkspace .v6-plan-row').forEach(row=>{const open=row.querySelector('[data-full-plan-open]');if(!open)return;const type=open.dataset.fullPlanOpen,id=open.dataset.fullPlanId;if(!LIST[type])return;
+      const done=row.classList.contains('st-done');const btn=document.createElement('button');btn.type='button';btn.className='v7-mark';btn.dataset.planType=type;btn.dataset.planId=id;btn.dataset.planMark=done?'not_started':'reviewed';btn.textContent=done?'Undo':'Mark done';row.insertBefore(btn,open)});
+    return r};
+})();
+
+/* ---------- v7.1: "Review concept" opens the concept itself ---------- */
+(function(){
+  const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  async function openConcept(conceptId){
+    const view=document.getElementById('review'),list=document.getElementById('reviewList');if(!view||!list)return;
+    let box=document.getElementById('v7Concept');if(!box){box=document.createElement('section');box.id='v7Concept';box.className='v7-concept';list.parentNode.insertBefore(box,list)}
+    view.classList.add('v7-concept-open');box.innerHTML='<p class="v6-task-flag">Loading the concept…</p>';view.scrollTop=0;
+    const close=()=>{view.classList.remove('v7-concept-open');box.innerHTML=''};
+    let d;try{d=await api(`/api/review/concepts/${encodeURIComponent(conceptId)}/detail`)}catch(err){box.innerHTML=`<button type="button" class="v6-session-exit" data-c-back>← All concepts</button><p class="v6-task-flag">${esc(err.message||'Could not load this concept.')}</p>`;box.querySelector('[data-c-back]').onclick=close;return}
+    const ids=[...list.querySelectorAll('.concept-review-card')].map(c=>{const m=(c.querySelector('.text-btn')?.getAttribute('onclick')||'').match(/markConceptReviewed\('([^']+)'/);return m?m[1]:null}).filter(Boolean);
+    const pos=ids.indexOf(conceptId),nextId=pos>=0?ids[pos+1]:null;
+    const rel=d.related||{};
+    const item=x=>`<article class="v7-concept-item"><span class="v6-kicker">You missed this in ${esc(x.source)}</span><p class="v7-concept-stem">${esc(x.stem)}</p>${x.pairs?`<table class="v6-match-review"><tbody>${x.pairs.map(p=>`<tr><th>${esc(p.left)}</th><td>${esc(p.right)}</td></tr>`).join('')}</tbody></table>`:`<ul class="v7-concept-opts">${(x.options||[]).map(o=>`<li class="${o.correct?'ok':''}">${o.correct?'<b>✓</b>':'<b></b>'}<span>${esc(o.text)}</span></li>`).join('')}</ul>`}${x.lesson?(typeof v6LessonHTML==='function'?v6LessonHTML(x.lesson):`<p>${esc(x.lesson)}</p>`):''}${x.ref_type==='practice'?`<button type="button" class="secondary" data-c-retry="${esc(x.ref_id)}">Try this question again →</button>`:''}</article>`;
+    box.innerHTML=`<div class="v7-concept-head"><button type="button" class="v6-session-exit" data-c-back>← All concepts</button><div class="v7-concept-acts"><button type="button" class="secondary" data-c-done>✓ Done reviewing</button>${nextId?'<button type="button" class="primary" data-c-next>Next concept →</button>':''}</div></div>
+      <span class="v6-kicker">${esc(d.domain||'PMP concept')}</span><h2>${esc(d.concept)}</h2>
+      ${(rel.note||rel.tricky)?`<div class="v7-concept-rel"><span>Study it:</span>${rel.note?`<button type="button" data-c-note="${esc(rel.note.id)}">Topic note · ${esc(rel.note.title)} →</button>`:''}${rel.tricky?`<button type="button" data-c-tricky="${esc(rel.tricky.id)}">Tricky words · ${esc(rel.tricky.title)} →</button>`:''}</div>`:''}
+      ${d.items&&d.items.length?d.items.map(item).join(''):'<p class="v6-task-flag">Nothing is waiting on this concept any more. Mark it done.</p>'}`;
+    box.querySelector('[data-c-back]').onclick=close;
+    box.querySelector('[data-c-done]').onclick=async e=>{e.target.disabled=true;try{await api(`/api/study/items/concept/${encodeURIComponent(conceptId)}`,{method:'PUT',body:JSON.stringify({status:'reviewed'})})}catch(err){}await loadConceptReview();if(nextId&&document.querySelector(`#reviewList .text-btn[onclick*="'${nextId}'"]`))openConcept(nextId);else close()};
+    const nx=box.querySelector('[data-c-next]');if(nx)nx.onclick=()=>openConcept(nextId);
+    box.querySelectorAll('[data-c-retry]').forEach(b=>b.onclick=()=>{close();retryQuestion(b.dataset.cRetry)});
+    const n=box.querySelector('[data-c-note]');if(n)n.onclick=()=>{close();window.v7OrigConceptSource('note',n.dataset.cNote,'')};
+    const t=box.querySelector('[data-c-tricky]');if(t)t.onclick=()=>{close();window.v7OrigConceptSource('tricky',t.dataset.cTricky,'')};
+  }
+  window.v7OpenConcept=openConcept;
+  if(typeof window.openConceptSource==='function'){
+    const o=window.openConceptSource;window.v7OrigConceptSource=o;
+    // Questions and exam misses open the concept lesson; study items still open the item itself.
+    document.addEventListener('click',e=>{const b=e.target.closest('#reviewList .concept-review-actions .secondary');if(!b)return;const card=b.closest('.concept-review-card');const m=(card.querySelector('.text-btn')?.getAttribute('onclick')||'').match(/markConceptReviewed\('([^']+)'/);const src=(b.getAttribute('onclick')||'').match(/openConceptSource\('([^']*)'/);
+      if(m&&src&&(src[1]==='practice'||src[1]==='exam'||src[1]==='')){e.preventDefault();e.stopImmediatePropagation();openConcept(m[1])}},true);
+  }
+  if(typeof showView==='function'){const o=window.showView;window.showView=function(id){if(id!=='review'){const v=document.getElementById('review');if(v&&v.classList.contains('v7-concept-open')){v.classList.remove('v7-concept-open');const b=document.getElementById('v7Concept');if(b)b.innerHTML=''}}return o.apply(this,arguments)}}
+})();
+
+/* ---------- v7.1: exams — full-screen, nothing but the exam ---------- */
+(function(){
+  const area=document.getElementById('examSessionArea'),card=document.getElementById('examQuestionCard'),rules=document.getElementById('ruleReviewArea');if(!area||!card)return;
+  const sync=()=>{
+    const running=!area.classList.contains('hidden')&&!card.querySelector('.pause-card')&&!card.querySelector('.break-card')&&state.currentView==='exams';
+    const concepts=rules&&!rules.classList.contains('hidden')&&rules.querySelector('#rulesContinue')&&state.currentView==='exams';
+    document.body.classList.toggle('v7-exam-live',!!(running||concepts));
+    document.body.classList.toggle('v7-exam-running',!!running);
+  };
+  new MutationObserver(sync).observe(area,{attributes:true,attributeFilter:['class']});
+  new MutationObserver(sync).observe(card,{childList:true});
+  if(rules)new MutationObserver(sync).observe(rules,{attributes:true,attributeFilter:['class'],childList:true});
+  if(typeof showView==='function'){const o=window.showView;window.showView=function(){const r=o.apply(this,arguments);sync();return r}}
+  sync();
 })();

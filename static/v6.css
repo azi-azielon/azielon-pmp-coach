@@ -819,3 +819,72 @@ body.v6 #reviewList .concept-review-card[hidden]{display:none!important}
 body.v6 .v6-pager{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin:0 0 6px;font-size:13px;color:#5B6475}
 body.v6 .v6-pager button{height:32px!important;min-height:0!important;padding:0 12px!important;font-size:12.5px!important}
 body.v6 .v6-pager button[disabled]{opacity:.4;cursor:default}
+/* v7 Today + plan */
+body.v6 .v6-study-bar [hidden]{display:none!important}
+body.v6 .v7-now{padding:6px 0 18px}
+body.v6 .v7-now h2{font-family:var(--v6-serif)!important;font-size:26px!important;line-height:1.2!important;margin:6px 0 6px!important;color:var(--v6-navy)!important}
+body.v6 .v7-now p{margin:0 0 14px;color:#5B6475;font-size:14.5px}
+body.v6 .v7-actions{display:flex;gap:10px;margin-bottom:18px}
+body.v6 .v7-go{height:46px!important;padding:0 26px!important;font-size:15px!important}
+body.v6 .v7-steps{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+body.v6 .v7-step{all:unset;display:inline-flex;align-items:center;gap:7px;font-size:13px;color:#8A92A0}
+body.v6 button.v7-step{cursor:pointer}
+body.v6 .v7-step i{font-style:normal;width:20px;height:20px;border-radius:50%;border:1.5px solid #D6CDB9;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;box-sizing:border-box}
+body.v6 .v7-step.is-done{color:#2f7d4f}
+body.v6 .v7-step.is-done i{background:#2f7d4f;border-color:#2f7d4f;color:#fff}
+body.v6 .v7-step.is-now{color:var(--v6-navy);font-weight:600}
+body.v6 .v7-step.is-now i{border-color:var(--v6-gold);color:var(--v6-gold-deep);background:#FBF1DC}
+body.v6 .v7-step-line{width:22px;height:1px;background:#D6CDB9}
+body.v6 .v7-quiet{margin:0;padding-top:12px;border-top:1px solid var(--v6-line);font-size:13px;color:#8A92A0}
+body.v6 .v7-quiet b{color:var(--v6-navy)}
+body.v6 .v7-total{border-left:1px solid var(--v6-line);padding-left:24px}
+body.v6 .v7-total b{color:var(--v6-gold-deep)!important}
+body.v6 .v7-exams{margin-top:14px;padding:12px 14px;background:#FBF6EA;border-radius:10px}
+body.v6 .v7-exams p{margin:4px 0 8px;font-size:13.5px;color:#4A5262}
+body.v6 .v7-exams small{font-size:12px;color:#8A92A0;margin-left:8px}
+body.v6 .v7-exams .v6-exam-bars{display:inline-flex}
+body.v6 .v6-plan-row{grid-template-columns:22px minmax(0,1fr) auto auto!important}
+body.v6 .v7-mark{all:unset;cursor:pointer;font-size:12.5px;color:#5B6475;padding:4px 10px;border:1px solid var(--v6-line);border-radius:999px;background:#fff}
+body.v6 .v7-mark:hover{border-color:var(--v6-navy);color:var(--v6-navy)}
+body.v6 #examSetup .mode-card.v7-recommended{border-color:var(--v6-navy)!important;box-shadow:0 0 0 1px var(--v6-navy)!important;position:relative}
+body.v6 #examSetup .mode-card.v7-recommended em{font-style:normal;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--v6-gold-deep);display:block;margin-bottom:4px}
+body.v6 #ruleReviewArea .rule-review-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+/* v7.1 exam: full screen, fits without scrolling */
+body.v6.v7-exam-live #app{grid-template-columns:minmax(0,1fr)!important}
+body.v6.v7-exam-live .sidebar{display:none!important}
+body.v6.v7-exam-live .topbar{display:none!important}
+body.v6.v7-exam-live #licensedViewer,body.v6.v7-exam-live .viewer-watermark{opacity:.5}
+body.v6.v7-exam-running #app main > #exams.view.active{display:flex!important;flex-direction:column;overflow:hidden!important;padding:14px 28px 14px!important}
+body.v6.v7-exam-running #exams > *:not(#examSessionArea){display:none!important}
+body.v6.v7-exam-running #examSessionArea{display:flex!important;flex-direction:column;flex:1 1 auto;min-height:0;max-width:1100px;width:100%;margin:0 auto!important}
+body.v6.v7-exam-running #examSessionArea .exam-toolbar{flex:none;margin:0 0 6px!important;padding:0!important}
+body.v6.v7-exam-running #examSessionArea .exam-toolbar h3{font-size:17px!important;margin:0!important}
+body.v6.v7-exam-running #examNavigator{flex:none;padding:2px 0 6px!important;margin:0 0 6px!important}
+body.v6.v7-exam-running #examMessage{flex:none;min-height:0;margin:0!important;font-size:12.5px}
+body.v6.v7-exam-running #examQuestionCard{flex:1 1 auto;min-height:0;max-width:none!important;display:flex!important;flex-direction:column;overflow:hidden}
+body.v6.v7-exam-running #examQuestionCard > .question-meta{flex:none;margin:0 0 6px!important}
+body.v6.v7-exam-running #examQuestionCard > .question-stem{flex:none;font-size:16px!important;line-height:1.5!important;margin:0 0 10px!important;max-height:34vh;overflow:auto}
+body.v6.v7-exam-running #examQuestionCard > .options,body.v6.v7-exam-running #examQuestionCard > .matching-area{flex:0 1 auto;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:7px!important;margin:0!important;padding-right:2px}
+body.v6.v7-exam-running #examQuestionCard .option{padding:9px 14px!important;margin:0!important;font-size:14.5px!important;line-height:1.4!important}
+body.v6.v7-exam-running #examQuestionCard > #examAnswerFeedback{flex:1 1 0;min-height:0;overflow:auto;margin-top:8px}
+body.v6.v7-exam-running #examQuestionCard > #examAnswerFeedback:empty{flex:1 1 0}
+body.v6.v7-exam-running #examQuestionCard > .question-actions{flex:none;position:static!important;margin:10px 0 0!important;padding:10px 0 0!important;border-top:1px solid var(--v6-line);background:none!important;box-shadow:none!important}
+body.v6.v7-exam-running #examQuestionCard > .question-actions::before{display:none!important}
+/* v7.1 concept lesson */
+body.v6 #review.v7-concept-open > *:not(#v7Concept){display:none!important}
+body.v6 #review:not(.v7-concept-open) #v7Concept{display:none}
+body.v6 .v7-concept{max-width:900px}
+body.v6 .v7-concept-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+body.v6 .v7-concept-acts{display:flex;gap:8px}
+body.v6 .v7-concept-acts button{height:36px!important;padding:0 14px!important;font-size:13px!important}
+body.v6 .v7-concept h2{font-family:var(--v6-serif)!important;font-size:24px!important;margin:2px 0 10px!important;color:var(--v6-navy)!important}
+body.v6 .v7-concept-rel{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;font-size:13px;color:#5B6475}
+body.v6 .v7-concept-rel button{all:unset;cursor:pointer;font-size:13px;font-weight:600;color:var(--v6-gold-deep);padding:5px 12px;border:1px solid #E3D5B5;border-radius:999px;background:#FBF6EA}
+body.v6 .v7-concept-item{border-top:1px solid var(--v6-line);padding:14px 0}
+body.v6 .v7-concept-stem{font-size:15px;line-height:1.55;color:var(--v6-navy);margin:6px 0 10px}
+body.v6 .v7-concept-opts{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:5px}
+body.v6 .v7-concept-opts li{display:flex;gap:10px;font-size:14px;color:#5B6475;padding:7px 12px;border:1px solid var(--v6-line);border-radius:9px;background:#fff}
+body.v6 .v7-concept-opts li b{flex:none;width:14px;color:#2f7d4f}
+body.v6 .v7-concept-opts li.ok{border-color:#BFDCC9;background:#F3F9F5;color:#1F5A48;font-weight:500}
+body.v6 .v7-concept-item > .secondary{margin-top:10px;height:36px!important;padding:0 14px!important;font-size:13px!important}
+body.v6.v7-exam-running #examQuestionCard{padding:0 2px 2px!important}

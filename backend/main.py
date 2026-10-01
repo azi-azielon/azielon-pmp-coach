@@ -1347,6 +1347,89 @@ def _concept_review_rows(user,db,items):
     rows.sort(key=lambda x:(-x['incorrect_count'],-x['marked_count'],-x['needs_review_count'],str(x['concept']).lower()))
     return rows
 
+def _lesson_tokens(text):
+    import re as _re
+    stop={'the','and','for','with','that','this','from','into','what','which','when','your','are','was','has','have','not','its','their','project','manager','team','should','does','will','they','them','than','then','who','how','why','vs'}
+    return {w for w in _re.findall(r'[a-z]{3,}',(text or '').lower()) if w not in stop}
+
+@app.get('/api/review/concepts/{concept_id}/detail')
+def concept_review_detail(concept_id:str,user: User = Depends(current_user), db: Session = Depends(get_db)):
+    """Everything a learner needs to re-learn one concept: the questions they missed, the right answer and the lesson."""
+    require_paid_access(user,db)
+    items=[]; name=None; domain=None
+    try:
+        review_sets=_practice_review_sets(user.id,db)
+        ids=review_sets.get('incorrect_now',set())
+        if ids:
+            for q in db.query(Question).filter(Question.id.in_(ids)).all():
+                concept=q.primary_concept or q.domain or 'Practice concept'
+                if _concept_key(concept)!=concept_id: continue
+                name=name or concept; domain=domain or q.domain
+                try:
+                    opts=json.loads(q.options_json or '[]'); ans=json.loads(q.answer_json or '{}'); exp=json.loads(q.explanation_json or '{}')
+                except Exception: opts=[]; ans={}; exp={}
+                correct=set(ans.get('correctOptionIds') or [])
+                items.append({'source':'Practice','ref_type':'practice','ref_id':q.id,'stem':q.stem,
+                              'options':[{'text':o.get('text'),'correct':o.get('id') in correct} for o in opts if isinstance(o,dict)],
+                              'lesson':'\n'.join(x for x in [
+                                  ('Concept: '+str(exp.get('underlyingPrinciple'))) if exp.get('underlyingPrinciple') else '',
+                                  ('In this scenario: '+str(exp.get('plainLanguageRationale'))) if exp.get('plainLanguageRationale') else '',
+                                  ('Watch for: '+str(exp.get('situationalNuance'))) if exp.get('situationalNuance') else ''] if x),
+                              'mindset':''})
+    except Exception as e:
+        print('concept detail: practice failed',repr(e))
+        try: db.rollback()
+        except Exception: pass
+    try:
+        seen=set()
+        for s in db.query(ExamSession).filter(ExamSession.user_id==user.id).order_by(ExamSession.id.desc()).all():
+            qids=set()
+            if s.status in ('submitted','expired'):
+                qids|={a.question_id for a in db.query(ExamAttempt).filter(ExamAttempt.exam_session_id==s.id,ExamAttempt.is_correct==False).all()}
+            try:
+                raw=json.loads(s.marked_json or '[]'); raw=raw.keys() if isinstance(raw,dict) else raw
+                if s.status in ('submitted','expired'): qids|={str((m.get('question_id') or m.get('id')) if isinstance(m,dict) else m) for m in (raw or [])}
+            except Exception: pass
+            for qid in qids:
+                if qid in seen: continue
+                q=EXAM_QUESTIONS.get(qid) or {}
+                concept=q.get('topic') or q.get('domain') or 'Exam concept'
+                if not q or _concept_key(concept)!=concept_id: continue
+                seen.add(qid); name=name or concept; domain=domain or q.get('domain')
+                item={'source':EXAM_DEFS.get(s.exam_code,{}).get('name') or s.exam_code,'ref_type':'exam','ref_id':qid,'stem':q.get('stem'),'lesson':q.get('explanation') or '','mindset':''}
+                if q.get('type')=='matching':
+                    item['pairs']=[{'left':k,'right':v} for k,v in (q.get('answer') or {}).items()] if isinstance(q.get('answer'),dict) else []
+                else:
+                    ans=q.get('answer') or []; ans=ans if isinstance(ans,list) else [ans]
+                    item['options']=[{'text':o,'correct':chr(65+i) in ans} for i,o in enumerate(q.get('options') or [])]
+                items.append(item)
+                if len(items)>=6: break
+            if len(items)>=6: break
+    except Exception as e:
+        print('concept detail: exam failed',repr(e))
+        try: db.rollback()
+        except Exception: pass
+    related={}
+    try:
+        want=_lesson_tokens((name or concept_id.replace('-',' '))+' '+' '.join((i.get('stem') or '')[:160] for i in items[:2]))
+        nm=_lesson_tokens(name or concept_id.replace('-',' '))
+        feats=set(access_payload(user,db).get('features') or [])
+        if 'notes' in feats:
+            best=None
+            for n in db.query(TopicNote).all():
+                tt=_lesson_tokens(n.title); sc=3*len(tt&nm)+len(tt&want)
+                if sc>=3 and (best is None or sc>best[0]): best=(sc,n)
+            if best: related['note']={'id':best[1].id,'title':best[1].title}
+        if 'tricky' in feats:
+            best=None
+            for t in db.query(TrickyWord).all():
+                tt=_lesson_tokens(f'{t.left_term} {t.right_term}'); sc=3*len(tt&nm)+len(tt&want)
+                if sc>=3 and (best is None or sc>best[0]): best=(sc,t)
+            if best: related['tricky']={'id':best[1].id,'title':f'{best[1].left_term} vs {best[1].right_term}'}
+    except Exception as e:
+        print('concept detail: related failed',repr(e))
+    return {'concept_id':concept_id,'concept':name or concept_id.replace('-',' ').title(),'domain':domain,'items':items,'related':related}
+
 @app.get('/api/review/concepts')
 def concepts_to_review(user: User = Depends(current_user), db: Session = Depends(get_db)):
     require_paid_access(user,db)
