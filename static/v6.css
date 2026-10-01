@@ -812,3 +812,10 @@ body.v6 .v6-ready-list b{display:block;font-size:13.5px;color:var(--v6-navy)}
 body.v6 .v6-ready-list small{font-size:12px;color:#8A92A0}
 body.v6 .result-badge.close{background:#FBF1DC!important;color:#8F6219!important;border-color:#E9CF94!important}
 body.v6 #app main #progress > .progress-tabbar{background:#FFFDF8!important;z-index:8!important;display:flex!important;width:100%;box-sizing:border-box;margin-top:-18px!important;padding-top:14px!important;top:-18px!important}
+/* v6.9 Concepts to Review layout + pager */
+body.v6 #reviewList{align-content:start!important;grid-template-rows:none!important;grid-auto-rows:max-content!important;height:auto!important;max-height:none!important;overflow:visible!important}
+body.v6 #reviewList .concept-review-card{min-height:max-content!important;height:auto!important}
+body.v6 #reviewList .concept-review-card[hidden]{display:none!important}
+body.v6 .v6-pager{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin:0 0 6px;font-size:13px;color:#5B6475}
+body.v6 .v6-pager button{height:32px!important;min-height:0!important;padding:0 12px!important;font-size:12.5px!important}
+body.v6 .v6-pager button[disabled]{opacity:.4;cursor:default}

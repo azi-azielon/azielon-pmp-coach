@@ -851,3 +851,23 @@ function v6RenderReadyPanel(p){
 })();
 
 document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]');if(!b)return;showView('progress');setTimeout(()=>document.getElementById('v6ReadyPanel')?.scrollIntoView({behavior:'smooth',block:'start'}),400)});
+
+/* ---------- v6.9: Concepts to Review — 10 per page with Prev / Next ---------- */
+(function(){
+  if(typeof loadConceptReview!=='function')return;const o=window.loadConceptReview;const PER=10;let page=0,lastFilter=null;
+  function paint(){
+    const list=document.getElementById('reviewList');if(!list)return;const cards=[...list.querySelectorAll('.concept-review-card')];
+    let pager=document.getElementById('v6ReviewPager');
+    if(cards.length<=PER){cards.forEach(c=>c.hidden=false);if(pager)pager.remove();return}
+    const pages=Math.ceil(cards.length/PER);page=Math.max(0,Math.min(page,pages-1));
+    cards.forEach((c,i)=>c.hidden=Math.floor(i/PER)!==page);
+    if(!pager){pager=document.createElement('div');pager.id='v6ReviewPager';pager.className='v6-pager';list.parentNode.insertBefore(pager,list)}
+    const a=page*PER+1,b=Math.min(cards.length,(page+1)*PER);
+    pager.innerHTML=`<button type="button" class="secondary" data-pg="-1" ${page===0?'disabled':''}>← Previous</button><span>${a}–${b} of ${cards.length}</span><button type="button" class="secondary" data-pg="1" ${page>=pages-1?'disabled':''}>Next →</button>`;
+    pager.querySelectorAll('[data-pg]').forEach(x=>x.onclick=()=>{page+=Number(x.dataset.pg);paint();const v=document.getElementById('review');if(v)v.scrollTop=0});
+  }
+  window.loadConceptReview=async function(){
+    const f=state.conceptReviewFilter||'all';if(f!==lastFilter){page=0;lastFilter=f}
+    const r=await o.apply(this,arguments);try{paint()}catch(e){}return r;
+  };
+})();
