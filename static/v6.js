@@ -343,17 +343,20 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
     if(days==null||days<0)return out;
     const studyDays=Math.max(1,Math.floor(days*perWeek/7));
     // keep the final stretch for exams + review; learning must finish before it
-    const examDays=Math.min(studyDays-1,examsLeft*2);const learnDays=Math.max(1,studyDays-examDays-Math.min(REVIEW_DAYS,Math.floor(studyDays/6)));
+    // Learning gets at least 60% of the study days; exams and review share the rest (they can overlap when time is short).
+    const review=Math.min(REVIEW_DAYS,Math.floor(studyDays/6));
+    const examDays=Math.min(examsLeft*2,Math.max(studyDays>1?1:0,Math.floor(studyDays*0.4)));
+    const learnDays=Math.min(studyDays,Math.max(1,Math.ceil(studyDays*0.6),studyDays-examDays-review));
     const per=k=>left[k]?Math.max(1,Math.ceil(left[k]/learnDays)):0;
     out.perDay={note:per('note'),tricky:per('tricky'),diagram:per('diagram'),question:Math.max(10,Math.min(60,Math.ceil(left.question/Math.max(1,studyDays-examsLeft))))};
     const total=left.note*MIN.note+left.tricky*MIN.tricky+left.diagram*MIN.diagram+left.question*MIN.question+examsLeft*MIN.exam;
     out.hoursPerDay=Math.max(0.5,Math.ceil(total/60/studyDays*2)/2);
-    out.studyDays=studyDays;out.learnDays=learnDays;out.examEvery=examsLeft?Math.max(1,Math.floor(examDays/examsLeft)):null;
+    out.studyDays=studyDays;out.learnDays=learnDays;out.examEvery=examsLeft?Math.max(1,Math.floor(Math.max(1,studyDays-learnDays)/examsLeft)):null;out.examsFit=Math.min(examsLeft,Math.max(1,studyDays-learnDays+Math.floor(learnDays/3)));
     out.learningDone=!left.note&&!left.tricky&&!left.diagram;
     out.blocksPerDay=Math.max(1,out.perDay.note,out.perDay.tricky,out.perDay.diagram);
     out.perBlockQuestions=Math.max(8,Math.min(30,Math.ceil(out.perDay.question/out.blocksPerDay)));
     out.examPhase=out.learningDone||studyDays<=examDays+1;
-    out.status=out.hoursPerDay>6?'tight':out.hoursPerDay>3?'steady':'comfortable';
+    out.status=out.hoursPerDay>8?'unrealistic':out.hoursPerDay>5?'tight':out.hoursPerDay>3?'steady':'comfortable';
     return out;
   };
 
@@ -414,10 +417,10 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
     let box=document.getElementById('v6PacePanel');if(!box){box=document.createElement('section');box.id='v6PacePanel';box.className='v6-pace-panel';host.appendChild(box)}
     const s=v6Pace(state.lastProgress);
     if(s.hoursPerDay==null){box.innerHTML=`<span class="v6-kicker">Your plan to exam day</span><p>Add your exam date under <b>My Plan</b> and Azielon will pace every topic, question and exam for you.</p>`;return}
-    const L=s.left,row=(label,left,per,unit)=>left?`<div><b>${left}</b><span>${label} left</span><small>${per} ${unit}/day</small></div>`:`<div class="is-done"><b>✓</b><span>${label}</span><small>complete</small></div>`;
+    const L=s.left,row=(label,left,per,unit)=>left?`<div><b>${left}</b><span>${label} left</span><small>${per} ${unit}${per===1?'':'s'} a day</small></div>`:`<div class="is-done"><b>✓</b><span>${label}</span><small>complete</small></div>`;
     const bars=Array.from({length:s.examTarget},(_,i)=>`<i class="${i<s.examsDone?'on':''}"></i>`).join('');
-    const tone={comfortable:'Comfortable pace.',steady:'Steady pace — keep it daily.',tight:'Tight timeline — consider more study days per week or moving your exam date.'}[s.status];
-    box.innerHTML=`<div class="v6-pace-head"><div><span class="v6-kicker">Your plan to exam day</span><h3>${s.hoursPerDay} hours a day · ${s.days} days left</h3><p>${tone} Based on ${s.studyDays} study days before your exam.</p></div><div class="v6-exam-goal"><span class="v6-kicker">Exams at ${s.examPass}%+</span><div class="v6-exam-bars">${bars}</div><small>${s.examsDone} of ${s.examTarget} · pass ${s.examTarget} before exam day</small></div></div><div class="v6-pace-grid">${row('Topic notes',L.note,s.perDay.note,'topic')}${row('Tricky words',L.tricky,s.perDay.tricky,'pair')}${tierFull()?row('Diagrams',L.diagram,s.perDay.diagram,'diagram'):''}${row('Practice questions',L.question,s.perDay.question,'questions')}</div><p class="v6-pace-note">Learning finishes about ${s.learnDays} study days in; after that, the plan schedules a full exam every ${s.examEvery||2} days until you have ${s.examTarget} scores at ${s.examPass}%+, with the final days for review.</p>`;
+    const tone={comfortable:'Comfortable pace.',steady:'Steady pace — keep it daily.',tight:'Tight timeline — add study days per week or move your exam date if you can.',unrealistic:`That is more than most people can study in a day. Move your exam date if you can; otherwise focus on topic notes, tricky words and practice, and skim the diagrams.`}[s.status];
+    box.innerHTML=`<div class="v6-pace-head"><div><span class="v6-kicker">Your plan to exam day</span><h3>${s.hoursPerDay} hours a day · ${s.days} days left</h3><p>${tone} Based on ${s.studyDays} study days before your exam.</p></div><div class="v6-exam-goal"><span class="v6-kicker">Exams at ${s.examPass}%+</span><div class="v6-exam-bars">${bars}</div><small>${s.examsDone} of ${s.examTarget} · pass ${s.examTarget} before exam day</small></div></div><div class="v6-pace-grid">${row('Topic notes',L.note,s.perDay.note,'topic')}${row('Tricky words',L.tricky,s.perDay.tricky,'pair')}${tierFull()?row('Diagrams',L.diagram,s.perDay.diagram,'diagram'):''}${row('Practice questions',L.question,s.perDay.question,'question')}</div><p class="v6-pace-note">${s.learningDone?'All topics are done.':`Learning is spread over your first ${s.learnDays} study day${s.learnDays===1?'':'s'}.`} ${s.examsLeft?(s.examsFit<s.examsLeft?`There is time for about ${s.examsFit} full exam${s.examsFit===1?'':'s'} (each is about 4 hours); aim for ${s.examPass}%+ on each.`:`Then take a full exam ${s.examEvery<=1?'every study day':`every ${s.examEvery} study days`} until you have ${s.examTarget} scores at ${s.examPass}%+.`):''} Keep the last days for review.</p>`;
   }
   if(typeof renderCompactProgressDashboard==='function'){
     const o=window.renderCompactProgressDashboard;window.renderCompactProgressDashboard=function(p){const r=o.apply(this,arguments);try{renderPacePanel()}catch(e){console.warn(e)}return r};
@@ -530,4 +533,41 @@ function v6RenderDoneToday(){
     const qc=document.querySelector('#questionCard .question-card')||document.getElementById('questionCard'),acts=qc&&qc.querySelector('.question-actions'),meta=qc&&qc.querySelector('.question-meta');
     if(acts&&meta){acts.classList.add('v6-review-nav');meta.after(acts)}
     const v=document.querySelector('.view.active');if(v)v.scrollTop=0;return r};
+})();
+
+/* ---------- v6.4: exams — pause & exit, resume later; timer continues across rule reviews ---------- */
+(function(){
+  const sid=()=>state.examSession&&state.examSession.session_id;
+  async function exitExam(){
+    clearExamTimer();state.examLock=false;state.v6RulePaused=false;
+    document.getElementById('examSessionArea')?.classList.add('hidden');document.getElementById('ruleReviewArea')?.classList.add('hidden');
+    state.examSession=null;
+    try{await loadExamCatalog()}catch(e){}
+    if(typeof renderExamCatalog==='function')renderExamCatalog();
+    const v=document.getElementById('exams');if(v)v.scrollTop=0;
+  }
+  window.v6ExitExam=exitExam;
+  const pb=document.getElementById('examPauseBtn');
+  if(pb&&pb.onclick){const o=pb.onclick;pb.textContent='Pause';pb.onclick=async function(e){
+    await o.call(this,e);
+    const card=document.querySelector('#examQuestionCard .pause-card');if(!card||card.querySelector('#v6ExitExam'))return;
+    const p=card.querySelector('p');if(p)p.textContent='Resume now, or exit and come back later. You will pick up at this question with the same time left.';
+    const btn=document.createElement('button');btn.id='v6ExitExam';btn.type='button';btn.className='secondary';btn.textContent='Exit — resume later';btn.onclick=exitExam;
+    const r=card.querySelector('#resumePausedExam');if(r){const row=document.createElement('div');row.className='v6-next-actions';r.replaceWith(row);row.append(r,btn)}else card.appendChild(btn);
+  }}
+  // Resuming a paused exam from the exam list restarts its timer on the server first.
+  if(typeof resumeExam==='function'){const o=resumeExam;window.resumeExam=async function(code){
+    const e=(state.examCatalog||[]).find(x=>x.code===code),a=e&&e.active_session;
+    if(a&&a.paused){try{await api(`/api/exam-sessions/${a.session_id}/resume`,{method:'POST'})}catch(err){}}
+    return o.apply(this,arguments)}}
+  // Reviewing the 10 rules between blocks stops the clock; it continues where it left off.
+  if(typeof showExamRuleBlock==='function'){const o=showExamRuleBlock;window.showExamRuleBlock=async function(n){
+    if(sid()&&state.examTimerHandle&&!state.v6RulePaused){clearExamTimer();try{await api(`/api/exam-sessions/${sid()}/pause`,{method:'POST'});state.v6RulePaused=true}catch(e){}}
+    return o.apply(this,arguments)}}
+  if(typeof beginExamQuestions==='function'){const o=beginExamQuestions;window.beginExamQuestions=async function(){
+    try{
+      if(state.v6RulePaused){const rr=await api(`/api/exam-sessions/${sid()}/resume`,{method:'POST'});state.v6RulePaused=false;state.examSession.remaining_seconds=Math.max(1,rr.remaining_seconds)}
+      else if(sid()){const st=await api(`/api/exam-sessions/${sid()}/status`);if(st&&st.remaining_seconds!=null)state.examSession.remaining_seconds=Math.max(1,st.remaining_seconds)}
+    }catch(e){}
+    return o.apply(this,arguments)}}
 })();

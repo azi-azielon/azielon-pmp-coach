@@ -2117,8 +2117,9 @@ def _active_real_mock(user_id:int, db:Session):
 
 def _guard_no_active_real_mock(user:User, db:Session):
     active=_active_real_mock(user.id,db)
-    if active:
-        raise HTTPException(423,'A Real Mock exam is active or paused. Finish or submit it before opening study content.')
+    # A paused exam frees the student to study; only a running Real Mock locks study content.
+    if active and active.status=='active':
+        raise HTTPException(423,'A Real Mock exam is running. Pause or submit it before opening study content.')
 
 def _score_exam_response(q, data: ExamAttemptIn):
     qt=q.get('type')

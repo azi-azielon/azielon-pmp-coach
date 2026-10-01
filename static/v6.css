@@ -670,3 +670,21 @@ body.v6 #examResults.v6-reviewing .exam-report-final{display:none!important}
 body.v6 #examResults .v6-review-back{margin-bottom:10px}
 body.v6 .v6-review-nav{margin:8px 0 14px!important;padding:0!important;border:0!important;display:flex;gap:10px;justify-content:flex-start}
 body.v6 #examResults.v6-reviewing ~ .v6-exam-back, body.v6 #exams:has(#examResults.v6-reviewing) > .v6-exam-back{display:none!important}
+/* v6.4 fixes */
+body.v6 #coach .bubble.user{color:var(--v6-navy)!important;background:#F1E8D6!important;border-radius:12px!important;padding:10px 14px!important;margin:4px 0 14px auto!important;max-width:75%!important;width:fit-content;text-align:left}
+body.v6 #coach .bubble.user b{display:block;margin-bottom:2px}
+body.v6 #coach .bubble.user *{color:inherit}
+body.v6 #coach .bubble.user b{color:var(--v6-gold-deep)!important}
+body.v6 #planGrid{align-items:stretch!important}
+body.v6 #planGrid .simple-price-card{display:flex!important;flex-direction:column!important;transform:none!important;margin:0!important}
+body.v6 #planGrid .simple-feature-list{flex:1 1 auto;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;align-content:flex-start!important}
+body.v6 #planGrid .simple-plan-button{margin-top:auto!important}
+body.v6 #notesGrid.notes-grid{align-items:stretch!important;align-content:start!important;grid-template-rows:none!important;grid-auto-rows:max-content!important}
+body.v6 #notesGrid .browse-note{display:flex!important;flex-direction:column!important;height:auto!important;min-height:max-content!important;max-height:none!important;overflow:visible!important}
+body.v6 #notesGrid .browse-note .summary{flex:1 1 auto;margin-bottom:12px!important}
+body.v6 #notesGrid .browse-note > button{position:static!important;margin-top:auto!important;align-self:flex-start;width:auto!important;padding:8px 16px!important;transform:none!important}
+body.v6 .tricky-decision-strip{grid-template-columns:1fr 1fr!important}
+body.v6 .tricky-decision-card{display:block!important}
+body.v6 .tricky-decision-card h4{margin:0 0 4px!important}
+@media (max-width:900px){body.v6 .tricky-decision-strip{grid-template-columns:1fr!important}}
+body.v6 .pause-card .v6-next-actions{justify-content:center;margin-top:6px}

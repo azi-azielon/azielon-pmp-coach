@@ -1263,7 +1263,7 @@ function renderExamCatalog(){
 
   const rows=state.examCatalog.filter(e=>e.kind===state.examKind);
 
-  $('#examCatalog').innerHTML=rows.map(e=>`<article class="exam-card"><span class="pill">${e.kind==='mock'?'Full Simulation':'Concept Mastery'}</span><h3>${escapeHtml(e.name)}</h3><p>${e.question_count} questions · ${e.duration_minutes} minutes</p><p>${e.kind==='mastery'?'Take it as a real mock or review rules before practice blocks.':'Rules and explanations stay hidden until submission.'}</p>${e.active_session?`<button class="primary exam-resume" data-code="${e.code}">Resume active exam</button>`:`<button class="primary exam-choose" data-code="${e.code}">Choose exam</button>`}</article>`).join('');
+  $('#examCatalog').innerHTML=rows.map(e=>`<article class="exam-card"><span class="pill">${e.kind==='mock'?'Full Simulation':'Concept Mastery'}</span><h3>${escapeHtml(e.name)}</h3><p>${e.question_count} questions · ${e.duration_minutes} minutes</p><p>${e.kind==='mastery'?'Take it as a real mock or review rules before practice blocks.':'Rules and explanations stay hidden until submission.'}</p>${e.active_session?`<button class="primary exam-resume" data-code="${e.code}">${e.active_session.paused?'Resume paused exam':'Resume exam'} →</button>`:`<button class="primary exam-choose" data-code="${e.code}">Choose exam</button>`}</article>`).join('');
 
   $$('.exam-choose').forEach(b=>b.onclick=()=>openExamSetup(b.dataset.code));$$('.exam-resume').forEach(b=>b.onclick=()=>resumeExam(b.dataset.code));
 
