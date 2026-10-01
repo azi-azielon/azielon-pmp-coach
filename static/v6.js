@@ -1,3 +1,7 @@
+
+/* Per-browser memory of today's practice scores (shown in "Done today"). */
+function v6SetScore(id,v){try{localStorage.setItem('v6score:'+id,v)}catch(e){}}
+function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch(e){return''}}
 /* Azielon PMP Coach — v6 learner experience layer.
    Loads after app.js. Re-renders the shell and the "Today" home so the learner
    always sees one clear next step. All data and actions come from app.js. */
@@ -278,6 +282,7 @@
       state.v6PracticeTask=null;
       const card=document.getElementById('questionCard');if(!card)return r;
       const acc=res&&res.accuracy!=null?Math.round(res.accuracy):null;
+      if(planTask&&res)v6SetScore(planTask.id,`${res.correct}/${res.total}${acc!=null?` · ${acc}%`:''}`);
       const verdict=acc==null?'':acc>=80?'Exam-ready accuracy on these topics.':acc>=65?'Close. Review the misses, then move on.':'These topics need another pass. Review each miss before moving on.';
       const box=document.createElement('div');box.className='v6-session-done';
       box.innerHTML=`<span class="v6-kicker">${planTask?'Today’s practice complete':'Session complete'}</span><h3>${res?`${res.correct} of ${res.total} correct`:'Answers saved'}${acc!=null?` <span>· ${acc}%</span>`:''}</h3>${verdict?`<p>${verdict}</p>`:''}<div class="v6-next-actions"><button class="v6-btn-gold" type="button" id="v6BackToday">Continue to next step →</button>${res&&res.correct<res.total?'<button class="v6-btn-quiet" type="button" id="v6ReviewMisses">Practice my misses</button>':''}</div>`;
@@ -292,6 +297,7 @@
 
 /* ---------- Pacing engine: finish everything before exam day ---------- */
 (function(){
+  const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const MIN={note:20,tricky:10,diagram:12,question:2,exam:300}; // exam = 4 h sitting + 1 h review
   const EXAM_TARGET=5,EXAM_PASS=80,REVIEW_DAYS=5;
   const tierFull=()=>{const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return t==='full'||t.startsWith('full')||(typeof isStaff==='function'&&isStaff())};
@@ -369,8 +375,20 @@
     const shown=blocks.length?blocks[Math.max(0,idx)]:tasks;
     origToday(p,shown);
     const pace=v6Pace(p),total=Math.max(pace.blocksPerDay||1,blocks.filter(b=>b.some(t=>t.type==='practice')).length);
-    const cnt=document.querySelector('.v6-plan-count');if(cnt&&blocks.length){const d=shown.filter(t=>taskState(t)==='done').length;cnt.textContent=`Block ${Math.max(1,idx+1)} of ${total} · ${d} of ${shown.length} done`}
+    const cnt=document.querySelector('.v6-plan-count');if(cnt&&blocks.length){const d=shown.filter(t=>taskState(t)==='done').length;cnt.textContent=`${total<=8?`Block ${Math.max(1,idx+1)} of ${total}`:`Block ${Math.max(1,idx+1)} today`} · ${d} of ${shown.length} done`}
     const head=document.querySelector('.v6-plan-head');if(head&&!document.querySelector('.v6-pace'))head.insertAdjacentHTML('afterend',paceLine(p));
+    // Done today: every finished item from earlier blocks (current block's done items stay in the list above).
+    const earlier=blocks.slice(0,Math.max(0,idx)).flat().filter(t=>taskState(t)==='done');
+    const lastAllDone=blocks.length&&blocks[blocks.length-1].every(t=>taskState(t)==='done');
+    const doneAll=lastAllDone?tasks.filter(t=>taskState(t)==='done'):earlier;
+    const plan=document.querySelector('.v6-plan:not(.v6-upnext)');
+    if(plan&&doneAll.length){
+      const LBL={note:'Topic note',tricky:'Tricky words',diagram:'Diagram',practice:'Practice',exam:'Exam'};
+      const rows=doneAll.map(t=>{const sc=t.type==='practice'||t.type==='exam'?v6GetScore(t.id):'';
+        return `<div class="v6-done-row"><span class="v6-done-tick" aria-hidden="true">✓</span><span class="v6-done-type">${esc(LBL[t.type]||t.label||'Study')}</span><span class="v6-done-title" title="${esc(t.title)}">${esc(t.title)}</span>${sc?`<span class="v6-done-score">${esc(sc)}</span>`:''}${t.type==='practice'||t.type==='exam'?'':`<button class="v6-task-open" type="button" data-today-open="${esc(t.id)}">Review →</button>`}</div>`}).join('');
+      plan.insertAdjacentHTML('afterend',`<details class="v6-donetoday"${lastAllDone?' open':''}><summary>Done today <span>${doneAll.length} item${doneAll.length===1?'':'s'}</span></summary><div class="v6-done-list">${rows}</div></details>`);
+      bindDashboardWorkspaceActions();
+    }
   };
 
   function renderPacePanel(){
