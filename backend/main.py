@@ -1011,6 +1011,11 @@ def _get_study_profile(db:Session,user_id:int):
         row=StudyPlanProfile(user_id=user_id,weekly_hours=7.0,study_days_per_week=5,session_minutes=45); db.add(row); db.commit(); db.refresh(row)
     return row
 
+BACKGROUNDS={'active_pm','some_pm','new_pm'}
+def _get_background(db,user_id):
+    row=db.query(StudyItemState).filter(StudyItemState.user_id==user_id,StudyItemState.content_type=='profile',StudyItemState.content_id=='background').first()
+    return row.last_rating if row and row.last_rating in BACKGROUNDS else None
+
 def _study_profile_payload(row):
     return {'exam_date':row.exam_date.date().isoformat() if row.exam_date else None,'weekly_hours':float(row.weekly_hours or 7),'study_days_per_week':int(row.study_days_per_week or 5),'session_minutes':int(row.session_minutes or 45)}
 
@@ -1037,6 +1042,17 @@ def _adaptive_plan(profile, readiness, patterns, domains, review_count, feature_
 @app.get('/api/coach/profile')
 def coach_profile(user:User=Depends(current_user),db:Session=Depends(get_db)):
     require_paid_access(user,db); return _study_profile_payload(_get_study_profile(db,user.id))
+
+@app.put('/api/coach/background')
+def update_background(payload:dict,user:User=Depends(current_user),db:Session=Depends(get_db)):
+    require_paid_access(user,db)
+    val=str(payload.get('background') or '')
+    if val not in BACKGROUNDS: raise HTTPException(400,'Choose active_pm, some_pm or new_pm')
+    row=db.query(StudyItemState).filter(StudyItemState.user_id==user.id,StudyItemState.content_type=='profile',StudyItemState.content_id=='background').first()
+    if not row:
+        row=StudyItemState(user_id=user.id,content_type='profile',content_id='background',status='not_started'); db.add(row)
+    row.last_rating=val; row.updated_at=datetime.utcnow(); db.commit()
+    return {'background':val}
 
 @app.put('/api/coach/profile')
 def update_coach_profile(payload:dict,user:User=Depends(current_user),db:Session=Depends(get_db)):
@@ -1120,9 +1136,17 @@ def progress(user: User = Depends(current_user), db: Session = Depends(get_db)):
         missed=db.query(Attempt.question_id,func.count(Attempt.id)).filter(Attempt.user_id==user.id,Attempt.is_correct==False,Attempt.question_id.in_(incorrect_ids)).group_by(Attempt.question_id).order_by(func.count(Attempt.id).desc()).limit(10).all()
 
     exam_history=[]
-    for s in completed_sessions[:10]:
+    first_real={}
+    for s in sorted(completed_sessions,key=lambda x:((_naive_utc(x.completed_at) or datetime.min),x.id)):
+        if s.mode=='real_mock' and s.exam_code not in first_real: first_real[s.exam_code]=s.id
+    for s in completed_sessions[:12]:
         rows=[a for a in exam_attempts if a.exam_session_id==s.id]
         answered=len(rows); correct=sum(1 for a in rows if a.is_correct)
+        qids=json.loads(s.question_ids_json or '[]'); amap={a.question_id:a for a in rows}; doms={}
+        for qid in qids:
+            dq=(EXAM_QUESTIONS.get(qid) or {}).get('domain') or 'Other'; dd=doms.setdefault(dq,[0,0]); dd[1]+=1
+            if amap.get(qid) and amap[qid].is_correct: dd[0]+=1
+        dom_pct={k:round(v[0]/v[1]*100,1) for k,v in doms.items() if v[1]}
         try:
             edef=_exam_def(s.exam_code)
             exam_name=edef.get('name') or s.exam_code
@@ -1140,6 +1164,9 @@ def progress(user: User = Depends(current_user), db: Session = Depends(get_db)):
             'accuracy':round(correct/answered*100,1) if answered else None,
             'started_at':s.started_at.isoformat() if s.started_at else None,
             'completed_at':s.completed_at.isoformat() if s.completed_at else None,
+            'domains':dom_pct,
+            'first_attempt':first_real.get(s.exam_code)==s.id,
+            'counts_for_target':first_real.get(s.exam_code)==s.id and answered>=len(qids)*0.9,
         })
 
     accessible=set(access_payload(user,db).get('features') or [])
@@ -1199,7 +1226,7 @@ def progress(user: User = Depends(current_user), db: Session = Depends(get_db)):
         'readiness': readiness,
         'mistake_patterns': mistake_patterns,
         'adaptive_plan': adaptive_plan,
-        'study_profile': _study_profile_payload(profile),
+        'study_profile': {**_study_profile_payload(profile),'background':_get_background(db,user.id)},
         'study_summary': study_summary(user,db)
     }
 
@@ -2157,7 +2184,8 @@ def _owned_exam_session(session_id: int, user: User, db: Session):
         raise HTTPException(404,'Exam session not found')
     return s
 
-AZIELON_PASS_BENCHMARK=float(os.getenv('AZIELON_PASS_BENCHMARK','70'))
+AZIELON_PASS_BENCHMARK=float(os.getenv('AZIELON_PASS_BENCHMARK','80'))
+AZIELON_CLOSE_BAND=float(os.getenv('AZIELON_CLOSE_BAND','70'))
 
 def _exam_time_state(s: ExamSession):
     now=datetime.utcnow()
@@ -2408,10 +2436,13 @@ def exam_results(session_id:int,user:User=Depends(current_user),db:Session=Depen
     for group in (domains,approaches,question_types):
         for d in group.values(): d['accuracy']=round(d['correct']/d['total']*100,1) if d['total'] else None
     accuracy=round(correct/len(ids)*100,1) if ids else None
-    result_label='PASS' if accuracy is not None and accuracy>=AZIELON_PASS_BENCHMARK else 'BELOW BENCHMARK'
+    result_label='PASS' if accuracy is not None and accuracy>=AZIELON_PASS_BENCHMARK else ('CLOSE' if accuracy is not None and accuracy>=AZIELON_CLOSE_BAND else 'BELOW BENCHMARK')
+    first=db.query(ExamSession).filter(ExamSession.user_id==user.id,ExamSession.exam_code==s.exam_code,ExamSession.mode=='real_mock',ExamSession.status.in_(['submitted','expired'])).order_by(ExamSession.completed_at.asc(),ExamSession.id.asc()).first()
+    counts=bool(first and first.id==s.id and s.mode=='real_mock' and answered>=len(ids)*0.9)
+    count_reason='' if counts else ('rules shown first' if s.mode!='real_mock' else ('a retake' if not (first and first.id==s.id) else 'fewer than 90% of questions answered'))
     return {'session_id':s.id,'exam_code':s.exam_code,'status':s.status,'total':len(ids),'answered':answered,'correct':correct,
             'accuracy':accuracy,'domains':domains,'approaches':approaches,'question_types':question_types,
-            'benchmark':AZIELON_PASS_BENCHMARK,'result_label':result_label,
+            'benchmark':AZIELON_PASS_BENCHMARK,'close_band':AZIELON_CLOSE_BAND,'result_label':result_label,'counts_for_target':counts,'count_reason':count_reason,
             'benchmark_note':'Azielon practice benchmark only; PMI does not publish a fixed percentage passing score.',
             'results':results}
 

@@ -339,7 +339,7 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
     const days=plan.days_until_exam;const perWeek=Math.max(1,Math.min(7,Number(prof.study_days_per_week||plan.study_days_per_week||5)));
     const left={note:open(state.notes).length,tricky:open(state.tricky).length,diagram:tierFull()?open(state.diagrams).length:0,
       question:Math.max(0,Number(p.practice_bank_total||0)-Number(p.practice_unique_attempted||0))};
-    const hist=(p.exam_history||[]).filter(x=>x.total&&x.correct/x.total*100>=EXAM_PASS&&x.answered>=x.total*0.9);
+    const hist=(p.exam_history||[]).filter(x=>x.total&&x.correct/x.total*100>=EXAM_PASS&&x.answered>=x.total*0.9&&(x.counts_for_target===undefined||x.counts_for_target));
     const examsDone=Math.min(EXAM_TARGET,hist.length);const examsLeft=EXAM_TARGET-examsDone;
     const out={blocksPerDay:1,perBlockQuestions:15,days,left,examsDone,examsLeft,examTarget:EXAM_TARGET,examPass:EXAM_PASS,perDay:{note:1,tricky:1,diagram:tierFull()?1:0,question:15},hoursPerDay:null,studyDays:null,learnDays:null,examEvery:null,status:'no-date'};
     if(days==null||days<0)return out;
@@ -400,7 +400,7 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
   // One quiet pacing line on Today, full breakdown on My Progress.
   function paceLine(p){
     const s=v6Pace(p);if(s.hoursPerDay==null)return'';
-    return `<p class="v6-pace">Study about <b>${s.hoursPerDay} h/day</b> on ${s.studyDays} study day${s.studyDays===1?'':'s'} to finish every topic and <b>${s.examTarget} exams at ${s.examPass}%+</b> before exam day <span>(${s.examsDone} of ${s.examTarget} done)</span>. <button type="button" class="v6-datebar-btn" data-go-plan>Change exam date</button></p>`;
+    return `<p class="v6-pace">Study about <b>${s.hoursPerDay} h/day</b> on ${s.studyDays} study day${s.studyDays===1?'':'s'} to finish every topic and <b>${s.examTarget} exams at ${s.examPass}%+</b> before exam day <span>(${s.examsDone} of ${s.examTarget} done)</span>. <button type="button" class="v6-datebar-btn" data-go-plan>Change exam date</button>${(p&&p.study_profile&&!p.study_profile.background)?' · <button type="button" class="v6-datebar-btn" data-go-ready>Set your study-hours target</button>':''}</p>`;
   }
   const origToday=window.renderTodayPlanFromDb;
   window.renderTodayPlanFromDb=function(p,tasks){
@@ -723,7 +723,7 @@ function v6BindDateBar(root){
   if(typeof renderFeatureLaunchpad!=='function')return;const o=window.renderFeatureLaunchpad;
   window.renderFeatureLaunchpad=function(p){
     const r=o.apply(this,arguments);const focus=state.dashboardFocus||'today';const host=document.getElementById('dashboardWorkspace');
-    if(focus==='plan'&&host){if(typeof renderFullPlan==='function')renderFullPlan(p||state.lastProgress||{});host.insertAdjacentHTML('afterbegin',v6ExamDateBar(p));v6BindDateBar(host)}
+    if(focus==='plan'&&host){v6RenderFullPlan(p||state.lastProgress||{})}
     return r;
   };
   // My Progress: the same exam-date bar above the pace panel
@@ -732,3 +732,122 @@ function v6BindDateBar(root){
 })();
 
 document.addEventListener('click',e=>{const b=e.target.closest('[data-go-plan]');if(!b)return;state.dashboardFocus='plan';if(state.currentView!=='dashboard')showView('dashboard');renderFeatureLaunchpad(state.lastProgress||{});setTimeout(()=>document.querySelector('#v6DateBar [data-datebar-edit]')?.click(),50)});
+
+/* ---------- v6.7: Full plan with section tabs and status filters ---------- */
+(function(){
+  const esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const tierFull=()=>{const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return t==='full'||t.startsWith('full')||(typeof isStaff==='function'&&isStaff())};
+  const has=f=>typeof hasFeature==='function'?hasFeature(f):true;
+  const bucket=st=>st==='reviewed'||st==='mastered'?'done':st==='needs_review'?'review':'todo';
+  const S=state.v6Plan=state.v6Plan||{sec:'notes',filter:'todo',domain:''};
+  function sections(p){
+    const out=[];
+    if(has('notes'))out.push({k:'notes',label:'Topic notes',rows:(state.notes||[]).map(x=>({id:x.id,type:'note',title:x.title,sub:x.domain,st:bucket(x.studyStatus),domain:x.domain}))});
+    if(has('tricky'))out.push({k:'tricky',label:'Tricky words',rows:(state.tricky||[]).map(x=>({id:x.id,type:'tricky',title:`${x.left} vs ${x.right}`,sub:x.domain||'',st:bucket(x.studyStatus),domain:x.domain}))});
+    if(tierFull()&&has('diagrams'))out.push({k:'diagrams',label:'Diagrams',rows:(state.diagrams||[]).map(x=>({id:x.id,type:'diagram',title:x.title,sub:x.domain,st:bucket(x.studyStatus),domain:x.domain}))});
+    if(has('match'))out.push({k:'match',label:'Match sets',rows:((state.v6Match||{}).sets||[]).map(x=>({id:x.id,type:'match',title:x.title,sub:`${x.domain}${x.lastScore?' · last '+x.lastScore:''}`,st:bucket(x.studyStatus),domain:x.domain})),loading:!(state.v6Match||{}).sets});
+    out.push({k:'exams',label:'Exams',rows:(p?.exam_cards||[]).map(x=>({id:x.exam_code,type:'exam',title:x.exam_name||x.exam_code,sub:x.completed?`${x.accuracy}% · ${x.result==='PASS'?'passed':'below 80%'}`:(x.status==='active'||x.status==='paused')?`${x.answered}/${x.total} answered`:'Not taken',st:x.completed?'done':(x.status==='active'||x.status==='paused')?'review':'todo',exam:x}))});
+    out.push({k:'practice',label:'Practice',practice:true});
+    return out;
+  }
+  const FL={todo:'Need to study',review:'Need review',done:'Done'};
+  const FL_EXAM={todo:'To take',review:'In progress',done:'Done'};
+  function rowHTML(r){
+    const act=r.st==='done'?'Review':r.st==='review'?(r.type==='exam'?'Resume':'Review'):(r.type==='exam'?'Start':'Study');
+    const attrs=r.type==='match'?`data-m-plan-open="${esc(r.id)}"`:r.type==='exam'?`data-full-plan-open="exam" data-exam-code="${esc(r.id)}" data-session-id="${esc(r.exam.session_id||'')}" data-exam-status="${esc(r.exam.status||'')}"`:`data-full-plan-open="${r.type}" data-full-plan-id="${esc(r.id)}"`;
+    return `<div class="v6-plan-row st-${r.st}"><span class="v6-plan-dot" aria-hidden="true">${r.st==='done'?'✓':r.st==='review'?'↻':''}</span><div class="v6-plan-copy"><b title="${esc(r.title)}">${esc(r.title)}</b><small>${esc(r.sub||'')}</small></div><button type="button" class="v6-task-open" ${attrs}>${act} →</button></div>`;
+  }
+  window.v6RenderFullPlan=function(p){
+    const host=document.getElementById('dashboardWorkspace');if(!host)return;p=p||state.lastProgress||{};
+    const secs=sections(p);if(!secs.some(s=>s.k===S.sec))S.sec=secs[0].k;const sec=secs.find(s=>s.k===S.sec);
+    const L=sec.k==='exams'?FL_EXAM:FL;
+    let body='';
+    if(sec.practice){
+      const done=p.practice_unique_attempted||0,total=p.practice_bank_total||0,miss=p.practice_currently_incorrect||0,acc=p.practice_accuracy;
+      body=`<div class="v6-plan-practice"><div><b>${done}</b><span>of ${total} questions practiced</span></div><div><b>${acc==null?'—':Math.round(acc)+'%'}</b><span>accuracy</span></div><div><b>${miss}</b><span>still wrong — need review</span></div></div><div class="v6-next-actions"><button type="button" class="primary" data-plan-practice="new">Practice new questions →</button>${miss?'<button type="button" class="secondary" data-plan-practice="missed">Practice my misses</button>':''}</div>`;
+    }else{
+      const doms=[...new Set(sec.rows.map(r=>r.domain).filter(Boolean))].sort();
+      const inDom=sec.rows.filter(r=>!S.domain||r.domain===S.domain);
+      const cnt=k=>inDom.filter(r=>r.st===k).length;
+      if(!['todo','review','done'].includes(S.filter))S.filter='todo';
+      const rows=inDom.filter(r=>r.st===S.filter);
+      body=`<div class="v6-plan-filters"><div class="v6-plan-chips">${['todo','review','done'].map(k=>`<button type="button" class="${S.filter===k?'active':''} f-${k}" data-plan-filter="${k}">${L[k]} <span>${cnt(k)}</span></button>`).join('')}</div>${doms.length>1?`<select data-plan-domain aria-label="Domain"><option value="">All domains</option>${doms.map(d=>`<option ${S.domain===d?'selected':''}>${esc(d)}</option>`).join('')}</select>`:''}</div>
+        <div class="v6-plan-rows">${sec.loading?'<p class="v6-task-flag">Loading…</p>':rows.length?rows.map(rowHTML).join(''):`<p class="v6-plan-empty">${S.filter==='todo'?'Nothing left to study here. ✓':S.filter==='review'?'Nothing marked for review.':'Nothing done yet — start with “'+L.todo+'”.'}</p>`}</div>`;
+    }
+    const total=s=>s.practice||s.loading?'':(()=>{const d=s.rows.filter(r=>r.st==='done').length;return `<span>${d}/${s.rows.length}</span>`})();
+    host.innerHTML=`${typeof v6ExamDateBar==='function'?v6ExamDateBar(p):''}<div class="v6-plan-tabs" role="tablist">${secs.map(s=>`<button type="button" role="tab" class="${s.k===S.sec?'active':''}" data-plan-sec="${s.k}">${esc(s.label)} ${total(s)}</button>`).join('')}</div>${body}`;
+    if(typeof v6BindDateBar==='function')v6BindDateBar(host);
+    if(typeof bindDashboardWorkspaceActions==='function')bindDashboardWorkspaceActions();
+    host.querySelectorAll('[data-plan-sec]').forEach(b=>b.onclick=()=>{S.sec=b.dataset.planSec;S.filter='todo';S.domain='';v6RenderFullPlan(p)});
+    host.querySelectorAll('[data-plan-filter]').forEach(b=>b.onclick=()=>{S.filter=b.dataset.planFilter;v6RenderFullPlan(p)});
+    const ds=host.querySelector('[data-plan-domain]');if(ds)ds.onchange=()=>{S.domain=ds.value;v6RenderFullPlan(p)};
+    host.querySelectorAll('[data-m-plan-open]').forEach(b=>b.onclick=()=>v6OpenMatchSet(b.dataset.mPlanOpen));
+    host.querySelectorAll('[data-plan-practice]').forEach(b=>b.onclick=()=>{const missed=b.dataset.planPractice==='missed';showView('practice');setTimeout(()=>{const f=document.getElementById('pReviewFocus');if(f)f.value=missed?'incorrect_now':'';const c=document.getElementById('pCount');if(c)c.value=missed?10:15;if(typeof createPracticeSession==='function')createPracticeSession()},60)});
+    const needSets=has('match')&&!(state.v6Match||{}).sets;
+    if(needSets&&typeof v6LoadMatchSets==='function')v6LoadMatchSets().then(()=>{if(state.dashboardFocus==='plan')v6RenderFullPlan(p)}).catch(()=>{});
+  };
+  window.renderFullPlan=function(p){return v6RenderFullPlan(p)};
+})();
+
+
+/* ---------- v6.8: Ready-to-book checklist, target hours by background, 80% everywhere ---------- */
+const V6_BG={active_pm:{label:'Active PM (3+ years)',min:70,max:90,target:80},some_pm:{label:'Some PM experience',min:100,max:140,target:120},new_pm:{label:'New to project management',min:150,max:200,target:175}};
+function v6StudiedHours(p){
+  const done=a=>(a||[]).filter(x=>['reviewed','mastered'].includes(x.studyStatus)).length;
+  const m=((state.v6Match||{}).sets||[]).reduce((a,x)=>a+(x.attempts||0),0);
+  const mins=done(state.notes)*20+done(state.tricky)*10+done(state.diagrams)*12+Number(p.practice_answered||0)*2+m*5+(p.exam_history||[]).length*240;
+  return Math.round(mins/60);
+}
+function v6ReadyChecks(p,conceptCount){
+  const tf=(()=>{const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return t==='full'||t.startsWith('full')})();
+  const pend=a=>(a||[]).filter(x=>!['reviewed','mastered'].includes(x.studyStatus)).length;
+  const lists=[['topic notes',state.notes],['tricky words',state.tricky]];if(tf)lists.push(['diagrams',state.diagrams]);
+  const left=lists.map(([n,a])=>[n,pend(a)]).filter(x=>x[1]);
+  const cov=Number(p.practice_coverage||0);
+  const counting=(p.exam_history||[]).filter(x=>x.counts_for_target!==false&&x.total&&x.answered>=x.total*0.9).sort((a,b)=>String(b.completed_at).localeCompare(String(a.completed_at)));
+  const last3=counting.slice(0,3),last3ok=last3.length===3&&last3.every(x=>x.correct/x.total*100>=80);
+  const pass3=last3.filter(x=>x.correct/x.total*100>=80).length;
+  let doms={},src='';
+  if(last3.length){last3.forEach(x=>Object.entries(x.domains||{}).forEach(([d,v])=>{(doms[d]=doms[d]||[]).push(v)}));doms=Object.fromEntries(Object.entries(doms).map(([d,a])=>[d,Math.round(a.reduce((x,y)=>x+y,0)/a.length)]));src='full mocks'}
+  else{Object.entries(p.domains||{}).forEach(([d,v])=>{if(v.answered)doms[d]=Math.round(v.correct/v.answered*100)});src='practice so far'}
+  const domNames=['People','Process','Business Environment'];const domVals=domNames.map(d=>[d,doms[d]]);
+  const domOk=last3.length>0&&domVals.every(([,v])=>v!=null&&v>=75);
+  const weak=domVals.filter(([,v])=>v==null||v<75).map(([d,v])=>`${d} ${v==null?'—':v+'%'}`);
+  return [
+    {ok:!left.length,title:'Every topic studied',detail:left.length?left.map(([n,c])=>`${c} ${n}`).join(' · ')+' left':'All topics done'},
+    {ok:cov>=80,title:'80% of practice questions answered',detail:`${Math.round(cov)}% answered`},
+    {ok:last3ok,title:'Last 3 full mocks at 80%+',detail:last3.length?`${pass3} of the last ${last3.length} at 80%+ (first attempts, timed mode)`:'No timed full mock yet'},
+    {ok:domOk,title:'Every domain at 75%+',detail:(weak.length?'Below 75%: '+weak.join(' · '):'All domains 75%+')+` · from ${src}`},
+    {ok:conceptCount!=null&&conceptCount<15,title:'Fewer than 15 concepts to review',detail:conceptCount==null?'Checking…':`${conceptCount} in Concepts to Review`}
+  ];
+}
+function v6RenderReadyPanel(p){
+  p=p||state.lastProgress||{};const host=document.querySelector('#progress [data-progress-panel="overview"]');if(!host)return;
+  let box=document.getElementById('v6ReadyPanel');if(!box){box=document.createElement('section');box.id='v6ReadyPanel';box.className='v6-ready';host.appendChild(box)}
+  const bg=(p.study_profile||{}).background,B=V6_BG[bg];const studied=v6StudiedHours(p);
+  const draw=cc=>{
+    const checks=v6ReadyChecks(p,cc),met=checks.filter(c=>c.ok).length;
+    const s=typeof v6Pace==='function'?v6Pace(p):{};const weeks=s.days?Math.max(1,s.days/7):null;
+    const hoursLine=B?(()=>{const rem=Math.max(0,B.target-studied);const pct=Math.min(100,Math.round(studied/B.target*100));
+      return `<div class="v6-ready-hours"><div><span class="v6-kicker">Prep hours</span><p><b>~${studied} h</b> of about <b>${B.target} h</b> recommended for: ${B.label} (${B.min}–${B.max} h)${weeks&&rem?` · about ${Math.ceil(rem/weeks)} h a week to exam day`:''}</p><div class="v6-ready-bar"><i style="width:${pct}%"></i></div><small>Estimated from what you have finished in the app. <button type="button" class="v6-datebar-btn" data-bg-change>Change background</button></small></div></div>`})()
+      :`<div class="v6-ready-hours"><span class="v6-kicker">Prep hours</span><p>What is your project management background? We will set your target study hours.</p><div class="v6-bg-pick">${Object.entries(V6_BG).map(([k,v])=>`<button type="button" data-bg="${k}"><b>${v.label}</b><span>${v.min}–${v.max} hours</span></button>`).join('')}</div></div>`;
+    box.innerHTML=`<div class="v6-ready-head"><div><span class="v6-kicker">Ready to book your exam?</span><h3>${met===5?'Yes — you meet all 5 checks. ✓':`${met} of 5 checks met`}</h3><p>Book the real exam when all five are green. These are Azielon coaching benchmarks; PMI does not publish a passing score.</p></div></div>${hoursLine}<ul class="v6-ready-list">${checks.map(c=>`<li class="${c.ok?'ok':''}"><span>${c.ok?'✓':''}</span><div><b>${c.title}</b><small>${c.detail}</small></div></li>`).join('')}</ul>`;
+    box.querySelectorAll('[data-bg]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{await api('/api/coach/background',{method:'PUT',body:JSON.stringify({background:b.dataset.bg})});await loadProgress();v6RenderReadyPanel(state.lastProgress)}catch(e){b.disabled=false;alert(e.message||'Could not save')}});
+    const ch=box.querySelector('[data-bg-change]');if(ch)ch.onclick=()=>{p={...p,study_profile:{...(p.study_profile||{}),background:null}};const hb=box.querySelector('.v6-ready-hours');hb.outerHTML=`<div class="v6-ready-hours"><span class="v6-kicker">Prep hours</span><p>What is your project management background?</p><div class="v6-bg-pick">${Object.entries(V6_BG).map(([k,v])=>`<button type="button" data-bg="${k}" class="${k===bg?'active':''}"><b>${v.label}</b><span>${v.min}–${v.max} hours</span></button>`).join('')}</div></div>`;box.querySelectorAll('[data-bg]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{await api('/api/coach/background',{method:'PUT',body:JSON.stringify({background:b.dataset.bg})});await loadProgress();v6RenderReadyPanel(state.lastProgress)}catch(e){b.disabled=false}})};
+  };
+  draw(state.v6ConceptCount??null);
+  api('/api/review/concepts').then(r=>{state.v6ConceptCount=r.count;if(document.getElementById('v6ReadyPanel')===box)draw(r.count)}).catch(()=>{});
+}
+(function(){
+  if(typeof renderCompactProgressDashboard==='function'){const o=window.renderCompactProgressDashboard;window.renderCompactProgressDashboard=function(p){const r=o.apply(this,arguments);try{v6RenderReadyPanel(p)}catch(e){console.warn(e)}return r}}
+  // Exam report: 80% bar, amber "close" band, and whether this attempt counts toward the 5
+  if(typeof showExamResults==='function'){const o=window.showExamResults;window.showExamResults=async function(){
+    const r=await o.apply(this,arguments);const area=document.getElementById('examResults'),rep=area&&area.querySelector('.exam-report-final');if(!rep)return r;
+    const res=state.examReviewResults||{};const h2=rep.querySelector('.final-report-head h2'),badge=rep.querySelector('.result-badge');
+    const lab=res.result_label;if(h2)h2.textContent=lab==='PASS'?'80%+ — on target ✓':lab==='CLOSE'?'Close — not yet 80%':'Below 80% — keep building';
+    if(badge){badge.classList.remove('pass','below');badge.classList.add(lab==='PASS'?'pass':lab==='CLOSE'?'close':'below')}
+    const note=rep.querySelector('.benchmark-note');if(note)note.innerHTML=`Target: 80% on a first, timed attempt. ${res.counts_for_target?'<b>This attempt counts toward your 5 exams at 80%+.</b>':`<b>This attempt does not count toward your 5</b> (${res.count_reason||'a retake, or rules shown first'}) — still useful practice.`} PMI does not publish a passing score.`;
+    return r}}
+})();
+
+document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]');if(!b)return;showView('progress');setTimeout(()=>document.getElementById('v6ReadyPanel')?.scrollIntoView({behavior:'smooth',block:'start'}),400)});

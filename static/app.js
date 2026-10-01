@@ -1198,7 +1198,7 @@ const set=(id,val)=>{const el=$(id);if(el)el.textContent=val};
 
 set('#pAnswered',p.answered);set('#pCorrect',p.correct);set('#pAccuracy',p.accuracy==null?'—':p.accuracy+'%');set('#pCompletedExams',p.completed_exams||0);set('#pPracticeAnswered',p.practice_answered||0);set('#pExamAnswered',p.exam_answered||0);set('#pBookmarks',p.bookmarks);set('#pReviewCount',p.review_queue.length);
 
-$('#progressBenchmarkNote').textContent=`Azielon benchmark: ${p.benchmark||70}% · practice benchmark only, not PMI's passing score.`;
+$('#progressBenchmarkNote').textContent=`Azielon target: ${p.benchmark||80}% on first, timed attempts · coaching benchmark only, not PMI's passing score.`;
 
 $('#examReportCards').innerHTML=(p.exam_cards||[]).map(x=>`<article class="exam-report-card ${x.completed?'completed':x.status==='active'||x.status==='paused'?'in-progress':''}"><div class="exam-report-top"><span class="report-check">${x.completed?'✓':x.status==='active'||x.status==='paused'?'◐':'○'}</span><div><span class="eyebrow">${escapeHtml(x.kind==='mock'?'Full Mock':'Concept Mastery')}</span><h4>${escapeHtml(x.exam_name||x.exam_code)}</h4></div><span class="report-status ${x.result==='PASS'?'pass':x.result?'below':''}">${examStatusLabel(x)}</span></div><div class="exam-report-score"><b>${x.correct}/${x.total}</b><span>${x.completed?(x.accuracy+'%'):(x.answered+'/'+x.total+' answered')}</span></div><div class="mini-track"><i style="width:${Math.min(100,(x.answered/x.total)*100)}%"></i></div><button class="secondary report-action" onclick="openExamFromProgress('${escapeHtml(x.exam_code)}',${x.session_id||'null'},'${escapeHtml(x.status)}')">${examActionLabel(x)} →</button></article>`).join('')||'<p class="small-note">No exams are included in the current plan.</p>';
 
