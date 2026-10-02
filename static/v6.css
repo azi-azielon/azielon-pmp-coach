@@ -938,3 +938,28 @@ body.v6 #ruleReviewArea{max-width:1000px;margin:0 auto}
 @media (max-width:640px){body.v6 .v8-opt{flex-direction:column;align-items:flex-start}}
 body.v6 #examSetup.v8-has-setup > .mode-grid,body.v6 #examSetup.v8-has-setup > h3:not(.v8-h),body.v6 #examSetup.v8-has-setup > .feedback-setting,body.v6 #examSetup.v8-has-setup > #examSetupMessage{display:none!important}
 body.v6 .v8-note{margin:0 0 12px;padding:9px 14px;background:#FBF6EA;border-left:3px solid var(--v6-gold);border-radius:0 8px 8px 0;font-size:13.5px;color:#4A5262}
+/* v7.10 compact concept lesson */
+body.v6 #app main > #review.view.active.v7-concept-open{padding-top:10px!important;padding-bottom:34px!important}
+body.v6 .v7-concept{max-width:1000px}
+body.v6 .v7-concept-head{margin-bottom:6px;align-items:flex-end}
+body.v6 .v7-concept-title{display:flex;flex-direction:column;gap:1px;min-width:0}
+body.v6 .v7-concept-title .v6-session-exit{margin:0 0 4px;align-self:flex-start}
+body.v6 .v7-concept h2{font-size:20px!important;margin:0!important;line-height:1.2!important}
+body.v6 .v7-concept-rel{margin:4px 0 6px;font-size:12.5px}
+body.v6 .v7-concept-rel button{font-size:12.5px;padding:3px 10px}
+body.v6 .v7-concept-item{padding:8px 0}
+body.v6 .v7-concept-stem{font-size:14px;line-height:1.45;margin:3px 0 6px}
+body.v6 .v7-concept-opts{margin:0 0 6px;gap:4px}
+body.v6 .v7-concept-opts li{font-size:13.5px;padding:6px 10px}
+body.v6 .v7-concept-more{margin:0 0 6px;font-size:12.5px;color:#6B7280}
+body.v6 .v7-concept-more summary{cursor:pointer}
+body.v6 .v7-concept-more li b{color:#B5483B}
+body.v6 .v7-concept .v6-lesson-row{padding:3px 0!important;font-size:13.5px!important;line-height:1.42!important}
+body.v6 .v7-concept .v6-lesson-row span{font-size:13.5px!important;line-height:1.42!important}
+body.v6 .v7-concept .v6-lesson{margin:0!important}
+body.v6 .v7-concept-item[hidden]{display:none!important}
+body.v6 .v7-concept-pager{display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--v6-line);font-size:13px;color:#5B6475}
+body.v6 .v7-concept-pager span{margin-right:auto;font-weight:600;color:var(--v6-navy)}
+body.v6 .v7-concept-pager button{height:30px!important;min-height:0!important;padding:0 12px!important;font-size:12.5px!important}
+body.v6 .v7-concept-pager button[disabled]{opacity:.4}
+body.v6 .v7-concept-item{border-top:0!important}
