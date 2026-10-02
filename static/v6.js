@@ -1240,8 +1240,9 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
       ?opt('block_rules','Learn, then answer','Read 10 concepts, then answer the 10 questions on them. You see the explanation after each answer. Repeats for all 180 questions.','Start learning →',true,'Recommended')
        +opt('real_mock','Real mock exam','No concepts shown. 180 questions with a 4-hour timer. Answers at the end. Counts toward your 5 exams at 80%+.','Start real mock',false)
        +opt('review_all','All concepts first','Read all 180 concepts in one go, then take the exam.','Read all concepts',false)
-       +opt('rules_only','Just browse the concepts','Look through the 180 concepts. No exam, no timer.','Browse concepts',false)
       :opt('real_mock','Full mock exam','180 questions with a 4-hour timer, like the real exam. Answers and explanations at the end. You can pause and come back.','Start the exam →',true));
+    const running=(state.examCatalog||[]).filter(x=>x.code!==code&&x.active_session&&!x.active_session.paused);
+    if(running.length){const n=document.createElement('p');n.className='v8-note';n.innerHTML=`<b>${esc(running.map(x=>x.name).join(', '))}</b> is still in progress. Starting this exam pauses it and stops its timer. You can resume it later from the exam list.`;wrap.querySelector('.v8-h').after(n)}
     box.appendChild(wrap);
     wrap.querySelectorAll('[data-v8-mode]').forEach(b=>b.onclick=async()=>{
       const mode=b.dataset.v8Mode,label=b.textContent;wrap.querySelectorAll('button').forEach(x=>x.disabled=true);b.textContent='Starting…';
@@ -1275,7 +1276,8 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
     if(head&&onContinue){const m=String(title||'').match(/Block (\d+)/);const k=area.querySelector('.eyebrow');if(k)k.textContent=m?`Step 1 of 2 · Block ${m[1]} of 18`:'Step 1 of 2';
       const h=head.querySelector('h3');if(h&&m)h.textContent='Read these 10 concepts';
       if(!area.querySelector('.v8-sub')){const p=document.createElement('p');p.className='v8-sub';p.textContent='Take your time — the timer is stopped. When you are ready, answer the 10 questions on them.';head.after(p)}
-      area.querySelectorAll('#rulesContinue,#rulesContinueTop').forEach(b=>b.textContent='Start the 10 questions →')}
+      if(!m){if(h)h.textContent='Read all 180 concepts';const sub=area.querySelector('.v8-sub');if(sub)sub.textContent='The timer has not started. When you are ready, start the 180-question exam.'}
+      area.querySelectorAll('#rulesContinue,#rulesContinueTop').forEach(b=>b.textContent=m?'Start the 10 questions →':'Start the exam →')}
     return r}}
   // 4) Question screen: show loading, and show a clear message with Retry if a question cannot load.
   if(typeof loadExamQuestion==='function'){const o=window.loadExamQuestion;window.loadExamQuestion=async function(i){

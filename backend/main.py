@@ -2382,9 +2382,10 @@ def exam_rules(exam_code:str, block:int|None=None, user:User=Depends(current_use
     e=_require_exam_access(user,db,exam_code,'block_rules')
     require_feature(user,db,'rules','Rule Review is included with Concept + Exam or Premium')
     if not e.get('rules_available'): raise HTTPException(404,'This exam does not have rule-review content')
+    # Concepts stay hidden only while a Real Mock is actually running. A paused mock does not block study.
     active=_active_real_mock(user.id,db)
-    if active:
-        raise HTTPException(403,'Rule review is unavailable while a Real Mock session is active')
+    if active and active.status=='active':
+        raise HTTPException(403,'A Real Mock exam is running. Pause or submit it before reading concepts.')
     rs=[r for r in EXAM_CONTENT.get('rules',[]) if r.get('exam_code')==exam_code]
     if block is not None: rs=[r for r in rs if int(r.get('block') or 0)==block]
     rs.sort(key=lambda r:(int(r.get('block') or 0),int(r.get('position') or 0)))
@@ -2406,6 +2407,15 @@ def start_exam(exam_code:str, data:ExamStartIn, user:User=Depends(current_user),
     if len(ids)!=180: raise HTTPException(500,'Exam content is incomplete')
     # Real mock order is mixed but deterministic per session creation.
     if mode=='real_mock': random.shuffle(ids)
+    # Only one exam runs at a time: anything else still running is paused (its timer stops) and can be resumed later.
+    for other in db.query(ExamSession).filter(ExamSession.user_id==user.id,ExamSession.status=='active').all():
+        _expire_exam_if_needed(other,db)
+        if other.status!='active': continue
+        if other.break_started_at:   # close an open pacing break first so the pause is counted correctly
+            used=max(0,int((datetime.utcnow()-other.break_started_at).total_seconds()))
+            other.break_seconds_used=(other.break_seconds_used or 0)+min(600,used)
+        other.status='paused'; other.break_started_at=datetime.utcnow()
+    db.commit()
     s=ExamSession(user_id=user.id,exam_code=exam_code,mode=mode,feedback_mode=feedback,
                   question_ids_json=json.dumps(ids),duration_seconds=int(e.get('duration_minutes',240))*60,
                   status='active',current_index=0,marked_json='[]',rules_viewed_json='[]')
