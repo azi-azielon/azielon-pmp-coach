@@ -1189,19 +1189,28 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
   // Apply a rewrite only while the original wording is untouched, so Instructor Studio edits always win.
   function apply(){
     if(!RW)return;
-    (state.notes||[]).forEach(n=>{if(n._rw)return;const r=RW.notes&&RW.notes[n.id];if(!r)return;if(String(n.summary||'')!==String(r.old||''))return;
-      Object.assign(n,{summary:r.summary,example:r.example,dos:r.dos,donts:r.donts,rule:r.rule,examCue:r.examCue,_rw:true})});
-    (state.tricky||[]).forEach(t=>{if(t._rw)return;const r=RW.tricky&&RW.tricky[t.id];if(!r)return;if(String(t.leftMeaning||'')!==String(r.old||''))return;
+    // Merged duplicates are hidden; split-out notes are added. Instructor-edited items are left alone.
+    const hideN=n=>{const r=RW.notes&&RW.notes[n.id];return !!(r&&r.hidden&&String(n.summary||'')===String(r.old||''))};
+    if((state.notes||[]).some(hideN))state.notes=state.notes.filter(n=>!hideN(n));
+    (RW.newNotes||[]).forEach(x=>{if(!(state.notes||[]).some(n=>n.id===x.id)&&(state.notes||[]).length&&(typeof noteDomain==='undefined'||!noteDomain||noteDomain===x.domain))state.notes.push({...x,_rw:true,studyStatus:(state.v7NoteStates&&state.v7NoteStates[x.id])||'not_started'})});
+    (state.notes||[]).forEach(n=>{if(n._rw)return;const r=RW.notes&&RW.notes[n.id];if(!r||r.hidden)return;if(String(n.summary||'')!==String(r.old||''))return;
+      Object.assign(n,{summary:r.summary,example:r.example,dos:r.dos,donts:r.donts,rule:r.rule,examCue:r.examCue,_rw:true});if(r.title)n.title=r.title});
+    const hideT=t=>{const r=RW.tricky&&RW.tricky[t.id];return !!(r&&r.hidden&&String(t.leftMeaning||'')===String(r.old||''))};
+    if((state.tricky||[]).some(hideT))state.tricky=state.tricky.filter(t=>!hideT(t));
+    // A plan step that pointed at a merged item now points at the note or pair it was merged into.
+    (state.todayPlan||[]).forEach(t=>{const list=t.type==='note'?'notes':t.type==='tricky'?'tricky':null;if(!list)return;const r=RW[list]&&RW[list][t.itemId];
+      if(r&&r.hidden&&r.mergedInto&&!(state[list]||[]).some(x=>String(x.id)===String(t.itemId))){const it=(state[list]||[]).find(x=>String(x.id)===String(r.mergedInto));if(it){t.itemId=it.id;t.item=it;t.title=list==='notes'?it.title:`${it.left} vs ${it.right}`}}});
+    (state.tricky||[]).forEach(t=>{if(t._rw)return;const r=RW.tricky&&RW.tricky[t.id];if(!r||r.hidden)return;if(String(t.leftMeaning||'')!==String(r.old||''))return;
       Object.assign(t,{hook:r.hook,leftMeaning:r.leftMeaning,rightMeaning:r.rightMeaning,leftScenarioCue:r.leftScenarioCue,rightScenarioCue:r.rightScenarioCue,leftMemory:r.leftMemory,rightMemory:r.rightMemory,trap:r.trap,memory:r.memory,_rw:true})});
   }
   window.v7ApplyRewrites=apply;
   ['renderNotes','renderNotesSingle','renderTricky','renderTodayPlanFromDb','v6RenderFullPlan'].forEach(fn=>{if(typeof window[fn]!=='function')return;const o=window[fn];window[fn]=function(){try{apply()}catch(e){}return o.apply(this,arguments)}});
-  ['loadNotes','loadTricky'].forEach(fn=>{if(typeof window[fn]!=='function')return;const o=window[fn];window[fn]=async function(){await load();return o.apply(this,arguments)}});
+  ['loadNotes','loadTricky'].forEach(fn=>{if(typeof window[fn]!=='function')return;const o=window[fn];window[fn]=async function(){await load();if(fn==='loadNotes'&&RW&&(RW.newNotes||[]).length){try{const st=await api('/api/study/states');state.v7NoteStates=Object.fromEntries((st||[]).filter(x=>x.content_type==='note').map(x=>[x.content_id,x.status]))}catch(e){}}return o.apply(this,arguments)}});
   if(state.token)load().then(()=>{try{apply()}catch(e){}});
   // Note layout: what it is → a real example → do / don't → rule → exam cue
   if(typeof noteDetailHtml==='function'){const o=window.noteDetailHtml;window.noteDetailHtml=function(n){
     if(!n||!n._rw)return o.apply(this,arguments);
-    const li=a=>(a||[]).slice(0,4).map(x=>`<li>${esc(x)}</li>`).join('');
+    const li=a=>(a||[]).slice(0,5).map(x=>`<li>${esc(x)}</li>`).join('');
     return `<div class="note-study-body fingertip-note v7-note">
       <p class="note-summary fingertip-summary">${esc(n.summary)}</p>
       <section class="v7-note-example"><span class="exam-section-kicker">In real life</span><p>${esc(n.example)}</p></section>
@@ -1213,3 +1222,75 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
       <p class="v7-note-cue"><b>On the exam:</b> ${esc(n.examCue)}</p>
     </div>`}}
 })();
+
+/* ---------- v7.8: Concept Mastery — clear choices, real buttons, never a blank screen ---------- */
+(function(){
+  const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const $id=id=>document.getElementById(id);
+  // 1) Setup screen: one recommended button, the other ways clearly labelled.
+  if(typeof openExamSetup==='function'){const o=window.openExamSetup;window.openExamSetup=function(code){
+    const r=o.apply(this,arguments);
+    const box=$id('examSetup'),grid=box&&box.querySelector('.mode-grid');if(!grid)return r;
+    const e=(state.examCatalog||[]).find(x=>x.code===code)||{};const mastery=e.kind==='mastery';
+    box.classList.add('v8-has-setup');   // hides the old list; learn mode always explains each answer
+    box.querySelector('.v8-setup')?.remove();
+    const wrap=document.createElement('div');wrap.className='v8-setup';
+    const opt=(mode,title,desc,btn,primary,tag)=>`<div class="v8-opt ${primary?'is-main':''}">${tag?`<span class="v8-tag">${tag}</span>`:''}<div class="v8-opt-copy"><b>${title}</b><span>${desc}</span></div><button type="button" class="${primary?'primary':'secondary'}" data-v8-mode="${mode}">${btn}</button></div>`;
+    wrap.innerHTML=`<h3 class="v8-h">${mastery?'How do you want to take this exam?':'Ready to start?'}</h3><div id="v8SetupAlert" class="v8-alert" hidden></div>`+(mastery
+      ?opt('block_rules','Learn, then answer','Read 10 concepts, then answer the 10 questions on them. You see the explanation after each answer. Repeats for all 180 questions.','Start learning →',true,'Recommended')
+       +opt('real_mock','Real mock exam','No concepts shown. 180 questions with a 4-hour timer. Answers at the end. Counts toward your 5 exams at 80%+.','Start real mock',false)
+       +opt('review_all','All concepts first','Read all 180 concepts in one go, then take the exam.','Read all concepts',false)
+       +opt('rules_only','Just browse the concepts','Look through the 180 concepts. No exam, no timer.','Browse concepts',false)
+      :opt('real_mock','Full mock exam','180 questions with a 4-hour timer, like the real exam. Answers and explanations at the end. You can pause and come back.','Start the exam →',true));
+    box.appendChild(wrap);
+    wrap.querySelectorAll('[data-v8-mode]').forEach(b=>b.onclick=async()=>{
+      const mode=b.dataset.v8Mode,label=b.textContent;wrap.querySelectorAll('button').forEach(x=>x.disabled=true);b.textContent='Starting…';
+      const alertBox=$id('v8SetupAlert');alertBox.hidden=true;const msg=$id('examSetupMessage');if(msg)msg.textContent='';
+      try{
+        if(mode==='rules_only'){box.querySelector('#rulesOnlyBtn')?.click()}
+        else{const sel=$id('examFeedback');if(sel)sel.value='immediate';await startExam(code,mode)}
+      }finally{
+        const err=(msg&&msg.textContent||'').trim();
+        if(err){alertBox.innerHTML=`<b>That did not start.</b> ${esc(err)}`;alertBox.hidden=false}
+        wrap.querySelectorAll('button').forEach(x=>x.disabled=false);b.textContent=label;
+      }
+    });
+    return r}}
+  // 2) Starting or resuming always begins from a clean state.
+  const reset=()=>{state.v6RulePaused=false;try{clearExamTimer()}catch(e){}};
+  ['startExam','resumeExam'].forEach(fn=>{if(typeof window[fn]!=='function')return;const o=window[fn];window[fn]=async function(){reset();return o.apply(this,arguments)}});
+  if(typeof showExamResults==='function'){const o=window.showExamResults;window.showExamResults=async function(){try{clearExamTimer()}catch(e){}state.v6RulePaused=false;return o.apply(this,arguments)}}
+  // 3) Concepts screen: if it cannot load, say so with a way forward (never an empty page).
+  if(typeof showExamRuleBlock==='function'){const o=window.showExamRuleBlock;window.showExamRuleBlock=async function(n){
+    const rules=$id('ruleReviewArea'),sess=$id('examSessionArea'),msg=$id('examMessage');if(msg)msg.textContent='';
+    if(rules){$id('examSetup')?.classList.add('hidden');sess?.classList.add('hidden');rules.innerHTML='<p class="v8-loading">Loading the next 10 concepts…</p>';rules.classList.remove('hidden')}
+    const r=await o.apply(this,arguments);
+    if(rules&&!rules.querySelector('.rule-list')){const err=(msg&&msg.textContent||'').trim()||'The concepts could not be loaded.';
+      rules.innerHTML=`<div class="v8-alert"><b>We could not load these concepts.</b> ${esc(err)}</div><div class="v8-row"><button type="button" class="primary" id="v8RulesRetry">Try again</button><button type="button" class="secondary" id="v8RulesExit">Back to exams</button></div>`;
+      rules.classList.remove('hidden');$id('v8RulesRetry').onclick=()=>showExamRuleBlock(n);$id('v8RulesExit').onclick=()=>typeof v6ExitExam==='function'?v6ExitExam():location.reload()}
+    return r}}
+  // Concepts screen wording: step 1 of 2, with the start button at the top and bottom.
+  if(typeof renderRules==='function'){const o=window.renderRules;window.renderRules=function(rules,title,onContinue){
+    const r=o.apply(this,arguments);const area=$id('ruleReviewArea'),head=area&&area.querySelector('.rule-review-head');
+    if(head&&onContinue){const m=String(title||'').match(/Block (\d+)/);const k=area.querySelector('.eyebrow');if(k)k.textContent=m?`Step 1 of 2 · Block ${m[1]} of 18`:'Step 1 of 2';
+      const h=head.querySelector('h3');if(h&&m)h.textContent='Read these 10 concepts';
+      if(!area.querySelector('.v8-sub')){const p=document.createElement('p');p.className='v8-sub';p.textContent='Take your time — the timer is stopped. When you are ready, answer the 10 questions on them.';head.after(p)}
+      area.querySelectorAll('#rulesContinue,#rulesContinueTop').forEach(b=>b.textContent='Start the 10 questions →')}
+    return r}}
+  // 4) Question screen: show loading, and show a clear message with Retry if a question cannot load.
+  if(typeof loadExamQuestion==='function'){const o=window.loadExamQuestion;window.loadExamQuestion=async function(i){
+    const card=$id('examQuestionCard'),msg=$id('examMessage');const before=card?card.innerHTML:'';if(msg)msg.textContent='';
+    if(card&&!card.querySelector('.pause-card'))card.innerHTML='<p class="v8-loading">Loading question…</p>';
+    const r=await o.apply(this,arguments);
+    if(card&&card.querySelector('.v8-loading')){
+      const rulesOpen=!$id('ruleReviewArea')?.classList.contains('hidden');
+      if(rulesOpen){card.innerHTML=''}
+      else{const err=(msg&&msg.textContent||'').trim()||'The question could not be loaded.';
+        card.innerHTML=`<div class="v8-alert"><b>We could not load this question.</b> ${esc(err)}</div><div class="v8-row"><button type="button" class="primary" id="v8QRetry">Try again</button><button type="button" class="secondary" id="v8QExit">Save and exit</button></div>`;
+        $id('v8QRetry').onclick=async()=>{try{await api(`/api/exam-sessions/${state.examSession.session_id}/resume`,{method:'POST'})}catch(e){}loadExamQuestion(i)};
+        $id('v8QExit').onclick=()=>typeof v6ExitExam==='function'?v6ExitExam():location.reload()}
+    }
+    return r}}
+})();
+
+(function(){if(typeof beginExamQuestions!=='function')return;const o=window.beginExamQuestions;window.beginExamQuestions=async function(){const r=await o.apply(this,arguments);const pill=document.getElementById('examModePill');if(pill){const m=state.examSession&&state.examSession.mode;pill.textContent=m==='real_mock'?'Real mock exam':m==='block_rules'?'Learn, then answer':'Concepts read first'}return r}})();

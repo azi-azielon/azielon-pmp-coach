@@ -918,3 +918,22 @@ body.v6 .v7-note .fingertip-section li{margin:0 0 4px!important;font-size:14px!i
 body.v6 .v7-note .fingertip-rule{margin:0!important;padding:10px 16px!important}
 body.v6 .v7-note .fingertip-rule strong{font-size:16px!important}
 body.v6 .v7-note-example{margin:0 0 10px!important;padding:8px 14px!important}
+/* v7.8 exam setup + states */
+body.v6 .v8-h{font-family:var(--v6-serif)!important;font-size:22px!important;color:var(--v6-navy)!important;margin:4px 0 12px!important}
+body.v6 .v8-setup{max-width:860px}
+body.v6 .v8-opt{display:flex;align-items:center;gap:18px;padding:14px 16px;border:1px solid var(--v6-line);border-radius:12px;background:#fff;margin-bottom:10px;position:relative}
+body.v6 .v8-opt.is-main{border-color:var(--v6-navy);background:#FBF6EA;padding-top:26px}
+body.v6 .v8-tag{position:absolute;top:8px;left:16px;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--v6-gold-deep)}
+body.v6 .v8-opt-copy{flex:1;min-width:0}
+body.v6 .v8-opt-copy b{display:block;font-size:16px;color:var(--v6-navy)}
+body.v6 .v8-opt-copy span{display:block;font-size:13.5px;color:#5B6475;margin-top:2px;line-height:1.45}
+body.v6 .v8-opt button{flex:none;height:40px!important;padding:0 18px!important;font-size:14px!important;white-space:nowrap}
+body.v6 .v8-opt.is-main button{height:44px!important;padding:0 22px!important;font-size:15px!important}
+body.v6 .v8-alert{padding:10px 14px;border-radius:10px;background:#FBE9E6;color:#7E2F39;font-size:14px;margin:0 0 12px}
+body.v6 .v8-alert[hidden]{display:none}
+body.v6 .v8-row{display:flex;gap:10px}
+body.v6 .v8-loading{color:#6B7280;font-size:14px;padding:18px 0}
+body.v6 .v8-sub{margin:4px 0 12px;color:#5B6475;font-size:14px}
+body.v6 #ruleReviewArea{max-width:1000px;margin:0 auto}
+@media (max-width:640px){body.v6 .v8-opt{flex-direction:column;align-items:flex-start}}
+body.v6 #examSetup.v8-has-setup > .mode-grid,body.v6 #examSetup.v8-has-setup > h3:not(.v8-h),body.v6 #examSetup.v8-has-setup > .feedback-setting,body.v6 #examSetup.v8-has-setup > #examSetupMessage{display:none!important}

@@ -1,5 +1,5 @@
 {
- "version": "1.0",
+ "version": "1.1",
  "notes": {
   "BUS-01": {
    "old": "Governance tells you who has authority to decide what. The uploaded Business Environment notes use the flow Problem → Assess → Check → Owner → Act → Escalate.",
@@ -79,41 +79,41 @@
   },
   "BUS-05": {
    "old": "Foundations and value-delivery material distinguish business need, business case, project delivery, benefits, and strategic value.",
-   "summary": "The business need is the problem or opportunity; the business case explains why paying for the project is worth it. You care because a project must keep fitting the organization's goals.",
-   "example": "A retailer approved a store-kiosk project last year. Now the company decides to move sales online. Priya does not keep building out of habit. She reviews the business case with the sponsor to see if the project still makes sense.",
+   "summary": "The business case explains why the project is worth paying for: the need, options, costs, benefits and risks. You care because a project that finishes on time but no longer fits the organization's goals is not a success.",
+   "example": "Jo's project builds a store kiosk to cut checkout time. Midway, the company moves to mobile-only checkout. Jo does not keep building out of habit. She assesses what the news means, reviews the business case with the sponsor, and the sponsor decides what happens next.",
    "dos": [
-    "Know the business need behind your project",
-    "Keep the project tied to the organization's strategy",
-    "Recheck the business case when conditions change a lot",
-    "Take the findings to the sponsor for a decision"
+    "Read the business case to learn the need behind your project",
+    "Link project objectives and decisions to organizational goals and expected benefits",
+    "Assess the impact and recheck the business case after a major change",
+    "Take the findings to the sponsor for a decision, and tell the team why"
    ],
    "donts": [
-    "Do not continue only because the project was approved once.",
-    "Do not confuse finishing the work with creating strategic value.",
-    "Do not select projects using one number alone.",
-    "Do not cancel or redirect the project on your own."
+    "Do not continue only because the project was approved once; keep rechecking the business case.",
+    "Do not confuse the business case (why) with the charter (authorizes the project).",
+    "Do not judge value by one number, money alone, or on time and on budget.",
+    "Do not cancel, redirect or escalate before assessing the impact; the sponsor decides."
    ],
    "rule": "Business Need → Business Case → Project → Benefits → Value",
-   "examCue": "When a question says 'strategy changed', 'new competitor' or 'market shift', think: reassess the business case with the sponsor before continuing."
+   "examCue": "When a question says 'strategy changed', 'justification' or 'benefits no longer expected', think: assess the impact, then reassess the business case with the sponsor."
   },
   "BUS-06": {
    "old": "The Business Environment material frames AI as decision support with human accountability and sustainability as environmental + social + economic lifecycle thinking.",
-   "summary": "Responsible AI means using AI as a helper while a human stays accountable for the decision. Sustainability means weighing environmental, social and economic effects over the whole life of the product.",
+   "summary": "Responsible AI means using AI as a helper while a human stays accountable for the decision. You care because AI output can be wrong or biased, and sensitive data must stay protected.",
    "example": "An AI tool gives Sam a schedule forecast that looks too good. He checks the data it used, finds missing tasks, and corrects it before reporting. He also keeps client names out of the tool because it is not approved.",
    "dos": [
     "Check that the tool and the data are approved",
     "Validate AI output before acting on it",
-    "Keep a human accountable for the final decision",
-    "Compare options by full lifecycle impact, not price alone"
+    "Watch for bias (an unfair slant) in what the tool produces",
+    "Keep a human accountable for the final decision"
    ],
    "donts": [
     "Do not treat AI output as the final answer.",
     "Do not put sensitive data into an unapproved AI tool.",
-    "Do not choose the cheapest or fastest option without checking long-term impact.",
     "Do not let AI make governance decisions."
    ],
-   "rule": "AI: Protect data → Validate output → Human decides. Sustainability: think long term.",
-   "examCue": "When a question says 'AI recommends', 'bias' or 'privacy', think validate, then a human decides. 'Lifecycle' or 'environmental' means balance long-term impact."
+   "rule": "Protect data → Validate output → Human decides",
+   "examCue": "When a question says 'AI recommends', 'bias' or 'privacy', think: protect the data, validate the output, then a human decides.",
+   "title": "Responsible AI"
   },
   "BUS-07": {
    "old": "The Finance and Business Environment formula notes frame formulas as decision support: calculate, interpret, validate, decide.",
@@ -155,22 +155,22 @@
   },
   "PEO-01": {
    "old": "Lead by enabling the team rather than controlling every task. The uploaded People notes emphasize coaching, removing blockers, empowering the team, protecting focus, active listening, and adapting leadership to the situation.",
-   "summary": "Servant leadership means you lead by helping the team succeed instead of controlling every task. You care because the exam almost always prefers coaching and removing obstacles over giving orders.",
-   "example": "A developer tells Grace she has waited four days for a test server. Grace does not tell her to work harder. She listens, calls the infrastructure lead, gets the server released, and checks back the next day.",
+   "summary": "Servant leadership means you lead by serving the team so it can deliver value, instead of controlling every task. You care because the exam almost always prefers coaching and removing obstacles over giving orders.",
+   "example": "A developer tells Grace she has waited four days for a test server. Grace does not tell her to work harder. She listens, calls the infrastructure lead, gets the server released, and keeps a demanding executive from interrupting the team.",
    "dos": [
     "Listen to understand what the person needs",
-    "Coach and mentor the team",
-    "Remove obstacles that block the work",
-    "Let the team make decisions about its own work"
+    "Coach the team and let it make decisions about its own work",
+    "Remove impediments (things blocking the team)",
+    "Protect the team from outside interruptions"
    ],
    "donts": [
-    "Do not use command-and-control with a capable team.",
+    "Do not command, micromanage or assign every task yourself when the team is capable.",
     "Do not escalate a team issue before talking with the people involved.",
-    "Do not solve every problem yourself; help the team solve it.",
-    "Do not micromanage tasks."
+    "Do not solve a problem the team can solve with a little coaching.",
+    "Do not think servant leader means passive; you still act and remove blockers."
    ],
    "rule": "Coach → Facilitate → Empower → Remove Barriers",
-   "examCue": "When a question says 'blocker', 'impediment' or 'self-organizing team', think servant leader: listen, coach, and remove the obstacle before escalating."
+   "examCue": "When a question says 'blocker', 'impediment' or 'self-organizing team', think servant leader: listen, coach, and remove the obstacle before escalating. Do not command."
   },
   "PEO-02": {
    "old": "The uploaded leadership material presents the Thomas-Kilmann modes and frames collaborate/problem solve as the generally preferred win-win approach, while force/direct is reserved for urgent or non-negotiable contexts.",
@@ -194,78 +194,78 @@
   "PEO-03": {
    "old": "Team development is presented as Forming → Storming → Norming → Performing → Adjourning. Storming is normal, teams can regress, and leadership should change as the team matures.",
    "summary": "Tuckman's model describes five stages every team goes through, from first meeting to finishing. You care because the right leadership style depends on the stage your team is in.",
-   "example": "Three weeks into a new project, Dana's team is arguing about who does what. She recognizes this as Storming, which is normal. She helps them agree ground rules and clear roles instead of replacing anyone.",
+   "example": "Three weeks into a new project, two of Dana's analysts argue openly about who owns the test plan. She recognizes this as Storming, which is normal. She brings them together, clarifies roles and agrees ground rules instead of replacing anyone.",
    "dos": [
     "Identify which stage the team is in",
-    "Give clear direction to a brand-new team",
-    "Coach the team through conflict and set ground rules",
-    "Delegate more as the team matures"
+    "Give clear direction to a brand-new team and expect a slow start",
+    "Coach the team through Storming conflict and set ground rules",
+    "Delegate once the team performs; recognize people when it adjourns (closes)"
    ],
    "donts": [
-    "Do not try to skip Storming.",
+    "Do not try to skip Storming; conflict there is normal, not failure.",
     "Do not replace people when the conflict is normal team growth.",
     "Do not use the same leadership style at every stage.",
-    "Do not forget a new member can move the team back a stage."
+    "Do not forget a new member can move the team back to Storming."
    ],
    "rule": "Forming → Storming → Norming → Performing → Adjourning",
-   "examCue": "When a question says 'new team', 'new member joined' or 'arguing over roles', think Forming/Storming: coach and set ground rules; do not replace anyone yet."
+   "examCue": "When a question says 'new team', 'new member joined' or 'arguing over roles', think: which Tuckman stage, then match your style. Coach and set ground rules; do not replace anyone."
   },
   "PEO-04": {
    "old": "The People notes cover Maslow, Herzberg, McGregor X/Y, McClelland, Vroom, Ouchi, and situational leadership. The goal is recognizing what motivates behavior rather than memorizing names alone.",
    "summary": "Motivation theories explain what makes people want to do good work. You care because the right response depends on what the person actually needs, and that is often not money.",
    "example": "Ken, a strong analyst, has become quiet and slow. Sara asks what has changed and learns he feels his work goes unnoticed. She gives him ownership of a visible report and recognizes his results in the team meeting.",
    "dos": [
-    "Find the need behind the behavior",
-    "Fix basic issues such as pay and conditions first",
-    "Use recognition, growth and responsibility to motivate",
-    "Match your approach to the person"
+    "Maslow: needs climb from physiological and safety to social, esteem and self-actualization; lower levels come first.",
+    "Herzberg: hygiene factors (pay, conditions) prevent dissatisfaction; motivators (recognition, growth) create satisfaction.",
+    "McGregor (Theory X/Y): X assumes people need control; Y assumes they are self-motivated. PMI prefers Y.",
+    "McClelland: people are driven by achievement, affiliation or power; match work to the dominant need.",
+    "Vroom (expectancy): effort leads to performance, performance to reward; the reward must matter to the person."
    ],
    "donts": [
-    "Do not use more pay as the answer to every motivation problem.",
-    "Do not assume everyone is motivated by the same thing.",
-    "Do not treat the models as rigid formulas.",
-    "Do not confuse hygiene factors with motivators."
+    "Do not use more pay as the answer to every motivation problem; pay is a hygiene factor.",
+    "Do not assume everyone is motivated by the same thing, or treat the models as rigid formulas.",
+    "Do not confuse hygiene factors with motivators: fixing conditions stops complaints but does not inspire."
    ],
-   "rule": "Need → Motivation signal → Right leadership response",
-   "examCue": "When a question says 'salary and conditions' think Herzberg hygiene; 'recognition' or 'growth' think motivators; 'achievement, affiliation, power' think McClelland."
+   "rule": "Find the need first, then pick the motivator.",
+   "examCue": "When a question says 'salary and conditions', think Herzberg hygiene; 'recognition' or 'growth', think motivators; 'achievement, affiliation, power', think McClelland; 'reward not valued', think Vroom."
   },
   "PEO-05": {
    "old": "Stakeholder work is not a one-time list. The uploaded materials emphasize early identification, analysis of power/interest and engagement, tailored communication, and continuous monitoring.",
-   "summary": "Stakeholders are the people who affect your project or are affected by it. You care because finding them early and involving them in the right way prevents surprises and resistance later.",
-   "example": "A finance director who was never consulted starts blocking approvals. Wei adds her to the stakeholder register (list of stakeholders), meets her to learn her concerns, and sets up a short monthly review with her.",
+   "summary": "Stakeholders are the people who affect your project or are affected by it. You care because finding them early and involving them in the right way prevents surprises, and one ignored stakeholder can stall the whole project.",
+   "example": "A warehouse supervisor keeps criticizing a new scanning system in meetings. Grace does not send another status email. She meets him, learns he fears losing staff, involves him in planning the training, and updates the stakeholder register (list of stakeholders).",
    "dos": [
     "Identify stakeholders early and keep looking for new ones",
-    "Analyze each one's power, interest and expectations",
-    "Tailor how you engage each stakeholder",
-    "Update the stakeholder register as things change"
+    "Analyze each one's power, interest, influence and expectations",
+    "Meet resistant stakeholders to learn their real concern, then tailor the engagement",
+    "Update the stakeholder register and reassess engagement as things change"
    ],
    "donts": [
-    "Do not send more messages without understanding the resistance.",
-    "Do not treat the stakeholder register as a one-time list.",
-    "Do not escalate a resistant stakeholder before analyzing why.",
+    "Do not send more messages without understanding the resistance; sending information is not engaging.",
+    "Do not treat the stakeholder register or the analysis as a one-time task.",
+    "Do not escalate, ignore or work around a resistant stakeholder before analyzing why.",
     "Do not engage everyone the same way."
    ],
    "rule": "Identify → Analyze → Engage → Monitor",
-   "examCue": "When a question says 'new stakeholder', 'resistant' or 'high power', think: identify, analyze their concern, then engage. Update the register first."
+   "examCue": "When a question says 'new stakeholder', 'resistant' or 'unaware', think: update the register, analyze their needs first, then adjust how you engage them."
   },
   "PEO-06": {
    "old": "Communication notes emphasize tailoring method and frequency to stakeholder needs, active listening, and correcting structural communication problems through the communications approach rather than reactive messaging.",
-   "summary": "Communication means getting the right information to the right people in a way they can use. You care because most project problems begin with someone not knowing something they needed to know.",
-   "example": "Executives say Tom's 12-page weekly report tells them nothing. He asks what they need to decide, replaces it with a one-page dashboard, and asks a month later whether it helps.",
+   "summary": "Communication means getting the right information to the right people in a way they can use. You choose between three methods: interactive (live, two-way), push (you send it) and pull (people fetch it).",
+   "example": "Two team leads are upset about a schedule cut. Ravi does not email them. He holds a call so they can ask questions. The weekly report goes out by email, and the procedures manual sits on the team site.",
    "dos": [
-    "Ask who needs what information, and why",
-    "Tailor method, detail and frequency to each audience",
-    "Listen actively: repeat back, clarify, then solve",
+    "Ask who needs what and why, then tailor method, detail and frequency",
+    "Use interactive for sensitive or urgent topics, push for routine updates, pull for reference material",
+    "Listen actively and check the message was understood, not only sent",
     "Update the communications plan when communication keeps failing"
    ],
    "donts": [
-    "Do not assume more communication fixes the problem.",
-    "Do not use one channel for every stakeholder.",
+    "Do not assume more communication, or the fastest method, fixes the problem.",
+    "Do not use email alone for conflict or bad news, or pull for anything urgent.",
     "Do not send a blaming memo instead of fixing the process.",
     "Do not leave a remote team without agreed communication rules."
    ],
    "rule": "Audience → Need → Method → Frequency → Feedback → Adjust",
-   "examCue": "When a question says 'misunderstanding', 'did not receive' or 'virtual team', think: find why it failed, then review the communications management plan."
+   "examCue": "When a question says 'sensitive' or 'misunderstanding', think interactive. 'Reference library', think pull. 'Did not receive' or 'virtual team', think review the communications management plan."
   },
   "PEO-07": {
    "old": "The leadership and roles materials distinguish formal authority from influence. The PM often works through expert and referent power, while decision rights depend on governance and delivery context.",
@@ -345,22 +345,22 @@
   },
   "PRO-02": {
    "old": "Scope notes distinguish requirements, acceptance criteria, RTM, scope statement, WBS, WBS dictionary, and formal handling of requested changes.",
-   "summary": "Scope is all the work the project will do, and requirements are what stakeholders need from it. You care because unapproved extra work, called scope creep, is a top cause of trouble.",
-   "example": "During a website build, the client asks a developer for an extra chat feature. Zoe first checks whether it is in the approved scope. It is not, so she assesses the impact and submits a change request.",
+   "summary": "Requirements are what stakeholders need. The scope baseline is the approved work: the scope statement, the WBS (work broken into pieces) and its dictionary. You build exactly that, because unapproved extra work is a top cause of trouble.",
+   "example": "A developer wants to add a free dashboard the customer never asked for. Mei says no and explains it is not in the approved scope. When the customer later asks for it, Mei assesses the impact and submits a change request.",
    "dos": [
-    "Clarify the request and check it against approved scope",
-    "Trace each requirement from need to acceptance",
+    "Clarify the request and compare it against the approved scope baseline",
+    "Trace each requirement from business need to acceptance",
     "Break the scope into smaller pieces with a WBS",
-    "Send new scope through the change process"
+    "Send new scope through change control; confirm finished deliverables with the customer"
    ],
    "donts": [
-    "Do not add work informally because it sounds reasonable.",
+    "Do not gold plate (add unrequested extras), even to please the customer.",
+    "Do not add a small request informally; that is scope creep.",
     "Do not update the baseline before the change is approved.",
-    "Do not confuse the RTM (tracing) with the WBS (breaking down).",
-    "Do not deliver extras nobody asked for."
+    "Do not confuse the RTM (tracing) with the WBS, or collect requirements from one stakeholder only."
    ],
    "rule": "Need → Requirement → Acceptance Criteria → Scope/WBS → Deliver → Verify → Accept",
-   "examCue": "When a question says 'new feature', 'customer asked the team directly' or 'not in scope', think: assess the impact, then follow change control."
+   "examCue": "When a question says 'team added an extra feature', think gold plating. 'Customer asked informally' or 'not in scope', think: assess the impact, then follow change control."
   },
   "PRO-03": {
    "old": "Schedule learning should connect activity logic, dependencies, float, critical path, and compression trade-offs rather than treating formulas as isolated facts.",
@@ -383,79 +383,79 @@
   },
   "PRO-04": {
    "old": "The EVM material teaches the story first: Plan it → Earn it → Spend it → Forecast it. PV, EV, and AC unlock the formulas, followed by variance/index and EAC/ETC/VAC interpretation.",
-   "summary": "Earned value management (EVM) compares the work you planned, the work you finished and the money you spent. It tells you early whether you are over budget or behind schedule.",
-   "example": "By month three, Hana planned $50,000 of work, finished $40,000 worth and spent $45,000. She is behind and over budget. She finds the cause, forecasts the final cost, and reports it to the sponsor.",
+   "summary": "Earned value management (EVM) compares work you planned (PV), work you finished (EV) and money you spent (AC). It tells you early whether you are over budget or behind schedule.",
+   "example": "Halfway through, Kim planned $50,000 of work, finished $40,000 worth and spent $45,000. CPI = 40/45 = 0.89 and SPI = 40/50 = 0.80. She is over budget and behind, so she finds the cause and forecasts the final cost for the sponsor.",
    "dos": [
     "Find PV, EV and AC first",
-    "Start every variance and index formula with EV",
+    "Calculate CPI = EV ÷ AC and SPI = EV ÷ PV; EV goes on top",
     "Read above 1 as good and below 1 as bad",
-    "Forecast the final cost (EAC), then decide how to respond"
+    "Find the cause, forecast the final cost (EAC), then decide how to respond"
    ],
    "donts": [
     "Do not read schedule variance as days; it is in money.",
     "Do not use a forecast formula without checking its assumption.",
-    "Do not confuse the cost baseline with the project budget.",
-    "Do not report numbers without saying what they mean."
+    "Do not confuse the cost baseline with the project budget, or AC with PV.",
+    "Do not read CPI below 1 as under budget, or report numbers without explaining the cause."
    ],
    "rule": "Plan it → Earn it → Spend it → Forecast it",
-   "examCue": "When a question gives 'CPI' or 'SPI', think: below 1 is bad, above 1 is good. CPI is cost, SPI is schedule."
+   "examCue": "When a question gives EV, AC and PV, think CPI for cost and SPI for schedule. Below 1 means over budget or behind schedule; above 1 is good."
   },
   "PRO-05": {
    "old": "The quality materials frame quality as conformance + fitness for use, with prevention over inspection. They distinguish Manage Quality, Control Quality, and formal acceptance.",
    "summary": "Quality means the product meets its requirements and is fit for use. You care because preventing defects costs less than finding them later, and the customer must formally accept the result.",
-   "example": "A team finishes a payroll report. Testers check it against requirements and it passes. Yuki then reviews it with the payroll manager, who signs off. Only then does Yuki treat it as accepted.",
+   "example": "Testers keep finding the same errors in a payroll report, so Yuki gives the team a checklist and the errors drop. The next report passes testing. She then reviews it with the payroll manager, who signs off. Only then is it accepted.",
    "dos": [
-    "Build quality into the process from the start",
+    "Agree quality standards up front and build checks into daily work",
     "Check the deliverable against requirements (Control Quality)",
     "Get formal acceptance from the customer (Validate Scope)",
-    "Find the root cause of defects"
+    "Find the root cause of repeat defects and improve the process (Manage Quality)"
    ],
    "donts": [
     "Do not assume internal testing equals customer acceptance.",
-    "Do not treat quality as a final inspection only.",
-    "Do not add extras and call it quality (gold plating).",
-    "Do not confuse low grade with low quality."
+    "Do not rely only on inspection at the end, but do not skip it either.",
+    "Do not add extras and call it quality; that is gold plating.",
+    "Do not confuse low grade with low quality, or Manage Quality (process) with Control Quality (deliverable)."
    ],
    "rule": "Plan quality → Build quality → Check quality → Accept quality",
-   "examCue": "When a question says 'verified' think Control Quality by the team; 'accepted' or 'sign-off' think Validate Scope with the customer; 'process' think Manage Quality."
+   "examCue": "When a question says 'verified', think Control Quality; 'sign-off', think Validate Scope; 'defects keep recurring', think prevention: fix the process (Manage Quality), not more inspection."
   },
   "PRO-06": {
    "old": "The Risk materials distinguish future uncertainty from current issues and organize work around identification, qualitative/quantitative analysis, responses, reserves, and monitoring.",
    "summary": "A risk is something that might happen in the future; an issue is a problem happening now. You care because each one has its own path and its own log.",
-   "example": "Ivan listed 'supplier may deliver late' as a risk with a backup supplier ready. The supplier does miss the date. Ivan records it in the issue log, activates the backup supplier, and updates the risk register.",
+   "example": "Ana listed 'supplier may ship late' in the risk register with a backup supplier. On Monday the supplier confirms a two-week delay, so it is now an issue. Ana records it in the issue log, assigns an owner, starts the backup plan and updates the risk register.",
    "dos": [
     "Ask first: has it happened yet?",
-    "Record and analyze risks in the risk register",
+    "Record future uncertainty in the risk register and analyze it",
     "Carry out the planned response when a risk occurs",
-    "Log it as an issue and keep monitoring"
+    "Log it as an issue with an owner and due date, then monitor"
    ],
    "donts": [
     "Do not leave a risk that has occurred only in the risk register.",
-    "Do not ignore new risks created by your response.",
-    "Do not re-analyze a current problem as if it might happen.",
-    "Do not treat every risk as a threat."
+    "Do not re-analyze a current problem as if it might happen; log it now and act.",
+    "Do not ignore new risks created by your response, or treat every risk as a threat.",
+    "Do not assume every issue needs a change request."
    ],
    "rule": "No → Risk: Analyze → Respond → Monitor. Yes → Issue: Analyze → Resolve → Monitor.",
-   "examCue": "When a question says 'might', 'could' or 'potential', think risk register. 'Has occurred' or 'is happening' means issue log and act now."
+   "examCue": "When a question says 'might', 'could' or 'potential', think risk register: future uncertainty. 'Has occurred' or 'is now' means issue log: a current problem, act now."
   },
   "PRO-07": {
    "old": "Reserve notes distinguish contingency reserve from management reserve and connect funding decisions to identified vs unforeseen uncertainty.",
-   "summary": "Reserves are extra money or time set aside for uncertainty: contingency reserve for risks you identified, management reserve for surprises nobody saw coming. You need to know which one applies and who approves it.",
-   "example": "A storm delays a build. Storm delay was in the risk register, so Kofi uses the contingency reserve. Later a surprise soil problem appears. That was never identified, so he asks the sponsor for management reserve.",
+   "summary": "Reserves are money set aside for uncertainty. Contingency reserve is for risks you identified and sits inside the cost baseline. Management reserve is for surprises nobody identified and sits outside it.",
+   "example": "Tom set aside $10,000 of contingency for bad weather, but storms cost $15,000. He uses the contingency and raises a change request for the extra $5,000. Later a soil problem nobody identified appears, so he asks management to approve using management reserve.",
    "dos": [
-    "Ask whether the risk was identified beforehand",
-    "Use contingency reserve for identified risks",
-    "Request management reserve for unforeseen events",
-    "Update the records after using a reserve"
+    "Ask first: was this risk identified beforehand?",
+    "Use contingency reserve for its identified risks, then update the records and remaining reserve",
+    "Ask management to approve management reserve for surprises nobody identified",
+    "Raise a change request when the project needs more than the approved plan allows"
    ],
    "donts": [
-    "Do not use management reserve for every overrun.",
-    "Do not spend a reserve without the required approval.",
-    "Do not use a reserve to avoid a necessary change request.",
-    "Do not place management reserve inside the cost baseline."
+    "Do not treat management reserve as everyday project money; management must approve using it.",
+    "Do not count management reserve inside the cost baseline.",
+    "Do not spend contingency on extra features.",
+    "Do not use a reserve to avoid a change request the project needs."
    ],
-   "rule": "Identified risk → Contingency reserve. Unforeseen → Management reserve, with approval.",
-   "examCue": "When a question says 'identified risk' or 'known', think contingency reserve. 'Unforeseen' or 'unknown' means management reserve, which needs approval."
+   "rule": "Identified risk → contingency reserve. Surprise → management reserve, with approval. Need more → change request.",
+   "examCue": "When a question says 'identified risk', think contingency reserve. 'Unforeseen' or 'not anticipated', think management reserve and approval. 'More than the approved budget', think change request."
   },
   "PRO-08": {
    "old": "The procurement cheat sheet emphasizes clear scope, right contract, fair selection, active monitoring, formal change, and clean closure.",
@@ -478,22 +478,22 @@
   },
   "PRO-09": {
    "old": "Resource questions often test negotiation, role authority, continuity, knowledge transfer, and the schedule effect of leveling/smoothing.",
-   "summary": "Resources are the people and equipment your project needs, and most of them are shared with other work. You care because getting, keeping and replacing people without hurting the schedule is your job.",
-   "example": "Priya, your only database expert, is pulled onto another project by her department manager. You check what her absence does to your dates, then meet that manager to agree on shared hours and a handover to a colleague.",
+   "summary": "Resources are the people and equipment your project needs, and most are shared with other work. You care because resolving a clash over them, without hurting the schedule or your working relationships, is your job.",
+   "example": "Priya, your only database expert, is pulled onto another project by her department manager. You check which tasks can wait without moving your end date, then meet that manager to agree on shared days and a handover to a colleague.",
    "dos": [
-    "Find out who controls the person: often the functional (department) manager.",
-    "Assess the impact on schedule and cost before you talk to anyone.",
-    "Negotiate with the resource owner first; escalate only if that fails.",
-    "Plan knowledge transfer when someone is leaving or being replaced."
+    "Find who controls the person, often the functional (department) manager, and check the resource plan",
+    "Assess the impact on schedule and cost, and what each side really needs",
+    "Negotiate with the resource owner, replan and recheck dates; escalate only if unresolved",
+    "Plan knowledge transfer when someone is leaving or being replaced"
    ],
    "donts": [
-    "Do not assume the charter lets you overrule a functional manager.",
+    "Do not assume the charter lets you overrule or bypass a functional manager.",
     "Do not run to the sponsor before you have tried to negotiate.",
-    "Do not let a person leave without handing over what they know.",
+    "Do not secretly overload the team with overtime, or let knowledge leave without a handover.",
     "Do not forget: leveling can move the end date; smoothing stays within float (spare time)."
    ],
    "rule": "Need/Conflict → Assess impact → Negotiate → Adjust/Transfer → Escalate if unresolved",
-   "examCue": "When a question says 'functional manager', 'resource conflict' or 'overallocated', think: assess the impact, then negotiate with the resource owner before escalating."
+   "examCue": "When a question says 'functional manager', 'pulled to another project' or 'overallocated', think: assess the impact, then negotiate with the resource owner before escalating."
   },
   "PRO-10": {
    "old": "The document deck provides a compact memory system: WHY = Business Case; AUTHORITY = Charter/Governance; HOW = Management Plan; APPROVED = Baseline; MAY HAPPEN = Risk Register; HAPPENED = Issue Log; TRACE = RTM; DETAIL = WBS Dictionary; CHANGE STATUS = Change Log; SELLER = Contract.",
@@ -516,22 +516,22 @@
   },
   "PRO-11": {
    "old": "Change control material repeatedly emphasizes sequence: analyze impact before approval or implementation, follow the defined authority path, then update and communicate.",
-   "summary": "Integrated change control is the agreed path every change must follow before it touches the approved plan. You care because unapproved changes quietly break scope, schedule and budget.",
-   "example": "The sponsor asks Dev to add a reporting screen next week. Dev thanks him, works out the extra cost and days with the team, submits a change request, and builds it only after the change control board (the approving group) says yes.",
+   "summary": "Integrated change control is the agreed path every change follows before it touches the approved plan. The exact order depends on the scenario, but the impact must be understood before anyone approves or implements.",
+   "example": "The sponsor asks Dev to add a reporting screen next week. Dev clarifies what is needed, writes a change request, and works out the extra cost and days with the team. After the change control board (the approving group) says yes, he updates the plan, tells the team, then builds it.",
    "dos": [
-    "Understand the change and analyze its impact before anything else.",
-    "Submit a change request to the right approval authority.",
-    "Update plans, baselines and the change log after approval.",
-    "Tell affected stakeholders what was decided, then implement and monitor."
+    "Understand the change, then record it as a change request",
+    "Analyze impact on scope, schedule, cost, quality and risk with the team",
+    "Send it to the approving authority named in the plan",
+    "Update plans, baselines and the change log, tell stakeholders, then implement and monitor"
    ],
    "donts": [
-    "Do not implement first and analyze later.",
-    "Do not go to the change control board without an impact analysis.",
+    "Never approve or implement a change before its impact is known.",
     "Do not skip the process because the sponsor or customer asked.",
-    "Do not change a baseline casually or on your own."
+    "Do not reject a change, or go to the board, before analyzing the impact.",
+    "Do not update a baseline without approval, even for the sponsor."
    ],
-   "rule": "Change identified → Impact analysis → Change request → Decision → Update/Communicate → Implement → Monitor",
-   "examCue": "When a question says 'new request', 'CCB' or 'baseline affected', think: analyze impact first, then follow the formal change process."
+   "rule": "Understand → Record the request → Analyze impact → Decide → Update the plan → Tell people → Implement",
+   "examCue": "A change request has already been submitted: the next step is to analyze its impact. Someone only mentions a change, or you spot a problem: first confirm a change is really needed, then raise the request. The change is approved: update the plan and baselines and tell stakeholders before the work is done."
   },
   "PRO-12": {
    "old": "The lifecycle deck uses a memorable spectrum: Predictive = know it/plan it; Iterative = improve it; Incremental = add to it; Agile = learn/adapt; Hybrid = blend what fits.",
@@ -554,98 +554,42 @@
   },
   "PRO-13": {
    "old": "The lifecycle notes distinguish Scrum cadence from Kanban flow. Scrum uses sprints and defined accountabilities/events; Kanban visualizes flow, limits WIP, and measures throughput/cycle time.",
-   "summary": "Scrum works in fixed time boxes called sprints with set roles and meetings. Kanban is continuous flow with limits on work in progress (WIP). You care because each uses different measures and fixes.",
-   "example": "A support team's board shows eight tickets stuck in 'Testing' when the limit is five. Sam does not let anyone start new tickets. He asks the team to help clear testing first, then looks for the cause.",
+   "summary": "Scrum works in fixed time boxes called sprints with set roles and meetings. Kanban is continuous flow on a visible board with limits on work in progress (WIP). You care because each uses different measures and fixes.",
+   "example": "A support team's board shows eight tickets stuck in 'Testing' when the limit is five. Sam does not let anyone start new tickets. He asks the team to help clear testing first, then looks at why testing is slow.",
    "dos": [
     "Decide first: is this about sprints and roles, or about flow?",
-    "Use velocity (work finished per sprint) for Scrum teams.",
-    "Use throughput and cycle time (start-to-finish time) for Kanban.",
-    "Help finish stuck work when a WIP limit is exceeded."
+    "Use velocity for Scrum; throughput and cycle time (start-to-finish time) for Kanban",
+    "Make the workflow visible and respect each column's WIP limit",
+    "Help finish stuck work first; pull new work only when there is capacity"
    ],
    "donts": [
-    "Do not use velocity as a Kanban measure.",
-    "Do not start more work when WIP is already over the limit.",
-    "Do not assume every board is Kanban; without WIP limits it is only a task board.",
-    "Do not add sprints or sprint events to a pure Kanban question."
+    "Do not use velocity as a Kanban measure, or add sprints to a pure Kanban question.",
+    "Do not start more work, or raise the WIP limit, to hide a bottleneck (stuck point).",
+    "Do not push work onto people to keep everyone busy; in Kanban the team pulls it.",
+    "Do not assume every board is Kanban; without WIP limits it is only a task board."
    ],
-   "rule": "Scrum = cadence and sprints; Kanban = flow, WIP limits and pull.",
-   "examCue": "When a question says 'sprint' or 'velocity', think Scrum. When it says 'WIP', 'bottleneck' or 'cycle time', think Kanban."
+   "rule": "Scrum = sprints. Kanban = flow and WIP limits: stop starting, start finishing.",
+   "examCue": "When a question says 'sprint' or 'velocity', think Scrum. 'WIP exceeded', 'bottleneck' or 'cycle time', think Kanban: stop starting, help finish, then find the cause."
   },
   "az-note-people-02": {
    "old": "In agile environments, the leader enables the team rather than directing every task.",
-   "summary": "Servant leadership means you lead by helping the team succeed instead of giving orders. You care because PMI treats this as the default style, especially on agile teams.",
-   "example": "Lena's developers are waiting three days for a test server. She does not tell them what to do meanwhile. She calls the infrastructure lead, gets the server released, and keeps a demanding executive from interrupting them.",
-   "dos": [
-    "Remove impediments (things blocking the team).",
-    "Coach the team and let them make their own work decisions.",
-    "Protect the team from outside interruptions.",
-    "Stay active: ask what the team needs and act on it."
-   ],
-   "donts": [
-    "Do not assign tasks to each person yourself.",
-    "Do not make every team decision for them.",
-    "Do not think servant leader means passive; you still act and remove blockers.",
-    "Do not solve a problem the team can solve with a little coaching."
-   ],
-   "rule": "Serve the team so the team can deliver value.",
-   "examCue": "When a question says 'blocked', 'impediment' or 'self-organizing team', think: remove the obstacle and coach, do not command."
+   "hidden": true,
+   "mergedInto": "PEO-01"
   },
   "az-note-people-03": {
    "old": "Know how team behavior changes through forming, storming, norming, performing, and adjourning.",
-   "summary": "Teams grow through five stages: forming, storming, norming, performing and adjourning. You care because the right leadership move depends on which stage the team is in.",
-   "example": "Three weeks into a project, two analysts argue openly about who owns the test plan. Omar recognizes storming. He brings them together, clarifies roles, and helps them agree on how they will work.",
-   "dos": [
-    "Give clear direction while the team is forming.",
-    "Expect conflict in storming and help the team work through it.",
-    "Step back and delegate once the team is performing.",
-    "Watch for a slide back to storming when membership changes."
-   ],
-   "donts": [
-    "Do not treat all conflict as failure; storming is normal.",
-    "Do not expect a brand-new team to perform at full speed.",
-    "Do not use one style for every stage.",
-    "Do not skip closing and recognition when the team adjourns."
-   ],
-   "rule": "Forming → Storming → Norming → Performing → Adjourning.",
-   "examCue": "When a question says 'new team', 'arguing over roles' or 'new member joined', think: which Tuckman stage, then match your style to it."
+   "hidden": true,
+   "mergedInto": "PEO-03"
   },
   "az-note-people-04": {
    "old": "The PM should understand stakeholder needs, influence, expectations, and engagement before choosing a communication response.",
-   "summary": "Stakeholder engagement means working with the people your project affects so they support it. You care because one ignored or unhappy stakeholder can stall the whole project.",
-   "example": "A warehouse supervisor keeps criticizing a new scanning system in meetings. Grace does not send another status email. She meets him, learns he fears losing staff, and involves him in planning the training.",
-   "dos": [
-    "Identify stakeholders and analyze their interest and influence.",
-    "Tailor how you engage each person to what they need.",
-    "Meet resistant stakeholders to understand their real concern.",
-    "Reassess engagement as the project and the people change."
-   ],
-   "donts": [
-    "Do not use the same communication approach for everyone.",
-    "Do not ignore or work around a resistant stakeholder.",
-    "Do not treat stakeholder analysis as a one-time task.",
-    "Do not confuse sending information with engaging people."
-   ],
-   "rule": "Analyze first; engage intentionally; monitor continuously.",
-   "examCue": "When a question says 'resistant', 'unaware' or 'new stakeholder', think: analyze their needs first, then adjust the engagement approach."
+   "hidden": true,
+   "mergedInto": "PEO-05"
   },
   "az-note-people-05": {
    "old": "Choose interactive, push, or pull communication based on urgency, complexity, audience, and need for feedback.",
-   "summary": "There are three ways to share information: interactive (two-way, live), push (you send it) and pull (people fetch it). You care because the wrong method causes misunderstanding and conflict.",
-   "example": "Two team leads are upset about a schedule cut. Ravi does not email them. He holds a call so they can ask questions. The weekly report goes out by email, and the procedures manual sits on the team site.",
-   "dos": [
-    "Use interactive when you need immediate feedback or the topic is sensitive.",
-    "Use push, such as email or memos, for routine updates to specific people.",
-    "Use pull, such as a shared site, for large reference material.",
-    "Check that the message was understood, not only sent."
-   ],
-   "donts": [
-    "Do not use email alone for conflict or bad news.",
-    "Do not pick the fastest method without asking if it will work.",
-    "Do not assume a pushed message was read or understood.",
-    "Do not use pull for anything urgent."
-   ],
-   "rule": "Complex or sensitive = interactive; broad reference material = pull.",
-   "examCue": "When a question says 'sensitive', 'misunderstanding' or 'urgent', think interactive. 'Large audience' or 'reference library', think pull."
+   "hidden": true,
+   "mergedInto": "PEO-06"
   },
   "az-note-people-06": {
    "old": "PMP scenarios often reward self-awareness, empathy, and adapting your approach before reacting.",
@@ -820,22 +764,8 @@
   },
   "az-note-people-15": {
    "old": "When resources are constrained, understand priorities and negotiate rather than escalating immediately.",
-   "summary": "A resource conflict happens when two pieces of work need the same person or equipment at once. You care because how you resolve it affects your schedule and your working relationships.",
-   "example": "Two projects both need the only network engineer in the same week. Luis checks which tasks can wait without moving his end date, then meets the engineer's department manager to agree which days each project gets.",
-   "dos": [
-    "Review priorities and what each side really needs.",
-    "Check the resource management plan for how conflicts are handled.",
-    "Negotiate with the functional (department) manager.",
-    "Replan the work, then escalate only if it stays unresolved."
-   ],
-   "donts": [
-    "Do not bypass the functional manager and go to the person directly.",
-    "Do not secretly overload the team with overtime.",
-    "Do not escalate to the sponsor as your first move.",
-    "Do not ignore the schedule impact of the fix you agree."
-   ],
-   "rule": "Assess → Negotiate → Replan → Escalate if unresolved.",
-   "examCue": "When a question says 'shared resource', 'pulled to another project' or 'functional manager refuses', think: assess, then negotiate before escalating."
+   "hidden": true,
+   "mergedInto": "PRO-09"
   },
   "az-note-process-01": {
    "old": "Know exactly who owns value, process facilitation, and delivery work in Scrum.",
@@ -915,22 +845,8 @@
   },
   "az-note-process-05": {
    "old": "Kanban optimizes flow by visualizing work, limiting work in progress, and managing bottlenecks.",
-   "summary": "Kanban is a way to manage work by showing it on a board and limiting work in progress (WIP), the items started but not finished. Finishing work, not starting it, delivers value.",
-   "example": "The 'Review' column on a marketing team's board is full, and writers want to start new articles. Joy asks two writers to help review the waiting drafts first. Then the team looks at why review is slow.",
-   "dos": [
-    "Visualize the workflow on a board everyone can see.",
-    "Respect the WIP limit for each column.",
-    "Clear bottlenecks (stuck points) before starting more work.",
-    "Pull new work only when there is capacity."
-   ],
-   "donts": [
-    "Do not keep everyone busy by starting everything at once.",
-    "Do not ignore a blocked or overfull column.",
-    "Do not raise the WIP limit to hide a bottleneck.",
-    "Do not push work onto people; in Kanban the team pulls it."
-   ],
-   "rule": "Stop starting; start finishing.",
-   "examCue": "When a question says 'WIP exceeded', 'bottleneck' or 'work piling up', think: stop starting, help finish, then find the cause."
+   "hidden": true,
+   "mergedInto": "PRO-13"
   },
   "az-note-process-06": {
    "old": "A cumulative flow diagram shows work distribution over time and helps reveal bottlenecks and WIP growth.",
@@ -1028,22 +944,8 @@
   },
   "az-note-process-11": {
    "old": "A risk is uncertain and may occur; an issue has already occurred and needs action now.",
-   "summary": "A risk is something that might happen in the future. An issue is a problem that has already happened and needs action now. The PM tracks them in different places and handles them differently.",
-   "example": "Ana listed \"supplier may ship late\" in the risk register with a backup supplier. On Monday the supplier confirms a two-week delay, so it is now an issue. Ana records it in the issue log, assigns an owner, and starts the backup plan.",
-   "dos": [
-    "Record future uncertainty in the risk register.",
-    "Record a confirmed problem in the issue log.",
-    "Carry out the planned response when a risk happens.",
-    "Assign an owner and a due date to every issue."
-   ],
-   "donts": [
-    "Do not leave a risk that already happened only in the risk register.",
-    "Do not start risk analysis on a problem that is already here; act.",
-    "Do not assume every issue needs a change request.",
-    "Do not wait for the next meeting to log an issue."
-   ],
-   "rule": "Risk register = future uncertainty. Issue log = current problems.",
-   "examCue": "When a question says \"might\", \"could\" or \"possible\", think risk. When it says \"has occurred\" or \"is now\", think issue log."
+   "hidden": true,
+   "mergedInto": "PRO-06"
   },
   "az-note-process-12": {
    "old": "Match the response strategy to whether the risk is a threat or opportunity and assign ownership.",
@@ -1066,41 +968,13 @@
   },
   "az-note-process-13": {
    "old": "Contingency reserve covers identified risks; management reserve covers unknown-unknowns and is outside the cost baseline.",
-   "summary": "Both are extra money set aside for uncertainty. Contingency reserve covers risks you already identified and sits inside the cost baseline. Management reserve covers total surprises and needs approval from above the PM.",
-   "example": "Tom budgeted $10,000 contingency for bad weather, but storms cost $15,000. He spends the contingency and submits a change request for the extra $5,000. He does not dip into the management reserve, because weather was a known risk.",
-   "dos": [
-    "Use contingency reserve for identified risks.",
-    "Ask for approval before using management reserve.",
-    "Submit a change request when a known risk costs more than its contingency.",
-    "Review remaining reserves as risks pass."
-   ],
-   "donts": [
-    "Do not treat management reserve as normal project money.",
-    "Do not use management reserve for a risk you had identified.",
-    "Do not count management reserve inside the cost baseline.",
-    "Do not spend contingency on extra features."
-   ],
-   "rule": "Contingency = known risks. Management reserve = unknown risks.",
-   "examCue": "When a question says \"identified risk\", think contingency. When it says \"unforeseen\" or \"not anticipated\", think management reserve and approval."
+   "hidden": true,
+   "mergedInto": "PRO-07"
   },
   "az-note-process-14": {
    "old": "In predictive work, assess impact before approval and update baselines only after authorized change approval.",
-   "summary": "Change control is the step-by-step way a predictive project handles a requested change. The PM studies the impact first, gets approval from the right authority, and only then updates the plan.",
-   "example": "A sponsor asks Rita to add a new report. Rita writes a change request, works with the team to find the cost and schedule impact, and sends it to the change control board (the approving group). After approval she updates the plan and tells the team.",
-   "dos": [
-    "Write the change request down.",
-    "Analyze impact on scope, schedule, cost, quality and risk with the team.",
-    "Send it to the approving authority named in the plan.",
-    "Update the baselines and inform stakeholders after approval."
-   ],
-   "donts": [
-    "Do not start the work before the change is approved.",
-    "Do not reject a change before assessing its impact.",
-    "Do not update baselines without approval, even for the sponsor.",
-    "Do not go to the board before analyzing with the team."
-   ],
-   "rule": "Request → Analyze → Approve/Reject → Update → Communicate.",
-   "examCue": "When a question says \"sponsor requests\", \"customer wants to add\" or \"small change\", think analyze the impact first, then the change control board."
+   "hidden": true,
+   "mergedInto": "PRO-11"
   },
   "az-note-process-15": {
    "old": "Resolve issues at the lowest appropriate level, but escalate when authority, urgency, or impact exceeds the team’s limits.",
@@ -1123,22 +997,8 @@
   },
   "az-note-process-16": {
    "old": "Requirements define needs; the scope baseline controls approved project scope in predictive projects.",
-   "summary": "Requirements are what stakeholders need. The scope baseline is the approved description of the work: the scope statement, the WBS (work broken into pieces) and its dictionary. The PM builds exactly that, nothing extra.",
-   "example": "A developer wants to add a free dashboard the customer never asked for. Mei says no and explains it is not in the approved scope. When the customer later asks for it, Mei submits a change request.",
-   "dos": [
-    "Trace each requirement back to a business need.",
-    "Compare the work against the approved scope baseline.",
-    "Send every scope change through change control.",
-    "Confirm finished deliverables with the customer."
-   ],
-   "donts": [
-    "Do not gold plate (add unrequested extras), even to please the customer.",
-    "Do not add a small request informally; that is scope creep.",
-    "Do not change the baseline without approval.",
-    "Do not collect requirements from only one stakeholder."
-   ],
-   "rule": "Build only approved scope: no gold plating, no scope creep.",
-   "examCue": "When a question says \"team added an extra feature\", think gold plating. When it says \"customer asked informally\", think change request."
+   "hidden": true,
+   "mergedInto": "PRO-02"
   },
   "az-note-process-17": {
    "old": "Control Quality checks correctness; Validate Scope obtains formal acceptance.",
@@ -1199,41 +1059,13 @@
   },
   "az-note-process-20": {
    "old": "Know the direction of CPI and SPI and what EV, PV, and AC represent.",
-   "summary": "Earned value compares three numbers: work you planned (PV), work you finished (EV), and money you spent (AC). From them the PM sees whether the project is over budget or behind schedule.",
-   "example": "Halfway through, Kim has finished $40,000 of work, planned $50,000, and spent $45,000. CPI = 40/45 = 0.89 and SPI = 40/50 = 0.80. She is over budget and behind, so she looks for the cause.",
-   "dos": [
-    "Calculate CPI as EV divided by AC.",
-    "Calculate SPI as EV divided by PV.",
-    "Read a value above 1 as good news.",
-    "Find the cause before choosing a corrective action."
-   ],
-   "donts": [
-    "Do not flip the formula; EV always goes on top.",
-    "Do not read a CPI below 1 as under budget.",
-    "Do not mix up AC (money spent) with PV (work planned).",
-    "Do not report the numbers without explaining the cause."
-   ],
-   "rule": "CPI < 1 = over budget. SPI < 1 = behind schedule. EV comes first.",
-   "examCue": "When a question gives EV, AC and PV, think CPI for money and SPI for schedule; below 1 is bad, above 1 is good."
+   "hidden": true,
+   "mergedInto": "PRO-04"
   },
   "az-note-process-21": {
    "old": "Prevent defects through quality planning and process improvement rather than relying only on inspection.",
-   "summary": "Quality management means planning how to meet requirements and building the work the right way the first time. Preventing a defect costs less than finding and fixing it later.",
-   "example": "Testers keep finding the same data-entry errors each month. Instead of adding more testers, Zoe gives the team a checklist and a short training. The errors drop, and less rework is needed.",
-   "dos": [
-    "Build quality checks into the daily work.",
-    "Look for the cause when a defect repeats.",
-    "Improve the process, not only the product.",
-    "Agree on quality standards with stakeholders up front."
-   ],
-   "donts": [
-    "Do not rely only on inspection at the end.",
-    "Do not add extra features and call it quality; that is gold plating.",
-    "Do not confuse Manage Quality (process) with Control Quality (deliverable).",
-    "Do not skip inspection entirely; it still matters."
-   ],
-   "rule": "Prevention over inspection. Manage Quality = process; Control Quality = product.",
-   "examCue": "When a question says \"defects keep recurring\" or \"rework is rising\", think prevention and fixing the process, not more inspection."
+   "hidden": true,
+   "mergedInto": "PRO-05"
   },
   "az-note-process-22": {
    "old": "Fix the underlying cause, not merely the visible symptom.",
@@ -1351,41 +1183,13 @@
   },
   "az-note-business-03": {
    "old": "The business case explains why the project should exist and whether continued investment remains justified.",
-   "summary": "The business case explains why the project is worth doing: the need, the options, the costs, the benefits and the risks. The PM keeps checking that the reason still holds.",
-   "example": "Jo's project builds a store kiosk to cut checkout time. Midway, the company moves to mobile-only checkout. Jo reviews the business case with the sponsor, since the expected benefit may be gone, and the sponsor decides what happens next.",
-   "dos": [
-    "Read the business case to learn why the project exists.",
-    "Recheck it after any major change.",
-    "Raise it with the sponsor when the benefit looks doubtful.",
-    "Tie project decisions back to the expected benefits."
-   ],
-   "donts": [
-    "Do not treat the business case as a one-time kickoff document.",
-    "Do not confuse it with the charter, which authorizes the project.",
-    "Do not cancel or continue the project on your own; the sponsor decides.",
-    "Do not judge value by money alone; compliance and safety count."
-   ],
-   "rule": "Business case = why. Charter = authorizes. If the why disappears, reassess.",
-   "examCue": "When a question says \"justification\", \"why the project exists\" or \"benefits no longer expected\", think business case and talk to the sponsor."
+   "hidden": true,
+   "mergedInto": "BUS-05"
   },
   "az-note-business-06": {
    "old": "Projects should remain aligned to organizational strategy and intended outcomes.",
-   "summary": "Strategic alignment means the project still supports what the organization is trying to achieve. A project that finishes on time but no longer serves that goal is not a success.",
-   "example": "Paul is building a tool for a product line. The company announces it will sell that line. Paul does not push on; he assesses what the news means for the project and takes it to the sponsor for a decision.",
-   "dos": [
-    "Link each project objective to an organizational goal.",
-    "Assess the impact when the strategy changes.",
-    "Tell the sponsor when the project may no longer fit.",
-    "Keep the team informed of why the work matters."
-   ],
-   "donts": [
-    "Do not keep going just because the plan was approved.",
-    "Do not make a major strategic decision alone.",
-    "Do not measure success by on time and on budget only.",
-    "Do not escalate before you have assessed the impact."
-   ],
-   "rule": "A successful project must still be the right project.",
-   "examCue": "When a question says \"strategy changed\" or \"new company priorities\", think assess the impact, then reassess the project with the sponsor."
+   "hidden": true,
+   "mergedInto": "BUS-05"
   },
   "az-note-business-07": {
    "old": "Market, regulatory, economic, social, and technology changes can alter project assumptions and value.",
@@ -1430,26 +1234,19 @@
   "TW-001": {
    "old": "Helps people understand, adopt, and sustain a new way of working. Think resistance, communication, training, engagement, readiness, and reinforcement.",
    "hook": "Is it about people adopting, or about changing the approved plan?",
-   "leftMeaning": "Helping people understand, accept and keep using a new way of working. Think training, communication and handling resistance.",
-   "rightMeaning": "The formal steps to review, approve or reject a change to the approved plan: scope, schedule or cost.",
-   "leftScenarioCue": "You see this when the new payroll system works fine, but clerks keep using their old spreadsheets and say nobody trained them.",
-   "rightScenarioCue": "You see this when the sponsor asks for an extra report that will add two weeks and more cost to the approved schedule.",
-   "leftMemory": "Change Management = people adopt.",
-   "rightMemory": "Change Control = plan changes get approved.",
-   "trap": "Staff resisting a new system is not fixed by a change request. And strong user support is not permission to alter a baseline without approval.",
+   "leftMeaning": "Helping people understand, accept and keep using a new way of working (organizational change): training, communication and handling resistance.",
+   "rightMeaning": "The formal path for a change to the project itself: understand it, record the request, analyze impact, then decide and update the plan.",
+   "leftScenarioCue": "You see this when the new payroll system works fine, but clerks keep using their old spreadsheets and managers ask how to win them over.",
+   "rightScenarioCue": "You see this when the client wants a new feature added, and the PM must check its effect on cost and dates before anyone approves.",
+   "leftMemory": "People resist = change management.",
+   "rightMemory": "Baseline affected = change control.",
+   "trap": "Unhappy staff after a rollout is not a baseline problem; a change request will not fix resistance. Raise one only if the plan must change.",
    "memory": "CHANGE MANAGEMENT = people adopt. CHANGE CONTROL = project changes are governed."
   },
   "TW-002": {
    "old": "Focuses on how people adopt a new capability, process, system, or behavior.",
-   "hook": "Are people struggling to adopt, or is the plan itself changing?",
-   "leftMeaning": "A change in how people work: a new system, process or habit that staff must take up.",
-   "rightMeaning": "A change to the project or product itself that affects requirements, scope, schedule, cost or risk.",
-   "leftScenarioCue": "You see this when nurses avoid the new scheduling tool after go-live and managers ask how to win them over.",
-   "rightScenarioCue": "You see this when the client wants a new feature added, and the PM must check its effect on cost and dates.",
-   "leftMemory": "People resist = organizational change.",
-   "rightMemory": "Baseline affected = project change.",
-   "trap": "A rollout with unhappy employees is not automatically a baseline problem. Look for resistance first; raise a change request only if the plan must change.",
-   "memory": "People resist → organizational change. Baseline affected → project change/control."
+   "hidden": true,
+   "mergedInto": "TW-001"
   },
   "TW-003": {
    "old": "An uncertain future event or condition that may affect objectives.",
@@ -1478,38 +1275,31 @@
   "TW-005": {
    "old": "A formal proposal to modify a document, deliverable, baseline, process, or other controlled element.",
    "hook": "Is it asking for a change, or tracking what happened?",
-   "leftMeaning": "A formal request to change something controlled, such as a deliverable, a document or a baseline.",
-   "rightMeaning": "The running list of every change request and its status: pending, approved, rejected or deferred.",
+   "leftMeaning": "The formal ask to change something that was approved, such as a deliverable, a document or a baseline.",
+   "rightMeaning": "The record of every change request and what was decided: approved, rejected or deferred. Every request is logged, even rejected ones.",
    "leftScenarioCue": "You see this when a team lead fills in a form asking to swap a material and explains the cost impact.",
    "rightScenarioCue": "You see this when a stakeholder asks whether last month's requested change was approved or rejected.",
    "leftMemory": "Request = asks for the change.",
-   "rightMemory": "Log = tracks every request's status.",
-   "trap": "Writing a request in the log does not approve it. Rejected requests are recorded there too, so check the status before doing the work.",
+   "rightMemory": "Log = records every request and decision.",
+   "trap": "Logging a request does not approve it. The impact must be understood before anyone approves or implements, so check the log's decision before starting work.",
    "memory": "REQUEST asks for change. LOG tracks what happened to the request."
   },
   "TW-006": {
    "old": "Has been checked for correctness and conformance to requirements through quality control.",
-   "hook": "Did we check it, or did the customer approve it?",
-   "leftMeaning": "A finished deliverable the team has inspected and found correct against the requirements.",
-   "rightMeaning": "A deliverable the customer or sponsor has formally signed off as meeting the acceptance criteria.",
-   "leftScenarioCue": "You see this when testers finish inspecting the training manual and confirm it meets every requirement.",
-   "rightScenarioCue": "You see this when the customer walks through the finished manual and signs the acceptance form.",
-   "leftMemory": "Verified = we checked it.",
-   "rightMemory": "Accepted = they approved it.",
-   "trap": "Passing the team's own quality check is not customer acceptance. The deliverable is verified first, then taken to the customer for sign-off.",
-   "memory": "VERIFY = we checked it. ACCEPT = they approved it."
+   "hidden": true,
+   "mergedInto": "TW-007"
   },
   "TW-007": {
    "old": "Checks deliverables for correctness, completeness, and conformance to quality requirements.",
    "hook": "Is the team checking correctness, or the customer formally accepting?",
-   "leftMeaning": "The team's own check that a deliverable is correct and meets its quality requirements.",
-   "rightMeaning": "The step where the customer or sponsor formally accepts the completed deliverable.",
-   "leftScenarioCue": "You see this when the team inspects a batch of circuit boards and measures them against the defect limits.",
-   "rightScenarioCue": "You see this when the PM meets the customer to review a finished deliverable and get written sign-off.",
-   "leftMemory": "Control Quality = is it correct?",
-   "rightMemory": "Validate Scope = customer accepts it.",
-   "trap": "Quality always happens before validation. Do not ask the customer to accept a deliverable the team has not yet checked.",
-   "memory": "QUALITY checks it. SCOPE accepts it."
+   "leftMeaning": "The team's own check that a deliverable is correct and meets its requirements. Its output is a verified deliverable.",
+   "rightMeaning": "The customer or sponsor formally signs off the finished deliverable against the acceptance criteria. Its output is an accepted deliverable.",
+   "leftScenarioCue": "You see this when testers finish inspecting the training manual and confirm it meets every requirement.",
+   "rightScenarioCue": "You see this when the customer walks through the finished manual with the PM and signs the acceptance form.",
+   "leftMemory": "Control Quality: we checked it, so verified.",
+   "rightMemory": "Validate Scope: they approved it, so accepted.",
+   "trap": "Passing the team's own quality check is not customer acceptance. Verify first, then go to the customer; never ask for sign-off on unchecked work.",
+   "memory": "QUALITY verifies it: we checked. SCOPE accepts it: they approved."
   },
   "TW-008": {
    "old": "Explains why the initiative is worth doing and supports the investment decision.",
@@ -1670,13 +1460,13 @@
   "TW-021": {
    "old": "Budget held for identified risks and known-unknowns that have been analyzed and planned for.",
    "hook": "Was the risk identified, or was it a total surprise?",
-   "leftMeaning": "Money set aside for risks you already identified and planned for. It sits inside the cost baseline.",
-   "rightMeaning": "Money held outside the cost baseline for surprises nobody identified. Using it usually needs management approval.",
+   "leftMeaning": "Money for risks you identified. It is inside the cost baseline, and the project manager can use it for those risks.",
+   "rightMeaning": "Money for surprises nobody identified. It is outside the cost baseline, and management must approve using it.",
    "leftScenarioCue": "You see this when a supplier delay listed in the risk register happens and the PM pays for the planned response.",
-   "rightScenarioCue": "You see this when a flood nobody anticipated damages the site and extra funds are needed.",
-   "leftMemory": "Contingency = risks you knew about.",
-   "rightMemory": "Management Reserve = total surprises.",
-   "trap": "If a known risk costs more than its contingency, raise a change request. Do not break open management reserve; it is for unknown risks only.",
+   "rightScenarioCue": "You see this when a flood nobody anticipated damages the site and the PM asks management to approve extra funds.",
+   "leftMemory": "Contingency = risks you identified.",
+   "rightMemory": "Management Reserve = surprises; management approves.",
+   "trap": "Do not treat management reserve as everyday project money. If the project needs more money than the approved plan allows, ask through a change request.",
    "memory": "CONTINGENCY = identified risk. MANAGEMENT RESERVE = unforeseen uncertainty."
   },
   "TW-022": {
@@ -1967,5 +1757,27 @@
    "trap": "Finishing the deliverable is not the goal. If nobody uses it or benefits never arrive, the project has not delivered value.",
    "memory": "DELIVERABLE = output. VALUE = business impact."
   }
- }
+ },
+ "newNotes": [
+  {
+   "id": "az-note-business-09",
+   "domain": "Business Environment",
+   "title": "Sustainability",
+   "summary": "Sustainability means weighing environmental, social and economic effects over the whole life of the product, often called the triple bottom line. You care because the cheapest or fastest choice today can cost more later.",
+   "example": "Vendor A is cheaper but creates more waste. Vendor B costs more but lasts longer and needs less upkeep. Lina compares the full lifecycle cost, the waste and the effect on the local community, checks company sustainability goals, and shows the sponsor the trade-off.",
+   "dos": [
+    "Evaluate lifecycle impact, not only today's price or schedule",
+    "Balance value, cost and risk across environmental, social and economic effects",
+    "Check the organization's sustainability goals and policies",
+    "Present the long-term trade-offs to the sponsor for a decision"
+   ],
+   "donts": [
+    "Do not choose the cheapest or fastest option without checking long-term impact.",
+    "Do not treat sustainability as optional decoration or as outside the project's scope.",
+    "Do not think sustainability is only 'green'; it is environmental, social and economic."
+   ],
+   "rule": "Evaluate lifecycle impact → Balance value, cost, risk → Think long term",
+   "examCue": "When a question says 'lifecycle', 'environmental' or 'long-term maintenance cost', think: weigh the full lifecycle trade-off, not only today's price or schedule."
+  }
+ ]
 }

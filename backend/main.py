@@ -1510,7 +1510,7 @@ def study_rewrites(user: User = Depends(current_user), db: Session = Depends(get
     require_paid_access(user,db)
     feats=set(access_payload(user,db).get('features') or [])
     if getattr(user,'role','') in ('admin','instructor','content_editor','reviewer'): feats|={'notes','tricky'}
-    return {'notes':STUDY_REWRITE.get('notes',{}) if 'notes' in feats else {},'tricky':STUDY_REWRITE.get('tricky',{}) if 'tricky' in feats else {}}
+    return {'notes':STUDY_REWRITE.get('notes',{}) if 'notes' in feats else {},'tricky':STUDY_REWRITE.get('tricky',{}) if 'tricky' in feats else {},'newNotes':STUDY_REWRITE.get('newNotes',[]) if 'notes' in feats else []}
 
 @app.get('/api/study/states')
 def study_states(user: User = Depends(current_user), db: Session = Depends(get_db)):
