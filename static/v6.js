@@ -1299,3 +1299,75 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
 })();
 
 (function(){if(typeof beginExamQuestions!=='function')return;const o=window.beginExamQuestions;window.beginExamQuestions=async function(){const r=await o.apply(this,arguments);const pill=document.getElementById('examModePill');if(pill){const m=state.examSession&&state.examSession.mode;pill.textContent=m==='real_mock'?'Real mock exam':m==='block_rules'?'Learn, then answer':'Concepts read first'}return r}})();
+
+
+/* ---------- v7.11: My Progress on one screen — done, left, weak areas, ready ---------- */
+(function(){
+  const esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const has=f=>typeof hasFeature==='function'?hasFeature(f):true;
+  const tierFull=()=>{const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return t==='full'||t.startsWith('full')||(typeof isStaff==='function'&&isStaff())};
+  const isDone=x=>['reviewed','mastered'].includes(x.studyStatus);
+  function studyRows(p){
+    const rows=[];const add=(k,label,arr)=>{arr=arr||[];if(arr.length)rows.push({k,label,done:arr.filter(isDone).length,total:arr.length})};
+    if(has('notes'))add('notes','Topic notes',state.notes);
+    if(has('tricky'))add('tricky','Tricky words',state.tricky);
+    if(tierFull()&&has('diagrams'))add('diagrams','Diagrams',state.diagrams);
+    if(has('match'))add('match','Match sets',(state.v6Match||{}).sets);
+    const bank=Number(p.practice_bank_total||0);if(bank)rows.push({k:'practice',label:'Practice questions',done:Math.min(bank,Number(p.practice_unique_attempted||0)),total:bank});
+    return rows;
+  }
+  function domainRows(p){
+    return ['People','Process','Business Environment'].map(d=>{const v=(p.domains||{})[d]||{};const pct=v.answered?Math.round(v.correct/v.answered*100):null;return {d,pct,n:v.answered||0}});
+  }
+  function render(p){
+    p=p||state.lastProgress||{};const sec=document.getElementById('progress');if(!sec)return;
+    sec.classList.add('v9');
+    let host=document.getElementById('v9Progress');if(!host){host=document.createElement('div');host.id='v9Progress';sec.insertBefore(host,sec.firstChild)}
+    sec.querySelectorAll('#v6DateBar').forEach(n=>{if(!host.contains(n))n.remove()});
+    const rows=studyRows(p),doms=domainRows(p);
+    const known=doms.filter(x=>x.pct!=null),weakest=known.length?known.reduce((a,b)=>b.pct<a.pct?b:a):null;
+    const pat=(p.mistake_patterns||[])[0];
+    const cc=state.v6ConceptCount;
+    const checks=typeof v6ReadyChecks==='function'?v6ReadyChecks(p,cc??null):[];const met=checks.filter(c=>c.ok).length;
+    const allHist=(p.exam_history||[]);const hist=allHist.filter(x=>x.total&&x.answered>=x.total*0.9);const best=hist.length?Math.max(...hist.map(x=>Math.round(x.correct/x.total*100))):null;
+    const tasks=state.todayPlan||[],tdone=tasks.filter(t=>typeof taskState==='function'&&taskState(t)==='done').length;
+    const todayTxt=tasks.length?(tdone>=tasks.length?'Today is done ✓':`Today: ${tdone} of ${tasks.length} steps done`):'';
+    host.innerHTML=`
+      <div class="v9-top">${typeof v6ExamDateBar==='function'?v6ExamDateBar(p):''}<span class="v9-today">${esc(todayTxt)}</span><button type="button" class="primary v9-go" data-v9-today>Continue today’s plan →</button></div>
+      <div class="v9-grid">
+        <section class="v9-col"><h3>Done and left to do</h3>
+          ${rows.map(r=>{const left=r.total-r.done,pc=r.total?Math.round(r.done/r.total*100):0;return `<button type="button" class="v9-row ${left?'':'ok'}" data-v9-sec="${r.k}"><span class="v9-name">${esc(r.label)}</span><span class="v9-bar"><i style="width:${pc}%"></i></span><span class="v9-num"><b>${r.done}</b> of ${r.total}</span><span class="v9-left">${left?left+' left':'✓ done'}</span></button>`}).join('')||'<p class="v9-none">Loading…</p>'}
+          <p class="v9-hint">Tap a row to see what is left.</p>
+        </section>
+        <section class="v9-col"><h3>Weak areas</h3>
+          ${doms.map(x=>`<div class="v9-row v9-dom ${x.pct==null?'na':x.pct<75?'weak':'ok'}"><span class="v9-name">${esc(x.d)}</span><span class="v9-bar"><i style="width:${x.pct||0}%"></i></span><span class="v9-num"><b>${x.pct==null?'—':x.pct+'%'}</b></span><span class="v9-left">${x.pct==null?'not practised yet':x.pct<75?(weakest&&weakest.d===x.d?'weakest':'below 75%'):'✓ on track'}</span></div>`).join('')}
+          <div class="v9-facts">
+            <div><span>Most common mistake</span><b>${pat?esc(pat.title)+` <em>· ${pat.count}×</em>`:'None yet'}</b></div>
+            <div><span>Concepts to review</span><b>${cc==null?'…':cc}</b></div>
+          </div>
+          <button type="button" class="v9-link" data-v9-review>${cc?`Review ${cc} concept${cc===1?'':'s'} →`:'Open Concepts to Review →'}</button>
+        </section>
+        <section class="v9-col"><h3>Ready to book the exam? <em>${met} of ${checks.length}</em></h3>
+          <ul class="v9-checks">${checks.map(c=>`<li class="${c.ok?'ok':''}"><span>${c.ok?'✓':''}</span><div><b>${esc(c.title)}</b><small>${esc(c.detail)}</small></div></li>`).join('')}</ul>
+          <div class="v9-facts"><div><span>Full exams finished</span><b>${hist.length}${best!=null?` <em>· best ${best}%</em>`:''}</b></div></div>
+          <button type="button" class="v9-link" data-v9-exams>${allHist.length?'See exam results →':'Go to mock exams →'}</button>
+        </section>
+      </div>
+      <div class="v9-back" hidden><button type="button" class="v9-link" data-v9-back>← Back to My Progress</button></div>`;
+    if(typeof v6BindDateBar==='function')v6BindDateBar(host);
+    host.querySelector('[data-v9-today]').onclick=()=>{state.dashboardFocus='today';showView('dashboard')};
+    host.querySelector('[data-v9-review]').onclick=()=>showView('review');
+    host.querySelectorAll('[data-v9-sec]').forEach(b=>b.onclick=()=>{const k=b.dataset.v9Sec;if(state.v6Plan){state.v6Plan.sec=k;state.v6Plan.filter=b.classList.contains('ok')?'done':'todo';state.v6Plan.domain=''}state.dashboardFocus='plan';showView('dashboard');setTimeout(()=>{state.dashboardFocus='plan';renderFeatureLaunchpad(state.lastProgress||{})},0)});
+    host.querySelector('[data-v9-exams]').onclick=()=>{if(!allHist.length){state.examKind='mock';showView('exams');return}sec.classList.add('v9-exams');host.querySelector('.v9-back').hidden=false;if(typeof setProgressTab==='function')setProgressTab('exams')};
+    host.querySelector('[data-v9-back]').onclick=()=>{sec.classList.remove('v9-exams');host.querySelector('.v9-back').hidden=true};
+    if(sec.classList.contains('v9-exams'))host.querySelector('.v9-back').hidden=false;
+  }
+  window.v9RenderProgress=render;
+  if(typeof renderCompactProgressDashboard==='function'){const o=window.renderCompactProgressDashboard;window.renderCompactProgressDashboard=function(p){const r=o.apply(this,arguments);try{render(p||state.lastProgress||{})}catch(e){console.warn('v9 progress',e)}
+    if(state.currentView==='progress'){
+      if(state.v6ConceptCount==null)api('/api/review/concepts').then(x=>{state.v6ConceptCount=x.count;render(state.lastProgress)}).catch(()=>{});
+      if(has('match')&&!(state.v6Match||{}).sets&&typeof v6LoadMatchSets==='function')Promise.resolve(v6LoadMatchSets()).then(()=>render(state.lastProgress)).catch(()=>{});
+    }
+    return r}}
+  if(typeof showView==='function'){const sv=window.showView;window.showView=function(id){if(id==='progress'){document.getElementById('progress')?.classList.remove('v9-exams');state.v6ConceptCount=null}return sv.apply(this,arguments)}}
+})();

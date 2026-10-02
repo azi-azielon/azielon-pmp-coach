@@ -963,3 +963,48 @@ body.v6 .v7-concept-pager span{margin-right:auto;font-weight:600;color:var(--v6-
 body.v6 .v7-concept-pager button{height:30px!important;min-height:0!important;padding:0 12px!important;font-size:12.5px!important}
 body.v6 .v7-concept-pager button[disabled]{opacity:.4}
 body.v6 .v7-concept-item{border-top:0!important}
+
+/* ---------- v7.11: My Progress on one screen ---------- */
+body.v6 #app main #progress.v9>.progress-tabbar,body.v6 #app main #progress.v9>.progress-tabpanel{display:none!important}
+body.v6 #app main #progress.v9.v9-exams>.progress-tabpanel[data-progress-panel="exams"]{display:block!important}
+body.v6 #progress.v9.v9-exams .v9-grid,body.v6 #progress.v9.v9-exams .v9-top{display:none}
+body.v6 #v9Progress .v9-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:0 0 10px;margin-bottom:14px;border-bottom:1px solid var(--v6-line,#E7E1D5)}
+body.v6 #v9Progress .v9-top .v6-datebar{flex:1 1 420px;border:0;padding:0;margin:0}
+body.v6 #v9Progress .v9-today{font-size:13px;color:#4A5262}
+body.v6 #v9Progress .v9-go{padding:8px 14px;font-size:13.5px;white-space:nowrap}
+body.v6 #v9Progress .v9-grid{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:28px;align-items:start}
+body.v6 #v9Progress .v9-col{min-width:0;padding:0;border:0;background:none}
+body.v6 #v9Progress .v9-col+.v9-col{border-left:1px solid var(--v6-line,#E7E1D5);padding-left:28px}
+body.v6 #v9Progress h3{font:600 12px/1.2 Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#7A6A45;margin:0 0 10px}
+body.v6 #v9Progress h3 em{font-style:normal;color:#1F2A44;letter-spacing:0;text-transform:none;font-size:13px;margin-left:6px}
+body.v6 #v9Progress .v9-row{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(40px,1fr) auto;grid-template-areas:"name bar num" "left left left";column-gap:10px;row-gap:1px;align-items:center;width:100%;padding:7px 0;margin:0;border:0;border-bottom:1px solid #F0EBE0;background:none;text-align:left;font:inherit;color:#1F2A44;border-radius:0;box-shadow:none}
+body.v6 #v9Progress button.v9-row{cursor:pointer}
+body.v6 #v9Progress button.v9-row:hover .v9-name{text-decoration:underline}
+body.v6 #v9Progress .v9-name{grid-area:name;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.v6 #v9Progress .v9-bar{grid-area:bar;height:6px;border-radius:3px;background:#EEE8DB;overflow:hidden}
+body.v6 #v9Progress .v9-bar i{display:block;height:100%;background:#2F7D5B;border-radius:3px}
+body.v6 #v9Progress .v9-num{grid-area:num;font-size:13px;color:#4A5262;white-space:nowrap;min-width:64px;text-align:right}
+body.v6 #v9Progress .v9-num b{color:#1F2A44}
+body.v6 #v9Progress .v9-left{grid-area:left;font-size:12px;color:#8A6A1F}
+body.v6 #v9Progress .v9-row.ok .v9-left{color:#2F7D5B}
+body.v6 #v9Progress .v9-dom.weak .v9-bar i{background:#C0562F}
+body.v6 #v9Progress .v9-dom.weak .v9-left{color:#C0562F;font-weight:600}
+body.v6 #v9Progress .v9-dom.na .v9-left{color:#8A8F99}
+body.v6 #v9Progress .v9-hint,body.v6 #v9Progress .v9-none{font-size:12px;color:#8A8F99;margin:8px 0 0}
+body.v6 #v9Progress .v9-facts{margin-top:10px}
+body.v6 #v9Progress .v9-facts div{display:flex;justify-content:space-between;gap:12px;font-size:13px;padding:5px 0;color:#4A5262}
+body.v6 #v9Progress .v9-facts b{color:#1F2A44;text-align:right}
+body.v6 #v9Progress .v9-facts em{font-style:normal;font-weight:400;color:#6B7280}
+body.v6 #v9Progress .v9-link{margin-top:8px;padding:0;border:0;background:none;color:#1F2A44;font:600 13.5px Inter,system-ui,sans-serif;text-decoration:underline;text-underline-offset:3px;cursor:pointer;box-shadow:none}
+body.v6 #v9Progress .v9-checks{list-style:none;margin:0;padding:0}
+body.v6 #v9Progress .v9-checks li{display:grid;grid-template-columns:18px 1fr;gap:8px;padding:6px 0;border-bottom:1px solid #F0EBE0}
+body.v6 #v9Progress .v9-checks li>span{width:16px;height:16px;margin-top:2px;border:1.5px solid #C9C2B2;border-radius:50%;font-size:11px;line-height:14px;text-align:center;color:#fff}
+body.v6 #v9Progress .v9-checks li.ok>span{background:#2F7D5B;border-color:#2F7D5B}
+body.v6 #v9Progress .v9-checks b{display:block;font-size:13.5px;font-weight:600;color:#1F2A44}
+body.v6 #v9Progress .v9-checks small{display:block;font-size:12px;color:#6B7280;line-height:1.35}
+body.v6 #v9Progress .v9-back{margin:0 0 10px}
+@media(max-width:980px){body.v6 #v9Progress .v9-grid{grid-template-columns:1fr;gap:18px}body.v6 #v9Progress .v9-col+.v9-col{border-left:0;padding-left:0;border-top:1px solid var(--v6-line,#E7E1D5);padding-top:14px}}
+body.v6 #app main #v9Progress h3{font:600 12px/1.3 Inter,system-ui,sans-serif!important;letter-spacing:.08em!important;text-transform:uppercase;color:#7A6A45!important;margin:0 0 8px!important}
+body.v6 #app main #v9Progress h3 em{font:600 12px Inter,system-ui,sans-serif;letter-spacing:0;color:#1F2A44;margin-left:6px}
+body.v6 #v9Progress .v9-dom{grid-template-columns:158px minmax(40px,1fr) auto}
+body.v6 #v9Progress .v9-dom .v9-num{min-width:40px}
