@@ -619,15 +619,30 @@ function v6RenderDoneToday(){
     h.querySelectorAll('[data-m-open]').forEach(b=>b.onclick=()=>openSet(b.dataset.mOpen));
   }
 
-  function openSet(id){
+  function openSet(id,only){
     const s=(M.sets||[]).find(x=>x.id===id);if(!s)return;
-    M.play={set:s,order:shuffle(s.pairs.map((p,i)=>i)),pick:{},active:0,checked:false};
+    M.play={set:s,order:shuffle(s.pairs.map((p,i)=>i)),pick:{},active:0,checked:false,intro:true,only:only&&only.length?only:null};
     renderPlay();
+  }
+  /* v7.12: "Read this first" — the terms and what they mean, before the student is asked to match them */
+  function renderIntro(){
+    const h=host(),P=M.play,s=P.set,q=M.queue;
+    const idx=P.only||s.pairs.map((_,i)=>i);
+    const qline=q?`<span class="v6-m-q">Today’s practice · match set ${q.i+1} of ${q.ids.length}</span>`:'';
+    h.innerHTML=`<div class="v6-m-play v6-m-intro">
+      <div class="v6-m-head"><button type="button" class="v6-session-exit" data-m-back>${q?'← Today':'← All sets'}</button>${qline}<span class="v6-kicker">${P.only?'Read these again':'Read this first'} · ${esc(s.domain)}</span><h2>${esc(s.title)}</h2>
+      <div class="v6-m-introbar"><p>${P.only?`You missed ${idx.length} last time. Read ${idx.length===1?'it':'them'} once more, then match the whole set again.`:`You will match these ${s.pairs.length} terms next. Read what each one means first.`}</p><button type="button" class="primary" data-m-start>Start matching →</button></div></div>
+      <div class="v6-m-readlist">${idx.map(i=>`<div class="v6-m-read"><b>${esc(s.pairs[i].left)}</b><p>${esc(s.pairs[i].lesson)}</p></div>`).join('')}</div>
+    </div>`;
+    const v=document.getElementById('match');if(v)v.scrollTop=0;
+    h.querySelector('[data-m-back]').onclick=()=>{if(q){M.queue=null;backToToday()}else{M.play=null;renderList()}};
+    h.querySelector('[data-m-start]').onclick=()=>{P.intro=false;renderPlay()};
   }
   window.v6OpenMatchSet=async function(id){showView('match');await loadSets();openSet(id)};
 
   function renderPlay(){
     const h=host(),P=M.play;if(!h||!P)return;const s=P.set,n=s.pairs.length;
+    if(P.intro)return renderIntro();
     const used=new Set(Object.values(P.pick));const filled=Object.keys(P.pick).length;
     const q=M.queue;const qline=q?`<span class="v6-m-q">Today’s practice · match set ${q.i+1} of ${q.ids.length}</span>`:'';
     let res='';
@@ -657,7 +672,7 @@ function v6RenderDoneToday(){
         try{const r=await api(`/api/match-sets/${encodeURIComponent(s.id)}/result`,{method:'POST',body:JSON.stringify({correct:P.score,total:n})});s.studyStatus=r.status;s.lastScore=r.last_rating;s.attempts=r.review_count}catch(e){}
         if(q)q.scores.push([P.score,n]);};
     }else{
-      const rt=h.querySelector('[data-m-retry]');if(rt)rt.onclick=()=>{if(q)q.scores.pop();openSet(s.id)};
+      const rt=h.querySelector('[data-m-retry]');if(rt)rt.onclick=()=>{if(q)q.scores.pop();openSet(s.id,s.pairs.map((_,i)=>i).filter(i=>P.pick[i]!==i))};
       h.querySelector('[data-m-continue]').onclick=()=>{
         if(q){q.i++;if(q.i<q.ids.length)return openSet(q.ids[q.i]);return finishQueue()}
         const list=(M.sets||[]).filter(x=>M.theme==='all'||x.theme===M.theme);const i=list.findIndex(x=>x.id===s.id);
