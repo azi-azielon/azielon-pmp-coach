@@ -1018,3 +1018,4 @@ body.v6 .v6-m-read{padding:10px 0;border-bottom:1px solid #F0EBE0}
 body.v6 .v6-m-read b{display:block;font-size:14.5px;color:#1F2A44;margin-bottom:2px}
 body.v6 .v6-m-read p{margin:0;font-size:13.5px;line-height:1.45;color:#3F4756}
 @media(max-width:820px){body.v6 .v6-m-readlist{grid-template-columns:1fr}}
+body.v6 .v6-m-reread{padding:0;margin-left:6px;border:0;background:none;box-shadow:none;font:600 13.5px Inter,system-ui,sans-serif;color:#1F2A44;text-decoration:underline;text-underline-offset:3px;cursor:pointer}

@@ -631,7 +631,7 @@ function v6RenderDoneToday(){
     const qline=q?`<span class="v6-m-q">Today’s practice · match set ${q.i+1} of ${q.ids.length}</span>`:'';
     h.innerHTML=`<div class="v6-m-play v6-m-intro">
       <div class="v6-m-head"><button type="button" class="v6-session-exit" data-m-back>${q?'← Today':'← All sets'}</button>${qline}<span class="v6-kicker">${P.only?'Read these again':'Read this first'} · ${esc(s.domain)}</span><h2>${esc(s.title)}</h2>
-      <div class="v6-m-introbar"><p>${P.only?`You missed ${idx.length} last time. Read ${idx.length===1?'it':'them'} once more, then match the whole set again.`:`You will match these ${s.pairs.length} terms next. Read what each one means first.`}</p><button type="button" class="primary" data-m-start>Start matching →</button></div></div>
+      <div class="v6-m-introbar"><p>${P.only?`You missed ${idx.length} last time. Read ${idx.length===1?'it':'them'} once more, then match the whole set again.`:P.back?'Your matches so far are saved. Read, then go back and finish.':`You will match these ${s.pairs.length} terms next. Read what each one means first.`}</p><button type="button" class="primary" data-m-start>${P.back?'Back to matching →':'Start matching →'}</button></div></div>
       <div class="v6-m-readlist">${idx.map(i=>`<div class="v6-m-read"><b>${esc(s.pairs[i].left)}</b><p>${esc(s.pairs[i].lesson)}</p></div>`).join('')}</div>
     </div>`;
     const v=document.getElementById('match');if(v)v.scrollTop=0;
@@ -651,7 +651,7 @@ function v6RenderDoneToday(){
       res=`<div class="v6-m-result ${right===n?'is-perfect':''}"><b>${right} of ${n} correct</b><span>${right===n?'You have this one. ✓':'Read the lesson under each pair, then try again.'}</span><div class="v6-m-actions v6-m-actions-top">${right<n?'<button type="button" class="secondary" data-m-retry>Try again</button>':''}<button type="button" class="primary" data-m-continue>${q?(q.i+1<q.ids.length?'Next match set →':'Finish practice step →'):'Next set →'}</button></div></div>`;
     }
     h.innerHTML=`<div class="v6-m-play">
-      <div class="v6-m-head"><button type="button" class="v6-session-exit" data-m-back>${q?'← Today':'← All sets'}</button>${qline}<span class="v6-kicker">${esc(THEME_LABEL[s.theme]||'')} · ${esc(s.domain)}${s.approach&&s.approach!=='Mixed'?' · '+esc(s.approach):''}</span><h2>${esc(s.title)}</h2><p>${esc(s.prompt)}${P.checked?'':' Tap a term, then tap its match.'}</p></div>
+      <div class="v6-m-head"><button type="button" class="v6-session-exit" data-m-back>${q?'← Today':'← All sets'}</button>${qline}<span class="v6-kicker">${esc(THEME_LABEL[s.theme]||'')} · ${esc(s.domain)}${s.approach&&s.approach!=='Mixed'?' · '+esc(s.approach):''}</span><h2>${esc(s.title)}</h2><p>${esc(s.prompt)}${P.checked?'':' Tap a term, then tap its match.'}${P.checked?'':' <button type="button" class="v6-m-reread" data-m-reread>Read the notes again</button>'}</p></div>
       ${res}${P.checked?`<div class="v6-m-remember"><span class="v6-kicker">Remember</span><p>${esc(s.remember)}</p></div>`:''}
       <div class="v6-m-board ${P.checked?'is-checked':''}">
         <div class="v6-m-left">${s.pairs.map((p,i)=>{const pk=P.pick[i];const ok=P.checked&&pk===i,bad=P.checked&&pk!==i;
@@ -663,6 +663,7 @@ function v6RenderDoneToday(){
     const v=document.getElementById('match');if(v)v.scrollTop=0;
     h.querySelector('[data-m-back]').onclick=()=>{if(q){M.queue=null;backToToday()}else{M.play=null;renderList()}};
     if(!P.checked){
+      const rr=h.querySelector('[data-m-reread]');if(rr)rr.onclick=()=>{P.intro=true;P.only=null;P.back=true;renderPlay()};
       h.querySelectorAll('[data-m-left]').forEach(el=>{const f=()=>{const i=+el.dataset.mLeft;if(P.pick[i]!=null&&P.active===i){delete P.pick[i]}P.active=i;renderPlay()};el.onclick=f;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f()}}});
       h.querySelectorAll('[data-m-right]').forEach(el=>el.onclick=()=>{const j=+el.dataset.mRight;
         for(const k in P.pick)if(P.pick[k]===j)delete P.pick[k];
