@@ -1457,3 +1457,75 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
   if(typeof showView==='function'){const sv=window.showView;window.showView=function(id){const r=sv.apply(this,arguments);if(id==='formulas'){try{render()}catch(e){console.warn(e)}}return r}}
   document.addEventListener('click',e=>{const b=e.target.closest('#nav button[data-view="formulas"]');if(b)setTimeout(()=>{if(state.currentView==='formulas')render()},0)});
 })();
+
+
+/* ---------- v7.14: case-study text and data exhibits in exam questions; real exam result ---------- */
+(function(){
+  const esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function extras(q){
+    let h='';
+    if(q&&q.case_text)h+=`<details class="v7-case" open><summary><span class="v6-kicker">Case study</span> ${esc(q.case_title||'')}</summary>${String(q.case_text).split(/\n+/).map(p=>`<p>${esc(p)}</p>`).join('')}</details>`;
+    const e=q&&q.exhibit;
+    if(e&&Array.isArray(e.rows))h+=`<figure class="v7-exhibit"><figcaption><span class="v6-kicker">Exhibit</span> ${esc(e.title||'')}</figcaption><table><thead><tr>${(e.columns||[]).map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${e.rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></figure>`;
+    return h;
+  }
+  function inject(sel,q){try{const card=document.querySelector(sel),stem=card&&card.querySelector('.question-stem');if(!stem||card.querySelector('.v7-case,.v7-exhibit'))return;const h=extras(q);if(h)stem.insertAdjacentHTML('beforebegin',h);
+    // The case is long: once the student has read it for the first question of the set, later questions start with it folded.
+    const d=card.querySelector('.v7-case');if(d&&q.case_id){const k=state.v7CaseSeen=state.v7CaseSeen||{};if(k[q.case_id]&&k[q.case_id]!==q.id)d.open=false;else k[q.case_id]=q.id}}catch(e){console.warn(e)}}
+  if(typeof renderExamQuestion==='function'){const o=window.renderExamQuestion;window.renderExamQuestion=function(q){const r=o.apply(this,arguments);inject('#examQuestionCard',q);return r}}
+  if(typeof renderExamReview==='function'){const o=window.renderExamReview;window.renderExamReview=function(i){const r=o.apply(this,arguments);try{const x=state.examReviewResults&&state.examReviewResults.results[i];if(x)inject('#examReviewCard',x.question)}catch(e){}return r}}
+
+  // Real exam result: one quiet line on My Progress. These reports are what lets the 80% benchmark be checked against real outcomes.
+  const RAT=[['','Not sure'],['AT','Above Target'],['T','Target'],['BT','Below Target'],['NI','Needs Improvement']];
+  async function draw(){
+    const host=document.getElementById('v9Progress');if(!host||document.getElementById('v7Real'))return;
+    const box=document.createElement('div');box.id='v7Real';box.className='v7-real';host.appendChild(box);
+    let cur=null;try{cur=(await api('/api/coach/real-exam')).real_exam}catch(e){}
+    const view=()=>{box.innerHTML=cur?`<span>Your real PMP exam: <b>${cur.result==='pass'?'Passed':'Did not pass'}</b>${cur.exam_month?' · '+esc(cur.exam_month):''}. Thank you, this helps the next student.</span> <button type="button" class="v9-link" data-real-edit>Change</button>`
+      :`<span>Taken the real PMP exam?</span> <button type="button" class="v9-link" data-real-edit>Tell us your result</button>`;
+      box.querySelector('[data-real-edit]').onclick=form};
+    const form=()=>{const sel=(n,l)=>`<label>${l}<select name="${n}">${RAT.map(([v,t])=>`<option value="${v}" ${cur&&cur[n]===v?'selected':''}>${t}</option>`).join('')}</select></label>`;
+      box.innerHTML=`<form class="v7-real-form"><label>Result<select name="result" required><option value="">Choose…</option><option value="pass" ${cur&&cur.result==='pass'?'selected':''}>Passed</option><option value="fail" ${cur&&cur.result==='fail'?'selected':''}>Did not pass</option></select></label><label>Month<input type="month" name="exam_month" value="${esc(cur&&cur.exam_month||'')}"></label>${sel('people','People')}${sel('process','Process')}${sel('business','Business Environment')}<button type="submit" class="primary">Save</button><button type="button" class="v9-link" data-real-cancel>Cancel</button><span class="v7-real-msg"></span></form>`;
+      box.querySelector('[data-real-cancel]').onclick=view;
+      box.querySelector('form').onsubmit=async e=>{e.preventDefault();const f=new FormData(e.target),body=Object.fromEntries(f.entries());try{cur=(await api('/api/coach/real-exam',{method:'PUT',body:JSON.stringify(body)})).real_exam;view()}catch(err){box.querySelector('.v7-real-msg').textContent=err.message||'Could not save'}}};
+    view();
+  }
+  if(typeof window.v9RenderProgress==='function'&&typeof renderCompactProgressDashboard==='function'){const o=window.renderCompactProgressDashboard;let cached=null;
+    window.renderCompactProgressDashboard=function(p){const keep=document.getElementById('v7Real');const r=o.apply(this,arguments);try{const host=document.getElementById('v9Progress');if(host){if(keep&&!document.getElementById('v7Real'))host.appendChild(keep);else if(state.currentView==='progress')draw()}}catch(e){}return r}}
+})();
+
+
+/* ---------- v7.15: every long list shows 10 at a time with Prev / Next; wider copy protection ---------- */
+(function(){
+  const PER=10;
+  // [container selector, item selector, noun]
+  const LISTS=[['#notesGrid','.note-card','notes'],['#trickyGrid','.tricky-card','pairs'],['.v6-m-list','.v6-m-row','match sets'],['.v6-plan-rows','.v6-plan-row','items'],
+    ['#examHistory','.exam-history-row','exams'],['#ruleReviewArea .rule-list','.rule-row','concepts'],['#adminTable','.admin-row:not(:first-child)','rows'],['#examReportCards','.exam-report-card','exams'],['.v6-done-list','.v6-done-row','items']];
+  const pages=new WeakMap();let busy=false;
+  function apply(box,itemSel,noun){
+    const items=[...box.querySelectorAll(':scope > '+itemSel)];
+    let pager=box.previousElementSibling&&box.previousElementSibling.classList.contains('v10-pager')?box.previousElementSibling:null;
+    if(items.length<=PER){if(pager)pager.remove();items.forEach(x=>{if(x.classList.contains('v10-hide')){x.classList.remove('v10-hide');x.style.removeProperty('display')}});pages.delete(box);return}
+    // A new set of items (filter, search, tab) starts again at the first page.
+    const sig=items.length+'|'+(items[0].textContent||'').slice(0,60);
+    let st=pages.get(box);if(!st||st.sig!==sig){st={page:0,sig};pages.set(box,st)}
+    const last=Math.ceil(items.length/PER)-1;st.page=Math.max(0,Math.min(last,st.page));
+    items.forEach((x,i)=>{const hide=Math.floor(i/PER)!==st.page;x.classList.toggle('v10-hide',hide);if(hide)x.style.setProperty('display','none','important');else if(x.style.display==='none')x.style.removeProperty('display')});
+    if(!pager){pager=document.createElement('div');pager.className='v10-pager';box.parentNode.insertBefore(pager,box)}
+    const from=st.page*PER+1,to=Math.min(items.length,from+PER-1);
+    const html=`<button type="button" data-v10="-1" ${st.page===0?'disabled':''}>← Prev</button><span>${from}–${to} of ${items.length} ${noun}</span><button type="button" data-v10="1" ${st.page===last?'disabled':''}>Next →</button>`;
+    if(pager.dataset.h!==html){pager.dataset.h=html;pager.innerHTML=html;
+      pager.querySelectorAll('[data-v10]').forEach(b=>b.onclick=()=>{st.page+=Number(b.dataset.v10);run();const sc=box.closest('.view')||document.scrollingElement;try{pager.scrollIntoView({block:'nearest'})}catch(e){}})}
+  }
+  function run(){if(busy)return;busy=true;try{LISTS.forEach(([c,i,n])=>document.querySelectorAll(c).forEach(box=>{if(box.closest('#v6ReviewPager'))return;apply(box,i,n)}))}catch(e){console.warn('pager',e)}busy=false}
+  let t=null;new MutationObserver(()=>{if(busy)return;clearTimeout(t);t=setTimeout(run,30)}).observe(document.body,{childList:true,subtree:true});
+  window.v10Paginate=run;
+
+  // Copy protection: cover the newer study views too, block select-all, and print nothing for students.
+  const VIEWS=['notes','diagrams','tricky','practice','exams','review','coach','match','formulas','dashboard'];
+  window.isProtectedView=function(id){return VIEWS.includes(id||state.currentView)};
+  window.protectedInteractionTarget=function(target){return !!(target&&target.closest&&target.closest(VIEWS.map(v=>'#'+v).join(',')))&&!target.closest('input,textarea,select,button,[contenteditable="true"]')};
+  document.addEventListener('keydown',e=>{if(!document.body.classList.contains('copy-protected'))return;const a=document.activeElement;if(a&&a.matches('input,textarea,select,[contenteditable="true"]'))return;if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='a')e.preventDefault()});
+  document.addEventListener('selectstart',e=>{if(document.body.classList.contains('copy-protected')&&window.protectedInteractionTarget(e.target))e.preventDefault()});
+  try{if(typeof updateContentProtection==='function')updateContentProtection()}catch(e){}
+})();

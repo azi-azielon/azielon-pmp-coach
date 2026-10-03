@@ -184,7 +184,7 @@ for _code in EXAM_QUESTION_IDS:
     EXAM_QUESTION_IDS[_code].sort(key=lambda qid: EXAM_QUESTIONS[qid].get('index',0))
 
 def _exam_question_payload(q, include_answer=False):
-    p={k:q.get(k) for k in ('id','exam_code','index','domain','topic','approach','difficulty','type','stem','options','matching_left','matching_right','rule_id','block','block_title')}
+    p={k:q.get(k) for k in ('id','exam_code','index','domain','topic','approach','difficulty','type','stem','options','matching_left','matching_right','rule_id','block','block_title','eco_task','case_id','case_title','case_text','exhibit')}
     if include_answer:
         p['answer']=q.get('answer')
         p['explanation']=q.get('explanation')
@@ -1067,6 +1067,52 @@ def _adaptive_plan(profile, readiness, patterns, domains, review_count, feature_
 @app.get('/api/coach/profile')
 def coach_profile(user:User=Depends(current_user),db:Session=Depends(get_db)):
     require_paid_access(user,db); return _study_profile_payload(_get_study_profile(db,user.id))
+
+REAL_RATINGS={'AT','T','BT','NI',''}
+def _real_exam_payload(row):
+    if not row or not row.last_rating: return None
+    p=(row.last_rating.split('|')+['']*5)[:5]
+    return {'result':p[0],'people':p[1],'process':p[2],'business':p[3],'exam_month':p[4]}
+
+@app.get('/api/coach/real-exam')
+def get_real_exam(user:User=Depends(current_user),db:Session=Depends(get_db)):
+    require_paid_access(user,db)
+    row=db.query(StudyItemState).filter(StudyItemState.user_id==user.id,StudyItemState.content_type=='profile',StudyItemState.content_id=='real_exam').first()
+    return {'real_exam':_real_exam_payload(row)}
+
+@app.put('/api/coach/real-exam')
+def put_real_exam(payload:dict,user:User=Depends(current_user),db:Session=Depends(get_db)):
+    """The student reports the outcome of the real PMP exam, so Azielon can calibrate its 80% benchmark against real results."""
+    require_paid_access(user,db)
+    res=str(payload.get('result') or '')
+    if res not in ('pass','fail'): raise HTTPException(400,'Choose pass or fail')
+    r=[str(payload.get(k) or '').upper() for k in ('people','process','business')]
+    if any(x not in REAL_RATINGS for x in r): raise HTTPException(400,'Ratings must be AT, T, BT or NI')
+    month=str(payload.get('exam_month') or '')[:7]
+    row=db.query(StudyItemState).filter(StudyItemState.user_id==user.id,StudyItemState.content_type=='profile',StudyItemState.content_id=='real_exam').first()
+    if not row:
+        row=StudyItemState(user_id=user.id,content_type='profile',content_id='real_exam',status='not_started'); db.add(row)
+    row.last_rating='|'.join([res]+r+[month]); row.updated_at=datetime.utcnow(); db.commit()
+    return {'ok':True,'real_exam':_real_exam_payload(row)}
+
+@app.get('/api/admin/real-exam-results')
+def admin_real_exam_results(user: User = Depends(require_roles('admin','instructor')), db: Session = Depends(get_db)):
+    """Each reported real-exam outcome next to that student's Azielon exam scores (first full attempts)."""
+    out=[]
+    for row in db.query(StudyItemState).filter(StudyItemState.content_type=='profile',StudyItemState.content_id=='real_exam').all():
+        u=db.get(User,row.user_id); scores=[]
+        for ses in db.query(ExamSession).filter(ExamSession.user_id==row.user_id,ExamSession.status.in_(['submitted','expired'])).order_by(ExamSession.id).all():
+            ids=json.loads(ses.question_ids_json or '[]'); att=db.query(ExamAttempt).filter(ExamAttempt.exam_session_id==ses.id).all()
+            if ids and len(att)>=0.9*len(ids):
+                scores.append({'exam':ses.exam_code,'mode':ses.mode,'pct':round(sum(1 for a in att if a.is_correct)/len(ids)*100,1)})
+        timed=[x['pct'] for x in scores if x['mode']=='real_mock']
+        out.append({'user_id':row.user_id,'email':getattr(u,'email',None),**(_real_exam_payload(row) or {}),'reported_at':row.updated_at.isoformat() if row.updated_at else None,
+                    'exam_scores':scores,'timed_mock_average':round(sum(timed)/len(timed),1) if timed else None,'last_timed_mock':timed[-1] if timed else None})
+    passed=[x['timed_mock_average'] for x in out if x.get('result')=='pass' and x['timed_mock_average'] is not None]
+    failed=[x['timed_mock_average'] for x in out if x.get('result')=='fail' and x['timed_mock_average'] is not None]
+    return {'count':len(out),'passed':sum(1 for x in out if x.get('result')=='pass'),'failed':sum(1 for x in out if x.get('result')=='fail'),
+            'lowest_timed_average_among_passers':min(passed) if passed else None,'highest_timed_average_among_non_passers':max(failed) if failed else None,
+            'benchmark':AZIELON_PASS_BENCHMARK,'results':out}
 
 @app.put('/api/coach/background')
 def update_background(payload:dict,user:User=Depends(current_user),db:Session=Depends(get_db)):
@@ -2370,8 +2416,17 @@ def _score_exam_response(q, data: ExamAttemptIn):
     expected=ans if isinstance(ans,list) else [ans]
     return set(selected)==set(expected), {'selected_option_ids':selected}
 
+def _exam_released(e, user) -> bool:
+    """Exams marked approved:false are a staff-only preview until the instructor releases them
+    by listing their codes (or 'all') in the RELEASE_EXAMS environment variable."""
+    if e.get('approved',True): return True
+    if getattr(user,'role','') in ('admin','instructor','content_editor','reviewer'): return True
+    rel={x.strip() for x in os.getenv('RELEASE_EXAMS','').split(',') if x.strip()}
+    return 'all' in rel or e.get('code') in rel
+
 def _require_exam_access(user: User, db: Session, exam_code: str, mode: str|None=None):
     e=_exam_def(exam_code)
+    if not _exam_released(e,user): raise HTTPException(403,'This exam is not released yet')
     feature=exam_code
     require_feature(user,db,feature,f'{e.get("name","This exam")} is not included in your plan')
     if e.get('kind')=='mastery':
@@ -2389,6 +2444,8 @@ def exam_catalog(user: User = Depends(current_user), db: Session = Depends(get_d
     for e in EXAM_CONTENT.get('exams',[]):
         if e.get('code') not in features:
             continue
+        if not _exam_released(e,user):
+            continue
         attempts=db.query(ExamSession).filter(ExamSession.user_id==user.id, ExamSession.exam_code==e['code']).count()
         latest=db.query(ExamSession).filter(ExamSession.user_id==user.id, ExamSession.exam_code==e['code']).order_by(ExamSession.id.desc()).first()
         active=None
@@ -2404,7 +2461,7 @@ def exam_catalog(user: User = Depends(current_user), db: Session = Depends(get_d
             score_pct=round(correct/total*100,1) if total else None
             latest_summary={'session_id':latest.id,'status':latest.status,'answered':len(rows),'correct':correct,'total':total,'accuracy':score_pct,
                             'result':'PASS' if latest.status in ('submitted','expired') and score_pct is not None and score_pct>=AZIELON_PASS_BENCHMARK else ('BELOW BENCHMARK' if latest.status in ('submitted','expired') and score_pct is not None else None)}
-        out.append({**e,'sessions_started':attempts,'latest_status':latest.status if latest else None,'active_session':active,'latest_summary':latest_summary,'benchmark':AZIELON_PASS_BENCHMARK})
+        out.append({**e,'preview':not e.get('approved',True) and not ({'all',e.get('code')} & {x.strip() for x in os.getenv('RELEASE_EXAMS','').split(',')}),'sessions_started':attempts,'latest_status':latest.status if latest else None,'active_session':active,'latest_summary':latest_summary,'benchmark':AZIELON_PASS_BENCHMARK})
     return out
 
 @app.get('/api/exams/{exam_code}/rules')
@@ -2437,7 +2494,10 @@ def start_exam(exam_code:str, data:ExamStartIn, user:User=Depends(current_user),
     ids=list(EXAM_QUESTION_IDS.get(exam_code,[]))
     if len(ids)!=180: raise HTTPException(500,'Exam content is incomplete')
     # Real mock order is mixed but deterministic per session creation.
-    if mode=='real_mock': random.shuffle(ids)
+    if mode=='real_mock':
+        # Case-study questions stay together, in order, at the start (as on the real exam); the rest are shuffled.
+        case_ids=[i for i in ids if (EXAM_QUESTIONS.get(i) or {}).get('case_id')]; rest=[i for i in ids if i not in set(case_ids)]
+        random.shuffle(rest); ids=case_ids+rest
     # Only one exam runs at a time: anything else still running is paused (its timer stops) and can be resumed later.
     for other in db.query(ExamSession).filter(ExamSession.user_id==user.id,ExamSession.status=='active').all():
         _expire_exam_if_needed(other,db)

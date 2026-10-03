@@ -682,7 +682,7 @@ FEATURE_MATRIX = {
     },
     'full': {
         'practice','review','progress','bookmarks','notes','tricky','diagrams','match',
-        'visual_questions','mock1','mock2','mastery3','mastery4','mastery5',
+        'visual_questions','mock1','mock2','mock6','mock7','mastery3','mastery4','mastery5',
         'rules','mastery_learning','mastery_real_mock','ai_coach'
     },
 }

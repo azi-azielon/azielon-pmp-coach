@@ -150,7 +150,7 @@ function applyAccessNavigation(){
 
   document.querySelectorAll('#nav button[data-view="exams"]').forEach(b=>{
 
-    const ok=b.dataset.examKind==='mock'?(hasFeature('mock1')||hasFeature('mock2')):(hasFeature('mastery3')||hasFeature('mastery4')||hasFeature('mastery5'));
+    const ok=b.dataset.examKind==='mock'?(hasFeature('mock1')||hasFeature('mock2')||hasFeature('mock6')||hasFeature('mock7')):(hasFeature('mastery3')||hasFeature('mastery4')||hasFeature('mastery5'));
 
     b.classList.toggle('nav-locked',!ok);
 
@@ -1263,7 +1263,7 @@ function renderExamCatalog(){
 
   const rows=state.examCatalog.filter(e=>e.kind===state.examKind);
 
-  $('#examCatalog').innerHTML=rows.map(e=>`<article class="exam-card"><span class="pill">${e.kind==='mock'?'Full Simulation':'Concept Mastery'}</span><h3>${escapeHtml(e.name)}</h3><p>${e.question_count} questions · ${e.duration_minutes} minutes</p><p>${e.kind==='mastery'?'Take it as a real mock or review rules before practice blocks.':'Rules and explanations stay hidden until submission.'}</p>${e.active_session?`<button class="primary exam-resume" data-code="${e.code}">${e.active_session.paused?'Resume paused exam':'Resume exam'} →</button>`:`<button class="primary exam-choose" data-code="${e.code}">Choose exam</button>`}</article>`).join('');
+  $('#examCatalog').innerHTML=rows.map(e=>`<article class="exam-card"><span class="pill">${e.kind==='mock'?'Full Simulation':'Concept Mastery'}</span><h3>${escapeHtml(e.name)}</h3><p>${e.question_count} questions · ${e.duration_minutes} minutes</p><p>${e.preview?'<b>Staff preview — students cannot see this exam until it is released.</b> ':''}${e.kind==='mastery'?'Take it as a real mock or review rules before practice blocks.':e.case_study_questions?`Opens with ${e.case_study_questions} case-study questions, then independent questions.`:'Rules and explanations stay hidden until submission.'}</p>${e.active_session?`<button class="primary exam-resume" data-code="${e.code}">${e.active_session.paused?'Resume paused exam':'Resume exam'} →</button>`:`<button class="primary exam-choose" data-code="${e.code}">Choose exam</button>`}</article>`).join('');
 
   $$('.exam-choose').forEach(b=>b.onclick=()=>openExamSetup(b.dataset.code));$$('.exam-resume').forEach(b=>b.onclick=()=>resumeExam(b.dataset.code));
 

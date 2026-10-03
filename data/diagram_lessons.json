@@ -4,38 +4,38 @@
   "BED-001": {
    "teaches": "How a business problem turns into a project, and why finishing the project is not yet the win.",
    "readIt": [
-    "Start at the blue lightbulb box on the left: Business Need, a problem or opportunity.",
-    "Follow the arrows right: the green Business Case justifies the money, the purple gear delivers the solution.",
-    "Keep going past the gear. The yellow Benefits box and red Strategic Value star come after delivery.",
-    "Read the small text under each box to see what each link produces."
+    "Start at box 1 on the left: Business Need, a problem or opportunity.",
+    "Follow the arrows right: box 2, Business Case, justifies the money; the blue Project Delivery box delivers the solution.",
+    "Stop at the dashed gold line. The project ends there, but the chain keeps going.",
+    "The green Benefits box and gold Strategic Value box come after delivery. Read the text under each box."
    ],
-   "example": "Look at the purple Project Delivery box. It only produces outputs and deliverables. The yellow Benefits box, such as higher revenue or efficiency, sits one arrow later. So the PM plans for people to use the deliverable, not only to hand it over.",
+   "example": "Look at the blue Project Delivery box. It only produces outputs and deliverables. The green Benefits box, such as higher revenue or efficiency, sits one arrow later, past the dashed line. So the PM plans for people to use the deliverable, not only to hand it over.",
    "examUse": "When a question says the project finished on time but the expected benefits or value did not appear, think of this chain. Ask which link broke, often adoption.",
-   "trap": "Treating the purple Project Delivery box as the finish line; delivery success does not mean value was realized.",
+   "trap": "Treating the blue Project Delivery box as the finish line; delivery success does not mean value was realized.",
    "remember": "No adoption, no benefits. Deliverable is not value."
   },
   "BED-002": {
    "teaches": "How to decide whether you make the call yourself or take it to someone with more authority.",
    "readIt": [
-    "Begin at the red warning triangle on the left: a problem or issue appears.",
-    "Move right through the blue Assess box and the yellow Check Authority box. You analyze before anything else.",
-    "Stop at the green diamond: 'Do you have decision authority?' Yes goes right to Act.",
-    "No goes down to the purple Escalate box, then the 'Decision provided' arrow returns up to Act."
+    "Begin at the red Problem or Issue box on the left: something has come up.",
+    "Move right through the white Assess box and the white Check Authority box. You analyze before anything else.",
+    "Stop at the blue diamond: 'Do you have decision authority?' Yes goes right to the green Act box.",
+    "No goes down to the gold Escalate box, then the 'Decision provided' arrow returns up to Act."
    ],
-   "example": "Take the purple Escalate if Needed box. It names the sponsor, steering committee, or governance board. The PM brings the issue there with supporting information, gets a decision, and then follows the arrow back up to Act.",
+   "example": "Take the gold Escalate if Needed box. It names the sponsor, steering committee, or governance board. The PM brings the issue there with supporting information, gets a decision, and then follows the arrow back up to Act.",
    "examUse": "When a question says the cost exceeds your approval threshold, or asks who should decide, think of this. Find the diamond: do you have the authority?",
-   "trap": "Jumping straight to the purple Escalate box and skipping Assess; PMI wants analysis before escalation.",
+   "trap": "Jumping straight to the gold Escalate box and skipping Assess; PMI wants analysis before escalation.",
    "remember": "Assess first. Escalate later, and only if you lack authority."
   },
   "BED-003": {
    "teaches": "How to help people actually use a change, in five steps from listening to making it stick.",
    "readIt": [
-    "Read the five colored boxes in the middle row, left to right, following the arrows.",
+    "Read the five numbered boxes in the middle row, left to right, following the arrows.",
     "Look above each box for what you do at that step.",
     "Look below each box for the short quote. It is the attitude for that step.",
-    "Notice Train is fourth, not first. Listening, involving, and explaining all come before it."
+    "Notice Train is box 4, not first. Listening, involving, and explaining all come before it."
    ],
-   "example": "Take the blue Understand Resistance box. Above it says to identify concerns, barriers, and root causes. Below it says 'Listen and empathize.' So when employees refuse a new system, the PM first asks why, before sending more emails or scheduling training.",
+   "example": "Take the gold Understand Resistance box, number 1. Above it says to identify concerns, barriers, and root causes. Below it says 'Listen and empathize.' So when employees refuse a new system, the PM first asks why, before sending more emails or scheduling training.",
    "examUse": "When a question says users resist, or training was delivered but adoption remains low, think of this flow. Find the step that was skipped.",
    "trap": "Confusing this people journey with integrated change control, which is the formal approval of changes to the plan.",
    "remember": "Deployment is not adoption. Listen, involve, explain, train, reinforce."
@@ -70,10 +70,10 @@
   "BED-006": {
    "teaches": "How to use AI on a project safely: check, protect, generate, verify, then let a person decide.",
    "readIt": [
-    "Read the five tall columns left to right, following the colored arrows.",
-    "The first two columns, blue and green, happen before AI runs: check the data, check privacy.",
-    "The yellow brain is where AI works. The red column right after it verifies the result.",
-    "End at the purple person icon: a human makes the decision and is accountable."
+    "Read the five tall columns left to right, following the arrows.",
+    "The first two white columns sit under 'Before AI runs': check the data, check privacy.",
+    "The blue column is where AI works. The red column right after it verifies the result.",
+    "End at the gold Human Decision column: a person makes the decision and is accountable."
    ],
    "example": "Take the red Validate Output column. It says to review results for accuracy, bias, and relevance. So if an AI tool forecasts a finish date, the PM compares it with the team's knowledge before sharing it with the sponsor.",
    "examUse": "When a question says an AI tool recommends an action, or mentions sensitive data, bias, or privacy, think of this. Validate first; a human decides.",
@@ -109,9 +109,9 @@
   "PD-001": {
    "teaches": "How people's needs stack up, and why lower needs must be met before higher ones motivate.",
    "readIt": [
-    "Start at the wide pink bottom layer: Physiological, the basic survival needs.",
-    "Climb one layer at a time: blue Safety, yellow Belonging, green Esteem, purple Self-Actualization.",
-    "Follow each thin line out to the side box. It gives everyday examples for that layer.",
+    "Start at the wide rose bottom layer: Physiological, the basic survival needs.",
+    "Climb one layer at a time: blue Safety, gold Belonging, green Esteem, dark navy Self-Actualization.",
+    "Follow each thin line out to the box on the right. It gives everyday examples for that layer.",
     "Notice the layers get narrower. Fewer things motivate until the layers below are satisfied."
    ],
    "example": "Look at the blue Safety & Security layer. Its side box lists job security and fair treatment. If a team member fears being laid off, praise and awards from the green Esteem layer will not motivate them. The PM addresses the security worry first.",
@@ -122,12 +122,12 @@
   "PD-002": {
    "teaches": "How a team matures in five stages, and why conflict in stage two is normal.",
    "readIt": [
-    "Start at the purple step 1 at bottom left: Forming, with orientation and uncertainty.",
+    "Start at the blue step 1 at bottom left: Forming, with orientation and uncertainty.",
     "Follow the curved arrows up the staircase: Storming, Norming, Performing, Adjourning.",
     "Read the short line under each name. It tells you what the team feels like.",
-    "Check the Exam Tip box at the bottom: name the stage before choosing a response."
+    "Read the line at the bottom of the picture: name the stage before choosing a response."
    ],
-   "example": "Look at the red step 2, Storming, with the lightning bolt. It says conflict and role tension. So when two members argue about who owns a task, the PM does not panic. The PM coaches, mediates, and sets ground rules.",
+   "example": "Look at the red step 2, Storming. It says conflict and role tension. So when two members argue about who owns a task, the PM does not panic. The PM coaches, mediates, and sets ground rules.",
    "examUse": "When a question says a new team is arguing, or a new member joined a high-performing team, think of this. Identify the stage first.",
    "trap": "Reading Storming as failure. Also, the staircase only climbs, but a team can slip back when members change.",
    "remember": "Storming is normal. Know the stage before you respond."
@@ -161,8 +161,8 @@
   "PD-005": {
    "teaches": "How five ways of handling conflict compare, based on concern for yourself and concern for others.",
    "readIt": [
-    "Read the two axes: concern for others runs up and down, concern for self runs left to right.",
-    "Go to the green top-right box with the star: Collaborate, high on both.",
+    "Read the two axes: concern for others runs up the left side, concern for self runs along the bottom.",
+    "Go to the green top-right box tagged Preferred in PMP: Collaborate, high on both.",
     "Find the yellow Compromise box in the dead center. It is medium on both.",
     "Check the other three corners: Smooth top-left, Withdraw bottom-left, Force bottom-right."
    ],
@@ -174,12 +174,12 @@
   "PD-006": {
    "teaches": "Where a project manager's influence comes from, and which sources PMI prefers.",
    "readIt": [
-    "Look at the two large top boxes with stars: Expert and Referent. Both say 'Commonly PMP-Favored'.",
+    "Look at the two large gold boxes on top: Expert and Referent. The label above says PMI prefers these.",
     "Read their one-line meanings: knowledge and competence, then respect and relationships.",
     "Drop to the three smaller boxes: Legitimate, Reward, Coercive. These come with the position.",
-    "Note the red warning triangle on Coercive. It is the ability to penalize."
+    "Note that Coercive is the only red box, with a warning under it. It is the ability to penalize."
    ],
-   "example": "Look at the purple Referent Power box. It says respect and relationships. A PM with no formal authority over a team can still get cooperation because people trust and respect them. The PM builds that trust through fairness and follow-through.",
+   "example": "Look at the gold Referent power box. It says respect and relationships. A PM with no formal authority over a team can still get cooperation because people trust and respect them. The PM builds that trust through fairness and follow-through.",
    "examUse": "When a question says the PM has no formal authority, or asks which type of power is best to use, think of this. Favor expert and referent.",
    "trap": "Mixing up expert and referent: expert is what you know, referent is how people regard you.",
    "remember": "PMI prefers earned power (expert, referent) over granted power."
@@ -203,9 +203,9 @@
     "Start at the formula box, top left: n times n minus 1, divided by 2.",
     "Check the Examples table: team size on the left, channels on the right.",
     "Look at the blue bar chart. Each bar is taller than the last by a bigger jump.",
-    "Read the red Key Takeaway box: more people means many more paths."
+    "Read the line at the bottom of the picture: more people means many more paths."
    ],
-   "example": "Look at the table rows for 4 and 8. A team of 4 has 6 channels. Double the team to 8 and channels jump to 28, not 12. So when a team grows, the PM updates the communications plan.",
+   "example": "Look at the two shaded table rows, 4 and 8. A team of 4 has 6 channels. Double the team to 8 and channels jump to 28, not 12. So when a team grows, the PM updates the communications plan.",
    "examUse": "When a question says team members were added and asks how many channels, or how many more, think of this. Count the PM in n.",
    "trap": "Forgetting to include yourself in n, or giving the new total when the question asks for the increase.",
    "remember": "n times (n minus 1), divided by 2. People add, channels multiply."
@@ -215,10 +215,10 @@
    "readIt": [
     "Read the top row first: Product Owner, Scrum Master, Developers. One line says what each does.",
     "Move to the Sprint Flow row. Follow the arrows left to right from Product Backlog.",
-    "Notice the red Daily Scrum box above the Sprint with looping arrows. It repeats every day.",
-    "After the Sprint come two different meetings: yellow Sprint Review, then teal Retrospective."
+    "Notice the blue Daily Scrum box above the Sprint with looping arrows. It repeats every day.",
+    "After the Sprint come two different meetings: gold Sprint Review, then green Retrospective."
    ],
-   "example": "Compare the yellow Sprint Review and teal Retrospective boxes. Review inspects the product with stakeholders. Retrospective improves the team's process. So if the team keeps missing handoffs, the fix belongs in the Retrospective.",
+   "example": "Compare the gold Sprint Review and green Retrospective boxes. Review inspects the product with stakeholders. Retrospective improves the team's process. So if the team keeps missing handoffs, the fix belongs in the Retrospective.",
    "examUse": "When a question says stakeholders want to see the increment, or the team wants to improve how it works, think of this. Demo means Review; process means Retrospective.",
    "trap": "Swapping the Review and the Retrospective, or having the Scrum Master assign the team's daily tasks.",
    "remember": "Review = product. Retro = process."
@@ -268,7 +268,7 @@
     "Follow the five white boxes left to right: Sender, Encode, Message / Channel, Decode, Receiver.",
     "Look up at the red Noise / Barriers box. Its arrow drops into the middle of the message.",
     "Trace the gold curved arrow underneath. It runs back from Receiver to Sender: that is feedback.",
-    "Read the Key Idea box at the bottom: message sent is not message understood."
+    "Read the line at the bottom of the picture: message sent is not message understood."
    ],
    "example": "Look at the red Noise / Barriers box. It lists jargon, assumptions, and tech issues. If the PM emails a client using technical terms, the client may decode it wrongly. The PM asks the client to repeat it back, closing the gold feedback loop.",
    "examUse": "When a question says a stakeholder misunderstood, did not receive, or misread a message, think of this. Look for the answer that confirms understanding.",
@@ -318,11 +318,11 @@
    "teaches": "Shows where your product ends and which outside people and systems connect to it.",
    "readIt": [
     "Start in the middle: the blue Proposed System / Product box. That is what you are building.",
-    "Notice the dashed line around it, labeled System Boundary. Everything inside is your scope.",
-    "Look at the six colored boxes around it. They are outside people and systems.",
+    "Notice the dashed line around it, labeled System boundary. Everything inside is your scope.",
+    "Look at the six boxes around it. They are outside people and systems.",
     "Read the arrow labels. Each one names what passes in or out."
    ],
-   "example": "Look at the pink Payment Gateway box on the right. A Payment Request arrow goes out and a Payment Status arrow comes back. The gateway is outside the boundary, so the team builds only the connection, not the gateway itself.",
+   "example": "Look at the gold Payment Gateway box on the right. A Payment Request arrow goes out and a Payment Status arrow comes back. The gateway is outside the boundary, so the team builds only the connection, not the gateway itself.",
    "examUse": "When a question asks about scope boundary, external interfaces, or how the product interacts with other systems and users, think of the context diagram.",
    "trap": "Confusing it with a flowchart. A context diagram shows who touches the system, not the step-by-step order of work.",
    "remember": "Context = what surrounds and touches the system."
@@ -330,12 +330,12 @@
   "PRD-002": {
    "teaches": "Shows how to sort the possible causes of one problem into groups, so you find the root cause.",
    "readIt": [
-    "Start at the fish head on the right: Recurring Defects. That is the problem.",
+    "Start at the red box on the right: Recurring Defects. That is the problem.",
     "Follow the spine left. Six big bones branch off: Methods, People, Materials, Machines, Measurements, Environment.",
     "Read the two small lines on each bone. These are possible causes in that group.",
     "Ask why for each cause until the team reaches the real root."
    ],
-   "example": "Look at the green People bone. It lists Insufficient training and Human error. If the team agrees training is the likely cause of the recurring defects, the PM arranges training and then checks whether defects drop.",
+   "example": "Look at the gold People bone. It lists Insufficient training and Human error. If the team agrees training is the likely cause of the recurring defects, the PM arranges training and then checks whether defects drop.",
    "examUse": "When a question says the cause of a defect is unknown and the team must find the root cause or brainstorm causes, think fishbone.",
    "trap": "Expecting it to rank causes. Fishbone only lists possible causes; a Pareto chart shows which one matters most.",
    "remember": "Fishbone = why did this happen?"
@@ -374,7 +374,7 @@
     "Look at the number on each bar: 5, 15, 25, 12, 5.",
     "Step back and see the shape: one hill, with the peak in the middle."
    ],
-   "example": "Look at the tall purple bar for 20–30. It reaches 25, so most results land in that range. Only 5 fall in 0–10 and 5 in 40–50. The PM sees that results cluster in the middle, with few extreme values.",
+   "example": "Look at the tall gold bar for 20–30. It reaches 25, so most results land in that range. Only 5 fall in 0–10 and 5 in 40–50. The PM sees that results cluster in the middle, with few extreme values.",
    "examUse": "When a question asks about the distribution, spread, or frequency of quality data, with no ranking of causes, think histogram.",
    "trap": "Confusing it with a Pareto chart. Histogram bars stay in number order; they are not sorted biggest first.",
    "remember": "Histogram = the shape of the data."
@@ -424,9 +424,9 @@
     "Start at the blue Decision Node on the left. Two paths leave it: Build In-House and Outsource.",
     "Follow each path to its two outcome boxes. Each shows a probability and a dollar amount.",
     "Multiply probability by dollars for each outcome, then add the two results.",
-    "Compare the two boxes on the right: $64,000 and $74,000. That is the EMV."
+    "Compare the two EMV boxes on the right: $64,000 and $74,000. The gold one is higher."
    ],
-   "example": "Follow the purple Outsource path. Success is 80% × $90,000 = $72,000. Minor Gain is 20% × $10,000 = $2,000. Together that is $74,000, higher than Build In-House at $64,000. On money alone, the PM chooses Outsource.",
+   "example": "Follow the lower Outsource path. Success is 80% × $90,000 = $72,000. Minor Gain is 20% × $10,000 = $2,000. Together that is $74,000, higher than Build In-House at $64,000. On money alone, the PM chooses Outsource.",
    "examUse": "When a question gives options with probabilities and dollar amounts, such as make-or-buy, and asks for the expected monetary value, think decision tree.",
    "trap": "Picking the biggest payoff ($120,000) without multiplying by its probability. Always multiply first, then add each branch.",
    "remember": "EMV = probability × impact. Multiply, add, then compare."
@@ -473,12 +473,12 @@
   "PRD-013": {
    "teaches": "How to spot where work is piling up by watching colored bands grow over time.",
    "readIt": [
-    "Start at the legend on the right: pink is Backlog, yellow In Progress, blue Testing, green Done.",
+    "Start at the labels on the right: rose is Backlog, gold In Progress, blue Testing, green Done.",
     "Read left to right, Week 1 to Week 6. Each band's height is how many items sit in that state.",
-    "Find the yellow double arrow near Week 4. That band got thicker, so work is waiting there.",
+    "Find the gold double arrow at Week 4. That band grew from 8 to 26 items, so work is waiting there.",
     "Look at the green band on top. Steady growth means work keeps getting finished."
    ],
-   "example": "Look at the yellow In Progress band around Week 4. It is much thicker than in Week 1, so the team started more work than it finished. The PM helps the team stop starting new items and clear the stuck ones first.",
+   "example": "Look at the gold In Progress band at Week 4. It holds 26 items, against 8 in Week 1, so the team started more work than it finished. The PM helps the team stop starting new items and clear the stuck ones first.",
    "examUse": "When a question mentions a bottleneck, growing WIP (work in progress), or a Kanban team that starts a lot but finishes little, think of this chart.",
    "trap": "Do not read it like a burndown chart; a burndown shows work remaining, this shows work sitting in each state.",
    "remember": "Wider bands = work waiting."
@@ -487,8 +487,8 @@
    "teaches": "How a team sees all its work and limits how much is started at once.",
    "readIt": [
     "Read the four columns left to right: To Do, In Progress, Review, Done. Each card is one work item.",
-    "Find the yellow tag 'WIP Limit: 3' under In Progress. Only three cards may sit there.",
-    "Count the In Progress cards: three. The column is full, so nothing new can start yet.",
+    "Find the gold tag 'WIP Limit: 3' under In Progress. Only three cards may sit there.",
+    "Count the In Progress cards: three. The column says 'Full: 3 of 3', so nothing new can start yet.",
     "Follow the blue arrow at the bottom. Work is pulled to the right only when space opens."
    ],
    "example": "In Progress holds Develop feature, Run unit tests and Update documentation, which is the limit of three. 'Design solution' must wait in To Do. The team finishes one card first, then pulls the next.",
@@ -500,11 +500,11 @@
    "teaches": "How a requested change moves through seven steps before anyone is allowed to build it.",
    "readIt": [
     "Follow the numbered circles 1 to 7 from left to right along the arrows.",
-    "Stop at box 2, Impact Analysis. It comes before the request goes for a decision.",
-    "Look at box 4, the gold one with people. The CCB (change control board) approves, rejects or defers.",
-    "Notice Implement is box 6. Plans are updated and people told (box 5) before work starts."
+    "Stop at box 3, Analyze impact. It comes before the request goes for a decision.",
+    "Look at box 4, the gold one, Decide. The CCB (change control board) approves, rejects or defers.",
+    "Notice Implement is box 7, the green one. The plan is updated (5) and people told (6) first."
    ],
-   "example": "Take box 2, Impact Analysis. A sponsor asks for a new report. Before saying yes, the PM checks what it does to scope, schedule, cost, quality, resources and risk, then writes the change request with those findings.",
+   "example": "Take box 3, Analyze impact. A sponsor asks for a new report. The PM first understands the need and records a change request, then checks what it does to scope, schedule, cost, quality, resources and risk, before the CCB decides.",
    "examUse": "When a question says the customer or sponsor requests a change and asks what to do first, think of this. Look for: analyze impact, change request, CCB.",
    "trap": "Implementing first because a sponsor or senior person asked; even their request goes through the steps.",
    "remember": "Analyze before approve; approve before implement."
@@ -616,12 +616,12 @@
   "PRD-024": {
    "teaches": "How to follow a process step by step, including its yes-or-no decision points.",
    "readIt": [
-    "Look at the legend in the middle first: oval is start or end, rectangle a step, diamond a decision.",
-    "Begin at the dark Start oval on the left and follow the arrows to the right.",
+    "Look at the legend at the top first: oval is start or end, rectangle a step, diamond a decision.",
+    "Begin at the dark Start oval on the left and follow the arrows through numbered steps 1 to 3.",
     "At each gold diamond, pick Yes or No. 'No' at the first one loops back for more information.",
-    "At the second diamond, Yes leads to Implement and No leads to Communicate decision. Both reach End."
+    "At the second diamond, Yes leads to update the plan, tell people, implement. No leads to Communicate decision. Both reach End."
    ],
-   "example": "Take the first diamond, 'Is the request complete?'. If No, the arrow drops to 'Request additional information' and loops back to the first step. The request moves on to impact analysis only when the answer is Yes.",
+   "example": "Take the first diamond, 'Is the request complete?'. If No, the arrow drops to 'Request additional information' and loops back to step 1. The request is recorded and moves on to impact analysis only when the answer is Yes.",
    "examUse": "When a question asks for a tool that shows the sequence of steps, decision points, or where a process breaks down, think flowchart.",
    "trap": "Confusing it with a context diagram, which shows a system and who interacts with it, not step order.",
    "remember": "Flowchart = what happens next?"
