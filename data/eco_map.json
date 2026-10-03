@@ -1,0 +1,570 @@
+{
+ "edition": "PMI PMP Exam Content Outline, July 2026",
+ "weights": {
+  "People": 33,
+  "Process": 41,
+  "Business Environment": 26
+ },
+ "tasks": {
+  "P1": {
+   "title": "Develop a common vision",
+   "domain": "People",
+   "enablers": [
+    "Help ensure a shared vision with key stakeholders",
+    "Promote the shared vision",
+    "Keep the vision current",
+    "Break down situations to identify root cause of vision misunderstanding"
+   ]
+  },
+  "P2": {
+   "title": "Manage conflicts",
+   "domain": "People",
+   "enablers": [
+    "Identify conflict sources",
+    "Analyze conflict context",
+    "Implement agreed-on resolution strategy",
+    "Communicate conflict management principles with team and external stakeholders",
+    "Establish environment fostering adherence to common ground rules",
+    "Manage and rectify ground rule violations"
+   ]
+  },
+  "P3": {
+   "title": "Lead the project team",
+   "domain": "People",
+   "enablers": [
+    "Establish team-level expectations",
+    "Empower the team",
+    "Solve problems",
+    "Represent voice of the team",
+    "Support team's varied experiences, skills, and perspectives",
+    "Determine appropriate leadership style",
+    "Establish clear roles and responsibilities within team"
+   ]
+  },
+  "P4": {
+   "title": "Engage stakeholders",
+   "domain": "People",
+   "enablers": [
+    "Identify stakeholders",
+    "Analyze stakeholders",
+    "Analyze and tailor communication to stakeholder needs",
+    "Execute stakeholder engagement plan",
+    "Optimize alignment among stakeholder needs, expectations, and project objectives",
+    "Build trust and influence stakeholders to accomplish project objectives"
+   ]
+  },
+  "P5": {
+   "title": "Align stakeholder expectations",
+   "domain": "People",
+   "enablers": [
+    "Categorize stakeholders",
+    "Identify stakeholder expectations",
+    "Facilitate discussions to align expectations",
+    "Organize and act on mentoring opportunities"
+   ]
+  },
+  "P6": {
+   "title": "Manage stakeholder expectations",
+   "domain": "People",
+   "enablers": [
+    "Identify internal and external customer expectations",
+    "Align and maintain outcomes to internal and external customer expectations",
+    "Monitor internal and external customer satisfaction/expectations and respond as needed"
+   ]
+  },
+  "P7": {
+   "title": "Help ensure knowledge transfer",
+   "domain": "People",
+   "enablers": [
+    "Identify knowledge critical to the project",
+    "Gather knowledge",
+    "Foster environment for knowledge transfer"
+   ]
+  },
+  "P8": {
+   "title": "Plan and manage communication",
+   "domain": "People",
+   "enablers": [
+    "Define communication strategy",
+    "Promote transparency and collaboration",
+    "Establish feedback loop",
+    "Understand reporting requirements",
+    "Create reports aligned with sponsor and stakeholder expectations",
+    "Support reporting and governance processes"
+   ]
+  },
+  "PR1": {
+   "title": "Develop an integrated project management plan and plan delivery",
+   "domain": "Process",
+   "enablers": [
+    "Assess project needs, complexity, and magnitude",
+    "Recommend project management development approach (predictive, adaptive/agile, or hybrid)",
+    "Determine critical information requirements (e.g., sustainability)",
+    "Recommend project execution strategy",
+    "Create integrated project management plan",
+    "Estimate work effort and resource requirements",
+    "Assess consolidated project plans for dependencies, gaps, and continued business value",
+    "Maintain integrated project management plan",
+    "Collect and analyze data to make informed project decisions"
+   ]
+  },
+  "PR2": {
+   "title": "Develop and manage project scope",
+   "domain": "Process",
+   "enablers": [
+    "Define scope",
+    "Obtain stakeholder agreement on project scope",
+    "Break down scope"
+   ]
+  },
+  "PR3": {
+   "title": "Help ensure value-based delivery",
+   "domain": "Process",
+   "enablers": [
+    "Identify value components with key stakeholders",
+    "Prioritize work based on value and stakeholder feedback",
+    "Assess opportunities to deliver value incrementally",
+    "Examine business value throughout project",
+    "Verify measurement system in place to track benefits",
+    "Evaluate delivery options to demonstrate value"
+   ]
+  },
+  "PR4": {
+   "title": "Plan and manage resources",
+   "domain": "Process",
+   "enablers": [
+    "Define and plan resources based on requirements",
+    "Manage and optimize resource needs and availability"
+   ]
+  },
+  "PR5": {
+   "title": "Plan and manage procurement",
+   "domain": "Process",
+   "enablers": [
+    "Plan procurement",
+    "Execute procurement management plan",
+    "Select preferred contract types",
+    "Evaluate vendor performance",
+    "Verify objectives of procurement agreement are met",
+    "Participate in agreement negotiations",
+    "Determine negotiation strategy",
+    "Manage suppliers and contracts",
+    "Plan and manage procurement strategy",
+    "Develop delivery solution"
+   ]
+  },
+  "PR6": {
+   "title": "Plan and manage finance",
+   "domain": "Process",
+   "enablers": [
+    "Analyze project financial needs",
+    "Quantify risk and contingency financial allocations",
+    "Plan spend tracking throughout project life cycle",
+    "Plan financial reporting",
+    "Anticipate future finance challenges",
+    "Monitor financial variations and work with governance process",
+    "Manage financial reserves"
+   ]
+  },
+  "PR7": {
+   "title": "Plan and optimize quality of products/deliverables",
+   "domain": "Process",
+   "enablers": [
+    "Gather quality requirements for project deliverables",
+    "Plan quality processes and tools",
+    "Execute quality management plan",
+    "Help ensure regulatory compliance",
+    "Manage cost of quality (CoQ) and sustainability",
+    "Conduct ongoing quality reviews",
+    "Implement continuous improvement"
+   ]
+  },
+  "PR8": {
+   "title": "Plan and manage schedule",
+   "domain": "Process",
+   "enablers": [
+    "Prepare schedule based on selected development approach",
+    "Coordinate with other projects and operations",
+    "Estimate project tasks (milestones, dependencies, story points)",
+    "Utilize benchmarks and historical data",
+    "Create project schedule",
+    "Baseline project schedule",
+    "Execute schedule management plan",
+    "Analyze schedule variation"
+   ]
+  },
+  "PR9": {
+   "title": "Evaluate project status",
+   "domain": "Process",
+   "enablers": [
+    "Develop project metrics, analysis, and reconciliation",
+    "Identify and tailor needed artifacts",
+    "Help ensure artifacts are created, reviewed, updated, and documented",
+    "Help ensure accessibility of artifacts",
+    "Assess current progress",
+    "Measure, analyze, and update project metrics",
+    "Communicate project status",
+    "Continually assess effectiveness of artifact management"
+   ]
+  },
+  "PR10": {
+   "title": "Manage project closure",
+   "domain": "Process",
+   "enablers": [
+    "Obtain project stakeholder approval of project completion",
+    "Determine criteria to successfully close project or phase",
+    "Validate readiness for transition (e.g., to operations team or next phase)",
+    "Conclude activities to close project or phase (e.g., final lessons learned, retrospectives, procurement, financials, resources)"
+   ]
+  },
+  "B1": {
+   "title": "Define and establish project governance",
+   "domain": "Business Environment",
+   "enablers": [
+    "Describe and establish structure, rules, procedures, reporting, ethics, and policies through use of organizational process assets (OPAs)",
+    "Define success metrics",
+    "Outline governance escalation paths and thresholds"
+   ]
+  },
+  "B2": {
+   "title": "Plan and manage project compliance",
+   "domain": "Business Environment",
+   "enablers": [
+    "Confirm project compliance requirements (e.g., security, health and safety, sustainability, regulatory compliance)",
+    "Classify compliance categories",
+    "Determine potential threats to compliance",
+    "Use methods to support compliance",
+    "Analyze consequences of noncompliance",
+    "Determine necessary approach and action(s) to address compliance needs",
+    "Measure extent to which project is in compliance"
+   ]
+  },
+  "B3": {
+   "title": "Manage and control changes",
+   "domain": "Business Environment",
+   "enablers": [
+    "Execute change control process",
+    "Communicate status of proposed changes",
+    "Implement approved changes to project",
+    "Update project documentation to reflect changes"
+   ]
+  },
+  "B4": {
+   "title": "Remove impediments and manage issues",
+   "domain": "Business Environment",
+   "enablers": [
+    "Evaluate impact of impediments",
+    "Prioritize and highlight impediments",
+    "Determine and apply intervention strategy to remove/minimize impediments",
+    "Reassess continually to help ensure impediments, obstacles, and blockers for team are addressed",
+    "Recognize when risk becomes issue",
+    "Collaborate with relevant stakeholders on approach to resolve issues"
+   ]
+  },
+  "B5": {
+   "title": "Plan and manage risk",
+   "domain": "Business Environment",
+   "enablers": [
+    "Identify risks",
+    "Analyze risks",
+    "Monitor and control risks",
+    "Develop risk management plan",
+    "Maintain risk register (e.g., poor IT security)",
+    "Execute risk management plan (e.g., risk response for security and managing sustainability risks)",
+    "Communicate status of risk impact on project"
+   ]
+  },
+  "B6": {
+   "title": "Continuous improvement",
+   "domain": "Business Environment",
+   "enablers": [
+    "Utilize lessons learned",
+    "Help ensure continuous improvement processes are updated",
+    "Update organizational process assets (OPAs)"
+   ]
+  },
+  "B7": {
+   "title": "Support organizational change",
+   "domain": "Business Environment",
+   "enablers": [
+    "Assess organizational culture",
+    "Evaluate impact of organizational change on project and determine required actions"
+   ]
+  },
+  "B8": {
+   "title": "Evaluate external business environment changes",
+   "domain": "Business Environment",
+   "enablers": [
+    "Survey changes to external business environment (e.g., regulations, technology, geopolitical, market)",
+    "Assess and prioritize impact on project scope/backlog based on changes in external business environment",
+    "Continually review external business environment for impacts on project scope/backlog"
+   ]
+  }
+ },
+ "items": {
+  "note": {
+   "BUS-01": "B1",
+   "BUS-02": "B2",
+   "BUS-03": "B7",
+   "BUS-04": "PR3",
+   "BUS-05": "PR3",
+   "BUS-06": "B2",
+   "BUS-07": "PR6",
+   "BUS-08": "B1",
+   "PEO-01": "P3",
+   "PEO-02": "P2",
+   "PEO-03": "P3",
+   "PEO-04": "P3",
+   "PEO-05": "P4",
+   "PEO-06": "P8",
+   "PEO-07": "P3",
+   "PEO-08": "P3",
+   "PEO-09": "P3",
+   "PRO-01": "PR1",
+   "PRO-02": "PR2",
+   "PRO-03": "PR8",
+   "PRO-04": "PR6",
+   "PRO-05": "PR7",
+   "PRO-06": "B5",
+   "PRO-07": "PR6",
+   "PRO-08": "PR5",
+   "PRO-09": "PR4",
+   "PRO-10": "PR9",
+   "PRO-11": "B3",
+   "PRO-12": "PR1",
+   "PRO-13": "PR1",
+   "az-note-people-06": "P3",
+   "az-note-people-07": "P5",
+   "az-note-people-08": "P3",
+   "az-note-people-09": "P3",
+   "az-note-people-10": "P5",
+   "az-note-people-11": "P3",
+   "az-note-people-12": "P2",
+   "az-note-people-13": "P3",
+   "az-note-people-14": "P3",
+   "az-note-process-01": "P3",
+   "az-note-process-02": "PR8",
+   "az-note-process-03": "PR2",
+   "az-note-process-04": "PR7",
+   "az-note-process-06": "PR9",
+   "az-note-process-07": "PR9",
+   "az-note-process-08": "PR8",
+   "az-note-process-09": "PR8",
+   "az-note-process-10": "PR1",
+   "az-note-process-12": "B5",
+   "az-note-process-15": "B4",
+   "az-note-process-17": "PR7",
+   "az-note-process-18": "PR8",
+   "az-note-process-19": "PR8",
+   "az-note-process-22": "B6",
+   "az-note-process-23": "PR5",
+   "az-note-process-24": "PR5",
+   "az-note-process-25": "PR4",
+   "az-note-process-26": "B6",
+   "az-note-process-27": "PR3",
+   "az-note-business-07": "B8",
+   "az-note-business-08": "PR10",
+   "az-note-business-09": "B2",
+   "az-note-people-15": "P1",
+   "az-note-people-16": "P5",
+   "az-note-people-17": "P6",
+   "az-note-people-18": "P7",
+   "az-note-people-19": "P8",
+   "az-note-process-28": "PR10",
+   "az-note-business-10": "B4",
+   "az-note-business-11": "B7",
+   "az-note-business-12": "B1"
+  },
+  "tricky": {
+   "TW-001": "B7",
+   "TW-003": "B5",
+   "TW-004": "PR1",
+   "TW-005": "B3",
+   "TW-007": "PR7",
+   "TW-008": "PR3",
+   "TW-009": "B1",
+   "TW-010": "PR1",
+   "TW-011": "PR1",
+   "TW-012": "B6",
+   "TW-013": "PR2",
+   "TW-014": "P4",
+   "TW-015": "PR2",
+   "TW-016": "PR2",
+   "TW-017": "PR5",
+   "TW-018": "PR5",
+   "TW-019": "PR3",
+   "TW-020": "PR3",
+   "TW-021": "PR6",
+   "TW-022": "B5",
+   "TW-023": "B5",
+   "TW-024": "P2",
+   "TW-025": "P3",
+   "TW-026": "P3",
+   "TW-027": "PR5",
+   "TW-028": "PR5",
+   "TW-029": "PR5",
+   "TW-030": "PR6",
+   "TW-031": "PR6",
+   "TW-032": "PR6",
+   "TW-033": "PR7",
+   "TW-034": "PR7",
+   "TW-035": "PR7",
+   "TW-036": "PR6",
+   "TW-037": "PR6",
+   "TW-038": "PR6",
+   "TW-039": "PR6",
+   "TW-040": "B1",
+   "TW-041": "B1",
+   "TW-042": "B1",
+   "TW-043": "PR1",
+   "TW-044": "PR9",
+   "TW-045": "PR3",
+   "TW-046": "P1",
+   "TW-047": "P6",
+   "TW-048": "P7",
+   "TW-049": "B6",
+   "TW-050": "B4",
+   "TW-051": "PR10",
+   "TW-052": "P8",
+   "TW-053": "B8"
+  },
+  "diagram": {
+   "BED-001": "PR3",
+   "BED-002": "B1",
+   "BED-003": "B7",
+   "BED-004": "B2",
+   "BED-005": "PR6",
+   "BED-006": "B2",
+   "BED-007": "B2",
+   "BED-008": "B1",
+   "PD-001": "P3",
+   "PD-002": "P3",
+   "PD-003": "P4",
+   "PD-004": "P4",
+   "PD-005": "P2",
+   "PD-006": "P3",
+   "PD-007": "PR4",
+   "PD-008": "P8",
+   "PD-009": "P3",
+   "PD-010": "P4",
+   "PD-011": "PR4",
+   "PD-012": "B1",
+   "PD-013": "P8",
+   "PD-014": "P3",
+   "PD-015": "P3",
+   "PD-016": "P3",
+   "PRD-001": "PR2",
+   "PRD-002": "PR7",
+   "PRD-003": "PR7",
+   "PRD-004": "PR7",
+   "PRD-005": "PR7",
+   "PRD-006": "PR7",
+   "PRD-007": "B5",
+   "PRD-008": "B5",
+   "PRD-009": "B5",
+   "PRD-010": "PR8",
+   "PRD-011": "PR9",
+   "PRD-012": "PR9",
+   "PRD-013": "PR9",
+   "PRD-014": "PR8",
+   "PRD-015": "B3",
+   "PRD-016": "B4",
+   "PRD-017": "PR9",
+   "PRD-018": "PR8",
+   "PRD-019": "PR8",
+   "PRD-020": "PR9",
+   "PRD-021": "PR6",
+   "PRD-022": "PR2",
+   "PRD-023": "B5",
+   "PRD-024": "PR7",
+   "PRD-025": "PR9",
+   "PRD-026": "PR7",
+   "PRD-027": "PR8",
+   "PRD-028": "PR3",
+   "PRD-029": "PR5",
+   "PRD-030": "PR1"
+  },
+  "match": {
+   "MT-001": "PR8",
+   "MT-002": "PR8",
+   "MT-003": "PR1",
+   "MT-004": "PR9",
+   "MT-005": "PR9",
+   "MT-006": "PR8",
+   "MT-007": "PR7",
+   "MT-008": "P3",
+   "MT-009": "PR3",
+   "MT-010": "PR1",
+   "MT-011": "PR2",
+   "MT-012": "PR9",
+   "MT-013": "PR9",
+   "MT-014": "PR9",
+   "MT-015": "PR5",
+   "MT-016": "PR5",
+   "MT-017": "PR2",
+   "MT-018": "PR10",
+   "MT-019": "B3",
+   "MT-020": "PR1",
+   "MT-021": "PR4",
+   "MT-022": "B1",
+   "MT-023": "P3",
+   "MT-024": "PR7",
+   "MT-025": "B3",
+   "MT-026": "PR9",
+   "MT-027": "B5",
+   "MT-028": "B3",
+   "MT-029": "B5",
+   "MT-030": "P4",
+   "MT-031": "PR10",
+   "MT-032": "PR5",
+   "MT-033": "B2",
+   "MT-034": "PR7",
+   "MT-035": "B4",
+   "MT-036": "PR3",
+   "MT-037": "P3",
+   "MT-038": "P3",
+   "MT-039": "P2",
+   "MT-040": "P3",
+   "MT-041": "P3",
+   "MT-042": "P3",
+   "MT-043": "P4",
+   "MT-044": "P5",
+   "MT-045": "P3",
+   "MT-046": "PR7",
+   "MT-047": "PR8",
+   "MT-048": "PR8",
+   "MT-049": "PR8",
+   "MT-050": "PR9",
+   "MT-051": "PR6",
+   "MT-052": "PR7",
+   "MT-053": "P3",
+   "MT-054": "P8",
+   "MT-055": "B5",
+   "MT-056": "B5",
+   "MT-057": "B5",
+   "MT-058": "PR6",
+   "MT-059": "B5",
+   "MT-060": "PR5",
+   "MT-061": "PR5",
+   "MT-062": "PR5",
+   "MT-063": "PR5",
+   "MT-064": "B1",
+   "MT-065": "B8",
+   "MT-066": "PR3",
+   "MT-067": "PR6",
+   "MT-068": "B7",
+   "MT-069": "B1",
+   "MT-070": "PR1",
+   "MT-071": "B1",
+   "MT-072": "B2",
+   "MT-073": "P1",
+   "MT-074": "P5",
+   "MT-075": "P6",
+   "MT-076": "P7",
+   "MT-077": "P8",
+   "MT-078": "B4",
+   "MT-079": "B6",
+   "MT-080": "B8"
+  }
+ }
+}

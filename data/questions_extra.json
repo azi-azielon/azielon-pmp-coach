@@ -1,0 +1,3836 @@
+{
+ "note": "Additional practice questions for thin ECO tasks. Inserted as Draft and NOT shown to students until approved in Instructor Studio.",
+ "items": [
+  {
+   "id": "AZ-GAP-P1-01",
+   "primaryConcept": "Shared vision at kickoff",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Easy",
+   "type": "single",
+   "stem": "A hospital has approved the charter for a pharmacy automation project. The sponsor, the chief pharmacist and the head of nursing have each read the charter, but they have never discussed it together. Detailed planning is due to start next week. What should the project manager do FIRST?",
+   "options": [
+    {
+     "id": "AZ-GAP-P1-01-O1",
+     "text": "Bring the three leaders together to agree what success will look like."
+    },
+    {
+     "id": "AZ-GAP-P1-01-O2",
+     "text": "Email the charter again and ask each leader to send questions in writing."
+    },
+    {
+     "id": "AZ-GAP-P1-01-O3",
+     "text": "Start the work breakdown structure so that planning is not held up."
+    },
+    {
+     "id": "AZ-GAP-P1-01-O4",
+     "text": "Ask the sponsor to write the vision and announce it to the other leaders."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P1-01-O1"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Bring the three leaders together to agree what success will look like.",
+    "plainLanguageRationale": "Three people reading the same charter can still picture three different results. Getting them to agree together comes before planning.",
+    "scenarioFactAudit": [
+     "The leaders have never discussed the charter together.",
+     "Detailed planning has not started yet."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P1-01-O1",
+      "rationale": "Correct. A vision is shared only when the key people have built and agreed it together."
+     },
+     {
+      "optionId": "AZ-GAP-P1-01-O2",
+      "rationale": "Reading a document separately does not show whether the three leaders mean the same thing."
+     },
+     {
+      "optionId": "AZ-GAP-P1-01-O3",
+      "rationale": "Planning before the outcome is agreed risks planning the wrong work."
+     },
+     {
+      "optionId": "AZ-GAP-P1-01-O4",
+      "rationale": "A vision announced by one person is not yet shared by the others."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "A vision is shared when people agree it together, not when they each receive it.",
+    "situationalNuance": "If the three leaders had already agreed measurable success criteria together, moving into planning would be right."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 1,
+    "taskCode": "P1",
+    "taskTitle": "Develop a common vision",
+    "enablerNumber": 1,
+    "enablerText": "Help ensure a shared vision with key stakeholders"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P1-02",
+   "primaryConcept": "Co-creating a product vision",
+   "deliveryApproach": "Agile",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A payments start-up is beginning a new mobile wallet. The product owner has a clear picture of the product in her head. The developers and the compliance officer have not been involved, and the first Sprint Planning is in four days. As the team's agile project manager, what is the BEST step to take?",
+   "options": [
+    {
+     "id": "AZ-GAP-P1-02-O1",
+     "text": "Ask the product owner to present her finished vision at Sprint Planning."
+    },
+    {
+     "id": "AZ-GAP-P1-02-O2",
+     "text": "Facilitate a short workshop where all of them draft the vision statement."
+    },
+    {
+     "id": "AZ-GAP-P1-02-O3",
+     "text": "Let the team start the backlog and refine the vision after the first review."
+    },
+    {
+     "id": "AZ-GAP-P1-02-O4",
+     "text": "Write the vision statement yourself from the product owner's description."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P1-02-O2"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Facilitate a short workshop where all of them draft the vision statement.",
+    "plainLanguageRationale": "People commit to a vision they helped shape. A short workshop before the first sprint is cheap and prevents rework.",
+    "scenarioFactAudit": [
+     "Only the product owner knows the vision.",
+     "Developers and compliance have not been involved.",
+     "There is still time before Sprint Planning."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P1-02-O1",
+      "rationale": "Presenting a finished vision informs people but does not test or build shared understanding."
+     },
+     {
+      "optionId": "AZ-GAP-P1-02-O2",
+      "rationale": "Correct. Building the vision together gives the team and compliance a shared understanding they will own."
+     },
+     {
+      "optionId": "AZ-GAP-P1-02-O3",
+      "rationale": "Starting work without an agreed direction invites rework and compliance surprises."
+     },
+     {
+      "optionId": "AZ-GAP-P1-02-O4",
+      "rationale": "The vision belongs to the product owner and stakeholders; writing it for them skips the shared thinking."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Co-create the vision with the people who must deliver and approve it.",
+    "situationalNuance": "If the team and compliance officer had already helped write the vision, a brief recap at Sprint Planning would be enough."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 1,
+    "taskCode": "P1",
+    "taskTitle": "Develop a common vision",
+    "enablerNumber": 1,
+    "enablerText": "Help ensure a shared vision with key stakeholders"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P1-03",
+   "primaryConcept": "Hidden disagreement behind sign-off",
+   "deliveryApproach": "Hybrid",
+   "difficulty": "Hard",
+   "type": "single",
+   "stem": "An airline is building a new loyalty app. The marketing vice president and the operations director both signed the charter. In separate conversations a week later, marketing describes the goal as more sign-ups, and operations describes it as fewer calls to the service desk. The sponsor says, \"They both signed, so carry on.\" What is the BEST response?",
+   "options": [
+    {
+     "id": "AZ-GAP-P1-03-O1",
+     "text": "Carry on as the sponsor directs and record the difference as a project risk."
+    },
+    {
+     "id": "AZ-GAP-P1-03-O2",
+     "text": "Plan for both goals and add contingency in case they pull against each other."
+    },
+    {
+     "id": "AZ-GAP-P1-03-O3",
+     "text": "Show the sponsor the gap and bring both leaders together to agree one goal."
+    },
+    {
+     "id": "AZ-GAP-P1-03-O4",
+     "text": "Ask the steering committee to rule on which of the two goals should take priority."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P1-03-O3"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Show the sponsor the gap and bring both leaders together to agree one goal.",
+    "plainLanguageRationale": "A signature shows that someone approved a document. It does not show that two people understood it the same way.",
+    "scenarioFactAudit": [
+     "Both leaders signed, yet describe different goals.",
+     "The sponsor has not seen the difference.",
+     "The sponsor says to carry on."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P1-03-O1",
+      "rationale": "The disagreement is already real, so logging it without acting leaves the project aiming at two targets."
+     },
+     {
+      "optionId": "AZ-GAP-P1-03-O2",
+      "rationale": "Planning for two unreconciled goals hides the conflict and spends money without a decision."
+     },
+     {
+      "optionId": "AZ-GAP-P1-03-O3",
+      "rationale": "Correct. Signatures did not create agreement; the difference must be surfaced and settled before more work is planned on it."
+     },
+     {
+      "optionId": "AZ-GAP-P1-03-O4",
+      "rationale": "Escalating before the two leaders have even talked skips the lowest level where it can be solved."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Sign-off is not the same as shared understanding; check understanding directly.",
+    "situationalNuance": "If the two leaders could not agree after a facilitated discussion, taking the decision to the sponsor or steering committee would be the next step."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 1,
+    "taskCode": "P1",
+    "taskTitle": "Develop a common vision",
+    "enablerNumber": 1,
+    "enablerText": "Help ensure a shared vision with key stakeholders"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P1-04",
+   "primaryConcept": "Promoting vision to newcomers",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Easy",
+   "type": "single",
+   "stem": "A river bridge is five months into construction. Its purpose is to cut ambulance travel time to the regional hospital. Two new subcontractor crews join this week. Their foremen have been given drawings and a schedule, but nobody has told them why the bridge is being built. What should the project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-P1-04-O1",
+     "text": "Give the crews their work packages and leave the purpose to the main team."
+    },
+    {
+     "id": "AZ-GAP-P1-04-O2",
+     "text": "Send the foremen a copy of the charter to read when they have the time."
+    },
+    {
+     "id": "AZ-GAP-P1-04-O3",
+     "text": "Wait for the foremen to ask about the purpose and then answer them fully."
+    },
+    {
+     "id": "AZ-GAP-P1-04-O4",
+     "text": "Explain the purpose during onboarding and link each crew's work to it."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P1-04-O4"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Explain the purpose during onboarding and link each crew's work to it.",
+    "plainLanguageRationale": "Promoting the vision means repeating it whenever new people arrive. People who know the why make better small decisions.",
+    "scenarioFactAudit": [
+     "New crews are joining mid-project.",
+     "They have tasks but not the purpose."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P1-04-O1",
+      "rationale": "Work packages tell people what to do, not why it matters."
+     },
+     {
+      "optionId": "AZ-GAP-P1-04-O2",
+      "rationale": "A document sent without a conversation is rarely read and seldom connects to daily work."
+     },
+     {
+      "optionId": "AZ-GAP-P1-04-O3",
+      "rationale": "Promoting the vision is an active job; waiting leaves it to chance."
+     },
+     {
+      "optionId": "AZ-GAP-P1-04-O4",
+      "rationale": "Correct. Newcomers make better daily choices when they know the purpose their work serves."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Every newcomer should hear the why, not only the what.",
+    "situationalNuance": "If the crews had already been briefed on the purpose by their own company and could explain it, a short confirmation would be enough."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 1,
+    "taskCode": "P1",
+    "taskTitle": "Develop a common vision",
+    "enablerNumber": 2,
+    "enablerText": "Promote the shared vision"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P1-05",
+   "primaryConcept": "Keeping the vision visible",
+   "deliveryApproach": "Agile",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A team building a farm-management app has a good vision statement stored on a wiki page that nobody opens. During refinement, developers often argue about which items matter, and their choices have started to drift away from the product goal. What should the agile project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-P1-05-O1",
+     "text": "Display the vision in the team space and use it in planning and reviews."
+    },
+    {
+     "id": "AZ-GAP-P1-05-O2",
+     "text": "Ask the product owner to rewrite the vision statement in simpler wording."
+    },
+    {
+     "id": "AZ-GAP-P1-05-O3",
+     "text": "Email the wiki link to the team with a reminder to read the page again."
+    },
+    {
+     "id": "AZ-GAP-P1-05-O4",
+     "text": "Ask each developer to confirm in writing that the vision has been read."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P1-05-O1"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Display the vision in the team space and use it in planning and reviews.",
+    "plainLanguageRationale": "The words are fine. They are hidden. Put the vision where decisions are made and refer to it often.",
+    "scenarioFactAudit": [
+     "The vision statement is good but unseen.",
+     "Refinement choices are drifting from the product goal."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P1-05-O1",
+      "rationale": "Correct. A vision guides decisions only when the team sees it and uses it in its regular events."
+     },
+     {
+      "optionId": "AZ-GAP-P1-05-O2",
+      "rationale": "The statement is already good; the problem is that nobody uses it."
+     },
+     {
+      "optionId": "AZ-GAP-P1-05-O3",
+      "rationale": "A one-time reminder does not make the vision part of daily decisions."
+     },
+     {
+      "optionId": "AZ-GAP-P1-05-O4",
+      "rationale": "Written confirmation creates compliance, not understanding or use."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "A vision that is not visible and used does not guide anyone.",
+    "situationalNuance": "If the team used the vision daily and still disagreed, the statement itself might be unclear and worth revisiting with the product owner."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 1,
+    "taskCode": "P1",
+    "taskTitle": "Develop a common vision",
+    "enablerNumber": 2,
+    "enablerText": "Promote the shared vision"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P1-06",
+   "primaryConcept": "Promoting vision across sites",
+   "deliveryApproach": "Hybrid",
+   "difficulty": "Moderate",
+   "type": "multiple",
+   "stem": "An insurer is modernizing its claims system with teams in three countries. A short pulse survey shows that four in ten team members cannot state what the project is meant to achieve. Delivery is on schedule. Which TWO actions should the project manager take?",
+   "options": [
+    {
+     "id": "AZ-GAP-P1-06-O1",
+     "text": "Add the vision statement to the footer of the weekly status report template."
+    },
+    {
+     "id": "AZ-GAP-P1-06-O2",
+     "text": "Open each increment review by linking the delivered work to the project goal."
+    },
+    {
+     "id": "AZ-GAP-P1-06-O3",
+     "text": "Report the low survey scores to the functional managers in each country."
+    },
+    {
+     "id": "AZ-GAP-P1-06-O4",
+     "text": "Have the sponsor explain the purpose in a live session and take questions."
+    },
+    {
+     "id": "AZ-GAP-P1-06-O5",
+     "text": "Pause delivery work until every team member can state the project goal."
+    }
+   ],
+   "selectCount": 2,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P1-06-O2",
+     "AZ-GAP-P1-06-O4"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Open each increment review by linking the delivered work to the project goal. / Have the sponsor explain the purpose in a live session and take questions.",
+    "plainLanguageRationale": "People understand a goal when they hear it often, from leaders, and can see their own work connected to it.",
+    "scenarioFactAudit": [
+     "Four in ten cannot state the goal.",
+     "Teams are spread across three countries.",
+     "Delivery is on schedule."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P1-06-O1",
+      "rationale": "A footer is passive and easy to ignore; it does not build understanding."
+     },
+     {
+      "optionId": "AZ-GAP-P1-06-O2",
+      "rationale": "Correct. Repeating the link between work and goal in a regular event keeps the vision alive."
+     },
+     {
+      "optionId": "AZ-GAP-P1-06-O3",
+      "rationale": "Escalating the scores passes the problem on without doing anything to promote the vision."
+     },
+     {
+      "optionId": "AZ-GAP-P1-06-O4",
+      "rationale": "Correct. Hearing the purpose from the sponsor, with a chance to ask questions, builds real understanding."
+     },
+     {
+      "optionId": "AZ-GAP-P1-06-O5",
+      "rationale": "Stopping work is out of proportion; the vision can be promoted while delivery continues."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Promote the vision actively and repeatedly, through conversation rather than paperwork.",
+    "situationalNuance": "If the survey had shown that people knew the goal but disagreed with it, the first step would be to explore their concerns."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 1,
+    "taskCode": "P1",
+    "taskTitle": "Develop a common vision",
+    "enablerNumber": 2,
+    "enablerText": "Promote the shared vision"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P1-07",
+   "primaryConcept": "Strategy shift and vision",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A retailer chartered a project to open 40 new stores. Four months in, a company announcement says the business is moving to an online-first strategy. Nobody has contacted the project, and store lease negotiations are continuing as planned. What should the project manager do FIRST?",
+   "options": [
+    {
+     "id": "AZ-GAP-P1-07-O1",
+     "text": "Continue with the approved baseline until someone raises a change request."
+    },
+    {
+     "id": "AZ-GAP-P1-07-O2",
+     "text": "Meet the sponsor to check whether the vision and business case still hold."
+    },
+    {
+     "id": "AZ-GAP-P1-07-O3",
+     "text": "Submit a change request that reduces the scope from 40 stores to 20 stores."
+    },
+    {
+     "id": "AZ-GAP-P1-07-O4",
+     "text": "Tell the team to stop all lease negotiations until further information comes."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P1-07-O2"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Meet the sponsor to check whether the vision and business case still hold.",
+    "plainLanguageRationale": "When the organization changes direction, check that the project still points the same way. Start by understanding, with the sponsor.",
+    "scenarioFactAudit": [
+     "Company strategy has changed to online-first.",
+     "The project has received no direction.",
+     "Lease commitments are still being made."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P1-07-O1",
+      "rationale": "Waiting ignores a clear signal that the project's purpose may no longer fit the organization."
+     },
+     {
+      "optionId": "AZ-GAP-P1-07-O2",
+      "rationale": "Correct. A change in strategy may change the reason for the project, and the sponsor is the right person to confirm it."
+     },
+     {
+      "optionId": "AZ-GAP-P1-07-O3",
+      "rationale": "Proposing a solution before understanding the impact is acting on a guess."
+     },
+     {
+      "optionId": "AZ-GAP-P1-07-O4",
+      "rationale": "Halting work on your own, without the sponsor, goes beyond the project manager's authority and may cause harm."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Keep the vision current: when strategy shifts, re-confirm the purpose before continuing or changing.",
+    "situationalNuance": "If the sponsor had already confirmed that the store program continues unchanged, carrying on with the baseline would be correct."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 1,
+    "taskCode": "P1",
+    "taskTitle": "Develop a common vision",
+    "enablerNumber": 3,
+    "enablerText": "Keep the vision current"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P1-08",
+   "primaryConcept": "Evidence changes the vision",
+   "deliveryApproach": "Agile",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A learning app's vision says it helps students practise maths at home. After three releases, usage data show that teachers, not students, are the main users, and they use it to set classroom work. Several developers suggest reordering the backlog toward teacher features. What should the agile project manager do NEXT?",
+   "options": [
+    {
+     "id": "AZ-GAP-P1-08-O1",
+     "text": "Keep the vision unchanged so that the team is not confused by a new goal."
+    },
+    {
+     "id": "AZ-GAP-P1-08-O2",
+     "text": "Let the developers reorder the backlog toward the teacher features now."
+    },
+    {
+     "id": "AZ-GAP-P1-08-O3",
+     "text": "Help the product owner revisit the vision with stakeholders, using the usage data."
+    },
+    {
+     "id": "AZ-GAP-P1-08-O4",
+     "text": "Ask the product owner to add teacher features and leave the vision as is."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P1-08-O3"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Help the product owner revisit the vision with stakeholders, using the usage data.",
+    "plainLanguageRationale": "The product has taught the team something about its real users. Revisit the vision with that evidence before changing the backlog.",
+    "scenarioFactAudit": [
+     "Data show teachers are the main users.",
+     "The vision still names students.",
+     "Developers want to change the backlog themselves."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P1-08-O1",
+      "rationale": "A vision that no longer matches reality misleads the team."
+     },
+     {
+      "optionId": "AZ-GAP-P1-08-O2",
+      "rationale": "Ordering the backlog is the product owner's call, and it should follow an agreed direction."
+     },
+     {
+      "optionId": "AZ-GAP-P1-08-O3",
+      "rationale": "Correct. New evidence about who gets value should be examined openly with the people who own the vision."
+     },
+     {
+      "optionId": "AZ-GAP-P1-08-O4",
+      "rationale": "Adding features that contradict the stated vision leaves the team with two directions."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "A vision is a living statement; update it when evidence shows the value lies elsewhere.",
+    "situationalNuance": "If the data were from one week only, the team would gather more evidence before reopening the vision."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 1,
+    "taskCode": "P1",
+    "taskTitle": "Develop a common vision",
+    "enablerNumber": 3,
+    "enablerText": "Keep the vision current"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P1-09",
+   "primaryConcept": "New sponsor, same vision?",
+   "deliveryApproach": "Hybrid",
+   "difficulty": "Hard",
+   "type": "single",
+   "stem": "A pharmaceutical firm is ten months into an eighteen-month laboratory system project. The vision was agreed at kickoff and has not been looked at since. A new sponsor has taken over. She has approved the latest status report without comment, and the team is busy with a release. What should the project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-P1-09-O1",
+     "text": "Continue as planned, since she approved the status report without comment."
+    },
+    {
+     "id": "AZ-GAP-P1-09-O2",
+     "text": "Ask the new sponsor to sign the existing charter so the record is in order."
+    },
+    {
+     "id": "AZ-GAP-P1-09-O3",
+     "text": "Raise the vision at the next phase gate, when the governance body meets."
+    },
+    {
+     "id": "AZ-GAP-P1-09-O4",
+     "text": "Review the vision with the new sponsor and key stakeholders to confirm it still holds."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P1-09-O4"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Review the vision with the new sponsor and key stakeholders to confirm it still holds.",
+    "plainLanguageRationale": "A change of sponsor is a natural moment to check the vision. Silence is not agreement.",
+    "scenarioFactAudit": [
+     "The sponsor is new.",
+     "The vision has not been reviewed for ten months.",
+     "Her only signal so far is an approved status report."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P1-09-O1",
+      "rationale": "Approving a status report says nothing about whether she shares the vision."
+     },
+     {
+      "optionId": "AZ-GAP-P1-09-O2",
+      "rationale": "A signature tidies the record but does not test shared understanding."
+     },
+     {
+      "optionId": "AZ-GAP-P1-09-O3",
+      "rationale": "Waiting months for a gate allows a possible misalignment to grow."
+     },
+     {
+      "optionId": "AZ-GAP-P1-09-O4",
+      "rationale": "Correct. A new sponsor may see the purpose differently, and ten months without review means the vision needs checking."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Re-confirm the vision whenever key people or conditions change.",
+    "situationalNuance": "If the new sponsor had helped write the original vision as a steering committee member, a brief confirmation would be enough."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 1,
+    "taskCode": "P1",
+    "taskTitle": "Develop a common vision",
+    "enablerNumber": 3,
+    "enablerText": "Keep the vision current"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P1-10",
+   "primaryConcept": "Root cause of conflicting requests",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A manufacturer is replacing its planning system. Two plant managers keep sending requirements that contradict each other, and three earlier pairs have each been handled one at a time. A fourth pair of conflicting requests arrives today. What should the project manager do NEXT?",
+   "options": [
+    {
+     "id": "AZ-GAP-P1-10-O1",
+     "text": "Ask each manager to describe the purpose and find the difference."
+    },
+    {
+     "id": "AZ-GAP-P1-10-O2",
+     "text": "Ask the sponsor to decide which plant manager's requirements take priority."
+    },
+    {
+     "id": "AZ-GAP-P1-10-O3",
+     "text": "Hold a prioritization vote on the open requirements with both plant teams."
+    },
+    {
+     "id": "AZ-GAP-P1-10-O4",
+     "text": "Tighten the change control procedure so that fewer requests can be raised."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P1-10-O1"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Ask each manager to describe the purpose and find the difference.",
+    "plainLanguageRationale": "When the same kind of conflict keeps coming back, look underneath it. Here the likely cause is two different ideas of what the project is for.",
+    "scenarioFactAudit": [
+     "Conflicting requests have arrived four times.",
+     "Handling them one at a time has not stopped the pattern."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P1-10-O1",
+      "rationale": "Correct. Repeated conflicting requests suggest the managers hold different pictures of the goal; find that difference first."
+     },
+     {
+      "optionId": "AZ-GAP-P1-10-O2",
+      "rationale": "Escalating before understanding the cause hands the sponsor a symptom."
+     },
+     {
+      "optionId": "AZ-GAP-P1-10-O3",
+      "rationale": "A vote settles this pair of requests but not the reason they keep conflicting."
+     },
+     {
+      "optionId": "AZ-GAP-P1-10-O4",
+      "rationale": "Making requests harder to raise suppresses the symptom and frustrates stakeholders."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "A repeating problem needs a root cause, not another quick fix.",
+    "situationalNuance": "If this were the first and only conflicting request, handling it through the normal requirements process would be enough."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 1,
+    "taskCode": "P1",
+    "taskTitle": "Develop a common vision",
+    "enablerNumber": 4,
+    "enablerText": "Break down situations to identify the root cause of a vision misunderstanding"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P1-11",
+   "primaryConcept": "Five whys on a vision gap",
+   "deliveryApproach": "Agile",
+   "difficulty": "Hard",
+   "type": "single",
+   "stem": "For three sprints in a row, a business owner has said at the Sprint Review, \"This is not what we wanted.\" Each time, the product owner had accepted the stories because they met their acceptance criteria. The team is discouraged. What should the agile project manager do FIRST?",
+   "options": [
+    {
+     "id": "AZ-GAP-P1-11-O1",
+     "text": "Ask the product owner to write more detailed criteria for each story."
+    },
+    {
+     "id": "AZ-GAP-P1-11-O2",
+     "text": "Facilitate a session with both to find why their views differ."
+    },
+    {
+     "id": "AZ-GAP-P1-11-O3",
+     "text": "Have the business owner approve every story before each sprint begins."
+    },
+    {
+     "id": "AZ-GAP-P1-11-O4",
+     "text": "Add a mid-sprint demonstration so that feedback arrives a week earlier."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P1-11-O2"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Facilitate a session with both to find why their views differ.",
+    "plainLanguageRationale": "Work that passes its criteria but disappoints the business points to a deeper gap. Find out why the product owner and business owner see the goal differently.",
+    "scenarioFactAudit": [
+     "The same complaint has come three sprints in a row.",
+     "Stories met their acceptance criteria.",
+     "Product owner and business owner judge the result differently."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P1-11-O1",
+      "rationale": "More detail on stories aimed at the wrong outcome produces more precise wrong work."
+     },
+     {
+      "optionId": "AZ-GAP-P1-11-O2",
+      "rationale": "Correct. The stories pass yet miss the mark, so the cause lies in how the two people understand the goal."
+     },
+     {
+      "optionId": "AZ-GAP-P1-11-O3",
+      "rationale": "This bypasses the product owner's role and does not explain why the two see things differently."
+     },
+     {
+      "optionId": "AZ-GAP-P1-11-O4",
+      "rationale": "Earlier feedback is useful, but it catches the gap sooner rather than removing its cause."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "When output is right but outcome is wrong, look for a vision misunderstanding.",
+    "situationalNuance": "If the stories had failed their acceptance criteria, the first place to look would be the team's quality practices."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 1,
+    "taskCode": "P1",
+    "taskTitle": "Develop a common vision",
+    "enablerNumber": 4,
+    "enablerText": "Break down situations to identify the root cause of a vision misunderstanding"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P1-12",
+   "primaryConcept": "Misread term in the vision",
+   "deliveryApproach": "Hybrid",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A government agency's vision for a grants portal says it must be \"accessible to all applicants.\" At the design review, the agency finds the vendor team understood this as available around the clock, while the agency meant usable by people with disabilities. What should the project manager do FIRST?",
+   "options": [
+    {
+     "id": "AZ-GAP-P1-12-O1",
+     "text": "Raise a change request to add disability access features to the design."
+    },
+    {
+     "id": "AZ-GAP-P1-12-O2",
+     "text": "Tell the vendor to redo the design at its own cost before the next review."
+    },
+    {
+     "id": "AZ-GAP-P1-12-O3",
+     "text": "Find out how the misreading arose and check other terms for the same gap."
+    },
+    {
+     "id": "AZ-GAP-P1-12-O4",
+     "text": "Ask the contracts officer to review the vendor's obligations on this point."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P1-12-O3"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Find out how the misreading arose and check other terms for the same gap.",
+    "plainLanguageRationale": "One misunderstood word has surfaced. Before fixing the design, learn why it happened and whether other words carry the same problem.",
+    "scenarioFactAudit": [
+     "The same word meant two things to two parties.",
+     "It was found at design review, before build."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P1-12-O1",
+      "rationale": "This acts before the gap is understood, and the need may already be part of the agreed scope."
+     },
+     {
+      "optionId": "AZ-GAP-P1-12-O2",
+      "rationale": "Assigning cost and blame before understanding the cause damages the relationship and may be wrong."
+     },
+     {
+      "optionId": "AZ-GAP-P1-12-O3",
+      "rationale": "Correct. Understanding how one key word was misread shows whether other parts of the vision were misread too."
+     },
+     {
+      "optionId": "AZ-GAP-P1-12-O4",
+      "rationale": "Going to the contract first treats a shared-understanding problem as a dispute."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Trace a misunderstanding to its source before choosing the fix.",
+    "situationalNuance": "If the cause were already known and limited to this one term, the next step would be agreeing how to correct the design."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 1,
+    "taskCode": "P1",
+    "taskTitle": "Develop a common vision",
+    "enablerNumber": 4,
+    "enablerText": "Break down situations to identify the root cause of a vision misunderstanding"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P5-01",
+   "primaryConcept": "Stakeholder analysis grid",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Easy",
+   "type": "single",
+   "stem": "A wind farm project has a stakeholder register listing sixty people and groups, from landowners to the grid operator. The project manager has limited time and wants to plan how to engage them. What should the project manager do NEXT?",
+   "options": [
+    {
+     "id": "AZ-GAP-P5-01-O1",
+     "text": "Send every stakeholder the same weekly report so that all are treated alike."
+    },
+    {
+     "id": "AZ-GAP-P5-01-O2",
+     "text": "Focus engagement on the stakeholders who already support the wind farm."
+    },
+    {
+     "id": "AZ-GAP-P5-01-O3",
+     "text": "Ask the sponsor to name the stakeholders that are worth engaging with."
+    },
+    {
+     "id": "AZ-GAP-P5-01-O4",
+     "text": "Analyze each stakeholder's power and interest and group them accordingly."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P5-01-O4"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Analyze each stakeholder's power and interest and group them accordingly.",
+    "plainLanguageRationale": "With many stakeholders and little time, sort them first. A power and interest grid tells you who needs close attention.",
+    "scenarioFactAudit": [
+     "Sixty stakeholders are already identified.",
+     "Engagement has not been planned yet."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P5-01-O1",
+      "rationale": "One message for sixty different stakeholders serves none of them well."
+     },
+     {
+      "optionId": "AZ-GAP-P5-01-O2",
+      "rationale": "Ignoring neutral or resistant stakeholders leaves the biggest risks unmanaged."
+     },
+     {
+      "optionId": "AZ-GAP-P5-01-O3",
+      "rationale": "The sponsor's view helps, but the analysis is the project manager's job and needs more than one opinion."
+     },
+     {
+      "optionId": "AZ-GAP-P5-01-O4",
+      "rationale": "Correct. Grouping by power and interest shows where to spend engagement effort."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Identify, then categorize, then plan engagement.",
+    "situationalNuance": "If the stakeholders had not yet been identified, building the register would come first."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 5,
+    "taskCode": "P5",
+    "taskTitle": "Align stakeholder expectations",
+    "enablerNumber": 1,
+    "enablerText": "Categorize stakeholders"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P5-02",
+   "primaryConcept": "Reclassifying a stakeholder",
+   "deliveryApproach": "Agile",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A city is building a transit app. A disability advocacy group was classed as low power and low interest and receives only a newsletter. This week the group persuaded two council members to question the app's funding. What should the agile project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-P5-02-O1",
+     "text": "Reassess the group's influence and update how the project engages with it."
+    },
+    {
+     "id": "AZ-GAP-P5-02-O2",
+     "text": "Ask the sponsor to deal with the council and leave the group's rating as it is."
+    },
+    {
+     "id": "AZ-GAP-P5-02-O3",
+     "text": "Move the group's requests to the top of the backlog to win back support."
+    },
+    {
+     "id": "AZ-GAP-P5-02-O4",
+     "text": "Keep sending the newsletter and add a paragraph about accessibility features."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P5-02-O1"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Reassess the group's influence and update how the project engages with it.",
+    "plainLanguageRationale": "Stakeholder categories are not fixed. When someone's influence changes, update the analysis and the way you engage.",
+    "scenarioFactAudit": [
+     "The group was rated low power.",
+     "It has now influenced council members on funding."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P5-02-O1",
+      "rationale": "Correct. The group's power has clearly changed, so its category and the engagement approach must change too."
+     },
+     {
+      "optionId": "AZ-GAP-P5-02-O2",
+      "rationale": "This treats the effect and keeps a classification that is now wrong."
+     },
+     {
+      "optionId": "AZ-GAP-P5-02-O3",
+      "rationale": "Backlog order belongs to the product owner, and this reacts without understanding the group's concerns."
+     },
+     {
+      "optionId": "AZ-GAP-P5-02-O4",
+      "rationale": "A newsletter paragraph does not match the influence the group has shown."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Stakeholder analysis is repeated throughout the project, not done once.",
+    "situationalNuance": "If the group had raised a concern without any effect on decision-makers, a direct conversation without reclassifying might be enough."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 5,
+    "taskCode": "P5",
+    "taskTitle": "Align stakeholder expectations",
+    "enablerNumber": 1,
+    "enablerText": "Categorize stakeholders"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P5-03",
+   "primaryConcept": "Assumed versus actual engagement",
+   "deliveryApproach": "Hybrid",
+   "difficulty": "Hard",
+   "type": "single",
+   "stem": "On a bank's core system migration, the chief financial officer is recorded as \"supportive\" because he approved the budget. He has missed every steering meeting, and his delegate has delayed three decisions. A team lead suggests marking him as \"resistant\". What should the project manager do FIRST?",
+   "options": [
+    {
+     "id": "AZ-GAP-P5-03-O1",
+     "text": "Change his rating to resistant and plan engagement on that assumption."
+    },
+    {
+     "id": "AZ-GAP-P5-03-O2",
+     "text": "Meet him to learn his real position, then update the engagement record."
+    },
+    {
+     "id": "AZ-GAP-P5-03-O3",
+     "text": "Report the delegate's delays to the sponsor and ask for a new delegate."
+    },
+    {
+     "id": "AZ-GAP-P5-03-O4",
+     "text": "Take the three delayed decisions directly to the steering committee."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P5-03-O2"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Meet him to learn his real position, then update the engagement record.",
+    "plainLanguageRationale": "Approving a budget is not proof of support, and absence is not proof of resistance. Ask him.",
+    "scenarioFactAudit": [
+     "The supportive rating rests only on a budget approval.",
+     "He is absent and his delegate delays decisions.",
+     "Nobody has spoken with him about it."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P5-03-O1",
+      "rationale": "This replaces one assumption with another without evidence."
+     },
+     {
+      "optionId": "AZ-GAP-P5-03-O2",
+      "rationale": "Correct. Both labels are guesses; a direct conversation gives facts to classify him on."
+     },
+     {
+      "optionId": "AZ-GAP-P5-03-O3",
+      "rationale": "Escalating about the delegate skips talking to the person concerned."
+     },
+     {
+      "optionId": "AZ-GAP-P5-03-O4",
+      "rationale": "Working around him may settle these decisions but leaves his real position unknown."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Classify stakeholders on evidence, and get that evidence by talking to them.",
+    "situationalNuance": "If he had already told the project manager that he opposes the migration, updating the rating and planning for resistance would be right."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 5,
+    "taskCode": "P5",
+    "taskTitle": "Align stakeholder expectations",
+    "enablerNumber": 1,
+    "enablerText": "Categorize stakeholders"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P5-04",
+   "primaryConcept": "Clarifying a vague expectation",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Easy",
+   "type": "single",
+   "stem": "A hotel owner has approved a renovation while the hotel stays open. In a planning meeting she says, \"Guests should barely notice the work.\" The team begins debating night shifts and noise barriers. What should the project manager do FIRST?",
+   "options": [
+    {
+     "id": "AZ-GAP-P5-04-O1",
+     "text": "Schedule all of the noisy work at night so that guests are not disturbed."
+    },
+    {
+     "id": "AZ-GAP-P5-04-O2",
+     "text": "Record the statement as an assumption and carry on with the planning."
+    },
+    {
+     "id": "AZ-GAP-P5-04-O3",
+     "text": "Ask the owner what she means in measurable terms and record her answer."
+    },
+    {
+     "id": "AZ-GAP-P5-04-O4",
+     "text": "Explain to the owner that some disruption to guests cannot be avoided."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P5-04-O3"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Ask the owner what she means in measurable terms and record her answer.",
+    "plainLanguageRationale": "The owner has given a wish, not a requirement. Turn it into something you can measure before planning around it.",
+    "scenarioFactAudit": [
+     "The expectation is stated in vague words.",
+     "The team is already debating solutions."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P5-04-O1",
+      "rationale": "This picks a solution before knowing what the owner actually expects."
+     },
+     {
+      "optionId": "AZ-GAP-P5-04-O2",
+      "rationale": "Recording a vague statement does not make it clear enough to plan against."
+     },
+     {
+      "optionId": "AZ-GAP-P5-04-O3",
+      "rationale": "Correct. A vague expectation must be made specific before the team designs a solution for it."
+     },
+     {
+      "optionId": "AZ-GAP-P5-04-O4",
+      "rationale": "Pushing back before understanding her expectation closes the conversation too early."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Make expectations specific and measurable before acting on them.",
+    "situationalNuance": "If the owner had already defined limits, such as no noise before 9 a.m., the team could move on to planning."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 5,
+    "taskCode": "P5",
+    "taskTitle": "Align stakeholder expectations",
+    "enablerNumber": 2,
+    "enablerText": "Identify stakeholder expectations"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P5-05",
+   "primaryConcept": "Surfacing unspoken expectations",
+   "deliveryApproach": "Agile",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A hospital is building a patient portal in two-week sprints. Two department heads attend every Sprint Review and say nothing. Afterwards, both complain to the sponsor that the portal is not what they expected. What should the agile project manager do NEXT?",
+   "options": [
+    {
+     "id": "AZ-GAP-P5-05-O1",
+     "text": "Ask the sponsor to tell them to raise their concerns during the reviews."
+    },
+    {
+     "id": "AZ-GAP-P5-05-O2",
+     "text": "Record their silence in the reviews as acceptance of each increment."
+    },
+    {
+     "id": "AZ-GAP-P5-05-O3",
+     "text": "Send an anonymous survey to all of the attendees after each review."
+    },
+    {
+     "id": "AZ-GAP-P5-05-O4",
+     "text": "Meet each department head directly and ask what they expected to see."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P5-05-O4"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Meet each department head directly and ask what they expected to see.",
+    "plainLanguageRationale": "Two people have expectations that the project has not heard. Go and ask them, one to one.",
+    "scenarioFactAudit": [
+     "They stay silent in reviews.",
+     "They complain to the sponsor afterwards.",
+     "Their expectations have not been captured."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P5-05-O1",
+      "rationale": "This uses the sponsor to deliver a message the project manager should handle directly."
+     },
+     {
+      "optionId": "AZ-GAP-P5-05-O2",
+      "rationale": "Silence is not agreement, and the complaints already show that."
+     },
+     {
+      "optionId": "AZ-GAP-P5-05-O3",
+      "rationale": "An anonymous survey is slower and less direct than asking two known people."
+     },
+     {
+      "optionId": "AZ-GAP-P5-05-O4",
+      "rationale": "Correct. Their expectations are unknown; a direct conversation is the quickest way to learn them."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Talk to the person directly before involving anyone else.",
+    "situationalNuance": "If the department heads had already explained their expectations and these conflicted, a facilitated alignment discussion would be next."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 5,
+    "taskCode": "P5",
+    "taskTitle": "Align stakeholder expectations",
+    "enablerNumber": 2,
+    "enablerText": "Identify stakeholder expectations"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P5-06",
+   "primaryConcept": "Eliciting and confirming expectations",
+   "deliveryApproach": "Hybrid",
+   "difficulty": "Moderate",
+   "type": "multiple",
+   "stem": "A logistics firm is automating a warehouse. Stakeholders include union representatives, a safety regulator and the operations managers. The charter lists objectives but says nothing about what each group expects. Which TWO actions should the project manager take?",
+   "options": [
+    {
+     "id": "AZ-GAP-P5-06-O1",
+     "text": "Interview each group about what success and failure would look like to them."
+    },
+    {
+     "id": "AZ-GAP-P5-06-O2",
+     "text": "Derive each group's expectations from the objectives listed in the charter."
+    },
+    {
+     "id": "AZ-GAP-P5-06-O3",
+     "text": "Record the expectations and confirm them with each group for accuracy."
+    },
+    {
+     "id": "AZ-GAP-P5-06-O4",
+     "text": "Ask the sponsor to state what the three stakeholder groups will expect."
+    },
+    {
+     "id": "AZ-GAP-P5-06-O5",
+     "text": "Wait for the expectations to appear during user acceptance testing."
+    }
+   ],
+   "selectCount": 2,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P5-06-O1",
+     "AZ-GAP-P5-06-O3"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Interview each group about what success and failure would look like to them. / Record the expectations and confirm them with each group for accuracy.",
+    "plainLanguageRationale": "Ask each group, write down what you heard, and check that you heard it correctly.",
+    "scenarioFactAudit": [
+     "Three very different stakeholder groups.",
+     "The charter is silent on their expectations."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P5-06-O1",
+      "rationale": "Correct. Expectations are learned by asking each group directly."
+     },
+     {
+      "optionId": "AZ-GAP-P5-06-O2",
+      "rationale": "The charter does not say what each group expects, so this would be guesswork."
+     },
+     {
+      "optionId": "AZ-GAP-P5-06-O3",
+      "rationale": "Correct. Writing expectations down and playing them back catches misunderstandings early."
+     },
+     {
+      "optionId": "AZ-GAP-P5-06-O4",
+      "rationale": "The sponsor can give a view but cannot speak for the union or the regulator."
+     },
+     {
+      "optionId": "AZ-GAP-P5-06-O5",
+      "rationale": "Learning expectations at testing is late and expensive."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Elicit expectations directly, document them, and confirm them.",
+    "situationalNuance": "If documented and confirmed expectations already existed, the next step would be checking them for conflicts."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 5,
+    "taskCode": "P5",
+    "taskTitle": "Align stakeholder expectations",
+    "enablerNumber": 2,
+    "enablerText": "Identify stakeholder expectations"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P5-07",
+   "primaryConcept": "Facilitating conflicting expectations",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A university is constructing a science building. Faculty expect open, flexible laboratories. The facilities department expects low maintenance costs, which favours fixed layouts. Each side emails the project manager separately asking for its view to be adopted. What should the project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-P5-07-O1",
+     "text": "Bring both sides together in one meeting to agree shared priorities for the project."
+    },
+    {
+     "id": "AZ-GAP-P5-07-O2",
+     "text": "Choose the lower-cost layout and inform both sides of the decision made."
+    },
+    {
+     "id": "AZ-GAP-P5-07-O3",
+     "text": "Forward each side's email to the other and ask them to settle it together."
+    },
+    {
+     "id": "AZ-GAP-P5-07-O4",
+     "text": "Ask the sponsor to decide between the faculty and facilities expectations."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P5-07-O1"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Bring both sides together in one meeting to agree shared priorities for the project.",
+    "plainLanguageRationale": "Two groups want different things and have not spoken to each other. Get them in one room with the project objectives in front of them.",
+    "scenarioFactAudit": [
+     "Expectations conflict.",
+     "Each side contacts the project manager separately.",
+     "No joint discussion has taken place."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P5-07-O1",
+      "rationale": "Correct. The two groups need to hear each other and weigh their expectations against the same objectives."
+     },
+     {
+      "optionId": "AZ-GAP-P5-07-O2",
+      "rationale": "Deciding alone leaves one group unheard and likely to resist later."
+     },
+     {
+      "optionId": "AZ-GAP-P5-07-O3",
+      "rationale": "Passing emails along is not facilitation and usually hardens positions."
+     },
+     {
+      "optionId": "AZ-GAP-P5-07-O4",
+      "rationale": "Escalation comes after the parties have tried to resolve it with the project manager's help."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Facilitate a joint discussion before deciding or escalating.",
+    "situationalNuance": "If a facilitated session had already ended without agreement, taking options to the sponsor would be appropriate."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 5,
+    "taskCode": "P5",
+    "taskTitle": "Align stakeholder expectations",
+    "enablerNumber": 3,
+    "enablerText": "Facilitate discussions to align expectations"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P5-08",
+   "primaryConcept": "Coaching a new product owner",
+   "deliveryApproach": "Agile",
+   "difficulty": "Hard",
+   "type": "single",
+   "stem": "At a telecom company, two senior stakeholders approach developers directly with conflicting priorities during the sprint. The product owner is new and reluctant to challenge them. The developers are switching tasks and missing their Sprint Goal. What is the BEST action for the agile project manager?",
+   "options": [
+    {
+     "id": "AZ-GAP-P5-08-O1",
+     "text": "Tell the developers to refuse any request not in the Sprint Backlog."
+    },
+    {
+     "id": "AZ-GAP-P5-08-O2",
+     "text": "Coach the product owner and help her run a priority session with both."
+    },
+    {
+     "id": "AZ-GAP-P5-08-O3",
+     "text": "Split the team's capacity evenly between the two senior stakeholders."
+    },
+    {
+     "id": "AZ-GAP-P5-08-O4",
+     "text": "Ask the sponsor to rank the two stakeholders' priorities for the team."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P5-08-O2"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Coach the product owner and help her run a priority session with both.",
+    "plainLanguageRationale": "The real problem is that priorities are not being agreed through the product owner. Build her confidence and bring the stakeholders together.",
+    "scenarioFactAudit": [
+     "Stakeholders bypass the product owner.",
+     "Their priorities conflict.",
+     "The product owner is new and hesitant."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P5-08-O1",
+      "rationale": "This protects the sprint for now but leaves the stakeholders' conflict untouched."
+     },
+     {
+      "optionId": "AZ-GAP-P5-08-O2",
+      "rationale": "Correct. This supports the right decision-maker and brings the conflicting expectations into one conversation."
+     },
+     {
+      "optionId": "AZ-GAP-P5-08-O3",
+      "rationale": "Dividing capacity avoids the decision and weakens the Sprint Goal."
+     },
+     {
+      "optionId": "AZ-GAP-P5-08-O4",
+      "rationale": "Escalating bypasses the product owner and skips an attempt to align at the working level."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Strengthen the proper decision path instead of working around it.",
+    "situationalNuance": "If the product owner had already tried a joint session and the stakeholders refused to agree, involving the sponsor would be reasonable."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 5,
+    "taskCode": "P5",
+    "taskTitle": "Align stakeholder expectations",
+    "enablerNumber": 3,
+    "enablerText": "Facilitate discussions to align expectations"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P5-09",
+   "primaryConcept": "Fixed versus flexible constraints",
+   "deliveryApproach": "Hybrid",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A utility is replacing its billing system. The sponsor expects every listed feature on a fixed date. The delivery team works in iterations and expects scope to flex. Neither side has said this to the other, and the first release plan is due next week. What should the project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-P5-09-O1",
+     "text": "Commit to the full scope on the fixed date and plan overtime to cover it."
+    },
+    {
+     "id": "AZ-GAP-P5-09-O2",
+     "text": "Show the sponsor the team's velocity and explain that the date will slip."
+    },
+    {
+     "id": "AZ-GAP-P5-09-O3",
+     "text": "Facilitate a discussion between both sides on what is fixed: scope, date or cost."
+    },
+    {
+     "id": "AZ-GAP-P5-09-O4",
+     "text": "Submit a change request to extend the date before the release plan is set."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P5-09-O3"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Facilitate a discussion between both sides on what is fixed: scope, date or cost.",
+    "plainLanguageRationale": "The sponsor and the team hold opposite assumptions. Put them on the table and agree what is fixed.",
+    "scenarioFactAudit": [
+     "The sponsor expects fixed scope and date.",
+     "The team expects scope to flex.",
+     "Neither has told the other."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P5-09-O1",
+      "rationale": "Promising both hides the conflict and puts the team and quality at risk."
+     },
+     {
+      "optionId": "AZ-GAP-P5-09-O2",
+      "rationale": "Presenting a conclusion before aligning on priorities is likely to create conflict."
+     },
+     {
+      "optionId": "AZ-GAP-P5-09-O3",
+      "rationale": "Correct. The two expectations cannot both hold, so they must be surfaced and agreed before the release plan."
+     },
+     {
+      "optionId": "AZ-GAP-P5-09-O4",
+      "rationale": "There is no agreed baseline to change yet; the expectations need aligning first."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Surface hidden assumptions and agree the trade-offs openly.",
+    "situationalNuance": "If the contract already fixed both scope and date, the discussion would turn to how to resource and plan for that."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 5,
+    "taskCode": "P5",
+    "taskTitle": "Align stakeholder expectations",
+    "enablerNumber": 3,
+    "enablerText": "Facilitate discussions to align expectations"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P5-10",
+   "primaryConcept": "Pairing mentor and mentee",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Easy",
+   "type": "single",
+   "stem": "On a mining equipment project, a junior business analyst finds stakeholder interviews difficult and has asked for help. A senior analyst on the team has spare capacity and enjoys teaching. The interviews continue for another three months. What should the project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-P5-10-O1",
+     "text": "Book the junior analyst on an interviewing course in the next quarter."
+    },
+    {
+     "id": "AZ-GAP-P5-10-O2",
+     "text": "Conduct the remaining interviews yourself to protect the schedule."
+    },
+    {
+     "id": "AZ-GAP-P5-10-O3",
+     "text": "Reassign the remaining interviews to the senior analyst on the team."
+    },
+    {
+     "id": "AZ-GAP-P5-10-O4",
+     "text": "Pair the two analysts with agreed learning goals and regular check-ins."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P5-10-O4"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Pair the two analysts with agreed learning goals and regular check-ins.",
+    "plainLanguageRationale": "There is a need, a willing mentor and enough time. Set up the pairing with clear goals.",
+    "scenarioFactAudit": [
+     "The junior analyst asked for help.",
+     "A senior analyst has capacity and interest.",
+     "Three months of interviews remain."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P5-10-O1",
+      "rationale": "A course next quarter comes too late and ignores the help available now."
+     },
+     {
+      "optionId": "AZ-GAP-P5-10-O2",
+      "rationale": "Taking over the work removes the chance to learn and overloads the project manager."
+     },
+     {
+      "optionId": "AZ-GAP-P5-10-O3",
+      "rationale": "Reassigning the work solves today's task but does nothing for the junior analyst's growth."
+     },
+     {
+      "optionId": "AZ-GAP-P5-10-O4",
+      "rationale": "Correct. A willing mentor, a willing learner and time available make a mentoring arrangement the natural choice."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Act on mentoring opportunities when need, mentor and time line up.",
+    "situationalNuance": "If no experienced person were available on the team, arranging outside coaching or training would be the alternative."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 5,
+    "taskCode": "P5",
+    "taskTitle": "Align stakeholder expectations",
+    "enablerNumber": 4,
+    "enablerText": "Organize and act on mentoring opportunities"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P5-11",
+   "primaryConcept": "Mentoring a stakeholder in agile",
+   "deliveryApproach": "Agile",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A sales director has become sponsor of an agile product team. She is new to agile and keeps asking for a full Gantt chart and signed requirements before any work starts. The team is frustrated. What should the agile project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-P5-11-O1",
+     "text": "Learn what she needs to see, then coach her on how agile provides it."
+    },
+    {
+     "id": "AZ-GAP-P5-11-O2",
+     "text": "Produce the Gantt chart and signed requirements she has asked for."
+    },
+    {
+     "id": "AZ-GAP-P5-11-O3",
+     "text": "Ask the agile coach to tell her that her requests do not fit agile."
+    },
+    {
+     "id": "AZ-GAP-P5-11-O4",
+     "text": "Ask the team to estimate the whole backlog so a firm date can be given."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P5-11-O1"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Learn what she needs to see, then coach her on how agile provides it.",
+    "plainLanguageRationale": "Stakeholders can be mentored too. Find the need behind her request and show her how the agile approach meets it.",
+    "scenarioFactAudit": [
+     "The sponsor is new to agile.",
+     "She asks for predictive artifacts.",
+     "Her underlying need has not been explored."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P5-11-O1",
+      "rationale": "Correct. Her requests reflect a real need for control and visibility; coaching shows her how reviews and roadmaps meet it."
+     },
+     {
+      "optionId": "AZ-GAP-P5-11-O2",
+      "rationale": "This satisfies the request but locks the team into an approach that does not fit the work."
+     },
+     {
+      "optionId": "AZ-GAP-P5-11-O3",
+      "rationale": "Telling a sponsor she is wrong, through someone else, harms the relationship and teaches nothing."
+     },
+     {
+      "optionId": "AZ-GAP-P5-11-O4",
+      "rationale": "A full estimate gives false certainty and does not address what she needs to understand."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Mentor stakeholders in the approach; meet the need, not only the request.",
+    "situationalNuance": "If the organization's governance required a baseline schedule, the project manager would provide it in a form that fits the approach."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 5,
+    "taskCode": "P5",
+    "taskTitle": "Align stakeholder expectations",
+    "enablerNumber": 4,
+    "enablerText": "Organize and act on mentoring opportunities"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P5-12",
+   "primaryConcept": "Making mentoring work",
+   "deliveryApproach": "Hybrid",
+   "difficulty": "Hard",
+   "type": "multiple",
+   "stem": "On an aerospace supplier project, a senior engineer offers to mentor a team lead in stakeholder negotiation. Both are fully booked on project tasks, and the schedule has little float. The team lead will chair supplier negotiations in two months. Which TWO actions should the project manager take?",
+   "options": [
+    {
+     "id": "AZ-GAP-P5-12-O1",
+     "text": "Suggest that they meet informally whenever their project tasks allow it."
+    },
+    {
+     "id": "AZ-GAP-P5-12-O2",
+     "text": "Agree mentoring goals with both of them and set aside time in the plan."
+    },
+    {
+     "id": "AZ-GAP-P5-12-O3",
+     "text": "Postpone the mentoring until the project closes and both have free time."
+    },
+    {
+     "id": "AZ-GAP-P5-12-O4",
+     "text": "Ask the senior engineer to chair the supplier negotiations instead."
+    },
+    {
+     "id": "AZ-GAP-P5-12-O5",
+     "text": "Check progress with both at intervals and adjust the arrangement as needed."
+    }
+   ],
+   "selectCount": 2,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P5-12-O2",
+     "AZ-GAP-P5-12-O5"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Agree mentoring goals with both of them and set aside time in the plan. / Check progress with both at intervals and adjust the arrangement as needed.",
+    "plainLanguageRationale": "Good intentions are not enough when everyone is busy. Give the mentoring goals and time, and check that it is working.",
+    "scenarioFactAudit": [
+     "Both people are fully booked.",
+     "The skill is needed in two months.",
+     "The mentor has volunteered."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P5-12-O1",
+      "rationale": "With both fully booked, informal mentoring will not happen."
+     },
+     {
+      "optionId": "AZ-GAP-P5-12-O2",
+      "rationale": "Correct. Mentoring happens only when it has clear goals and protected time."
+     },
+     {
+      "optionId": "AZ-GAP-P5-12-O3",
+      "rationale": "The skill is needed in two months, so waiting until closure misses the point."
+     },
+     {
+      "optionId": "AZ-GAP-P5-12-O4",
+      "rationale": "This removes the development opportunity and adds load to the senior engineer."
+     },
+     {
+      "optionId": "AZ-GAP-P5-12-O5",
+      "rationale": "Correct. Following up shows whether the mentoring is working before the negotiations begin."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Organize mentoring like any other work: goal, time, follow-up.",
+    "situationalNuance": "If the negotiations were next week, the senior engineer would likely lead them with the team lead observing."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 5,
+    "taskCode": "P5",
+    "taskTitle": "Align stakeholder expectations",
+    "enablerNumber": 4,
+    "enablerText": "Organize and act on mentoring opportunities"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P6-01",
+   "primaryConcept": "Unstated customer expectation",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Easy",
+   "type": "single",
+   "stem": "A builder is constructing a custom house under a signed contract with a completion date of 30 July. During a site visit the client says, \"It will be lovely to host our family reunion here in June.\" What should the project manager do FIRST?",
+   "options": [
+    {
+     "id": "AZ-GAP-P6-01-O1",
+     "text": "Say nothing for now and try to finish early enough for the reunion."
+    },
+    {
+     "id": "AZ-GAP-P6-01-O2",
+     "text": "Discuss the June expectation with the client now, against the plan."
+    },
+    {
+     "id": "AZ-GAP-P6-01-O3",
+     "text": "Send the client a written reminder of the completion date in the contract."
+    },
+    {
+     "id": "AZ-GAP-P6-01-O4",
+     "text": "Raise a change request to bring the completion date forward to June."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P6-01-O2"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Discuss the June expectation with the client now, against the plan.",
+    "plainLanguageRationale": "The client expects June; the contract says July. Talk about it today, while there is time to look at options.",
+    "scenarioFactAudit": [
+     "The contract completion date is 30 July.",
+     "The client mentions a June event."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P6-01-O1",
+      "rationale": "Silently chasing an unagreed date risks cost, quality and a disappointed client."
+     },
+     {
+      "optionId": "AZ-GAP-P6-01-O2",
+      "rationale": "Correct. An expectation that differs from the agreement should be raised as soon as it is heard."
+     },
+     {
+      "optionId": "AZ-GAP-P6-01-O3",
+      "rationale": "A formal reminder without a conversation is cold and does not explore what the client needs."
+     },
+     {
+      "optionId": "AZ-GAP-P6-01-O4",
+      "rationale": "A change request comes after the expectation is understood and the client decides to ask for it."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Surface a mismatched expectation early and directly.",
+    "situationalNuance": "If the client then formally asks for a June completion, the request would go through change control."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 6,
+    "taskCode": "P6",
+    "taskTitle": "Manage stakeholder expectations",
+    "enablerNumber": 1,
+    "enablerText": "Identify internal and external customer expectations"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P6-02",
+   "primaryConcept": "Asking internal customers",
+   "deliveryApproach": "Agile",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A team is building an onboarding tool for the company's own human resources department. The developers assume that speed of onboarding is what matters most. Nobody has asked the human resources staff. The second sprint starts tomorrow. What should the agile project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-P6-02-O1",
+     "text": "Build the fastest onboarding flow and collect feedback after the release."
+    },
+    {
+     "id": "AZ-GAP-P6-02-O2",
+     "text": "Reuse the requirements gathered for the previous human resources tool."
+    },
+    {
+     "id": "AZ-GAP-P6-02-O3",
+     "text": "Work with the product owner to ask the staff what a good result means."
+    },
+    {
+     "id": "AZ-GAP-P6-02-O4",
+     "text": "Ask the human resources director to sign off the Product Backlog."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P6-02-O3"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Work with the product owner to ask the staff what a good result means.",
+    "plainLanguageRationale": "The team is guessing what its internal customer wants. Replace the guess with a conversation.",
+    "scenarioFactAudit": [
+     "The customer is internal.",
+     "The team is working on an assumption.",
+     "Nobody has asked the users."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P6-02-O1",
+      "rationale": "Building on an untested assumption risks delivering the wrong value."
+     },
+     {
+      "optionId": "AZ-GAP-P6-02-O2",
+      "rationale": "Old requirements describe a different product and may not reflect today's expectations."
+     },
+     {
+      "optionId": "AZ-GAP-P6-02-O3",
+      "rationale": "Correct. Internal customers have expectations too, and the only way to know them is to ask."
+     },
+     {
+      "optionId": "AZ-GAP-P6-02-O4",
+      "rationale": "A signature on the backlog does not reveal what the staff actually value."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Internal customers deserve the same discovery as external ones.",
+    "situationalNuance": "If the product owner had already interviewed the staff and confirmed speed as the top priority, the team could proceed."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 6,
+    "taskCode": "P6",
+    "taskTitle": "Manage stakeholder expectations",
+    "enablerNumber": 1,
+    "enablerText": "Identify internal and external customer expectations"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P6-03",
+   "primaryConcept": "Internal and external customers",
+   "deliveryApproach": "Hybrid",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A software firm is delivering a scheduling system to a hospital network. The project manager has gathered the hospital's expectations carefully. The firm's own support department, which will maintain the system for five years, has not been consulted. Design is half complete. What should the project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-P6-03-O1",
+     "text": "Consult the support department when transition planning begins later."
+    },
+    {
+     "id": "AZ-GAP-P6-03-O2",
+     "text": "Give the support department the final documentation for its comments."
+    },
+    {
+     "id": "AZ-GAP-P6-03-O3",
+     "text": "Rely on the hospital's expectations, as the hospital is the paying customer."
+    },
+    {
+     "id": "AZ-GAP-P6-03-O4",
+     "text": "Engage the support department now and capture what it expects as well."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P6-03-O4"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Engage the support department now and capture what it expects as well.",
+    "plainLanguageRationale": "A project has customers inside the organization as well as outside. The team that will live with the system needs a voice while design can still change.",
+    "scenarioFactAudit": [
+     "External expectations are captured.",
+     "The internal support department has not been consulted.",
+     "Design is only half complete."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P6-03-O1",
+      "rationale": "By then the design is fixed and their expectations become expensive changes."
+     },
+     {
+      "optionId": "AZ-GAP-P6-03-O2",
+      "rationale": "Reviewing finished documents is too late to shape the result."
+     },
+     {
+      "optionId": "AZ-GAP-P6-03-O3",
+      "rationale": "The paying customer is not the only customer; ignoring support creates long-term cost."
+     },
+     {
+      "optionId": "AZ-GAP-P6-03-O4",
+      "rationale": "Correct. The support department is an internal customer of the project and its expectations affect the design."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Identify expectations of both internal and external customers.",
+    "situationalNuance": "If the support department had taken part in requirements from the start, no extra step would be needed."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 6,
+    "taskCode": "P6",
+    "taskTitle": "Manage stakeholder expectations",
+    "enablerNumber": 1,
+    "enablerText": "Identify internal and external customer expectations"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P6-04",
+   "primaryConcept": "Whose expectation counts",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Hard",
+   "type": "single",
+   "stem": "A shipyard is building a ferry. The contract specifies a standard interior finish. The client's on-site representative tells the foreman that his director expects a premium finish and urges the yard to \"do the right thing.\" No written request exists. What should the project manager do FIRST?",
+   "options": [
+    {
+     "id": "AZ-GAP-P6-04-O1",
+     "text": "Confirm the expectation with the client's authorized contact."
+    },
+    {
+     "id": "AZ-GAP-P6-04-O2",
+     "text": "Build the premium finish to protect the relationship with the client."
+    },
+    {
+     "id": "AZ-GAP-P6-04-O3",
+     "text": "Build to the contract and wait to see whether the client raises a claim."
+    },
+    {
+     "id": "AZ-GAP-P6-04-O4",
+     "text": "Ask the on-site representative to submit a formal change request."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P6-04-O1"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Confirm the expectation with the client's authorized contact.",
+    "plainLanguageRationale": "The message came second-hand and conflicts with the contract. Confirm it with the person who can speak for the client.",
+    "scenarioFactAudit": [
+     "The contract says standard finish.",
+     "The premium expectation is reported second-hand.",
+     "Nothing is in writing."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P6-04-O1",
+      "rationale": "Correct. A second-hand expectation needs confirming with the person who has authority before anything else happens."
+     },
+     {
+      "optionId": "AZ-GAP-P6-04-O2",
+      "rationale": "Delivering more than agreed without approval is gold plating and adds unapproved cost."
+     },
+     {
+      "optionId": "AZ-GAP-P6-04-O3",
+      "rationale": "Ignoring a known expectation gap stores up a dispute for delivery day."
+     },
+     {
+      "optionId": "AZ-GAP-P6-04-O4",
+      "rationale": "A change request may follow, but first confirm what the client actually expects and who can ask for it."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Confirm an expectation at its source before acting on it.",
+    "situationalNuance": "If the authorized contact confirms the client wants a premium finish, the request then goes through change control."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 6,
+    "taskCode": "P6",
+    "taskTitle": "Manage stakeholder expectations",
+    "enablerNumber": 1,
+    "enablerText": "Identify internal and external customer expectations"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P6-05",
+   "primaryConcept": "Informal extra for the customer",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "On a packaging line project, the customer's plant engineer asked a project engineer for a small extra sensor. The project engineer agreed and has started the wiring. The project manager learns of this in a team meeting. The sensor is not in the approved scope. What should the project manager do NEXT?",
+   "options": [
+    {
+     "id": "AZ-GAP-P6-05-O1",
+     "text": "Let the work continue, because the sensor is small and pleases the customer."
+    },
+    {
+     "id": "AZ-GAP-P6-05-O2",
+     "text": "Talk with both engineers to understand it, then use change control."
+    },
+    {
+     "id": "AZ-GAP-P6-05-O3",
+     "text": "Tell the customer's engineer that the sensor is out of scope and decline it."
+    },
+    {
+     "id": "AZ-GAP-P6-05-O4",
+     "text": "Have the wiring removed and remind the team about the scope baseline."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P6-05-O2"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Talk with both engineers to understand it, then use change control.",
+    "plainLanguageRationale": "Keep outcomes aligned with what was agreed. A new request, even a small one, is understood, recorded and analysed before it is done.",
+    "scenarioFactAudit": [
+     "The sensor is outside approved scope.",
+     "Work has started without approval.",
+     "The customer made the request informally."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P6-05-O1",
+      "rationale": "Unapproved additions, however small, are scope creep and set a precedent."
+     },
+     {
+      "optionId": "AZ-GAP-P6-05-O2",
+      "rationale": "Correct. Understand the request first, then record and assess it through the agreed process."
+     },
+     {
+      "optionId": "AZ-GAP-P6-05-O3",
+      "rationale": "Refusing outright ignores a need the customer may be entitled to request properly."
+     },
+     {
+      "optionId": "AZ-GAP-P6-05-O4",
+      "rationale": "Undoing the work before understanding the request wastes effort and may upset the customer."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Understand, record, analyse, decide: every change follows the same path.",
+    "situationalNuance": "If the sensor were needed to prevent an immediate safety hazard, the project manager would act to make things safe first and follow up with the change process."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 6,
+    "taskCode": "P6",
+    "taskTitle": "Manage stakeholder expectations",
+    "enablerNumber": 2,
+    "enablerText": "Align and maintain outcomes to internal and external customer expectations"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P6-06",
+   "primaryConcept": "Forecast versus customer hope",
+   "deliveryApproach": "Agile",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A customer expects forty features to be ready for a trade show in twelve weeks. Based on the last five sprints, the team will likely complete about twenty-eight. The customer has not seen this forecast. What should the agile project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-P6-06-O1",
+     "text": "Ask the team to work overtime so that all forty features can be completed."
+    },
+    {
+     "id": "AZ-GAP-P6-06-O2",
+     "text": "Wait two more sprints to see whether the team's velocity improves first."
+    },
+    {
+     "id": "AZ-GAP-P6-06-O3",
+     "text": "Share the forecast with the customer and agree what matters most."
+    },
+    {
+     "id": "AZ-GAP-P6-06-O4",
+     "text": "Request additional developers so that the team can deliver more each sprint."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P6-06-O3"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Share the forecast with the customer and agree what matters most.",
+    "plainLanguageRationale": "The customer's expectation and the evidence do not match. Show the data now and let the customer prioritize.",
+    "scenarioFactAudit": [
+     "The expectation is forty features.",
+     "The forecast is about twenty-eight.",
+     "The customer has not seen the forecast."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P6-06-O1",
+      "rationale": "Sustained overtime harms quality and morale and rarely closes a gap this large."
+     },
+     {
+      "optionId": "AZ-GAP-P6-06-O2",
+      "rationale": "Waiting uses up the time the customer needs to make choices."
+     },
+     {
+      "optionId": "AZ-GAP-P6-06-O3",
+      "rationale": "Correct. Being open early lets the customer choose the features that matter most for the show."
+     },
+     {
+      "optionId": "AZ-GAP-P6-06-O4",
+      "rationale": "Adding people late usually slows a team first and needs approval and budget."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Transparency early keeps expectations and outcomes aligned.",
+    "situationalNuance": "If the forecast rested on only one sprint of data, the team would gather a little more evidence while still sharing the early signal."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 6,
+    "taskCode": "P6",
+    "taskTitle": "Manage stakeholder expectations",
+    "enablerNumber": 2,
+    "enablerText": "Align and maintain outcomes to internal and external customer expectations"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P6-07",
+   "primaryConcept": "Expectation set by sales",
+   "deliveryApproach": "Hybrid",
+   "difficulty": "Hard",
+   "type": "single",
+   "stem": "A firm is migrating a customer's data center. The signed statement of work includes a four-hour outage window. In a planning meeting, the customer's executive says angrily that the sales team promised zero downtime. What is the BEST response from the project manager?",
+   "options": [
+    {
+     "id": "AZ-GAP-P6-07-O1",
+     "text": "Ask the sales team to explain to the executive what was actually promised."
+    },
+    {
+     "id": "AZ-GAP-P6-07-O2",
+     "text": "Commit to zero downtime so that the relationship with the customer is kept."
+    },
+    {
+     "id": "AZ-GAP-P6-07-O3",
+     "text": "Refer the executive to the outage window in the signed statement of work."
+    },
+    {
+     "id": "AZ-GAP-P6-07-O4",
+     "text": "Acknowledge the concern, review the agreement and explore options."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P6-07-O4"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Acknowledge the concern, review the agreement and explore options.",
+    "plainLanguageRationale": "The customer feels misled. Listen first, be clear about the agreement, and then work on options together.",
+    "scenarioFactAudit": [
+     "The statement of work allows a four-hour outage.",
+     "The customer believes zero downtime was promised.",
+     "The executive is upset."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P6-07-O1",
+      "rationale": "Passing the problem to sales avoids the conversation the project manager should lead."
+     },
+     {
+      "optionId": "AZ-GAP-P6-07-O2",
+      "rationale": "Promising something outside the agreed plan without analysis creates a bigger failure later."
+     },
+     {
+      "optionId": "AZ-GAP-P6-07-O3",
+      "rationale": "Quoting the contract alone is correct on paper but ignores the concern and damages trust."
+     },
+     {
+      "optionId": "AZ-GAP-P6-07-O4",
+      "rationale": "Correct. This respects the customer, anchors on the agreement and looks for a workable outcome."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Acknowledge, clarify the agreement, then problem-solve together.",
+    "situationalNuance": "If the customer decides zero downtime is required, that becomes a change request with cost and schedule impact to assess."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 6,
+    "taskCode": "P6",
+    "taskTitle": "Manage stakeholder expectations",
+    "enablerNumber": 2,
+    "enablerText": "Align and maintain outcomes to internal and external customer expectations"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P6-08",
+   "primaryConcept": "Customer priorities shift",
+   "deliveryApproach": "Agile",
+   "difficulty": "Moderate",
+   "type": "multiple",
+   "stem": "Midway through a release for a travel booking product, a new competitor offer changes what the customer cares about most. The current sprint ends in four days. The customer asks how the team will respond. Which TWO actions should the agile project manager support?",
+   "options": [
+    {
+     "id": "AZ-GAP-P6-08-O1",
+     "text": "Review the backlog order with the product owner and customer for the new priorities."
+    },
+    {
+     "id": "AZ-GAP-P6-08-O2",
+     "text": "Finish the whole release as planned and discuss the new priorities afterwards."
+    },
+    {
+     "id": "AZ-GAP-P6-08-O3",
+     "text": "Add the new high-priority items straight into the sprint that is in progress."
+    },
+    {
+     "id": "AZ-GAP-P6-08-O4",
+     "text": "Update the release forecast and share openly what will and will not fit."
+    },
+    {
+     "id": "AZ-GAP-P6-08-O5",
+     "text": "Ask the customer to submit each backlog change to a change control board."
+    }
+   ],
+   "selectCount": 2,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P6-08-O1",
+     "AZ-GAP-P6-08-O4"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Review the backlog order with the product owner and customer for the new priorities. / Update the release forecast and share openly what will and will not fit.",
+    "plainLanguageRationale": "In agile, changed priorities are handled by reordering the backlog and being open about the effect on the release.",
+    "scenarioFactAudit": [
+     "Customer priorities have changed.",
+     "The sprint ends in four days.",
+     "The release is only midway."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P6-08-O1",
+      "rationale": "Correct. Reordering the backlog is how an agile team keeps outcomes aligned with changed expectations."
+     },
+     {
+      "optionId": "AZ-GAP-P6-08-O2",
+      "rationale": "Delivering to an outdated priority wastes the release."
+     },
+     {
+      "optionId": "AZ-GAP-P6-08-O3",
+      "rationale": "Changing the sprint four days from its end disrupts the Sprint Goal with little gain."
+     },
+     {
+      "optionId": "AZ-GAP-P6-08-O4",
+      "rationale": "Correct. The customer needs a clear picture of what the change means for the release."
+     },
+     {
+      "optionId": "AZ-GAP-P6-08-O5",
+      "rationale": "Backlog reordering is the product owner's normal work and does not need a board."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Welcome change through the backlog, and keep the forecast transparent.",
+    "situationalNuance": "If the Sprint Goal itself had become pointless, the product owner could consider cancelling the sprint."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 6,
+    "taskCode": "P6",
+    "taskTitle": "Manage stakeholder expectations",
+    "enablerNumber": 2,
+    "enablerText": "Align and maintain outcomes to internal and external customer expectations"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P6-09",
+   "primaryConcept": "Reading a quiet customer",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Easy",
+   "type": "single",
+   "stem": "On a rail signalling project, the customer's liaison used to be friendly and active. For the last month she has sent one-line emails and skipped two progress meetings. No complaint has been made, and the project is on schedule. What should the project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-P6-09-O1",
+     "text": "Contact the liaison directly and ask how the project looks from her side."
+    },
+    {
+     "id": "AZ-GAP-P6-09-O2",
+     "text": "Carry on as planned, since there is no complaint and the schedule is met."
+    },
+    {
+     "id": "AZ-GAP-P6-09-O3",
+     "text": "Wait for the next milestone and send her a customer satisfaction survey."
+    },
+    {
+     "id": "AZ-GAP-P6-09-O4",
+     "text": "Ask the sponsor to call the liaison's manager and check for problems."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P6-09-O1"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Contact the liaison directly and ask how the project looks from her side.",
+    "plainLanguageRationale": "Her behaviour has changed. That is information. Ask her directly, and soon.",
+    "scenarioFactAudit": [
+     "Her engagement has dropped for a month.",
+     "No formal complaint exists.",
+     "Schedule performance is fine."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P6-09-O1",
+      "rationale": "Correct. A change in behaviour is a signal worth checking with the person herself."
+     },
+     {
+      "optionId": "AZ-GAP-P6-09-O2",
+      "rationale": "No complaint is not the same as a satisfied customer."
+     },
+     {
+      "optionId": "AZ-GAP-P6-09-O3",
+      "rationale": "A later survey delays a conversation that can happen today."
+     },
+     {
+      "optionId": "AZ-GAP-P6-09-O4",
+      "rationale": "Going over her head before speaking with her is premature and may harm trust."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Monitor satisfaction through behaviour as well as reports, and respond early.",
+    "situationalNuance": "If she had explained that she was covering for an absent colleague, no further action would be needed."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 6,
+    "taskCode": "P6",
+    "taskTitle": "Manage stakeholder expectations",
+    "enablerNumber": 3,
+    "enablerText": "Monitor internal and external customer satisfaction/expectations and respond as needed"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P6-10",
+   "primaryConcept": "Falling satisfaction score",
+   "deliveryApproach": "Agile",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A consumer banking app is released every month. After the last two releases, the user satisfaction score fell from 45 to 20, although every story was accepted by the product owner. The team proposes a redesign of the main screen. What should the agile project manager do FIRST?",
+   "options": [
+    {
+     "id": "AZ-GAP-P6-10-O1",
+     "text": "Add the main screen redesign to the top of the Product Backlog."
+    },
+    {
+     "id": "AZ-GAP-P6-10-O2",
+     "text": "Explore the reasons for the drop with users and the product owner."
+    },
+    {
+     "id": "AZ-GAP-P6-10-O3",
+     "text": "Report that all accepted stories were delivered as they were specified."
+    },
+    {
+     "id": "AZ-GAP-P6-10-O4",
+     "text": "Pause the monthly releases until the satisfaction score has recovered."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P6-10-O2"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Explore the reasons for the drop with users and the product owner.",
+    "plainLanguageRationale": "A falling score is a symptom. Learn what users are unhappy about before building anything.",
+    "scenarioFactAudit": [
+     "The score fell sharply over two releases.",
+     "All stories were accepted.",
+     "The cause is not known."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P6-10-O1",
+      "rationale": "A redesign is a guess at the cause and may not address what users dislike."
+     },
+     {
+      "optionId": "AZ-GAP-P6-10-O2",
+      "rationale": "Correct. The score shows that something is wrong but not what; find out before choosing a fix."
+     },
+     {
+      "optionId": "AZ-GAP-P6-10-O3",
+      "rationale": "Delivering to specification does not answer falling satisfaction."
+     },
+     {
+      "optionId": "AZ-GAP-P6-10-O4",
+      "rationale": "Stopping releases removes the means to fix the problem and does not explain it."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Understand the cause of dissatisfaction before responding to it.",
+    "situationalNuance": "If user feedback had already pinpointed the main screen as the problem, prioritizing the redesign would be reasonable."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 6,
+    "taskCode": "P6",
+    "taskTitle": "Manage stakeholder expectations",
+    "enablerNumber": 3,
+    "enablerText": "Monitor internal and external customer satisfaction/expectations and respond as needed"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P6-11",
+   "primaryConcept": "Complaint with a shared cause",
+   "deliveryApproach": "Hybrid",
+   "difficulty": "Hard",
+   "type": "single",
+   "stem": "The finance department, an internal customer, complains to the project manager's own manager that reports from a new analytics tool are inaccurate. The team's analysis shows that the errors come from data that finance itself enters. What is the BEST action for the project manager?",
+   "options": [
+    {
+     "id": "AZ-GAP-P6-11-O1",
+     "text": "Send the analysis to the manager to show that the fault lies with finance."
+    },
+    {
+     "id": "AZ-GAP-P6-11-O2",
+     "text": "Have the team quietly correct the data inside the tool before each report."
+    },
+    {
+     "id": "AZ-GAP-P6-11-O3",
+     "text": "Meet finance, share the findings openly and agree together how to fix the data inputs."
+    },
+    {
+     "id": "AZ-GAP-P6-11-O4",
+     "text": "Close the complaint, since data entry is outside the scope of the project."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P6-11-O3"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Meet finance, share the findings openly and agree together how to fix the data inputs.",
+    "plainLanguageRationale": "The customer is unhappy and the cause is shared. Sit down with them, show what you found, and solve it together.",
+    "scenarioFactAudit": [
+     "The customer is internal and has complained upward.",
+     "Analysis points to the customer's own data entry."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P6-11-O1",
+      "rationale": "Proving who is at fault does not solve the customer's problem and damages the relationship."
+     },
+     {
+      "optionId": "AZ-GAP-P6-11-O2",
+      "rationale": "A hidden workaround adds unapproved work and leaves the source of the errors in place."
+     },
+     {
+      "optionId": "AZ-GAP-P6-11-O3",
+      "rationale": "Correct. A direct, shared look at the evidence addresses the customer's real problem without blame."
+     },
+     {
+      "optionId": "AZ-GAP-P6-11-O4",
+      "rationale": "The customer still has inaccurate reports, so closing the complaint leaves the need unmet."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Respond to dissatisfaction with facts and collaboration, not blame.",
+    "situationalNuance": "If the errors had come from the tool itself, the team would correct the defect and tell finance what happened."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 6,
+    "taskCode": "P6",
+    "taskTitle": "Manage stakeholder expectations",
+    "enablerNumber": 3,
+    "enablerText": "Monitor internal and external customer satisfaction/expectations and respond as needed"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-P6-12",
+   "primaryConcept": "Building in satisfaction checks",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A tax agency's software project runs for fourteen months. The customer accepted phase one, but with a long list of complaints that surprised the team. The plan measures customer satisfaction only at final delivery. What should the project manager do to prevent this from happening again?",
+   "options": [
+    {
+     "id": "AZ-GAP-P6-12-O1",
+     "text": "Add more detail to the weekly status reports that the customer receives."
+    },
+    {
+     "id": "AZ-GAP-P6-12-O2",
+     "text": "Ask quality control to add further inspections before each handover."
+    },
+    {
+     "id": "AZ-GAP-P6-12-O3",
+     "text": "Ask the customer to review and sign the requirements baseline again."
+    },
+    {
+     "id": "AZ-GAP-P6-12-O4",
+     "text": "Agree regular satisfaction checkpoints and measures with the customer."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-P6-12-O4"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Agree regular satisfaction checkpoints and measures with the customer.",
+    "plainLanguageRationale": "The team was surprised because it only planned to ask at the end. Set up regular points to ask, and agree what will be measured.",
+    "scenarioFactAudit": [
+     "Complaints came as a surprise.",
+     "Satisfaction is measured only at final delivery.",
+     "Much of the project still lies ahead."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-P6-12-O1",
+      "rationale": "More reporting pushes information out but does not bring the customer's view in."
+     },
+     {
+      "optionId": "AZ-GAP-P6-12-O2",
+      "rationale": "Inspections check conformance to requirements, not how satisfied the customer is."
+     },
+     {
+      "optionId": "AZ-GAP-P6-12-O3",
+      "rationale": "Signing requirements again does not create a way to hear concerns as they arise."
+     },
+     {
+      "optionId": "AZ-GAP-P6-12-O4",
+      "rationale": "Correct. Checking satisfaction during the work lets the team respond before complaints pile up."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Monitor satisfaction throughout, not only at the end.",
+    "situationalNuance": "If the complaints had all concerned one defect type, a quality root-cause review would also be needed."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "People",
+    "taskNumber": 6,
+    "taskCode": "P6",
+    "taskTitle": "Manage stakeholder expectations",
+    "enablerNumber": 3,
+    "enablerText": "Monitor internal and external customer satisfaction/expectations and respond as needed"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "People"
+  },
+  {
+   "id": "AZ-GAP-PR10-01",
+   "primaryConcept": "Formal acceptance first",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Easy",
+   "type": "single",
+   "stem": "A gas pipeline project has finished its last deliverable, and quality control has verified everything. The team is keen to celebrate, and functional managers are asking for their people back. What should the project manager do NEXT?",
+   "options": [
+    {
+     "id": "AZ-GAP-PR10-01-O1",
+     "text": "Release the team members to their functional managers straight away."
+    },
+    {
+     "id": "AZ-GAP-PR10-01-O2",
+     "text": "Archive the project documents and close the project in the system."
+    },
+    {
+     "id": "AZ-GAP-PR10-01-O3",
+     "text": "Obtain formal written acceptance of the deliverables from the customer."
+    },
+    {
+     "id": "AZ-GAP-PR10-01-O4",
+     "text": "Hold the final lessons learned meeting while the team is still together."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-PR10-01-O3"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Obtain formal written acceptance of the deliverables from the customer.",
+    "plainLanguageRationale": "Verified means the team checked it. Accepted means the customer agreed. Closure starts with acceptance.",
+    "scenarioFactAudit": [
+     "Deliverables are verified by quality control.",
+     "Customer acceptance has not been obtained."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-PR10-01-O1",
+      "rationale": "Releasing people before acceptance leaves nobody to deal with issues the customer raises."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-01-O2",
+      "rationale": "Administrative closure follows acceptance; it does not replace it."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-01-O3",
+      "rationale": "Correct. Verified deliverables still need the customer's formal acceptance before closure can proceed."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-01-O4",
+      "rationale": "Lessons learned is part of closing, but acceptance of the product comes first."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Verify, then get formal acceptance, then close.",
+    "situationalNuance": "If signed acceptance were already in hand, the next steps would be transition, lessons learned and releasing the team."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "Process",
+    "taskNumber": 10,
+    "taskCode": "PR10",
+    "taskTitle": "Manage project closure",
+    "enablerNumber": 1,
+    "enablerText": "Obtain stakeholder approval of project completion"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "Process"
+  },
+  {
+   "id": "AZ-GAP-PR10-02",
+   "primaryConcept": "Sign-off required by governance",
+   "deliveryApproach": "Agile",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "An agile team has deployed the final release of a claims chatbot. The product owner says, \"Looks great, we are done.\" The organization's governance requires the sponsor's written approval before a project is closed. What should the agile project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-PR10-02-O1",
+     "text": "Arrange the sponsor's written approval as the governance process requires."
+    },
+    {
+     "id": "AZ-GAP-PR10-02-O2",
+     "text": "Treat the product owner's acceptance of the stories as project approval."
+    },
+    {
+     "id": "AZ-GAP-PR10-02-O3",
+     "text": "Record the product owner's verbal approval in the minutes and close."
+    },
+    {
+     "id": "AZ-GAP-PR10-02-O4",
+     "text": "Ask the team to confirm that every story meets the Definition of Done."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-PR10-02-O1"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Arrange the sponsor's written approval as the governance process requires.",
+    "plainLanguageRationale": "The product owner accepts increments. The organization says the sponsor approves closure. Follow that rule.",
+    "scenarioFactAudit": [
+     "Governance requires written sponsor approval.",
+     "Only a verbal comment from the product owner exists."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-PR10-02-O1",
+      "rationale": "Correct. The organization's rule names who approves completion, and that rule applies to agile projects too."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-02-O2",
+      "rationale": "Accepting stories is not the same as approving project completion under the governance rules."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-02-O3",
+      "rationale": "A minuted comment does not meet a requirement for the sponsor's written approval."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-02-O4",
+      "rationale": "The Definition of Done confirms quality of the work, not stakeholder approval of completion."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Completion is approved by whoever governance says approves it.",
+    "situationalNuance": "If governance named the product owner as the approving authority, her documented acceptance would be sufficient."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "Process",
+    "taskNumber": 10,
+    "taskCode": "PR10",
+    "taskTitle": "Manage project closure",
+    "enablerNumber": 1,
+    "enablerText": "Obtain stakeholder approval of project completion"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "Process"
+  },
+  {
+   "id": "AZ-GAP-PR10-03",
+   "primaryConcept": "Customer withholds sign-off",
+   "deliveryApproach": "Hybrid",
+   "difficulty": "Hard",
+   "type": "single",
+   "stem": "A fleet tracking system has met every documented acceptance criterion. The customer refuses to sign final acceptance until two extra reports are added. The reports were never requested before. The customer relationship is important. What should the project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-PR10-03-O1",
+     "text": "Add the two reports at no charge so that the customer signs the acceptance."
+    },
+    {
+     "id": "AZ-GAP-PR10-03-O2",
+     "text": "Review the criteria with the customer and treat the reports as a new request."
+    },
+    {
+     "id": "AZ-GAP-PR10-03-O3",
+     "text": "Ask the legal team to notify the customer that it is in breach of contract."
+    },
+    {
+     "id": "AZ-GAP-PR10-03-O4",
+     "text": "Close the project without a signature and note the refusal in the file."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-PR10-03-O2"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Review the criteria with the customer and treat the reports as a new request.",
+    "plainLanguageRationale": "Acceptance is judged against what was agreed. New wants are welcome, but they travel through their own request.",
+    "scenarioFactAudit": [
+     "All documented acceptance criteria are met.",
+     "The reports were never part of scope.",
+     "The customer is using sign-off as leverage."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-PR10-03-O1",
+      "rationale": "Unapproved extra work is scope creep and teaches the customer to withhold sign-off."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-03-O2",
+      "rationale": "Correct. This confirms completion on agreed terms and gives the new need a proper path."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-03-O3",
+      "rationale": "Moving to legal action before a direct discussion is premature and harms the relationship."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-03-O4",
+      "rationale": "Closing without acceptance ignores an unresolved stakeholder issue and the governance process."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Accept against agreed criteria; handle new needs as new requests.",
+    "situationalNuance": "If the reports had been in the approved requirements, the project would not be complete and the team would deliver them."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "Process",
+    "taskNumber": 10,
+    "taskCode": "PR10",
+    "taskTitle": "Manage project closure",
+    "enablerNumber": 1,
+    "enablerText": "Obtain stakeholder approval of project completion"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "Process"
+  },
+  {
+   "id": "AZ-GAP-PR10-04",
+   "primaryConcept": "Defining done for the project",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "During planning for a dam refurbishment, the sponsor asks, \"How will we know that this project is finished?\" The plan has a schedule and a budget but no statement of what must be true for closure. What should the project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-PR10-04-O1",
+     "text": "Explain that the project is finished when the last activity is complete."
+    },
+    {
+     "id": "AZ-GAP-PR10-04-O2",
+     "text": "Explain that the project is finished when the approved budget is spent."
+    },
+    {
+     "id": "AZ-GAP-PR10-04-O3",
+     "text": "Agree closure criteria with the key stakeholders and record them."
+    },
+    {
+     "id": "AZ-GAP-PR10-04-O4",
+     "text": "Propose defining the closure criteria once the final phase has begun."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-PR10-04-O3"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Agree closure criteria with the key stakeholders and record them.",
+    "plainLanguageRationale": "The sponsor is asking for closure criteria. Agree them now, in planning, and write them down.",
+    "scenarioFactAudit": [
+     "The plan has no closure criteria.",
+     "The question arises during planning."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-PR10-04-O1",
+      "rationale": "Finishing activities does not show that outcomes were accepted or handed over."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-04-O2",
+      "rationale": "Spending the budget is not a measure of completion."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-04-O3",
+      "rationale": "Correct. Closure criteria are defined and agreed early so that everyone knows what finished means."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-04-O4",
+      "rationale": "Leaving criteria until the end invites disagreement when it is hardest to resolve."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Decide what finished means before the work begins.",
+    "situationalNuance": "If the organization had standard closure criteria, the project manager would start from those and tailor them."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "Process",
+    "taskNumber": 10,
+    "taskCode": "PR10",
+    "taskTitle": "Manage project closure",
+    "enablerNumber": 2,
+    "enablerText": "Determine criteria to successfully close the project or phase"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "Process"
+  },
+  {
+   "id": "AZ-GAP-PR10-05",
+   "primaryConcept": "When does an agile project end?",
+   "deliveryApproach": "Agile",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A team has been improving a parcel-tracking service for a year. The Product Backlog always holds more ideas, and funding is renewed each quarter. Team members ask when the project will end. The sponsor has not said. What should the agile project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-PR10-05-O1",
+     "text": "Continue until the Product Backlog has no items left for the team."
+    },
+    {
+     "id": "AZ-GAP-PR10-05-O2",
+     "text": "Plan to close the project whenever the quarterly funding is not renewed."
+    },
+    {
+     "id": "AZ-GAP-PR10-05-O3",
+     "text": "Let the team decide the end date together at the next retrospective."
+    },
+    {
+     "id": "AZ-GAP-PR10-05-O4",
+     "text": "Agree with the sponsor and product owner the outcomes that mark the end."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-PR10-05-O4"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Agree with the sponsor and product owner the outcomes that mark the end.",
+    "plainLanguageRationale": "A backlog can go on forever. A project cannot. Agree what outcome or condition means the project is done.",
+    "scenarioFactAudit": [
+     "The backlog never empties.",
+     "No end condition has been stated.",
+     "Funding is renewed quarter by quarter."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-PR10-05-O1",
+      "rationale": "A backlog is never empty, so this gives no end point."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-05-O2",
+      "rationale": "Letting funding lapse decide the end is passive and leaves closure unplanned."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-05-O3",
+      "rationale": "The team does not own the business decision on when enough value has been delivered."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-05-O4",
+      "rationale": "Correct. A project needs agreed conditions for ending, even when the backlog can grow without limit."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Closure criteria describe outcomes reached, not an empty list.",
+    "situationalNuance": "If the work were an ongoing product with permanent funding, it would be managed as operations or a product, not closed as a project."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "Process",
+    "taskNumber": 10,
+    "taskCode": "PR10",
+    "taskTitle": "Manage project closure",
+    "enablerNumber": 2,
+    "enablerText": "Determine criteria to successfully close the project or phase"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "Process"
+  },
+  {
+   "id": "AZ-GAP-PR10-06",
+   "primaryConcept": "Unmet phase exit criterion",
+   "deliveryApproach": "Hybrid",
+   "difficulty": "Hard",
+   "type": "single",
+   "stem": "A medical device project is at its design phase gate. The exit criteria are an approved design and a completed regulatory submission. The design is approved, but the submission is two weeks from ready. The build team is waiting, and the sponsor urges an immediate start. What should the project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-PR10-06-O1",
+     "text": "Take the gate status and options to the governance body to decide."
+    },
+    {
+     "id": "AZ-GAP-PR10-06-O2",
+     "text": "Start the build phase, since the submission is expected to be ready soon."
+    },
+    {
+     "id": "AZ-GAP-PR10-06-O3",
+     "text": "Record the design phase as closed with a note on the open submission."
+    },
+    {
+     "id": "AZ-GAP-PR10-06-O4",
+     "text": "Keep the build team idle until the regulatory submission is completed."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-PR10-06-O1"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Take the gate status and options to the governance body to decide.",
+    "plainLanguageRationale": "The gate has rules, and one is not met. The people who own the gate decide what happens, not the project manager or the sponsor alone.",
+    "scenarioFactAudit": [
+     "One of two exit criteria is unmet.",
+     "The sponsor is pressing to start.",
+     "A governance body owns the phase gate."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-PR10-06-O1",
+      "rationale": "Correct. An unmet exit criterion is decided by the body that owns the gate, with the facts and options in front of it."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-06-O2",
+      "rationale": "Starting on an expectation bypasses the gate and takes a risk nobody has approved."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-06-O3",
+      "rationale": "Declaring the phase closed when a criterion is unmet misstates the project's status."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-06-O4",
+      "rationale": "Holding the team is also a decision the project manager should not take alone; the gate body may approve a partial start."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Phase exit criteria are waived or changed only through governance.",
+    "situationalNuance": "If the sponsor alone were the gate authority under the governance plan, her documented decision would settle it."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "Process",
+    "taskNumber": 10,
+    "taskCode": "PR10",
+    "taskTitle": "Manage project closure",
+    "enablerNumber": 2,
+    "enablerText": "Determine criteria to successfully close the project or phase"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "Process"
+  },
+  {
+   "id": "AZ-GAP-PR10-07",
+   "primaryConcept": "Operations not ready to receive",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A water utility's new control system is accepted and due for handover on Friday. The operations manager says the two technicians who will support it start work next month. The sponsor wants the project closed on Friday as planned. What should the project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-PR10-07-O1",
+     "text": "Hand over on Friday as planned, because the deliverables are accepted."
+    },
+    {
+     "id": "AZ-GAP-PR10-07-O2",
+     "text": "Raise the gap with the sponsor and operations and agree how to cover it."
+    },
+    {
+     "id": "AZ-GAP-PR10-07-O3",
+     "text": "Keep the project team running the system until the technicians arrive."
+    },
+    {
+     "id": "AZ-GAP-PR10-07-O4",
+     "text": "Move the handover date by one month and inform the sponsor afterwards."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-PR10-07-O2"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Raise the gap with the sponsor and operations and agree how to cover it.",
+    "plainLanguageRationale": "Handover needs someone ready to receive. Bring the gap to the people who can decide how to cover it.",
+    "scenarioFactAudit": [
+     "Support technicians start next month.",
+     "Handover is planned for Friday.",
+     "The sponsor wants closure on the date."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-PR10-07-O1",
+      "rationale": "Accepted deliverables with nobody to support them put the service at risk."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-07-O2",
+      "rationale": "Correct. Readiness to receive is part of transition, and the gap needs an agreed answer from those accountable."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-07-O3",
+      "rationale": "Extending the team's work without agreement or funding is a decision the project manager cannot make alone."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-07-O4",
+      "rationale": "Changing the date without the sponsor's decision ignores governance."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Validate that the receiving team is ready before transition.",
+    "situationalNuance": "If trained operations staff were already in place, handing over on Friday would be correct."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "Process",
+    "taskNumber": 10,
+    "taskCode": "PR10",
+    "taskTitle": "Manage project closure",
+    "enablerNumber": 3,
+    "enablerText": "Validate readiness for transition (e.g., to operations team or next phase)"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "Process"
+  },
+  {
+   "id": "AZ-GAP-PR10-08",
+   "primaryConcept": "Pilot exit before rollout",
+   "deliveryApproach": "Agile",
+   "difficulty": "Easy",
+   "type": "single",
+   "stem": "A team has finished a three-clinic pilot of an appointment app. The next phase is a rollout to forty clinics. Exit criteria for the pilot were agreed at the start. The team is eager to begin, and no major defects were reported. What should the agile project manager do FIRST?",
+   "options": [
+    {
+     "id": "AZ-GAP-PR10-08-O1",
+     "text": "Begin the rollout, since the pilot produced no major defect reports."
+    },
+    {
+     "id": "AZ-GAP-PR10-08-O2",
+     "text": "Move the team onto the rollout backlog so that momentum is not lost."
+    },
+    {
+     "id": "AZ-GAP-PR10-08-O3",
+     "text": "Check the pilot results against the exit criteria with stakeholders."
+    },
+    {
+     "id": "AZ-GAP-PR10-08-O4",
+     "text": "Collect testimonials from the three pilot clinics to support the rollout."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-PR10-08-O3"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Check the pilot results against the exit criteria with stakeholders.",
+    "plainLanguageRationale": "The pilot had exit criteria. Compare the results to them, with the stakeholders, before going wider.",
+    "scenarioFactAudit": [
+     "Exit criteria were agreed at the start.",
+     "The next phase is much larger."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-PR10-08-O1",
+      "rationale": "No major defects is one signal, not proof that the exit criteria were met."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-08-O2",
+      "rationale": "Starting the next phase before validating the first risks spreading problems to forty clinics."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-08-O3",
+      "rationale": "Correct. Readiness for the next phase is judged against the criteria agreed in advance."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-08-O4",
+      "rationale": "Testimonials help promotion but do not validate readiness."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Validate readiness for the next phase against agreed criteria.",
+    "situationalNuance": "If the stakeholders had already reviewed the results and approved the rollout, the team could begin."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "Process",
+    "taskNumber": 10,
+    "taskCode": "PR10",
+    "taskTitle": "Manage project closure",
+    "enablerNumber": 3,
+    "enablerText": "Validate readiness for transition (e.g., to operations team or next phase)"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "Process"
+  },
+  {
+   "id": "AZ-GAP-PR10-09",
+   "primaryConcept": "Open claim at contract closure",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Moderate",
+   "type": "single",
+   "stem": "A stadium project is complete and accepted. One supplier's final invoice includes a disputed claim for extra work. The finance department wants all contracts closed this month. What should the project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-PR10-09-O1",
+     "text": "Close the contract now and leave the claim for finance to handle later."
+    },
+    {
+     "id": "AZ-GAP-PR10-09-O2",
+     "text": "Pay the invoice in full so that the contract can be closed this month."
+    },
+    {
+     "id": "AZ-GAP-PR10-09-O3",
+     "text": "Withhold all payments to the supplier until the claim is withdrawn."
+    },
+    {
+     "id": "AZ-GAP-PR10-09-O4",
+     "text": "Resolve the claim through the contract's dispute procedure, then close."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-PR10-09-O4"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Resolve the claim through the contract's dispute procedure, then close.",
+    "plainLanguageRationale": "Closing procurements means settling everything the contract requires, including claims. The contract tells you how.",
+    "scenarioFactAudit": [
+     "A claim is in dispute.",
+     "Finance wants closure this month.",
+     "All work is accepted."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-PR10-09-O1",
+      "rationale": "A contract with an open claim is not ready to close."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-09-O2",
+      "rationale": "Paying a disputed claim to meet a date spends money without justification."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-09-O3",
+      "rationale": "Withholding undisputed amounts may breach the contract and escalates the dispute."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-09-O4",
+      "rationale": "Correct. A contract is closed only after open claims are settled in the way the contract sets out."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Settle open claims under the contract before closing it.",
+    "situationalNuance": "If the claim could not be settled by negotiation, the contract's next step, such as mediation, would apply."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "Process",
+    "taskNumber": 10,
+    "taskCode": "PR10",
+    "taskTitle": "Manage project closure",
+    "enablerNumber": 4,
+    "enablerText": "Conclude activities to close the project or phase (final lessons learned, retrospectives, procurement, financials, resources)"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "Process"
+  },
+  {
+   "id": "AZ-GAP-PR10-10",
+   "primaryConcept": "Lessons and release of the team",
+   "deliveryApproach": "Hybrid",
+   "difficulty": "Moderate",
+   "type": "multiple",
+   "stem": "A credit union's online banking project has formal acceptance, and the service has been handed to operations. Functional managers are asking when their people will return. Which TWO actions should the project manager take as part of closing?",
+   "options": [
+    {
+     "id": "AZ-GAP-PR10-10-O1",
+     "text": "Write the lessons learned alone from the issue log and status reports."
+    },
+    {
+     "id": "AZ-GAP-PR10-10-O2",
+     "text": "Keep the team assigned for a further month in case defects appear."
+    },
+    {
+     "id": "AZ-GAP-PR10-10-O3",
+     "text": "Hold a final retrospective with the team before its members move on."
+    },
+    {
+     "id": "AZ-GAP-PR10-10-O4",
+     "text": "Send the final report to the sponsor and skip the lessons session."
+    },
+    {
+     "id": "AZ-GAP-PR10-10-O5",
+     "text": "Plan the release of team members with their functional managers."
+    }
+   ],
+   "selectCount": 2,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-PR10-10-O3",
+     "AZ-GAP-PR10-10-O5"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Hold a final retrospective with the team before its members move on. / Plan the release of team members with their functional managers.",
+    "plainLanguageRationale": "With acceptance and handover done, close the remaining items: learn together, then release people in an orderly way.",
+    "scenarioFactAudit": [
+     "Acceptance and handover are complete.",
+     "Team members are still assigned.",
+     "Functional managers are waiting."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-PR10-10-O1",
+      "rationale": "Logs miss the team's insight; lessons learned is a team activity."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-10-O2",
+      "rationale": "Holding people without an agreed support plan wastes resources the organization needs."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-10-O3",
+      "rationale": "Correct. Final lessons are richest when the whole team contributes before leaving."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-10-O4",
+      "rationale": "The final report does not replace capturing lessons with the team."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-10-O5",
+      "rationale": "Correct. Releasing people in a coordinated way is part of closing and respects the managers' planning."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Capture lessons with the team, then release resources in coordination with their managers.",
+    "situationalNuance": "If an agreed warranty support period existed, the named people would stay for it and the rest would be released."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "Process",
+    "taskNumber": 10,
+    "taskCode": "PR10",
+    "taskTitle": "Manage project closure",
+    "enablerNumber": 4,
+    "enablerText": "Conclude activities to close the project or phase (final lessons learned, retrospectives, procurement, financials, resources)"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "Process"
+  },
+  {
+   "id": "AZ-GAP-PR10-11",
+   "primaryConcept": "Closing a cancelled project",
+   "deliveryApproach": "Predictive",
+   "difficulty": "Hard",
+   "type": "single",
+   "stem": "An energy company cancels a seismic analysis project at sixty percent complete because its strategy has changed. The sponsor says, \"Just stop.\" Two supplier contracts are active, and the team is upset about wasted work. What should the project manager do?",
+   "options": [
+    {
+     "id": "AZ-GAP-PR10-11-O1",
+     "text": "Run the closing process: record status, close the two contracts, capture lessons."
+    },
+    {
+     "id": "AZ-GAP-PR10-11-O2",
+     "text": "Stop all work today and release the team members to other projects."
+    },
+    {
+     "id": "AZ-GAP-PR10-11-O3",
+     "text": "Prepare a revised business case and ask the sponsor to reconsider."
+    },
+    {
+     "id": "AZ-GAP-PR10-11-O4",
+     "text": "Complete the deliverables in progress so that the effort is not wasted."
+    }
+   ],
+   "selectCount": null,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-PR10-11-O1"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Run the closing process: record status, close the two contracts, capture lessons.",
+    "plainLanguageRationale": "Cancelled projects still need closing. Record where things stand, end the contracts properly and keep the lessons.",
+    "scenarioFactAudit": [
+     "The project is cancelled for strategic reasons.",
+     "Supplier contracts are still active.",
+     "Work is sixty percent complete."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-PR10-11-O1",
+      "rationale": "Correct. A cancelled project is still closed formally so that its work, contracts and learning are not lost."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-11-O2",
+      "rationale": "Stopping without closure leaves contracts open and partial deliverables undocumented."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-11-O3",
+      "rationale": "The decision followed a strategy change and has been made; the project manager's job now is orderly closure."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-11-O4",
+      "rationale": "Continuing work on a cancelled project spends money without authorization."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Every project is closed formally, whether it finished or was cancelled.",
+    "situationalNuance": "If the sponsor had asked for options instead of announcing a decision, presenting a revised business case would be appropriate."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "Process",
+    "taskNumber": 10,
+    "taskCode": "PR10",
+    "taskTitle": "Manage project closure",
+    "enablerNumber": 4,
+    "enablerText": "Conclude activities to close the project or phase (final lessons learned, retrospectives, procurement, financials, resources)"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "Process"
+  },
+  {
+   "id": "AZ-GAP-PR10-12",
+   "primaryConcept": "Agile project ended early",
+   "deliveryApproach": "Agile",
+   "difficulty": "Hard",
+   "type": "multiple",
+   "stem": "After six sprints, a start-up's investor withdraws funding for a delivery-drone booking app. Work must end this week. There is a working increment, several cloud service subscriptions and an unhappy team. Which TWO actions should the agile project manager take?",
+   "options": [
+    {
+     "id": "AZ-GAP-PR10-12-O1",
+     "text": "Run one more sprint to finish the most valuable items in the backlog."
+    },
+    {
+     "id": "AZ-GAP-PR10-12-O2",
+     "text": "Record the state of the product and backlog for the product owner."
+    },
+    {
+     "id": "AZ-GAP-PR10-12-O3",
+     "text": "Skip the retrospective, since the team will not be working together again."
+    },
+    {
+     "id": "AZ-GAP-PR10-12-O4",
+     "text": "End the subscriptions, report final costs and hold a last retrospective."
+    },
+    {
+     "id": "AZ-GAP-PR10-12-O5",
+     "text": "Keep the cloud subscriptions active in case the funding returns later."
+    }
+   ],
+   "selectCount": 2,
+   "answer": {
+    "correctOptionIds": [
+     "AZ-GAP-PR10-12-O2",
+     "AZ-GAP-PR10-12-O4"
+    ]
+   },
+   "explanation": {
+    "correctAnswer": "Record the state of the product and backlog for the product owner. / End the subscriptions, report final costs and hold a last retrospective.",
+    "plainLanguageRationale": "Early termination still needs a tidy close: document what exists, stop the spending, and learn from the experience.",
+    "scenarioFactAudit": [
+     "Funding is withdrawn and work must end this week.",
+     "A working increment exists.",
+     "Paid subscriptions are still running."
+    ],
+    "optionAnalysis": [
+     {
+      "optionId": "AZ-GAP-PR10-12-O1",
+      "rationale": "There is no funding or authorization for further work."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-12-O2",
+      "rationale": "Correct. The working increment and backlog have value and must be left in a known, documented state."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-12-O3",
+      "rationale": "Lessons benefit the organization and each person's future work, not only this team."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-12-O4",
+      "rationale": "Correct. Closing means settling procurements and financials and capturing lessons, even on early termination."
+     },
+     {
+      "optionId": "AZ-GAP-PR10-12-O5",
+      "rationale": "Leaving services running incurs cost that nobody has approved."
+     }
+    ],
+    "commonErrors": [],
+    "underlyingPrinciple": "Close a terminated agile project as carefully as a completed one.",
+    "situationalNuance": "If the investor had only paused funding for a defined period, the team would agree what to keep running during the pause."
+   },
+   "visual": null,
+   "ecoMapping": {
+    "edition": "July 2026",
+    "domain": "Process",
+    "taskNumber": 10,
+    "taskCode": "PR10",
+    "taskTitle": "Manage project closure",
+    "enablerNumber": 4,
+    "enablerText": "Conclude activities to close the project or phase (final lessons learned, retrospectives, procurement, financials, resources)"
+   },
+   "version": 1,
+   "origin": "Original Azielon authored content",
+   "status": "Draft",
+   "reviewStatus": "Draft — awaiting instructor review",
+   "lifecycleState": "Draft",
+   "instructorApproval": false,
+   "provisionalDomain": "Process"
+  }
+ ]
+}

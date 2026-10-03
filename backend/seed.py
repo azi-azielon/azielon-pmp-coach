@@ -77,6 +77,26 @@ def seed_all(db: Session):
         src = _read('tricky_words_source.json')
         for t in src:
             db.add(TrickyWord(id=t['id'], left_term=t.get('left'), right_term=t.get('right'), tags_json=json.dumps(t.get('tags',[])), body_json=json.dumps(t)))
+    # Additional questions for thin exam-outline tasks: insert only the ids that are missing, as unapproved drafts.
+    try:
+        extra=_read('questions_extra.json').get('items',[])
+    except Exception:
+        extra=[]
+    for q in extra:
+        if db.get(Question,q['id']):
+            continue
+        eco=q.get('ecoMapping') or {}
+        db.add(Question(
+            id=q['id'], stem=q.get('stem',''), options_json=json.dumps(q.get('options',[])),
+            answer_json=json.dumps(q.get('answer',{})), explanation_json=json.dumps(q.get('explanation',{})),
+            type=q.get('type') or 'single', domain=eco.get('domain') or q.get('provisionalDomain'),
+            eco_task=eco.get('taskCode'), eco_enabler=eco.get('enablerText'),
+            delivery_approach=q.get('deliveryApproach'), difficulty=q.get('difficulty'),
+            primary_concept=q.get('primaryConcept'), curriculum_links_json=json.dumps([]),
+            visual_json=json.dumps(q.get('visual')), review_status=q.get('reviewStatus') or 'Draft',
+            lifecycle_state=q.get('lifecycleState') or 'Draft', instructor_approved=False,
+            source_metadata_json=json.dumps({}), version=1
+        ))
     db.commit()
     n=apply_content_updates(db)
     if n:

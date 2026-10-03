@@ -162,6 +162,19 @@ def _load_study_rewrite():
         return {'notes':{},'tricky':{}}
 STUDY_REWRITE=_load_study_rewrite()
 MATCH_SETS=_load_match_sets()
+def _load_eco_map():
+    try:
+        return json.loads((ROOT/'data'/'eco_map.json').read_text(encoding='utf-8'))
+    except Exception:
+        return {'tasks':{},'items':{}}
+ECO_MAP=_load_eco_map()
+def _eco_tag(kind, body):
+    """Label a study item with its July 2026 ECO task and that task's domain."""
+    code=(ECO_MAP.get('items',{}).get(kind) or {}).get(body.get('id'))
+    task=ECO_MAP.get('tasks',{}).get(code) if code else None
+    if task:
+        body['ecoTask']=code; body['ecoTaskTitle']=task.get('title'); body['domain']=task.get('domain')
+    return body
 MATCH_BY_ID={m['id']:m for m in MATCH_SETS}
 EXAM_RULES={r['rule_id']:r for r in EXAM_CONTENT.get('rules',[])}
 EXAM_QUESTION_IDS={}
@@ -1491,7 +1504,7 @@ def match_sets(user: User = Depends(current_user), db: Session = Depends(get_db)
     states=_study_state_map(db,user.id,'match'); out=[]
     for m in MATCH_SETS:
         st=states.get(('match',m['id']))
-        out.append({**m,'studyStatus':st.status if st else 'not_started','lastScore':st.last_rating if st else None,'attempts':st.review_count or 0 if st else 0})
+        out.append(_eco_tag('match',{**m,'studyStatus':st.status if st else 'not_started','lastScore':st.last_rating if st else None,'attempts':st.review_count or 0 if st else 0}))
     return out
 
 @app.post('/api/match-sets/{set_id}/result')
@@ -1510,7 +1523,8 @@ def study_rewrites(user: User = Depends(current_user), db: Session = Depends(get
     require_paid_access(user,db)
     feats=set(access_payload(user,db).get('features') or [])
     if getattr(user,'role','') in ('admin','instructor','content_editor','reviewer'): feats|={'notes','tricky'}
-    return {'notes':STUDY_REWRITE.get('notes',{}) if 'notes' in feats else {},'tricky':STUDY_REWRITE.get('tricky',{}) if 'tricky' in feats else {},'newNotes':STUDY_REWRITE.get('newNotes',[]) if 'notes' in feats else []}
+    return {'notes':STUDY_REWRITE.get('notes',{}) if 'notes' in feats else {},'tricky':STUDY_REWRITE.get('tricky',{}) if 'tricky' in feats else {},'newNotes':STUDY_REWRITE.get('newNotes',[]) if 'notes' in feats else [],
+            'ecoNotes':{i:{'task':c,'title':(ECO_MAP.get('tasks',{}).get(c) or {}).get('title'),'domain':(ECO_MAP.get('tasks',{}).get(c) or {}).get('domain')} for i,c in (ECO_MAP.get('items',{}).get('note') or {}).items()}}
 
 @app.get('/api/study/states')
 def study_states(user: User = Depends(current_user), db: Session = Depends(get_db)):
@@ -1734,12 +1748,21 @@ def study_summary(user:User=Depends(current_user),db:Session=Depends(get_db)):
 def notes(domain: str|None=None, q: str|None=None, user: User = Depends(current_user), db: Session = Depends(get_db)):
     require_feature(user, db, 'notes', 'Topic Notes are included with Concept + Exam or Premium')
     _guard_no_active_real_mock(user, db)
-    query=db.query(TopicNote)
-    if domain: query=query.filter(TopicNote.domain==domain)
-    rows=query.order_by(TopicNote.domain, TopicNote.id).all()
-    out=[]
+    rows=db.query(TopicNote).order_by(TopicNote.domain, TopicNote.id).all()
+    states=_study_state_map(db,user.id,'note')
+    out=[]; seen=set()
     for n in rows:
-        body=json.loads(n.body_json); body['studyStatus']=(_study_state_map(db,user.id,'note').get(('note',n.id)).status if _study_state_map(db,user.id,'note').get(('note',n.id)) else 'not_started')
+        body=json.loads(n.body_json); _st=states.get(('note',n.id)); body['studyStatus']=_st.status if _st else 'not_started'
+        _eco_tag('note',body); seen.add(n.id)
+        if domain and body.get('domain')!=domain: continue
+        if q and q.lower() not in json.dumps(body).lower(): continue
+        out.append(body)
+    # Notes added to close gaps against the exam outline ship in the overlay file, so no migration is needed.
+    for x in STUDY_REWRITE.get('newNotes',[]):
+        if x.get('id') in seen: continue
+        body={**x,'_rw':True}; _st=states.get(('note',x['id'])); body['studyStatus']=_st.status if _st else 'not_started'
+        _eco_tag('note',body)
+        if domain and body.get('domain')!=domain: continue
         if q and q.lower() not in json.dumps(body).lower(): continue
         out.append(body)
     return out
@@ -1748,15 +1771,15 @@ def notes(domain: str|None=None, q: str|None=None, user: User = Depends(current_
 def diagrams(domain: str|None=None, q: str|None=None, user: User = Depends(current_user), db: Session = Depends(get_db)):
     require_feature(user, db, 'diagrams', 'Diagrams & Models are Premium-only')
     _guard_no_active_real_mock(user, db)
-    query=db.query(Diagram)
-    if domain: query=query.filter(Diagram.domain==domain)
-    rows=query.order_by(Diagram.domain, Diagram.id).all()
+    rows=db.query(Diagram).order_by(Diagram.domain, Diagram.id).all()
     out=[]
     for d in rows:
         body=json.loads(d.metadata_json); body['imageFile']=d.image_file; _st=_study_state_map(db,user.id,'diagram').get(('diagram',d.id)); body['studyStatus']=_st.status if _st else 'not_started'
         if DIAGRAM_LESSONS.get(d.id):
             body['lesson']=DIAGRAM_LESSONS[d.id]
             if DIAGRAM_LESSONS[d.id].get('title'): body['title']=DIAGRAM_LESSONS[d.id]['title']
+        _eco_tag('diagram',body)
+        if domain and body.get('domain')!=domain: continue
         if q and q.lower() not in json.dumps(body).lower(): continue
         out.append(body)
     return out
@@ -1768,6 +1791,14 @@ def tricky_words(q: str|None=None, user: User = Depends(current_user), db: Sessi
     rows=db.query(TrickyWord).order_by(TrickyWord.id).all(); out=[]
     for t in rows:
         body=json.loads(t.body_json); _st=_study_state_map(db,user.id,'tricky').get(('tricky',t.id)); body['studyStatus']=_st.status if _st else 'not_started'; body['reviewCount']=_st.review_count if _st else 0; body['nextDueAt']=_st.next_due_at.isoformat() if _st and _st.next_due_at else None
+        _eco_tag('tricky',body)
+        if q and q.lower() not in json.dumps(body).lower(): continue
+        out.append(body)
+    seen={t.id for t in rows}; states=_study_state_map(db,user.id,'tricky')
+    for x in STUDY_REWRITE.get('newTricky',[]):
+        if x.get('id') in seen: continue
+        body={**x,'_rw':True}; _st=states.get(('tricky',x['id'])); body['studyStatus']=_st.status if _st else 'not_started'; body['reviewCount']=_st.review_count if _st else 0; body['nextDueAt']=_st.next_due_at.isoformat() if _st and _st.next_due_at else None
+        _eco_tag('tricky',body)
         if q and q.lower() not in json.dumps(body).lower(): continue
         out.append(body)
     return out

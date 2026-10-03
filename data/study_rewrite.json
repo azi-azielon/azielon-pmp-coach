@@ -1,5 +1,5 @@
 {
- "version": "1.1",
+ "version": "1.2",
  "notes": {
   "BUS-01": {
    "old": "Governance tells you who has authority to decide what. The uploaded Business Environment notes use the flow Problem → Assess → Check → Owner → Act → Escalate.",
@@ -1778,6 +1778,352 @@
    ],
    "rule": "Evaluate lifecycle impact → Balance value, cost, risk → Think long term",
    "examCue": "When a question says 'lifecycle', 'environmental' or 'long-term maintenance cost', think: weigh the full lifecycle trade-off, not only today's price or schedule."
+  },
+  {
+   "id": "az-note-people-15",
+   "domain": "People",
+   "title": "Shared Vision",
+   "ecoTask": "P1",
+   "summary": "A shared vision is one clear picture of why the project exists and what success looks like, agreed by the team and key stakeholders. You care because people who picture different outcomes pull in different directions.",
+   "example": "Maya's team builds a clinic booking app. Developers picture a full patient portal; the sponsor wants shorter phone queues. Maya asks each group to describe success, finds the gap came from a vague kickoff, and rewrites the vision statement with them.",
+   "dos": [
+    "Create the vision together with the team and key stakeholders",
+    "Repeat the vision often and link daily work to it",
+    "Revisit the vision when the business need or environment changes",
+    "Find the root cause when people describe the goal differently"
+   ],
+   "donts": [
+    "Do not write the vision alone and announce it to everyone.",
+    "Do not involve only the client and sponsor; the project team must share it too.",
+    "Do not treat the vision as a kickoff slide that never gets updated.",
+    "Do not blame people for a misunderstanding before asking where it started."
+   ],
+   "rule": "Build it together → Keep it visible → Keep it current → Fix misunderstandings at root",
+   "examCue": "When a question says 'the team and stakeholders describe the goal differently', think: bring them together, find where the misunderstanding began, and rebuild one shared vision."
+  },
+  {
+   "id": "az-note-people-16",
+   "domain": "People",
+   "title": "Aligning Stakeholder Expectations",
+   "ecoTask": "P5",
+   "summary": "Aligning expectations means sorting your stakeholders, learning what each one expects, and talking through the gaps until everyone agrees on what the project will deliver. Unspoken, conflicting expectations surface later as disputes and rework.",
+   "example": "Omar's warehouse project has two directors. Sales expects same-day shipping; Finance expects lower staffing cost. Omar groups stakeholders by power and interest, interviews both, then facilitates a workshop where they agree on priorities. He also pairs a new analyst with a senior mentor.",
+   "dos": [
+    "Categorize stakeholders, for example by power, interest and influence",
+    "Ask each group what they expect, and write it down",
+    "Facilitate a discussion so stakeholders resolve conflicting expectations together",
+    "Arrange mentoring where a stakeholder or team member needs to grow"
+   ],
+   "donts": [
+    "Do not assume silence means a stakeholder agrees.",
+    "Do not pick the winner yourself when two stakeholders want opposite things.",
+    "Do not promise each stakeholder something different to keep them happy.",
+    "Do not treat every stakeholder the same; engagement depends on power and interest."
+   ],
+   "rule": "Categorize → Find expectations → Facilitate agreement → Record it → Keep checking",
+   "examCue": "When a question says 'two stakeholders expect different outcomes', think: facilitate a discussion to align them, rather than choosing a side or escalating first."
+  },
+  {
+   "id": "az-note-people-17",
+   "domain": "People",
+   "title": "Customer Expectations & Satisfaction",
+   "ecoTask": "P6",
+   "summary": "A customer is whoever receives or uses your result: internal (inside your organization) or external (outside it, such as a client). You keep learning what they expect, keep outcomes matched to it, and respond when satisfaction drops.",
+   "example": "Priya delivers a payroll upgrade. Her internal customer is the HR team; her external customer is a client company. Demo feedback shows HR is pleased, but the client's survey scores fall. Priya calls the client, learns reports are confusing, and works the fix through the agreed process.",
+   "dos": [
+    "Identify both internal and external customers and what each expects",
+    "Confirm expectations as measurable acceptance criteria where you can",
+    "Monitor satisfaction regularly using demos, surveys and direct conversations",
+    "Respond quickly when satisfaction drops, starting with a conversation"
+   ],
+   "donts": [
+    "Do not assume a deliverable that meets the specification makes the customer satisfied.",
+    "Do not wait until the final handover to ask customers how they feel.",
+    "Do not add extras nobody requested to please a customer; that is gold plating.",
+    "Do not forget internal customers because they are not paying."
+   ],
+   "rule": "Identify customers → Learn expectations → Deliver to them → Monitor satisfaction → Respond",
+   "examCue": "When a question says 'requirements were met but the customer is unhappy', think: talk with the customer to understand the gap before changing anything."
+  },
+  {
+   "id": "az-note-people-18",
+   "domain": "People",
+   "title": "Knowledge Transfer",
+   "ecoTask": "P7",
+   "summary": "Knowledge transfer means the right people learn what the project knows before that knowledge walks away. Explicit knowledge can be written down; tacit knowledge lives in experience, so it moves through working together.",
+   "example": "Dana, the only engineer who understands a legacy billing interface, leaves in six weeks. Luis, the PM, lists what only she knows, has her document the steps, and pairs her with Ken so he learns her judgment by shadowing. They capture lessons learned before the handover.",
+   "dos": [
+    "Identify which knowledge is critical and who holds it",
+    "Capture explicit knowledge in documents, guides and the lessons learned register",
+    "Share tacit knowledge through pairing, shadowing, mentoring and communities of practice",
+    "Build trust so people feel safe sharing mistakes and know-how"
+   ],
+   "donts": [
+    "Do not rely on documents alone to pass on experience and judgment.",
+    "Do not leave knowledge transfer until the last week or the closing meeting.",
+    "Do not let critical knowledge sit with one person.",
+    "Do not punish people for sharing what went wrong."
+   ],
+   "rule": "Identify critical knowledge → Capture explicit → Share tacit by working together → Hand over",
+   "examCue": "When a question says 'a key expert is leaving' or 'only one person knows', think: plan knowledge transfer now, with pairing or shadowing plus documentation."
+  },
+  {
+   "id": "az-note-people-19",
+   "domain": "People",
+   "title": "Reporting, Transparency & Feedback Loops",
+   "ecoTask": "P8",
+   "summary": "Reporting means giving each stakeholder the information they need, in the form and frequency they need it. You care because open, timely information builds trust, and a feedback loop tells you whether the message landed.",
+   "example": "Sponsor Elena wants a one-page monthly summary; the project management office (PMO) requires a weekly status report. Raj confirms both needs in the communications management plan, puts a task board on the wall as an information radiator, and asks Elena afterward whether the summary answered her questions.",
+   "dos": [
+    "Ask what each stakeholder needs to know, how often and in what format",
+    "Match the level of detail to the audience; sponsors usually want summaries",
+    "Use information radiators (big visible charts or boards) so status is always open",
+    "Ask for feedback to confirm the report was understood and useful"
+   ],
+   "donts": [
+    "Do not send the same detailed report to every stakeholder.",
+    "Do not hide or soften bad news; report it early with options.",
+    "Do not assume a message was understood because it was sent.",
+    "Do not skip reports that governance requires, even on an agile project."
+   ],
+   "rule": "Know the requirement → Tailor the report → Make work visible → Ask for feedback",
+   "examCue": "When a question says 'the sponsor complains the reports are not useful', think: review the communications management plan and ask what the sponsor needs."
+  },
+  {
+   "id": "az-note-process-28",
+   "domain": "Process",
+   "title": "Closing a Project or Phase",
+   "ecoTask": "PR10",
+   "summary": "Closing means formally finishing a project or phase: confirm the closure criteria are met, get acceptance, hand over, and tidy up contracts, finances, records and people. A project that ends early still needs a proper close.",
+   "example": "Aisha's office move is complete. She confirms the closure criteria, gets the customer's signed acceptance, checks the facilities team is ready to take over, closes the mover's contract and final invoices, holds a final lessons learned session, archives the records, then releases her team.",
+   "dos": [
+    "Confirm closure criteria are met and obtain formal acceptance",
+    "Validate that operations or the next phase is ready to receive the work",
+    "Close procurements and financials, and write the final report",
+    "Capture final lessons learned, archive records, then release resources"
+   ],
+   "donts": [
+    "Do not release the team before acceptance and handover are done.",
+    "Do not skip closing because the project was cancelled; record why and what was finished.",
+    "Do not leave lessons learned only for the end; closing gathers the final ones.",
+    "Do not treat a finished deliverable as accepted without formal sign-off."
+   ],
+   "rule": "Complete → Accept → Transfer → Learn → Close",
+   "examCue": "When a question says 'the project was cancelled' or 'the last deliverable is done', think: follow the closing process, including acceptance, handover, lessons learned and archives."
+  },
+  {
+   "id": "az-note-business-10",
+   "domain": "Business Environment",
+   "title": "Removing Impediments",
+   "ecoTask": "B4",
+   "summary": "An impediment is anything slowing or blocking the team's work right now. You care because a servant leader clears the path: size up the impact, tackle the worst blockers first, and keep checking.",
+   "example": "At the daily standup, Tom says the test environment has been down for two days. Grace, the scrum master, checks how much work is blocked, puts it at the top of the visible impediment list, works with the infrastructure manager to restore it, then confirms it stays fixed.",
+   "dos": [
+    "Evaluate how much each impediment affects the team's work and goals",
+    "Prioritize impediments and make them visible to the team and stakeholders",
+    "Choose an intervention and work with the right people to remove it",
+    "Log a risk that has happened as an issue and act"
+   ],
+   "donts": [
+    "Do not wait for the retrospective to raise a blocker that hurts today.",
+    "Do not solve problems the team can solve; coach them and remove what they cannot.",
+    "Do not escalate before understanding the impact and trying what is within your authority.",
+    "Do not assume a removed impediment stays removed; reassess."
+   ],
+   "rule": "Evaluate impact → Prioritize and show → Intervene → Reassess",
+   "examCue": "When a question says 'the team is blocked by something outside its control', think: the project manager or scrum master assesses the impact and works to remove it."
+  },
+  {
+   "id": "az-note-business-11",
+   "domain": "Business Environment",
+   "title": "Organizational Culture & Readiness for Change",
+   "ecoTask": "B7",
+   "summary": "Organizational culture is how people in a company really behave, decide and speak up. When the organization changes, such as a merger or reorganization, you assess what it means for your project and act.",
+   "example": "Midway through Ben's project, the company merges two departments and his sponsor moves to another role. Ben observes how decisions are made in the new structure, assesses the effect on scope, resources and approvals, confirms who the sponsor now is, and updates the plan through change control.",
+   "dos": [
+    "Observe how decisions, communication and risk-taking really work before acting",
+    "Evaluate how an organizational change affects scope, schedule, resources and stakeholders",
+    "Confirm the project still supports the organization's strategy after the change",
+    "Tailor your approach and update plans through the agreed change process"
+   ],
+   "donts": [
+    "Do not carry on as if nothing changed after a reorganization or merger.",
+    "Do not force a delivery approach on a culture that is not ready for it.",
+    "Do not judge culture by the policy manual alone; watch what people do.",
+    "Do not change the plan informally; assess impact and use change control."
+   ],
+   "rule": "Assess culture → Evaluate the change's impact on the project → Decide actions → Update plans",
+   "examCue": "When a question says 'a reorganization, merger or new leadership happens mid-project', think: first assess the impact on the project, then determine the actions needed."
+  },
+  {
+   "id": "az-note-business-12",
+   "domain": "Business Environment",
+   "title": "Success Metrics & Escalation Thresholds",
+   "ecoTask": "B1",
+   "summary": "Success metrics are the agreed measures showing whether the project is delivering what it should. Thresholds (the limits you may act within) show when a variance is yours to fix and when it goes up for a decision.",
+   "example": "Nina's project charter says the sponsor must approve any cost variance above 10 percent. A supplier price rise pushes the forecast to 14 percent over. Nina analyzes the impact, prepares options, and escalates to the sponsor, because the decision is beyond her authority.",
+   "dos": [
+    "Agree measurable success metrics with the sponsor and key stakeholders early",
+    "Define thresholds and the escalation path before problems appear",
+    "Act yourself when a variance is inside your threshold",
+    "Escalate with impact analysis and options when a threshold is exceeded"
+   ],
+   "donts": [
+    "Do not measure success only by finishing on time and on budget.",
+    "Do not escalate every variance; handle what is within your authority.",
+    "Do not hide a breach of threshold while hoping to recover.",
+    "Do not escalate a problem without analysis and a recommendation."
+   ],
+   "rule": "Inside threshold → PM acts. Beyond threshold → Analyze → Escalate to the right authority",
+   "examCue": "When a question says 'the variance exceeds the agreed threshold' or 'beyond the PM's authority', think: analyze the impact, then escalate to whoever governance names."
+  }
+ ],
+ "newTricky": [
+  {
+   "id": "TW-046",
+   "left": "Project Vision",
+   "right": "Project Objectives",
+   "hook": "Is it the inspiring picture of why, or a measurable target?",
+   "leftMeaning": "A short, inspiring picture of the future the project creates and why it matters. It guides everyone's choices.",
+   "rightMeaning": "Specific, measurable targets the project must hit, such as a date, a cost limit or a performance level.",
+   "leftScenarioCue": "You see this when a product owner opens planning by reminding the team that nurses should spend time with patients, not paperwork.",
+   "rightScenarioCue": "You see this when the charter states the system must cut patient check-in time by 30 percent before December.",
+   "leftMemory": "Vision = the why and the picture.",
+   "rightMemory": "Objectives = measurable targets.",
+   "trap": "A team confused about purpose does not need tighter targets. Re-share the vision first; objectives then show how you will measure progress toward it.",
+   "memory": "VISION inspires and points the way. OBJECTIVES measure how far you got.",
+   "tags": [
+    "People"
+   ],
+   "ecoTask": "P1"
+  },
+  {
+   "id": "TW-047",
+   "left": "Stakeholder Needs",
+   "right": "Stakeholder Expectations",
+   "hook": "Is it what they must have, or what they picture getting?",
+   "leftMeaning": "What a stakeholder truly requires to solve their problem. Needs become requirements that are documented and agreed.",
+   "rightMeaning": "What a stakeholder believes or assumes will happen, often unspoken. Expectations must be uncovered, discussed and managed.",
+   "leftScenarioCue": "You see this when the finance manager states that month-end reports must reconcile with the general ledger.",
+   "rightScenarioCue": "You see this when the same manager is upset at the demo because she assumed the reports would look like her old ones.",
+   "leftMemory": "Need = must have, written down.",
+   "rightMemory": "Expectation = picture in their head.",
+   "trap": "Meeting every documented requirement does not guarantee satisfaction. If the customer is unhappy with a compliant deliverable, look for an unspoken expectation and discuss it.",
+   "memory": "NEEDS get documented. EXPECTATIONS get uncovered and managed.",
+   "tags": [
+    "People"
+   ],
+   "ecoTask": "P6"
+  },
+  {
+   "id": "TW-048",
+   "left": "Explicit Knowledge",
+   "right": "Tacit Knowledge",
+   "hook": "Can it be written down, or does it live in experience?",
+   "leftMeaning": "Knowledge that can be put into words, numbers or pictures and stored: procedures, manuals, checklists, reports.",
+   "rightMeaning": "Personal know-how that is hard to express: experience, judgment, insight and beliefs. It is shared through interaction.",
+   "leftScenarioCue": "You see this when a departing engineer writes a step-by-step guide for running the monthly data load.",
+   "rightScenarioCue": "You see this when a new buyer sits beside a veteran negotiator for a month to learn how she reads suppliers.",
+   "leftMemory": "Explicit = on paper.",
+   "rightMemory": "Tacit = in the head and hands.",
+   "trap": "Documentation alone does not transfer experience. When a question describes judgment or know-how, choose shadowing, pairing or mentoring, not another document.",
+   "memory": "EXPLICIT can be written and stored. TACIT is shared by working together.",
+   "tags": [
+    "People"
+   ],
+   "ecoTask": "P7"
+  },
+  {
+   "id": "TW-049",
+   "left": "Lessons Learned Register",
+   "right": "Lessons Learned Repository",
+   "hook": "Is it this project's running record, or the organization's library?",
+   "leftMeaning": "A project document, updated throughout the project, recording what worked, what did not and recommendations.",
+   "rightMeaning": "The organization's store of lessons from many past projects. It is an organizational process asset.",
+   "leftScenarioCue": "You see this when the team adds a note after a failed test run, so the next iteration avoids the same mistake.",
+   "rightScenarioCue": "You see this when a new project manager searches past projects for supplier problems before planning procurement.",
+   "leftMemory": "Register = this project, living.",
+   "rightMemory": "Repository = all projects, archived.",
+   "trap": "Lessons are not captured only at closing. The register is updated all along; at the end of a phase or project its content moves to the repository.",
+   "memory": "REGISTER lives in the project. REPOSITORY lives in the organization.",
+   "tags": [
+    "Business Environment",
+    "Process"
+   ],
+   "ecoTask": "B6"
+  },
+  {
+   "id": "TW-050",
+   "left": "Impediment",
+   "right": "Risk",
+   "hook": "Is it blocking work now, or might it happen later?",
+   "leftMeaning": "Something slowing or blocking the team's work right now. It is removed, usually with the scrum master's or project manager's help.",
+   "rightMeaning": "An uncertain event that may or may not happen and would affect objectives. It is analyzed and given a planned response.",
+   "leftScenarioCue": "You see this when developers cannot test today because their access to the test server has expired.",
+   "rightScenarioCue": "You see this when the team learns the test server licence may not be renewed next quarter.",
+   "leftMemory": "Impediment = blocked now, remove it.",
+   "rightMemory": "Risk = maybe later, plan a response.",
+   "trap": "Do not write a risk response for something already blocking work. It has happened, so treat it as an impediment or issue and act.",
+   "memory": "IMPEDIMENT is here today. RISK is a maybe for tomorrow.",
+   "tags": [
+    "Business Environment",
+    "People"
+   ],
+   "ecoTask": "B4"
+  },
+  {
+   "id": "TW-051",
+   "left": "Phase Closure",
+   "right": "Project Closure",
+   "hook": "Is one stage ending, or is the whole project ending?",
+   "leftMeaning": "Formally ending one phase: confirm its deliverables are accepted, capture lessons, and get approval at the phase gate to continue.",
+   "rightMeaning": "Formally ending the whole project: final acceptance, transition, closing contracts and finances, final report, archives and releasing the team.",
+   "leftScenarioCue": "You see this when design is complete and the steering committee reviews the results before funding the build phase.",
+   "rightScenarioCue": "You see this when the new system has been handed to operations and the project manager prepares the final report.",
+   "leftMemory": "Phase closure = gate, then continue.",
+   "rightMemory": "Project closure = everything ends.",
+   "trap": "Closing work is not only for the end of the project. Each phase is closed too, and lessons learned are captured at every phase end.",
+   "memory": "PHASE closure opens the next gate. PROJECT closure ends the work.",
+   "tags": [
+    "Process"
+   ],
+   "ecoTask": "PR10"
+  },
+  {
+   "id": "TW-052",
+   "left": "Push Communication",
+   "right": "Pull Communication",
+   "hook": "Is it sent to people, or do they fetch it themselves?",
+   "leftMeaning": "Information sent to specific recipients, such as email, memos and reports. Sending does not prove it was read or understood.",
+   "rightMeaning": "Information placed where people fetch it when they choose, such as an intranet, knowledge base or dashboard. Suits large audiences.",
+   "leftScenarioCue": "You see this when the project manager emails the weekly status report to the five steering committee members.",
+   "rightScenarioCue": "You see this when two hundred staff look up training guides on the project's intranet page whenever they need them.",
+   "leftMemory": "Push = I send it to you.",
+   "rightMemory": "Pull = you go and get it.",
+   "trap": "Neither confirms understanding. For sensitive or complex topics that need agreement, choose interactive communication, such as a meeting or call.",
+   "memory": "PUSH is sent to you. PULL waits for you to fetch it.",
+   "tags": [
+    "People"
+   ],
+   "ecoTask": "P8"
+  },
+  {
+   "id": "TW-053",
+   "left": "EEF",
+   "right": "OPA",
+   "hook": "Is it a condition you work within, or an asset you use?",
+   "leftMeaning": "Enterprise environmental factors: conditions the team does not control, internal or external, such as laws, market conditions, culture and infrastructure.",
+   "rightMeaning": "Organizational process assets: the organization's own policies, procedures, templates and knowledge from past projects that the project uses and can update.",
+   "leftScenarioCue": "You see this when a new data privacy regulation forces the team to rethink how customer records are stored.",
+   "rightScenarioCue": "You see this when the project manager starts the risk register from the company template and past lessons learned.",
+   "leftMemory": "EEF = conditions around you.",
+   "rightMemory": "OPA = tools the organization gives you.",
+   "trap": "Company culture and structure are internal EEFs, not OPAs. Being inside the organization does not make something a process asset.",
+   "memory": "EEF is the weather you work in. OPA is your toolbox.",
+   "tags": [
+    "Business Environment"
+   ],
+   "ecoTask": "B8"
   }
  ]
 }

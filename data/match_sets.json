@@ -1,5 +1,5 @@
 {
- "version": "1.1",
+ "version": "1.2",
  "sets": [
   {
    "id": "MT-001",
@@ -3576,6 +3576,443 @@
     }
    ],
    "remember": "AI: Protect data → Validate output → Human decides • Sustainability: Evaluate lifecycle impact → Balance value, cost, risk → Think long term"
+  },
+  {
+   "id": "MT-073",
+   "theme": "people",
+   "title": "Shared vision: build it, keep it alive",
+   "prompt": "Match each situation with what the project manager does to build or protect the shared vision.",
+   "domain": "People",
+   "ecoTask": "P1",
+   "approach": "Mixed",
+   "keywords": [
+    "shared vision",
+    "vision statement",
+    "key stakeholders",
+    "sponsor",
+    "purpose",
+    "alignment",
+    "root cause",
+    "onboarding",
+    "project charter",
+    "product vision"
+   ],
+   "pairs": [
+    {
+     "left": "Project is just starting",
+     "right": "Co-create a short statement of purpose with key stakeholders and the team",
+     "lesson": "A vision that people help write is a vision they own. If the PM writes it alone and announces it, people nod but do not commit. Build it together."
+    },
+    {
+     "left": "Team argues over daily priorities",
+     "right": "Use the agreed purpose as the test for which work matters most",
+     "lesson": "Promoting the vision means using it, not just quoting it. Ask: which option moves us closer to the outcome we all agreed on? It turns opinion fights into a shared test."
+    },
+    {
+     "left": "Business strategy shifts mid-project",
+     "right": "Review the direction with the sponsor and refresh it to match",
+     "lesson": "A vision is not frozen. When the organization's direction changes, check that the project still points the same way. Update it with the sponsor, then tell everyone."
+    },
+    {
+     "left": "Two groups describe different goals",
+     "right": "Ask each side why they see it that way to find the real gap",
+     "lesson": "Different pictures of success usually have a cause: an unclear word, a missed meeting, an old document. Find the root cause (the real reason) before you re-explain anything."
+    },
+    {
+     "left": "New member joins late",
+     "right": "Walk them through the purpose and intended outcome during onboarding",
+     "lesson": "Newcomers get the task list fast but often miss the why. A few minutes on purpose helps them make good choices without asking every time."
+    },
+    {
+     "left": "Purpose forgotten after kickoff",
+     "right": "Keep it posted where people work and repeat it at reviews and planning",
+     "lesson": "Saying it once is not enough. Leaders repeat the vision often and keep it visible, so it stays in mind when pressure rises."
+    }
+   ],
+   "remember": "Build it together → Use it to decide → Repeat it often → Refresh it when things change → If people disagree, find WHY first"
+  },
+  {
+   "id": "MT-074",
+   "theme": "people",
+   "title": "Aligning stakeholder expectations: the right move",
+   "prompt": "Match each stakeholder situation with the move that brings expectations into line.",
+   "domain": "People",
+   "ecoTask": "P5",
+   "approach": "Mixed",
+   "keywords": [
+    "stakeholder expectations",
+    "categorize stakeholders",
+    "stakeholder register",
+    "stakeholder engagement plan",
+    "facilitation",
+    "alignment",
+    "mentoring",
+    "influence",
+    "interest",
+    "change request"
+   ],
+   "pairs": [
+    {
+     "left": "Long, unsorted stakeholder list",
+     "right": "Group them by influence, interest and impact to focus your effort",
+     "lesson": "You cannot give everyone equal time. Sorting stakeholders into categories shows who needs close attention and who needs only updates. The result goes in the stakeholder register."
+    },
+    {
+     "left": "Success never clearly defined",
+     "right": "Interview each person and write down what a good result means to them",
+     "lesson": "Expectations are often unspoken. Ask early, record them, and play them back. An expectation nobody wrote down is a surprise waiting at acceptance time."
+    },
+    {
+     "left": "Two leaders want opposite outcomes",
+     "right": "Bring both into one facilitated session to agree shared priorities",
+     "lesson": "The PM does not pick a winner or carry messages back and forth. Get them in the same room, guide the talk, and let them reach agreement."
+    },
+    {
+     "left": "Request goes beyond approved scope",
+     "right": "Explain what is included, then offer the formal route for extras",
+     "lesson": "Never quietly say yes, and never give a flat no. Show the agreed scope, then use the change process: record the request, analyze impact, let the right authority decide."
+    },
+    {
+     "left": "Stakeholder new to agile",
+     "right": "Arrange mentoring so they learn their part in the new way of working",
+     "lesson": "Mentoring is not only for the team. A stakeholder who understands reviews, backlogs and their own role sets fair expectations. Spot these chances and act on them."
+    },
+    {
+     "left": "Supporter turns resistant",
+     "right": "Talk one-to-one about the concern, then adjust your engagement approach",
+     "lesson": "Engagement levels move over time. Do not ignore or escalate first. Listen privately, learn what changed, and update the stakeholder engagement plan."
+    }
+   ],
+   "remember": "Sort them → Ask what they expect → Talk it through together → Mentor where needed → Keep checking"
+  },
+  {
+   "id": "MT-075",
+   "theme": "people",
+   "title": "Customer satisfaction: read the signal, respond",
+   "prompt": "Match each customer signal with the project manager's best response.",
+   "domain": "People",
+   "ecoTask": "P6",
+   "approach": "Mixed",
+   "keywords": [
+    "customer expectations",
+    "customer satisfaction",
+    "internal customer",
+    "external customer",
+    "feedback",
+    "acceptance criteria",
+    "survey",
+    "net promoter score",
+    "fitness for use",
+    "outcomes"
+   ],
+   "pairs": [
+    {
+     "left": "Survey scores drop",
+     "right": "Follow up on the low ratings to learn why, then act and report back",
+     "lesson": "A score tells you something changed, not what. Talk to the people behind the numbers. Then close the loop: tell them what you did about it."
+    },
+    {
+     "left": "Customer silent at demos",
+     "right": "Ask open questions directly instead of treating quiet as approval",
+     "lesson": "Silence is not agreement. Quiet customers may be confused, unhappy or too polite. Invite feedback in a safe way, such as a one-to-one chat."
+    },
+    {
+     "left": "Meets spec, customer unhappy",
+     "right": "Revisit the real need behind the requirement and close the gap together",
+     "lesson": "Quality means fitness for use (it works for the real purpose), not only matching the document. Find what they truly needed, then handle any change through the agreed process."
+    },
+    {
+     "left": "Internal customer keeps adding wishes",
+     "right": "Capture each one and send it through prioritization or change control",
+     "lesson": "Internal customers, such as another department, count just as much as paying ones. Welcome the ideas, but do not add them quietly. That would be scope creep."
+    },
+    {
+     "left": "No agreed measure of satisfaction",
+     "right": "Define with them how success will be judged, such as surveys",
+     "lesson": "You cannot monitor what you never defined. Agree early how satisfaction will be measured and how often. Net Promoter Score (would you recommend us?) is one common measure."
+    },
+    {
+     "left": "Customer praises early delivery",
+     "right": "Note what they valued and build the same strength into later deliveries",
+     "lesson": "Monitoring satisfaction is not only about problems. Good news tells you what value looks like to this customer. Keep doing it on purpose."
+    }
+   ],
+   "remember": "Ask what they expect → Deliver to it → Keep measuring → Respond to every signal, good or bad"
+  },
+  {
+   "id": "MT-076",
+   "theme": "people",
+   "title": "Knowledge transfer: pick the right technique",
+   "prompt": "Match each knowledge transfer technique with the situation where it fits best.",
+   "domain": "People",
+   "ecoTask": "P7",
+   "approach": "Mixed",
+   "keywords": [
+    "knowledge transfer",
+    "tacit knowledge",
+    "explicit knowledge",
+    "job shadowing",
+    "pairing",
+    "community of practice",
+    "lessons learned",
+    "handover",
+    "wiki",
+    "knowledge repository"
+   ],
+   "pairs": [
+    {
+     "left": "Job shadowing",
+     "right": "A newcomer must absorb hands-on know-how by watching an expert at work",
+     "lesson": "Tacit knowledge (know-how in someone's head) is hard to write down. Watching and asking questions passes it on. A written report alone will not do it."
+    },
+    {
+     "left": "Pair working",
+     "right": "Two people build the same item side by side, so skill spreads while delivering",
+     "lesson": "Common on agile teams, for example pair programming. It removes the danger of one person being the only one who knows a part of the product."
+    },
+    {
+     "left": "Community of practice",
+     "right": "People from many teams meet regularly to swap tips in one specialty",
+     "lesson": "It crosses project borders. Testers, analysts or Scrum Masters from different teams learn from each other. The PM's job is to encourage it and make time for it."
+    },
+    {
+     "left": "Lessons learned register",
+     "right": "What went well or badly is recorded so later work avoids repeats",
+     "lesson": "This holds explicit knowledge (knowledge that can be written down). Update it all through the project, not only at the end, when people have already forgotten the details."
+    },
+    {
+     "left": "Handover session",
+     "right": "Someone is leaving or work moves to operations, so duties pass to the receiver",
+     "lesson": "When an expert is being replaced, start transfer right away. Mix documents with live walk-throughs, so the receiver gets both the facts and the judgment behind them."
+    },
+    {
+     "left": "Team wiki",
+     "right": "Reference steps and how-to facts must be searchable by anyone, anytime",
+     "lesson": "A shared online notebook the team edits itself. Great for explicit facts such as setup steps. Trap: it does not capture judgment, so pair it with people-to-people methods."
+    }
+   ],
+   "remember": "Tacit (in the head) → people methods: shadow, pair, community • Explicit (can be written) → documents: register, wiki • Someone leaving? Transfer NOW"
+  },
+  {
+   "id": "MT-077",
+   "theme": "people",
+   "title": "Reports and radiators: who needs what",
+   "prompt": "Match each audience and need with the report or artifact that serves it best.",
+   "domain": "People",
+   "ecoTask": "P8",
+   "approach": "Hybrid",
+   "keywords": [
+    "communications management plan",
+    "status report",
+    "information radiator",
+    "task board",
+    "burnup chart",
+    "earned value",
+    "phase gate",
+    "transparency",
+    "reporting requirements",
+    "steering committee",
+    "dashboard"
+   ],
+   "pairs": [
+    {
+     "left": "Sponsor: overall project health",
+     "right": "Short status summary of milestones, budget, top risks and decisions needed",
+     "lesson": "Sponsors want the headline and what you need from them. Keep it to one page. Ask how they like to receive it before you design the report."
+    },
+    {
+     "left": "Team: today's work and blockers",
+     "right": "Task board on the wall or screen, moved by the members themselves",
+     "lesson": "This is an information radiator: a big visible display anyone can read without asking. It builds transparency, and the team keeps it current, not the PM."
+    },
+    {
+     "left": "Product owner: release progress",
+     "right": "Burnup chart with completed work rising toward a total scope line",
+     "lesson": "A burnup shows two lines: work done and total scope. If scope grows, you see the top line move. That makes it clearer than a burndown for release talks."
+    },
+    {
+     "left": "Finance: spending against plan",
+     "right": "Earned value figures such as CPI, cost variance and forecast at completion",
+     "lesson": "Finance cares about numbers and forecasts. CPI (cost performance index) below 1 means over budget. These figures belong to predictive or hybrid reporting, measured against the cost baseline."
+    },
+    {
+     "left": "Steering committee: go or stop",
+     "right": "Phase gate review pack comparing results with the business case and exit criteria",
+     "lesson": "Governance bodies decide whether the project continues. The PM supports that decision with clear evidence. The PM presents; the committee decides."
+    },
+    {
+     "left": "Everyone: who gets which update",
+     "right": "Communications management plan listing audience, content, frequency and channel",
+     "lesson": "This is a HOW document. It is where reporting requirements are written down. Build it from stakeholder needs, and update it when feedback shows a report is not working."
+    }
+   ],
+   "remember": "Ask first: WHO needs it, WHAT do they decide with it, HOW OFTEN? Radiators are visible to all; reports are sent to someone."
+  },
+  {
+   "id": "MT-078",
+   "theme": "business",
+   "title": "Impediments: from spotting to clearing",
+   "prompt": "Match each impediment step or situation with the action the project manager takes.",
+   "domain": "Business Environment",
+   "ecoTask": "B4",
+   "approach": "Mixed",
+   "keywords": [
+    "impediment",
+    "blocker",
+    "impediment log",
+    "issue log",
+    "risk register",
+    "servant leader",
+    "daily standup",
+    "escalation",
+    "intervention",
+    "workaround",
+    "stakeholders"
+   ],
+   "pairs": [
+    {
+     "left": "Evaluate impact",
+     "right": "Work out what the blocker delays, costs or puts in danger",
+     "lesson": "Start by understanding, not fixing. A blocker that stops one small task is different from one that stops the release. The impact tells you how hard to push."
+    },
+    {
+     "left": "Prioritize and highlight",
+     "right": "Rank the blockers and show them on a board everyone can see",
+     "lesson": "A visible impediment list keeps problems from hiding. Rank by impact, so the team's attention goes to the blocker that hurts value most."
+    },
+    {
+     "left": "Apply an intervention",
+     "right": "Choose a way to remove or shrink the obstacle, then carry it out",
+     "lesson": "The team tries first, then the PM or Scrum Master helps. If it cannot be removed, reduce its effect with a workaround (a temporary way around the problem)."
+    },
+    {
+     "left": "Reassess continually",
+     "right": "Check at each standup whether it is cleared and whether new ones appeared",
+     "lesson": "Impediments are not handled once and forgotten. Fixes can fail and new blockers arrive. Keep looking, and give every open one an owner and a date."
+    },
+    {
+     "left": "Risk becomes an issue",
+     "right": "The uncertain event has now happened; log it and run the planned response",
+     "lesson": "A risk might happen; an issue has happened. Record it in the issue log, update the risk register, use the response you planned, and assign an owner."
+    },
+    {
+     "left": "Beyond the team's authority",
+     "right": "Work with the stakeholders who hold the power, bringing facts and options",
+     "lesson": "Escalation comes after the team has tried what it can. Never arrive with only a complaint. Bring the impact, the options and your recommendation."
+    }
+   ],
+   "remember": "See it → Size it → Rank it → Remove or shrink it → Check again. Resolve low; escalate only when it is outside your authority."
+  },
+  {
+   "id": "MT-079",
+   "theme": "business",
+   "title": "Continuous improvement: what each tool delivers",
+   "prompt": "Match each improvement activity or tool with what it produces or improves.",
+   "domain": "Business Environment",
+   "ecoTask": "B6",
+   "approach": "Mixed",
+   "keywords": [
+    "continuous improvement",
+    "retrospective",
+    "lessons learned",
+    "pdca",
+    "plan-do-check-act",
+    "kaizen",
+    "organizational process assets",
+    "opa",
+    "tailoring",
+    "templates",
+    "knowledge repository"
+   ],
+   "pairs": [
+    {
+     "left": "Retrospective",
+     "right": "A regular team meeting that ends with a few agreed changes to try next",
+     "lesson": "The team looks at how it worked, not at the product. The value is in the action items. A retrospective with no follow-up changes nothing."
+    },
+    {
+     "left": "Lessons learned review",
+     "right": "Experience from earlier projects is read at the start to shape new plans",
+     "lesson": "Using lessons matters more than collecting them. Before planning, look at what past projects recorded. A common trap is treating lessons as a closing-only activity."
+    },
+    {
+     "left": "PDCA cycle",
+     "right": "A repeating loop: try a small change, measure the result, then standardize",
+     "lesson": "Plan-Do-Check-Act. Plan a change, try it small, check the data, then act: keep it or adjust. Then go round again."
+    },
+    {
+     "left": "Kaizen",
+     "right": "A culture of small daily gains suggested by the people doing the work",
+     "lesson": "A Lean term meaning change for the better. Think many small steps, by everyone, all the time, rather than one big redesign led from the top."
+    },
+    {
+     "left": "OPA update",
+     "right": "Templates, policies and the knowledge repository are refreshed for the whole organization",
+     "lesson": "Organizational process assets are the organization's own templates, procedures and stored knowledge. Feeding improvements back means the next project starts smarter. Usually done with the PMO (project management office)."
+    },
+    {
+     "left": "Process tailoring",
+     "right": "The delivery approach is adapted to fit this project's size and context",
+     "lesson": "Tailoring means choosing how much process this project needs. Review it as you learn: drop steps that add no value, add controls where problems keep returning."
+    }
+   ],
+   "remember": "Learn → Change something small → Check it worked → Save it in the OPAs so the next project benefits (Plan-Do-Check-Act)"
+  },
+  {
+   "id": "MT-080",
+   "theme": "business",
+   "title": "External changes: type, example, where to look",
+   "prompt": "Match each type of external change with an example and the part of the project to check first.",
+   "domain": "Business Environment",
+   "ecoTask": "B8",
+   "approach": "Mixed",
+   "keywords": [
+    "external business environment",
+    "pestle",
+    "regulatory",
+    "technology",
+    "geopolitical",
+    "market",
+    "economic",
+    "social",
+    "backlog",
+    "scope",
+    "business case",
+    "enterprise environmental factors"
+   ],
+   "pairs": [
+    {
+     "left": "Regulatory change",
+     "right": "A new privacy law adds mandatory requirements; confirm them with compliance experts",
+     "lesson": "Laws and regulations are not optional and cannot be traded off. Find out what applies with the experts, then update scope or backlog through the proper process."
+    },
+    {
+     "left": "Technology change",
+     "right": "A platform you build on is being retired; check design and skills",
+     "lesson": "New tools or retired ones can make the current design outdated. Ask what must be rebuilt and whether the team has the skills. It may also be an opportunity."
+    },
+    {
+     "left": "Market change",
+     "right": "A rival's launch shifts demand; recheck the business case and feature priorities",
+     "lesson": "When competitors or customer demand move, the question is whether the project is still worth doing as planned. That is a sponsor and product owner conversation."
+    },
+    {
+     "left": "Geopolitical change",
+     "right": "Sanctions or a border conflict cut off a supplier; review sourcing and logistics",
+     "lesson": "Events between countries hit supply chains, travel and where teams may work. Look at contracts and alternative sources, and add new entries to the risk register."
+    },
+    {
+     "left": "Economic change",
+     "right": "Inflation or exchange rates move sharply; re-forecast costs and funding",
+     "lesson": "Money conditions change what things cost and how much funding is available. Update the forecast, check contract terms, and tell the sponsor early."
+    },
+    {
+     "left": "Social change",
+     "right": "Public attitudes and user habits shift; revisit adoption assumptions and community concerns",
+     "lesson": "People's values and behavior affect whether the product will be used or welcomed. Check the assumption log and stakeholder list for anything that no longer holds."
+    }
+   ],
+   "remember": "Outside world changed? Survey → Assess impact → Prioritize → Update scope or backlog through the proper process → Keep reviewing (PESTLE helps you scan: political, economic, social, technological, legal, environmental)"
   }
  ]
 }
