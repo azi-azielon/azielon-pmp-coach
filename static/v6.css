@@ -1077,3 +1077,32 @@ body.copy-protected #exams,body.copy-protected #match,body.copy-protected #formu
 body.copy-protected #app input,body.copy-protected #app textarea{-webkit-user-select:text;user-select:text}
 body.copy-protected #match img,body.copy-protected #exams img,body.copy-protected #dashboard img{pointer-events:none;-webkit-user-drag:none}
 @media print{body.copy-protected #app,body.copy-protected main{display:none!important}body.copy-protected::before{content:"Printing is not available for Azielon study content.";display:block;padding:40px;font:16px sans-serif}}
+
+/* ---------- v7.16: plan recommendation, free Day 1 ---------- */
+body.v6 #billing.v11 #billingFreeTrialBtn{display:none!important}
+body.v6 #billing.v11 #planGrid{display:block!important}
+body.v6 .v11-ask{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 18px;margin:0 0 16px;border:1px solid var(--v6-line,#E7E1D5);border-radius:14px;background:#FFFDF8}
+body.v6 .v11-ask .v6-kicker{margin:0}
+body.v6 .v11-ask b{font-size:16px;color:#1F2A44}
+body.v6 .v11-ask input{padding:8px 10px;border:1px solid #CFC8B8;border-radius:8px;font:500 14px Inter,system-ui,sans-serif;background:#fff}
+body.v6 .v11-none{padding:8px 12px;border:1px solid #CFC8B8;border-radius:8px;background:#fff;color:#1F2A44;font:600 13px Inter,system-ui,sans-serif;cursor:pointer;box-shadow:none}
+body.v6 .v11-none.active{background:#16213A;border-color:#16213A;color:#fff}
+body.v6 .v11-why{flex:1 1 100%;margin:4px 0 0;font-size:14.5px;line-height:1.45;color:#1F2A44}
+body.v6 .v11-why span{font:700 11px Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#8A6212;margin-right:8px}
+body.v6 .v11-why.muted{color:#6B7280}
+body.v6 .v11-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;align-items:stretch}
+body.v6 .v11-card{position:relative;display:flex;flex-direction:column;gap:8px;padding:18px 20px;border:1px solid var(--v6-line,#E7E1D5);border-radius:14px;background:#fff}
+body.v6 .v11-card.rec{border:2px solid #C9922A;background:#FFFBF1}
+body.v6 .v11-card.free{background:#FBF8F1}
+body.v6 .v11-tag{align-self:flex-start;padding:3px 10px;border-radius:999px;background:#C9922A;color:#1B1405;font:700 11px Inter,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase}
+body.v6 .v11-card h3{margin:0;font-size:20px;color:#1F2A44}
+body.v6 .v11-price{display:flex;align-items:baseline;gap:8px}
+body.v6 .v11-price strong{font-size:26px;color:#1F2A44}
+body.v6 .v11-price span{font-size:12.5px;color:#6B7280}
+body.v6 .v11-card p{margin:0;font-size:13.5px;color:#4A5262}
+body.v6 .v11-card ul{margin:4px 0 8px;padding:0 0 0 18px;font-size:13.5px;line-height:1.5;color:#3F4756;flex:1}
+body.v6 .v11-card button{padding:9px 14px;font-size:14px}
+body.v6 .v11-card small{font-size:12px;color:#6B7280}
+body.v6 .v11-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 14px;margin:0 0 12px;border:1px solid #E6D3A3;border-radius:10px;background:#FBEFD5;font-size:13.5px;color:#1F2A44}
+body.v6 .v11-banner button{padding:0;border:0;background:none;box-shadow:none;font:700 13.5px Inter,system-ui,sans-serif;color:#1F2A44;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+body.v7-exam-live .v11-banner{display:none}

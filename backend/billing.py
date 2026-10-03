@@ -7,7 +7,7 @@ import httpx
 from fastapi import HTTPException, Request
 from sqlalchemy.orm import Session
 
-from .models import BillingPlan, CheckoutOrder, Entitlement, PaymentWebhookEvent, User
+from .models import BillingPlan, CheckoutOrder, Entitlement, PaymentWebhookEvent, User, StudyItemState
 
 
 def utcnow():
@@ -18,10 +18,12 @@ def seed_billing_plans(db: Session):
     # Launch catalog: three simple choices only.
     # PayPal launch catalog: one-time purchases that grant time-limited access.
     # The legacy plan codes are retained so existing frontend/data references keep working.
+    # v7.16: every paid plan gives full access; plans differ only in how long access lasts.
+    # Earlier plan codes are retired below; learners who already bought one keep it until it ends.
     plans = [
-        ('drills_monthly','drills','Starter','30-day',30,2900),
-        ('concept_monthly','concept','Standard','30-day',30,6900),
-        ('full_3month','full','Premium','90-day',90,14900),
+        ('full_30','full','30 days','30-day',30,3900),
+        ('full_60','full','60 days','60-day',60,5900),
+        ('full_ext30','full','Extra 30 days','30-day extension',30,2500),
     ]
     features = {
         'drills':[
@@ -157,7 +159,14 @@ def grant_entitlement(db: Session, order: CheckoutOrder):
     return ent
 
 
+EXTENSION_PLAN_CODES={'full_ext30'}
+
 def create_local_order(db: Session, user: User, plan: BillingPlan, provider: str):
+    # The extension is for learners who already bought a plan (for example when the exam date moves).
+    if plan.code in EXTENSION_PLAN_CODES:
+        had_paid=db.query(Entitlement).filter(Entitlement.user_id==user.id).first()
+        if not had_paid:
+            raise HTTPException(400,'The 30-day extension is available after you have bought a 30-day or 60-day plan')
     order=CheckoutOrder(id=str(uuid.uuid4()),user_id=user.id,plan_code=plan.code,provider=provider,amount_cents=plan.amount_cents,currency=plan.currency,status='created')
     db.add(order); db.commit(); db.refresh(order)
     return order
@@ -657,6 +666,33 @@ async def process_paypal_webhook(db: Session, request: Request, body: dict):
         raise HTTPException(500,'Unable to process PayPal webhook')
 
 
+TRIAL_HOURS=24
+# Free Day 1: one of each, built around a single topic so the pieces teach each other.
+TRIAL_CONTENT={'note':['PRO-06'],'tricky':['TW-003'],'diagram':['PRD-016'],'match':['MT-029']}
+TRIAL_PRACTICE_QUESTIONS=10
+TRIAL_EXAM_CODE='trial20'
+
+def _trial_row(db: Session, user_id: int):
+    return db.query(StudyItemState).filter(StudyItemState.user_id==user_id,StudyItemState.content_type=='profile',StudyItemState.content_id=='trial_start').first()
+
+def trial_status(db: Session, user: User):
+    row=_trial_row(db,user.id)
+    if not row:
+        return {'used':False,'active':False,'ends_at':None}
+    start=row.last_reviewed_at or row.updated_at
+    end=start+timedelta(hours=TRIAL_HOURS)
+    return {'used':True,'active':end>utcnow(),'ends_at':end.isoformat()}
+
+def start_trial(db: Session, user: User):
+    if current_entitlement(db,user.id):
+        raise HTTPException(400,'You already have a plan')
+    if _trial_row(db,user.id):
+        raise HTTPException(400,'Your free day has already been used')
+    now=utcnow()
+    db.add(StudyItemState(user_id=user.id,content_type='profile',content_id='trial_start',status='not_started',last_reviewed_at=now,updated_at=now))
+    db.commit()
+    return trial_status(db,user)
+
 def require_paid_access(user: User, db: Session):
     required=os.getenv('REQUIRE_PAID_ACCESS','false').lower() in ('1','true','yes','on')
     if not required:
@@ -664,7 +700,7 @@ def require_paid_access(user: User, db: Session):
     if user.role in ('admin','instructor','content_editor','reviewer'):
         return True
     ent=current_entitlement(db,user.id)
-    if not ent:
+    if not ent and not trial_status(db,user)['active']:
         raise HTTPException(402,'Active paid access is required for this feature')
     return True
 
@@ -679,6 +715,10 @@ FEATURE_MATRIX = {
         # Concept Mastery exams are Premium-only (matches the plan cards).
         'practice','review','progress','bookmarks','mock1','mock2',
         'notes','tricky','rules','match'
+    },
+    # Free Day 1 (24 hours): the same screens, limited server-side to one item of each kind.
+    'trial': {
+        'practice','review','progress','notes','tricky','diagrams','match','trial20'
     },
     'full': {
         'practice','review','progress','bookmarks','notes','tricky','diagrams','match',
@@ -695,7 +735,9 @@ def user_tier(user: User, db: Session):
     if not required:
         return 'full'
     e=current_entitlement(db,user.id)
-    return e.tier_code if e else None
+    if e:
+        return e.tier_code
+    return 'trial' if trial_status(db,user)['active'] else None
 
 def feature_set(user: User, db: Session):
     tier=user_tier(user,db)

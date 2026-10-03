@@ -13,6 +13,8 @@ from .models import User, PasswordResetToken, Question, TopicNote, Diagram, Tric
 from .schemas import RegisterIn, LoginIn, ForgotPasswordIn, ResetPasswordIn, PracticeCreateIn, AttemptIn, QuestionPatchIn, QuestionCreateIn, ContentCreateIn, DiagramCreateIn, TrickyCreateIn, CheckoutIn, ExamStartIn, ExamAttemptIn, ExamMarkIn
 from .security import hash_password, verify_password, create_token, current_user, require_roles, create_password_reset_token, hash_reset_token
 from .seed import seed_all
+from .billing import trial_status, start_trial, TRIAL_PRACTICE_QUESTIONS
+from .billing import user_tier as _user_tier
 from .billing import seed_billing_plans, catalog as billing_catalog, current_entitlement, entitlement_payload, stripe_checkout, confirm_stripe_session, process_stripe_webhook, paypal_create_order, paypal_capture_order, process_paypal_webhook, paypal_ready, require_paid_access, payment_mode, test_checkout, require_feature, has_feature, access_payload, autobooks_checkout, autobooks_order_status, process_autobooks_confirmation
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -168,6 +170,11 @@ def _load_eco_map():
     except Exception:
         return {'tasks':{},'items':{}}
 ECO_MAP=_load_eco_map()
+def _trial_ids(user, db, kind):
+    """During the free Day 1 a learner sees one item of each kind. Returns that id set, or None for full access."""
+    from .billing import user_tier, TRIAL_CONTENT
+    return set(TRIAL_CONTENT.get(kind,[])) if user_tier(user,db)=='trial' else None
+
 def _eco_tag(kind, body):
     """Label a study item with its July 2026 ECO task and that task's domain."""
     code=(ECO_MAP.get('items',{}).get(kind) or {}).get(body.get('id'))
@@ -182,6 +189,19 @@ for _q in EXAM_CONTENT.get('questions',[]):
     EXAM_QUESTION_IDS.setdefault(_q['exam_code'],[]).append(_q['id'])
 for _code in EXAM_QUESTION_IDS:
     EXAM_QUESTION_IDS[_code].sort(key=lambda qid: EXAM_QUESTIONS[qid].get('index',0))
+
+def _build_trial_exam():
+    """Free Day 1 mini exam: 20 single-answer questions from Mock Exam 1, in the real exam's domain proportions."""
+    want={'People':7,'Process':8,'Business Environment':5}; picked=[]
+    for qid in EXAM_QUESTION_IDS.get('mock1',[]):
+        q=EXAM_QUESTIONS[qid]; d=q.get('domain')
+        if q.get('type')=='single_select' and want.get(d,0)>0:
+            picked.append(qid); want[d]-=1
+    if len(picked)==20:
+        EXAM_QUESTION_IDS['trial20']=picked
+        d={'code':'trial20','name':'Mini Mock Exam','kind':'mock','mini':True,'question_count':20,'duration_minutes':27,'rules_available':False,'approved':True}
+        EXAM_DEFS['trial20']=d; EXAM_CONTENT.setdefault('exams',[]).append(d)
+_build_trial_exam()
 
 def _exam_question_payload(q, include_answer=False):
     p={k:q.get(k) for k in ('id','exam_code','index','domain','topic','approach','difficulty','type','stem','options','matching_left','matching_right','rule_id','block','block_title','eco_task','case_id','case_title','case_text','exhibit')}
@@ -750,6 +770,11 @@ def create_practice(data: PracticeCreateIn, user: User = Depends(current_user), 
     feedback_mode = (data.feedback_mode or 'immediate').strip().lower()
     if feedback_mode not in {'immediate', 'end'}:
         raise HTTPException(400, 'feedback_mode must be immediate or end')
+    if _user_tier(user,db)=='trial':
+        # Free Day 1 includes one practice set of 10 questions.
+        if db.query(PracticeSession).filter(PracticeSession.user_id==user.id).count()>=1:
+            raise HTTPException(403,'Your free day includes one practice set of 10 questions. Choose a plan to keep practising.')
+        data.count=min(int(data.count or TRIAL_PRACTICE_QUESTIONS),TRIAL_PRACTICE_QUESTIONS)
     query = db.query(Question).filter(Question.lifecycle_state.in_(['Published','published','Instructor-Approved','Instructor Approved','instructor_approved']), Question.instructor_approved == True)
     if not has_feature(user, db, 'visual_questions'):
         query = query.filter(Question.visual_json.in_(['null','',None]))
@@ -1237,7 +1262,7 @@ def progress(user: User = Depends(current_user), db: Session = Depends(get_db)):
             'completed_at':s.completed_at.isoformat() if s.completed_at else None,
             'domains':dom_pct,
             'first_attempt':first_real.get(s.exam_code)==s.id,
-            'counts_for_target':first_real.get(s.exam_code)==s.id and answered>=len(qids)*0.9,
+            'counts_for_target':first_real.get(s.exam_code)==s.id and answered>=len(qids)*0.9 and not EXAM_DEFS.get(s.exam_code,{}).get('mini'),
         })
 
     accessible=set(access_payload(user,db).get('features') or [])
@@ -1548,7 +1573,9 @@ def match_sets(user: User = Depends(current_user), db: Session = Depends(get_db)
     require_feature(user, db, 'match', 'Match the Following is included with Standard or Premium')
     _guard_no_active_real_mock(user, db)
     states=_study_state_map(db,user.id,'match'); out=[]
+    _t=_trial_ids(user,db,'match')
     for m in MATCH_SETS:
+        if _t is not None and m['id'] not in _t: continue
         st=states.get(('match',m['id']))
         out.append(_eco_tag('match',{**m,'studyStatus':st.status if st else 'not_started','lastScore':st.last_rating if st else None,'attempts':st.review_count or 0 if st else 0}))
     return out
@@ -1569,7 +1596,7 @@ def study_rewrites(user: User = Depends(current_user), db: Session = Depends(get
     require_paid_access(user,db)
     feats=set(access_payload(user,db).get('features') or [])
     if getattr(user,'role','') in ('admin','instructor','content_editor','reviewer'): feats|={'notes','tricky'}
-    return {'notes':STUDY_REWRITE.get('notes',{}) if 'notes' in feats else {},'tricky':STUDY_REWRITE.get('tricky',{}) if 'tricky' in feats else {},'newNotes':STUDY_REWRITE.get('newNotes',[]) if 'notes' in feats else [],
+    return {'notes':STUDY_REWRITE.get('notes',{}) if 'notes' in feats else {},'tricky':STUDY_REWRITE.get('tricky',{}) if 'tricky' in feats else {},'newNotes':STUDY_REWRITE.get('newNotes',[]) if 'notes' in feats and _user_tier(user,db)!='trial' else [],
             'ecoNotes':{i:{'task':c,'title':(ECO_MAP.get('tasks',{}).get(c) or {}).get('title'),'domain':(ECO_MAP.get('tasks',{}).get(c) or {}).get('domain')} for i,c in (ECO_MAP.get('items',{}).get('note') or {}).items()}}
 
 @app.get('/api/study/states')
@@ -1796,16 +1823,18 @@ def notes(domain: str|None=None, q: str|None=None, user: User = Depends(current_
     _guard_no_active_real_mock(user, db)
     rows=db.query(TopicNote).order_by(TopicNote.domain, TopicNote.id).all()
     states=_study_state_map(db,user.id,'note')
+    trial_ids=_trial_ids(user,db,'note')
     out=[]; seen=set()
     for n in rows:
         body=json.loads(n.body_json); _st=states.get(('note',n.id)); body['studyStatus']=_st.status if _st else 'not_started'
         _eco_tag('note',body); seen.add(n.id)
+        if trial_ids is not None and n.id not in trial_ids: continue
         if domain and body.get('domain')!=domain: continue
         if q and q.lower() not in json.dumps(body).lower(): continue
         out.append(body)
     # Notes added to close gaps against the exam outline ship in the overlay file, so no migration is needed.
     for x in STUDY_REWRITE.get('newNotes',[]):
-        if x.get('id') in seen: continue
+        if x.get('id') in seen or trial_ids is not None: continue
         body={**x,'_rw':True}; _st=states.get(('note',x['id'])); body['studyStatus']=_st.status if _st else 'not_started'
         _eco_tag('note',body)
         if domain and body.get('domain')!=domain: continue
@@ -1818,6 +1847,8 @@ def diagrams(domain: str|None=None, q: str|None=None, user: User = Depends(curre
     require_feature(user, db, 'diagrams', 'Diagrams & Models are Premium-only')
     _guard_no_active_real_mock(user, db)
     rows=db.query(Diagram).order_by(Diagram.domain, Diagram.id).all()
+    _t=_trial_ids(user,db,'diagram')
+    if _t is not None: rows=[d for d in rows if d.id in _t]
     out=[]
     for d in rows:
         body=json.loads(d.metadata_json); body['imageFile']=d.image_file; _st=_study_state_map(db,user.id,'diagram').get(('diagram',d.id)); body['studyStatus']=_st.status if _st else 'not_started'
@@ -1835,6 +1866,8 @@ def tricky_words(q: str|None=None, user: User = Depends(current_user), db: Sessi
     require_feature(user, db, 'tricky', 'Tricky Words are included with Concept + Exam or Premium')
     _guard_no_active_real_mock(user, db)
     rows=db.query(TrickyWord).order_by(TrickyWord.id).all(); out=[]
+    _t=_trial_ids(user,db,'tricky')
+    if _t is not None: rows=[r for r in rows if r.id in _t]
     for t in rows:
         body=json.loads(t.body_json); _st=_study_state_map(db,user.id,'tricky').get(('tricky',t.id)); body['studyStatus']=_st.status if _st else 'not_started'; body['reviewCount']=_st.review_count if _st else 0; body['nextDueAt']=_st.next_due_at.isoformat() if _st and _st.next_due_at else None
         _eco_tag('tricky',body)
@@ -1842,7 +1875,7 @@ def tricky_words(q: str|None=None, user: User = Depends(current_user), db: Sessi
         out.append(body)
     seen={t.id for t in rows}; states=_study_state_map(db,user.id,'tricky')
     for x in STUDY_REWRITE.get('newTricky',[]):
-        if x.get('id') in seen: continue
+        if x.get('id') in seen or _t is not None: continue
         body={**x,'_rw':True}; _st=states.get(('tricky',x['id'])); body['studyStatus']=_st.status if _st else 'not_started'; body['reviewCount']=_st.review_count if _st else 0; body['nextDueAt']=_st.next_due_at.isoformat() if _st and _st.next_due_at else None
         _eco_tag('tricky',body)
         if q and q.lower() not in json.dumps(body).lower(): continue
@@ -1867,7 +1900,14 @@ def billing_me(user: User = Depends(current_user), db: Session = Depends(get_db)
             'amount_cents': plan.amount_cents if plan else None,
             'currency': plan.currency if plan else None,
         })
-    return {'entitlement':ep,'has_access': bool(e) or user.role in ('admin','instructor','content_editor','reviewer'), **access_payload(user,db), 'payment_mode': payment_mode(), 'providers':{'paypal':paypal_ready()}}
+    trial=trial_status(db,user)
+    return {'entitlement':ep,'has_access': bool(e) or trial['active'] or user.role in ('admin','instructor','content_editor','reviewer'), **access_payload(user,db), 'payment_mode': payment_mode(), 'providers':{'paypal':paypal_ready()},
+            'trial':{**trial,'available':not e and not trial['used']},'ever_paid':bool(db.query(Entitlement).filter(Entitlement.user_id==user.id).first())}
+
+@app.post('/api/billing/trial/start')
+def billing_trial_start(user: User = Depends(current_user), db: Session = Depends(get_db)):
+    """Start the free Day 1: 24 hours with one note, one tricky-word pair, one diagram, one match set, 10 practice questions and a 20-question mini exam."""
+    return start_trial(db,user)
 
 @app.post('/api/billing/test/checkout')
 def billing_test_checkout(payload: dict, user: User = Depends(current_user), db: Session = Depends(get_db)):
@@ -2492,7 +2532,7 @@ def start_exam(exam_code:str, data:ExamStartIn, user:User=Depends(current_user),
     if feedback not in {'immediate','block','end'}: raise HTTPException(400,'Invalid feedback mode')
     if mode=='real_mock': feedback='end'
     ids=list(EXAM_QUESTION_IDS.get(exam_code,[]))
-    if len(ids)!=180: raise HTTPException(500,'Exam content is incomplete')
+    if len(ids)!=int(e.get('question_count',180)): raise HTTPException(500,'Exam content is incomplete')
     # Real mock order is mixed but deterministic per session creation.
     if mode=='real_mock':
         # Case-study questions stay together, in order, at the start (as on the real exam); the rest are shuffled.

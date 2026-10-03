@@ -342,7 +342,7 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
   const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const MIN={note:20,tricky:10,diagram:12,question:2,exam:300}; // exam = 4 h sitting + 1 h review
   const EXAM_TARGET=5,EXAM_PASS=80,REVIEW_DAYS=5;
-  const tierFull=()=>{const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return t==='full'||t.startsWith('full')||(typeof isStaff==='function'&&isStaff())};
+  const tierFull=()=>{const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return t==='full'||t==='trial'||t.startsWith('full')||(typeof isStaff==='function'&&isStaff())};
   const open=rows=>(rows||[]).filter(x=>['not_started','needs_review'].includes(x.studyStatus||'not_started'));
   window.v6Pace=function(p){
     p=p||state.lastProgress||{};const plan=p.adaptive_plan||{},prof=p.study_profile||{};
@@ -762,7 +762,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-plan]')
 /* ---------- v6.7: Full plan with section tabs and status filters ---------- */
 (function(){
   const esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const tierFull=()=>{const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return t==='full'||t.startsWith('full')||(typeof isStaff==='function'&&isStaff())};
+  const tierFull=()=>{const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return t==='full'||t==='trial'||t.startsWith('full')||(typeof isStaff==='function'&&isStaff())};
   const has=f=>typeof hasFeature==='function'?hasFeature(f):true;
   const bucket=st=>st==='reviewed'||st==='mastered'?'done':st==='needs_review'?'review':'todo';
   const S=state.v6Plan=state.v6Plan||{sec:'notes',filter:'todo',domain:''};
@@ -825,7 +825,7 @@ function v6StudiedHours(p){
   return Math.round(mins/60);
 }
 function v6ReadyChecks(p,conceptCount){
-  const tf=(()=>{const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return t==='full'||t.startsWith('full')})();
+  const tf=(()=>{const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return t==='full'||t==='trial'||t.startsWith('full')})();
   const pend=a=>(a||[]).filter(x=>!['reviewed','mastered'].includes(x.studyStatus)).length;
   const lists=[['topic notes',state.notes],['tricky words',state.tricky]];if(tf)lists.push(['diagrams',state.diagrams]);
   const left=lists.map(([n,a])=>[n,pend(a)]).filter(x=>x[1]);
@@ -1321,7 +1321,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
 (function(){
   const esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const has=f=>typeof hasFeature==='function'?hasFeature(f):true;
-  const tierFull=()=>{const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return t==='full'||t.startsWith('full')||(typeof isStaff==='function'&&isStaff())};
+  const tierFull=()=>{const t=String(state.tierCode||state.billing?.tier_code||state.billing?.entitlement?.tier_code||'');return t==='full'||t==='trial'||t.startsWith('full')||(typeof isStaff==='function'&&isStaff())};
   const isDone=x=>['reviewed','mastered'].includes(x.studyStatus);
   function studyRows(p){
     const rows=[];const add=(k,label,arr)=>{arr=arr||[];if(arr.length)rows.push({k,label,done:arr.filter(isDone).length,total:arr.length})};
@@ -1528,4 +1528,66 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
   document.addEventListener('keydown',e=>{if(!document.body.classList.contains('copy-protected'))return;const a=document.activeElement;if(a&&a.matches('input,textarea,select,[contenteditable="true"]'))return;if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='a')e.preventDefault()});
   document.addEventListener('selectstart',e=>{if(document.body.classList.contains('copy-protected')&&window.protectedInteractionTarget(e.target))e.preventDefault()});
   try{if(typeof updateContentProtection==='function')updateContentProtection()}catch(e){}
+})();
+
+
+/* ---------- v7.16: free Day 1, 30/60-day plans, and a plan recommendation from the exam date ---------- */
+(function(){
+  const esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const price=p=>p?'$'+(p.amount_cents/100).toFixed(p.amount_cents%100?2:0):'';
+  const LS='v7ExamDate';
+  const getDate=()=>{try{const v=localStorage.getItem(LS);if(v)return v}catch(e){}return (state.lastProgress&&state.lastProgress.study_profile&&state.lastProgress.study_profile.exam_date)||''};
+  const setDate=v=>{try{localStorage.setItem(LS,v)}catch(e){}};
+  function daysTo(v){if(!v||v==='none')return null;const d=new Date(v+'T12:00:00'),t=new Date();t.setHours(12,0,0,0);return Math.round((d-t)/86400000)}
+  // Which plan fits, and why. The learner can still pick the other one.
+  function recommend(v,ext){
+    if(!v)return null;
+    if(v==='none')return {code:'full_60',why:'You have not booked your exam yet. 60 days covers the full study plan at about 2 hours a day.'};
+    const n=daysTo(v);if(n==null||isNaN(n)||n<0)return null;
+    if(n<=30)return {code:'full_30',why:`Your exam is in ${n} day${n===1?'':'s'}. The 30-day plan covers you through exam day, so you do not pay for time you will not use.`};
+    if(n<=60)return {code:'full_60',why:`Your exam is in ${n} days. The 60-day plan covers you through exam day. A 30-day plan would end before your exam.`};
+    return {code:'full_60',why:`Your exam is in ${n} days. Start with 60 days, which is enough for the full study plan.${ext?` If you need more time near the exam, you can add 30 days for ${price(ext)}.`:''}`};
+  }
+  window.v7Recommend=recommend;
+  async function pushDate(){const v=getDate();if(!v||v==='none'||!state.hasAccess)return;const prof=(state.lastProgress&&state.lastProgress.study_profile)||{};if(prof.exam_date)return;
+    try{await api('/api/coach/profile',{method:'PUT',body:JSON.stringify({exam_date:v,weekly_hours:prof.weekly_hours||8,study_days_per_week:prof.study_days_per_week||5,session_minutes:prof.session_minutes||120})});if(typeof loadProgress==='function')loadProgress()}catch(e){}}
+  window.renderBilling=function(catalog,bm){
+    const grid=document.getElementById('planGrid');if(!grid)return;
+    document.getElementById('billing').classList.add('v11');
+    const by=Object.fromEntries((catalog||[]).map(p=>[p.code,p]));const ext=by.full_ext30;
+    const ready=!!(bm.providers&&bm.providers.paypal),ent=bm.entitlement,trial=bm.trial||{};
+    const v=getDate(),rec=recommend(v,ext),n=daysTo(v);
+    const today=typeof todayDateKey==='function'?todayDateKey():new Date().toISOString().slice(0,10);
+    const ask=`<div class="v11-ask"><span class="v6-kicker">Step 1</span><b>When is your PMP exam?</b>
+      <input type="date" id="v11Date" min="${today}" value="${v&&v!=='none'?esc(v):''}"><button type="button" class="v11-none ${v==='none'?'active':''}" id="v11None">Not booked yet</button>
+      ${rec?`<p class="v11-why"><span>Our recommendation</span> ${esc(rec.why)}</p>`:'<p class="v11-why muted">Tell us your date and we will recommend the plan that fits.</p>'}</div>`;
+    const card=(code,title,sub,feats)=>{const p=by[code];if(!p)return '';const on=rec&&rec.code===code;
+      return `<article class="v11-card ${on?'rec':''}">${on?'<span class="v11-tag">Recommended for you</span>':''}<h3>${esc(title)}</h3><div class="v11-price"><strong>${price(p)}</strong><span>one-time · no automatic renewal</span></div><p>${esc(sub)}</p><ul>${feats.map(f=>`<li>${esc(f)}</li>`).join('')}</ul><button type="button" class="${on?'primary':'secondary'} paypal-buy" data-plan="${esc(code)}" ${ready?'':'disabled'}>Choose ${esc(title)}</button></article>`};
+    const all=['Daily guided study plan','All notes, tricky words, diagrams and match sets','All practice questions and full mock exams','PMP Coach and progress tracking'];
+    const freeCard=ent?'':`<article class="v11-card free"><h3>Free Day 1</h3><div class="v11-price"><strong>$0</strong><span>24 hours</span></div><p>Try one of everything before you decide.</p><ul><li>1 topic note, 1 tricky-word pair, 1 diagram</li><li>1 match set and the formula drill</li><li>10 practice questions</li><li>A 20-question mini mock exam</li></ul>${
+      trial.active?`<button type="button" class="secondary" data-v11-go>Continue my free day →</button><small>Ends ${esc(new Date(trial.ends_at+'Z').toLocaleString([], {weekday:'short',hour:'numeric',minute:'2-digit'}))}</small>`
+      :trial.available?'<button type="button" class="secondary" data-v11-trial>Start my free day</button>'
+      :'<button type="button" class="secondary" disabled>Free day used</button><small>Choose a plan to keep going.</small>'}</article>`;
+    const extCard=(bm.ever_paid&&ext)?`<article class="v11-card"><h3>Extra 30 days</h3><div class="v11-price"><strong>${price(ext)}</strong><span>one-time</span></div><p>Exam date moved? Add 30 days to the end of your current access.</p><ul><li>Keeps everything you have</li><li>Added after your current end date</li></ul><button type="button" class="secondary paypal-buy" data-plan="full_ext30" ${ready?'':'disabled'}>Add 30 days</button></article>`:'';
+    grid.innerHTML=`${ent?'':ask}<div class="v11-cards">${freeCard}${card('full_30','30 days','Best when your exam is within a month.',all)}${card('full_60','60 days','Enough time for the full study plan.',all)}${extCard}</div>`;
+    const msg=document.getElementById('billingMessage');
+    if(msg){msg.textContent=ent?`Current access: ${ent.plan_name||ent.tier_code}${ent.ends_at?' through '+new Date(ent.ends_at).toLocaleDateString():''}.`:(ready?'Secure checkout powered by PayPal.':'Checkout is being set up. You can still start your free day.')}
+    grid.querySelectorAll('.paypal-buy').forEach(b=>b.onclick=()=>{if(typeof startPayPal==='function')startPayPal(b.dataset.plan,b)});
+    const d=document.getElementById('v11Date');if(d)d.onchange=()=>{if(d.value){setDate(d.value);window.renderBilling(catalog,bm)}};
+    const nb=document.getElementById('v11None');if(nb)nb.onclick=()=>{setDate('none');window.renderBilling(catalog,bm)};
+    const tb=grid.querySelector('[data-v11-trial]');if(tb)tb.onclick=async()=>{tb.disabled=true;tb.textContent='Starting…';try{await api('/api/billing/trial/start',{method:'POST'});await bootApp()}catch(e){tb.disabled=false;tb.textContent='Start my free day';if(msg)msg.textContent=e.message||'Could not start the free day'}};
+    const go=grid.querySelector('[data-v11-go]');if(go)go.onclick=()=>showView('dashboard');
+  };
+  // Free Day 1: only the one server-provided note is shown, and a quiet banner says when the day ends.
+  function banner(){
+    const old=document.getElementById('v11Banner');const t=state.billing&&state.billing.trial;
+    if(!(state.tierCode==='trial'&&t&&t.active)){if(old)old.remove();return}
+    const main=document.querySelector('#app main');if(!main)return;
+    const ends=new Date(t.ends_at+'Z').toLocaleString([], {weekday:'short',hour:'numeric',minute:'2-digit'});
+    const html=`<span><b>Free Day 1</b> · one of everything · ends ${esc(ends)}</span><button type="button" data-v11-plans>Choose a plan →</button>`;
+    let b=old;if(!b){b=document.createElement('div');b.id='v11Banner';b.className='v11-banner';main.insertBefore(b,main.firstChild)}
+    if(b.dataset.h!==html){b.dataset.h=html;b.innerHTML=html;b.querySelector('[data-v11-plans]').onclick=()=>showView('billing')}
+  }
+  if(typeof loadNotes==='function'){const o=window.loadNotes;window.loadNotes=async function(){try{if(state.tierCode==='trial'&&typeof supplementalTopicNotes!=='undefined')supplementalTopicNotes.length=0}catch(e){}return o.apply(this,arguments)}}
+  if(typeof showView==='function'){const sv=window.showView;window.showView=function(id){const r=sv.apply(this,arguments);try{banner();if(id==='dashboard')pushDate()}catch(e){}return r}}
 })();

@@ -150,7 +150,7 @@ function applyAccessNavigation(){
 
   document.querySelectorAll('#nav button[data-view="exams"]').forEach(b=>{
 
-    const ok=b.dataset.examKind==='mock'?(hasFeature('mock1')||hasFeature('mock2')||hasFeature('mock6')||hasFeature('mock7')):(hasFeature('mastery3')||hasFeature('mastery4')||hasFeature('mastery5'));
+    const ok=b.dataset.examKind==='mock'?(hasFeature('mock1')||hasFeature('mock2')||hasFeature('mock6')||hasFeature('mock7')||hasFeature('trial20')):(hasFeature('mastery3')||hasFeature('mastery4')||hasFeature('mastery5'));
 
     b.classList.toggle('nav-locked',!ok);
 
