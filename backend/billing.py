@@ -675,7 +675,13 @@ TRIAL_EXAM_CODE='trial20'
 def _trial_row(db: Session, user_id: int):
     return db.query(StudyItemState).filter(StudyItemState.user_id==user_id,StudyItemState.content_type=='profile',StudyItemState.content_id=='trial_start').first()
 
+def free_day_enabled():
+    # v7.18: the free day is off unless FREE_DAY_ENABLED=true. Two paid plans only.
+    return os.getenv('FREE_DAY_ENABLED','false').lower() in ('1','true','yes','on')
+
 def trial_status(db: Session, user: User):
+    if not free_day_enabled():
+        return {'used':True,'active':False,'ends_at':None,'enabled':False}
     row=_trial_row(db,user.id)
     if not row:
         return {'used':False,'active':False,'ends_at':None}
@@ -684,6 +690,8 @@ def trial_status(db: Session, user: User):
     return {'used':True,'active':end>utcnow(),'ends_at':end.isoformat()}
 
 def start_trial(db: Session, user: User):
+    if not free_day_enabled():
+        raise HTTPException(403,'Choose a plan to get started')
     if current_entitlement(db,user.id):
         raise HTTPException(400,'You already have a plan')
     if _trial_row(db,user.id):
