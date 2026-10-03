@@ -1,7 +1,7 @@
 import os, json, random
 from pathlib import Path
 from datetime import datetime, timedelta, date
-from fastapi import FastAPI, Depends, HTTPException, Query, Request
+from fastapi import FastAPI, Depends, HTTPException, Query, Request, BackgroundTasks
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
@@ -2734,8 +2734,18 @@ def _issue_out(r, staff=False):
         d.update({'context':r.context,'user_name':r.user.name if r.user else '','user_email':r.user.email if r.user else ''})
     return d
 
+def _issue_notify_email():
+    return (os.getenv('ISSUE_NOTIFY_EMAIL','').strip() or os.getenv('PROGRAM_REGISTRATION_NOTIFY_EMAIL','azi@azielon.com').strip())
+
+def _issue_mail(to_email, subject, body):
+    # Runs after the response is sent, so a mail problem never blocks the student.
+    try:
+        _send_email_via_apps_script(to_email, subject, body)
+    except Exception as exc:
+        print(f'[issues] email to {to_email} failed: {str(exc)[:200]}', flush=True)
+
 @app.post('/api/issues')
-async def issue_create(request: Request, user: User = Depends(current_user), db: Session = Depends(get_db)):
+async def issue_create(request: Request, background: BackgroundTasks, user: User = Depends(current_user), db: Session = Depends(get_db)):
     b=await request.json()
     summary=str(b.get('summary') or '').strip()[:200]
     details=str(b.get('details') or '').strip()[:6000]
@@ -2752,6 +2762,13 @@ async def issue_create(request: Request, user: User = Depends(current_user), db:
     r=_Issue(user_id=user.id,area=str(b.get('area') or 'Other')[:64],kind=str(b.get('kind') or 'Something is not working')[:32],
              summary=summary,details=details,context=str(b.get('context') or '')[:1000],screenshot=shot,status='open')
     db.add(r); db.commit(); db.refresh(r)
+    base=os.getenv('APP_BASE_URL','').strip().rstrip('/') or str(request.base_url).rstrip('/')
+    background.add_task(_issue_mail,_issue_notify_email(),f'PMP Coach issue #{r.id}: {r.summary}'[:150],'\n'.join([
+        f'A student reported an issue in Azielon PMP Coach.','',
+        f'Report: #{r.id}',f'Student: {user.name} <{user.email}>',f'Where: {r.area}',f'Kind: {r.kind}',f'Title: {r.summary}','',
+        'What happened:',r.details,'',
+        f"Screenshot: {'yes, open the report in the app to view it' if r.screenshot else 'none'}",f'Device: {r.context}','',
+        f'Reply and mark it resolved here: {base}/ (sign in, then Report an Issue)']))
     return _issue_out(r)
 
 @app.get('/api/issues/mine')
@@ -2772,14 +2789,19 @@ def issue_screenshot(issue_id: int, user: User = Depends(current_user), db: Sess
     return {'screenshot':r.screenshot}
 
 @app.patch('/api/admin/issues/{issue_id}')
-async def issue_admin_update(issue_id: int, request: Request, user: User = Depends(require_roles('admin','instructor')), db: Session = Depends(get_db)):
+async def issue_admin_update(issue_id: int, request: Request, background: BackgroundTasks, user: User = Depends(require_roles('admin','instructor')), db: Session = Depends(get_db)):
     r=db.get(_Issue,issue_id)
     if not r: raise HTTPException(404,'Not found')
     b=await request.json()
+    was=r.status
     if b.get('status') in ('open','resolved'):
         r.status=b['status']; r.resolved_at=datetime.utcnow() if r.status=='resolved' else None
     if 'reply' in b: r.reply=str(b.get('reply') or '')[:2000]
     db.commit(); db.refresh(r)
+    if r.status=='resolved' and was!='resolved' and r.user and r.user.email:
+        background.add_task(_issue_mail,r.user.email,f'Your Azielon PMP Coach report #{r.id} is resolved','\n'.join([
+            f'Hello {r.user.name},','',f'The issue you reported, "{r.summary}", has been resolved.']+(['',f'Note from Azielon: {r.reply}'] if r.reply else [])+
+            ['','If you still see the problem, please send a new report from the Report an Issue page.','','Thank you,','Azielon PMP Coach']))
     return _issue_out(r,True)
 
 
