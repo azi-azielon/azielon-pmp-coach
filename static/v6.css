@@ -1112,3 +1112,38 @@ body .sales-value-list .v12-stats{grid-column:2;display:grid;grid-template-colum
 body .sales-value-list .v12-stats p{margin:0;font-size:12px;line-height:1.3;color:rgba(255,255,255,.62)}
 body .sales-value-list .v12-stats p b{display:block;font-size:17px;font-weight:600;color:#E0AE4F;letter-spacing:0}
 @media (max-width:700px){body .sales-value-list .v12-stats{grid-template-columns:repeat(2,1fr)}}
+
+/* v7.20: Report an Issue */
+body.v6 #issues .v13-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+body.v6 #issues .v13-col{background:#fff;border:1px solid #E6DFCF;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+body.v6 #issues h3{margin:0;font-size:17px;color:#14213D}
+body.v6 #issues label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:600;color:#3D4A63}
+body.v6 #issues select,body.v6 #issues input[type=text],body.v6 #issues #v13Sum,body.v6 #issues textarea{font:inherit;font-size:14px;font-weight:400;padding:8px 10px;border:1px solid #D9D2C0;border-radius:8px;background:#fff;color:#14213D;width:100%;box-sizing:border-box}
+body.v6 #issues textarea{resize:vertical;min-height:96px}
+body.v6 #issues .v13-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+body.v6 #issues .v13-shotrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+body.v6 #issues .v13-file span{display:inline-block;padding:7px 12px;border:1px solid #14213D;border-radius:8px;font-size:13px;font-weight:600;color:#14213D;cursor:pointer;background:#fff}
+body.v6 #issues .v13-hint,body.v6 #issues .v13-meta{font-size:12px;color:#7A7462;margin:0;font-weight:400}
+body.v6 #issues .v13-thumb{max-height:90px;max-width:220px;border:1px solid #D9D2C0;border-radius:6px;align-self:flex-start}
+body.v6 #issues .v13-send{display:flex;align-items:center;gap:12px}
+body.v6 #issues .v13-err{font-size:13px;color:#A23B2A}
+body.v6 #issues .v13-ok{margin:0;padding:10px 12px;border:1px solid #9CC7A4;background:#EFF8F0;border-radius:8px;font-size:13.5px;color:#1F5130}
+body.v6 #issues .v13-row{border:1px solid #EBE5D6;border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+body.v6 #issues .v13-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline;font-size:14px;color:#14213D}
+body.v6 #issues .v13-st{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:99px;background:#FBEFD5;color:#8A6212;white-space:nowrap}
+body.v6 #issues .v13-row.resolved .v13-st{background:#E4F3E7;color:#1F5130}
+body.v6 #issues .v13-det{margin:0;font-size:13px;color:#3D4A63;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+body.v6 #issues .v13-reply{margin:0;font-size:13px;color:#1F5130}
+body.v6 #issues .v13-act{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+body.v6 #issues .v13-act input{flex:1;min-width:140px;padding:6px 9px;font-size:13px}
+body.v6 #issues .v13-act button{padding:6px 11px;font-size:12.5px}
+body.v6 #issues .v13-empty{margin:0;font-size:13.5px;color:#7A7462}
+body.v6 #issues .v13-filter{display:flex;gap:6px}
+body.v6 #issues .v13-filter button,body.v6 #issues .v13-pager button{padding:5px 11px;font-size:12.5px;border:1px solid #D9D2C0;border-radius:99px;background:#fff;color:#14213D;cursor:pointer}
+body.v6 #issues .v13-filter button.active{background:#14213D;color:#fff;border-color:#14213D}
+body.v6 #issues .v13-pager{display:flex;gap:10px;align-items:center;justify-content:flex-end;font-size:12.5px;color:#7A7462}
+body.v6 #issues .v13-pager button:disabled{opacity:.4;cursor:default}
+.v13-over{position:fixed;inset:0;background:rgba(13,31,60,.86);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:20px}
+.v13-over img{max-width:100%;max-height:calc(100% - 60px);border-radius:8px;background:#fff}
+.v13-over button{padding:8px 18px;border-radius:8px;border:0;background:#fff;color:#14213D;font-weight:600;cursor:pointer}
+@media (max-width:900px){body.v6 #issues .v13-wrap{grid-template-columns:1fr}body.v6 #issues .v13-two{grid-template-columns:1fr}}

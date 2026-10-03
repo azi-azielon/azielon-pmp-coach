@@ -2722,6 +2722,67 @@ def root():
                  'Pragma':'no-cache','Expires':'0'}
     )
 
+# ---------- v7.20: Report an Issue ----------
+from .models import IssueReport as _Issue
+_ISSUE_MAX_SHOT=4_200_000  # about 3 MB of image once base64-encoded
+
+def _issue_out(r, staff=False):
+    d={'id':r.id,'area':r.area,'kind':r.kind,'summary':r.summary,'details':r.details,'status':r.status,'reply':r.reply or '',
+       'has_screenshot':bool(r.screenshot),'created_at':r.created_at.isoformat() if r.created_at else None,
+       'resolved_at':r.resolved_at.isoformat() if r.resolved_at else None}
+    if staff:
+        d.update({'context':r.context,'user_name':r.user.name if r.user else '','user_email':r.user.email if r.user else ''})
+    return d
+
+@app.post('/api/issues')
+async def issue_create(request: Request, user: User = Depends(current_user), db: Session = Depends(get_db)):
+    b=await request.json()
+    summary=str(b.get('summary') or '').strip()[:200]
+    details=str(b.get('details') or '').strip()[:6000]
+    if len(summary)<4: raise HTTPException(400,'Please add a short title for the issue')
+    if len(details)<10: raise HTTPException(400,'Please describe what happened in a sentence or two')
+    shot=b.get('screenshot') or None
+    if shot:
+        shot=str(shot)
+        if not shot.startswith(('data:image/png;base64,','data:image/jpeg;base64,','data:image/webp;base64,')): raise HTTPException(400,'The screenshot must be a PNG or JPG image')
+        if len(shot)>_ISSUE_MAX_SHOT: raise HTTPException(400,'The screenshot is too large. Please use an image under 3 MB')
+    day_ago=datetime.utcnow()-timedelta(days=1)
+    if db.query(_Issue).filter(_Issue.user_id==user.id,_Issue.created_at>=day_ago).count()>=20:
+        raise HTTPException(429,'You have sent many reports today. Please try again tomorrow')
+    r=_Issue(user_id=user.id,area=str(b.get('area') or 'Other')[:64],kind=str(b.get('kind') or 'Something is not working')[:32],
+             summary=summary,details=details,context=str(b.get('context') or '')[:1000],screenshot=shot,status='open')
+    db.add(r); db.commit(); db.refresh(r)
+    return _issue_out(r)
+
+@app.get('/api/issues/mine')
+def issue_mine(user: User = Depends(current_user), db: Session = Depends(get_db)):
+    return {'items':[_issue_out(r) for r in db.query(_Issue).filter(_Issue.user_id==user.id).order_by(_Issue.id.desc()).limit(50).all()]}
+
+@app.get('/api/admin/issues')
+def issue_admin_list(status: str = '', user: User = Depends(require_roles('admin','instructor')), db: Session = Depends(get_db)):
+    q=db.query(_Issue)
+    if status in ('open','resolved'): q=q.filter(_Issue.status==status)
+    return {'items':[_issue_out(r,True) for r in q.order_by(_Issue.id.desc()).limit(300).all()],
+            'open':db.query(_Issue).filter(_Issue.status=='open').count()}
+
+@app.get('/api/issues/{issue_id}/screenshot')
+def issue_screenshot(issue_id: int, user: User = Depends(current_user), db: Session = Depends(get_db)):
+    r=db.get(_Issue,issue_id)
+    if not r or (r.user_id!=user.id and user.role not in ('admin','instructor')): raise HTTPException(404,'Not found')
+    return {'screenshot':r.screenshot}
+
+@app.patch('/api/admin/issues/{issue_id}')
+async def issue_admin_update(issue_id: int, request: Request, user: User = Depends(require_roles('admin','instructor')), db: Session = Depends(get_db)):
+    r=db.get(_Issue,issue_id)
+    if not r: raise HTTPException(404,'Not found')
+    b=await request.json()
+    if b.get('status') in ('open','resolved'):
+        r.status=b['status']; r.resolved_at=datetime.utcnow() if r.status=='resolved' else None
+    if 'reply' in b: r.reply=str(b.get('reply') or '')[:2000]
+    db.commit(); db.refresh(r)
+    return _issue_out(r,True)
+
+
 @app.get('/{path:path}')
 def spa(path: str):
     candidate=STATIC/path

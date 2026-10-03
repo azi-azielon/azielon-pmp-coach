@@ -292,3 +292,21 @@ class ExamAttempt(Base):
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     __table_args__ = (UniqueConstraint('exam_session_id','question_id', name='uq_exam_attempt_session_question'),)
+
+
+class IssueReport(Base):
+    """v7.20: a problem a learner reports from the Report an Issue page."""
+    __tablename__ = 'issue_reports'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'), index=True, nullable=False)
+    area = Column(String(64), nullable=False, default='Other')
+    kind = Column(String(32), nullable=False, default='Something is not working')
+    summary = Column(String(200), nullable=False)
+    details = Column(Text, nullable=False, default='')
+    context = Column(Text, nullable=False, default='')
+    screenshot = Column(Text)
+    status = Column(String(16), nullable=False, default='open', index=True)
+    reply = Column(Text)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    resolved_at = Column(DateTime)
+    user = relationship('User')
