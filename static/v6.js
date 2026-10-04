@@ -1618,7 +1618,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
       ${staff()&&r.context?`<p class="v13-meta">${esc(r.context)}</p>`:''}
       ${r.reply&&!staff()?`<p class="v13-reply"><b>Azielon:</b> ${esc(r.reply)}</p>`:''}
       <div class="v13-act">${r.has_screenshot?`<button type="button" class="ghost" data-v13-shot="${r.id}">View screenshot</button>`:''}
-      ${staff()?`<input type="text" data-v13-reply="${r.id}" placeholder="Reply to the student (optional)" value="${esc(r.reply)}"><select data-v13-status="${r.id}" aria-label="Status of issue ${r.id}">${Object.keys(LABEL).map(k=>`<option value="${k}" ${k===r.status?'selected':''}>${LABEL[k]}</option>`).join('')}</select><button type="button" class="primary" data-v13-set="${r.id}">Save</button>`:''}</div></article>`).join('');
+      ${staff()?`<input type="text" data-v13-reply="${r.id}" placeholder="Reply to the student (optional)" value="${esc(r.reply)}"><select data-v13-status="${r.id}" aria-label="Status of issue ${r.id}">${Object.keys(LABEL).map(k=>`<option value="${k}" ${k===r.status?'selected':''}>${LABEL[k]}</option>`).join('')}</select><button type="button" class="primary" data-v13-set="${r.id}">Save</button>${state.user&&state.user.role==='admin'?`<button type="button" class="ghost v13-del" data-v13-del="${r.id}">Delete</button>`:''}`:''}</div></article>`).join('');
     const head=staff()?`<div class="v13-filter">${['open','in_progress','resolved','all'].map(f=>`<button type="button" class="${S.filter===f?'active':''}" data-v13-f="${f}">${f==='all'?'All':LABEL[f]+(S.counts&&S.counts[f]!=null?' ('+S.counts[f]+')':'')}</button>`).join('')}</div>`:'';
     const pager=pages>1?`<div class="v13-pager"><button type="button" data-v13-p="-1" ${S.page?'':'disabled'}>← Prev</button><span>${S.page+1} of ${pages}</span><button type="button" data-v13-p="1" ${S.page<pages-1?'':'disabled'}>Next →</button></div>`:'';
     return `<div class="v13-col"><h3>${staff()?'Reported issues':'Your reports'}</h3>${head}${rows||`<p class="v13-empty">${staff()?'No reports here.':'You have not reported anything yet.'}</p>`}${pager}</div>`;
@@ -1662,6 +1662,9 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
     host.querySelectorAll('[data-v13-f]').forEach(b=>b.onclick=async()=>{S.filter=b.dataset.v13F;S.page=0;const v=keep();await load();render(v)});
     host.querySelectorAll('[data-v13-shot]').forEach(b=>b.onclick=async()=>{try{const r=await api('/api/issues/'+b.dataset.v13Shot+'/screenshot');
       const o=document.createElement('div');o.className='v13-over';o.innerHTML=`<img alt="Screenshot" src="${r.screenshot}"><button type="button">Close</button>`;o.onclick=()=>o.remove();document.body.appendChild(o)}catch(e){}});
+    host.querySelectorAll('[data-v13-del]').forEach(b=>b.onclick=async()=>{const id=b.dataset.v13Del;
+      if(!confirm('Delete Issue #'+id+'? It is removed for you and for the student, and this cannot be undone.'))return;b.disabled=true;
+      try{await api('/api/admin/issues/'+id,{method:'DELETE'});const v=keep();await load();render(v)}catch(e){b.disabled=false;alert(e.message||'Could not delete the issue')}});
     host.querySelectorAll('[data-v13-set]').forEach(b=>b.onclick=async()=>{const id=b.dataset.v13Set,rp=host.querySelector(`[data-v13-reply="${id}"]`),st=host.querySelector(`[data-v13-status="${id}"]`);b.disabled=true;
       try{await api('/api/admin/issues/'+id,{method:'PATCH',body:JSON.stringify({status:st?st.value:'open',reply:rp?rp.value:''})});const v=keep();await load();render(v)}catch(e){b.disabled=false}});
   }

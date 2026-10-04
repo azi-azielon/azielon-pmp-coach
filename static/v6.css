@@ -1156,3 +1156,5 @@ body.v6 #issues .v13-own{background:#fff;border:1px solid #E6DFCF;border-radius:
 body.v6 #issues .v13-own summary{cursor:pointer;font-weight:600;color:#14213D;font-size:14px}
 body.v6 #issues .v13-own .v13-col{border:0;padding:10px 0 0}
 body.v6 #issues .v13-wrap.staff .v13-det{-webkit-line-clamp:4}
+
+body.v6 #issues .v13-act .v13-del{color:#A23B2A;border-color:#E3C5BF}

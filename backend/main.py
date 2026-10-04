@@ -2815,6 +2815,14 @@ def issue_screenshot(issue_id: int, user: User = Depends(current_user), db: Sess
     if not r or (r.user_id!=user.id and user.role not in ('admin','instructor')): raise HTTPException(404,'Not found')
     return {'screenshot':r.screenshot}
 
+@app.delete('/api/admin/issues/{issue_id}')
+def issue_admin_delete(issue_id: int, user: User = Depends(require_roles('admin')), db: Session = Depends(get_db)):
+    # v7.24: only the admin can delete a reported issue. It is removed for the student too.
+    r=db.get(_Issue,issue_id)
+    if not r: raise HTTPException(404,'Not found')
+    db.delete(r); db.commit()
+    return {'deleted':issue_id}
+
 @app.patch('/api/admin/issues/{issue_id}')
 async def issue_admin_update(issue_id: int, request: Request, background: BackgroundTasks, user: User = Depends(require_roles('admin','instructor')), db: Session = Depends(get_db)):
     r=db.get(_Issue,issue_id)
