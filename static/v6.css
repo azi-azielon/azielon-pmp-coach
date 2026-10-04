@@ -1147,3 +1147,12 @@ body.v6 #issues .v13-pager button:disabled{opacity:.4;cursor:default}
 .v13-over img{max-width:100%;max-height:calc(100% - 60px);border-radius:8px;background:#fff}
 .v13-over button{padding:8px 18px;border-radius:8px;border:0;background:#fff;color:#14213D;font-weight:600;cursor:pointer}
 @media (max-width:900px){body.v6 #issues .v13-wrap{grid-template-columns:1fr}body.v6 #issues .v13-two{grid-template-columns:1fr}}
+
+/* v7.23: issue statuses and the staff view */
+body.v6 #issues .v13-wrap.staff{grid-template-columns:1fr}
+body.v6 #issues .v13-row.in_progress .v13-st{background:#E3ECFB;color:#1F4E9C}
+body.v6 #issues .v13-act select{padding:6px 9px;font-size:13px;border:1px solid #D9D2C0;border-radius:8px;background:#fff;width:auto}
+body.v6 #issues .v13-own{background:#fff;border:1px solid #E6DFCF;border-radius:14px;padding:12px 18px}
+body.v6 #issues .v13-own summary{cursor:pointer;font-weight:600;color:#14213D;font-size:14px}
+body.v6 #issues .v13-own .v13-col{border:0;padding:10px 0 0}
+body.v6 #issues .v13-wrap.staff .v13-det{-webkit-line-clamp:4}

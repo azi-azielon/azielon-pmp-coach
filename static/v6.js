@@ -1596,7 +1596,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
   const KINDS=['Something is not working','A question or answer looks wrong','Payment or access','Suggestion'];
   const VIEW_AREA={dashboard:'Today',notes:'Topic Notes',tricky:'Tricky Words',diagrams:'Diagrams & Models',practice:'Practice',match:'Match the Following',formulas:'Formula Drill',exams:'Mock or Mastery Exam',coach:'PMP Coach',progress:'My Progress',billing:'Payment or account'};
   const S={shot:null,shotName:'',items:[],page:0,filter:'open',sent:null,last:'',busy:false};
-  const PER=5;
+  const PER=5,LABEL={open:'Open',in_progress:'In progress',resolved:'Resolved'};
   const staff=()=>typeof isStaff==='function'&&isStaff();
   const when=v=>v?new Date(v+'Z').toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}):'';
   // Shrink the picture in the browser so uploads stay small.
@@ -1608,26 +1608,26 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
       img.onload=()=>{const k=Math.min(1,1600/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);
         c.getContext('2d').drawImage(img,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.82))};img.src=fr.result};
     fr.readAsDataURL(file)})}
-  async function load(){try{const r=await api(staff()?'/api/admin/issues'+(S.filter==='all'?'':'?status='+S.filter):'/api/issues/mine');S.items=r.items||[];S.open=r.open}catch(e){S.items=[]}}
+  async function load(){try{const r=await api(staff()?'/api/admin/issues'+(S.filter==='all'?'':'?status='+S.filter):'/api/issues/mine');S.items=r.items||[];S.open=r.open;S.counts=r.counts||{}}catch(e){S.items=[]}}
   function list(){
     const pages=Math.max(1,Math.ceil(S.items.length/PER));if(S.page>=pages)S.page=pages-1;
     const rows=S.items.slice(S.page*PER,S.page*PER+PER).map(r=>`<article class="v13-row ${r.status}">
-      <div class="v13-top"><b>#${r.id} · ${esc(r.summary)}</b><span class="v13-st">${r.status==='resolved'?'Resolved':'Open'}</span></div>
+      <div class="v13-top"><b>Issue #${r.id} · ${esc(r.summary)}</b><span class="v13-st">${LABEL[r.status]||'Open'}</span></div>
       <p class="v13-meta">${esc(r.area)} · ${esc(r.kind)} · ${esc(when(r.created_at))}${staff()?` · ${esc(r.user_name)} (${esc(r.user_email)})`:''}</p>
       <p class="v13-det">${esc(r.details)}</p>
       ${staff()&&r.context?`<p class="v13-meta">${esc(r.context)}</p>`:''}
       ${r.reply&&!staff()?`<p class="v13-reply"><b>Azielon:</b> ${esc(r.reply)}</p>`:''}
       <div class="v13-act">${r.has_screenshot?`<button type="button" class="ghost" data-v13-shot="${r.id}">View screenshot</button>`:''}
-      ${staff()?`<input type="text" data-v13-reply="${r.id}" placeholder="Reply to the student (optional)" value="${esc(r.reply)}"><button type="button" class="${r.status==='open'?'primary':'secondary'}" data-v13-set="${r.id}" data-to="${r.status==='open'?'resolved':'open'}">${r.status==='open'?'Mark resolved':'Reopen'}</button>`:''}</div></article>`).join('');
-    const head=staff()?`<div class="v13-filter">${['open','resolved','all'].map(f=>`<button type="button" class="${S.filter===f?'active':''}" data-v13-f="${f}">${f==='open'?'Open'+(S.open!=null?' ('+S.open+')':''):f==='resolved'?'Resolved':'All'}</button>`).join('')}</div>`:'';
+      ${staff()?`<input type="text" data-v13-reply="${r.id}" placeholder="Reply to the student (optional)" value="${esc(r.reply)}"><select data-v13-status="${r.id}" aria-label="Status of issue ${r.id}">${Object.keys(LABEL).map(k=>`<option value="${k}" ${k===r.status?'selected':''}>${LABEL[k]}</option>`).join('')}</select><button type="button" class="primary" data-v13-set="${r.id}">Save</button>`:''}</div></article>`).join('');
+    const head=staff()?`<div class="v13-filter">${['open','in_progress','resolved','all'].map(f=>`<button type="button" class="${S.filter===f?'active':''}" data-v13-f="${f}">${f==='all'?'All':LABEL[f]+(S.counts&&S.counts[f]!=null?' ('+S.counts[f]+')':'')}</button>`).join('')}</div>`:'';
     const pager=pages>1?`<div class="v13-pager"><button type="button" data-v13-p="-1" ${S.page?'':'disabled'}>← Prev</button><span>${S.page+1} of ${pages}</span><button type="button" data-v13-p="1" ${S.page<pages-1?'':'disabled'}>Next →</button></div>`:'';
-    return `<div class="v13-col"><h3>${staff()?'Reports from students':'Your reports'}</h3>${head}${rows||`<p class="v13-empty">${staff()?'No reports here.':'You have not reported anything yet.'}</p>`}${pager}</div>`;
+    return `<div class="v13-col"><h3>${staff()?'Reported issues':'Your reports'}</h3>${head}${rows||`<p class="v13-empty">${staff()?'No reports here.':'You have not reported anything yet.'}</p>`}${pager}</div>`;
   }
   function form(){
     const area=VIEW_AREA[S.last]||'Other';
     return `<form class="v13-col v13-form" id="v13Form" novalidate>
       <h3>Tell us what went wrong</h3>
-      ${S.sent?`<p class="v13-ok"><b>Thank you. Report #${S.sent} is logged.</b> It will be resolved immediately. You can follow its status on this page.</p>`:''}
+      ${S.sent?`<p class="v13-ok"><b>Thank you. Issue #${S.sent} is logged.</b> It will be resolved immediately. You can follow its status on this page.</p>`:''}
       <div class="v13-two"><label>Where did it happen?<select id="v13Area">${AREAS.map(a=>`<option ${a===area?'selected':''}>${esc(a)}</option>`).join('')}</select></label>
       <label>What kind of issue?<select id="v13Kind">${KINDS.map(a=>`<option>${esc(a)}</option>`).join('')}</select></label></div>
       <label>Short title<input id="v13Sum" maxlength="200" placeholder="Example: Match set 12 will not let me submit"></label>
@@ -1642,7 +1642,8 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
   function put(v){if(!v)return;[['v13Area',v.a],['v13Kind',v.k],['v13Sum',v.s],['v13Det',v.d]].forEach(([id,x])=>{const e=document.getElementById(id);if(e&&x!=null)e.value=x})}
   function render(saved){
     const host=document.getElementById('issueHost');if(!host)return;
-    host.innerHTML=`<div class="v13-wrap">${form()}${list()}</div>`;put(saved);
+    host.innerHTML=staff()?`<div class="v13-wrap staff">${list()}<details class="v13-own" ${S.ownOpen?'open':''}><summary>Report an issue yourself</summary>${form()}</details></div>`:`<div class="v13-wrap">${form()}${list()}</div>`;put(saved);
+    const own=host.querySelector('.v13-own');if(own)own.ontoggle=()=>{S.ownOpen=own.open};
     const err=m=>{const e=document.getElementById('v13Err');if(e)e.textContent=m||''};
     const take=async f=>{try{const v=keep();S.shot=await readShot(f);S.shotName=f.name||'Pasted image';render(v)}catch(e){err(e.message)}};
     const fi=document.getElementById('v13File');if(fi)fi.onchange=()=>{if(fi.files[0])take(fi.files[0])};
@@ -1661,16 +1662,18 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
     host.querySelectorAll('[data-v13-f]').forEach(b=>b.onclick=async()=>{S.filter=b.dataset.v13F;S.page=0;const v=keep();await load();render(v)});
     host.querySelectorAll('[data-v13-shot]').forEach(b=>b.onclick=async()=>{try{const r=await api('/api/issues/'+b.dataset.v13Shot+'/screenshot');
       const o=document.createElement('div');o.className='v13-over';o.innerHTML=`<img alt="Screenshot" src="${r.screenshot}"><button type="button">Close</button>`;o.onclick=()=>o.remove();document.body.appendChild(o)}catch(e){}});
-    host.querySelectorAll('[data-v13-set]').forEach(b=>b.onclick=async()=>{const id=b.dataset.v13Set,rp=host.querySelector(`[data-v13-reply="${id}"]`);b.disabled=true;
-      try{await api('/api/admin/issues/'+id,{method:'PATCH',body:JSON.stringify({status:b.dataset.to,reply:rp?rp.value:''})});const v=keep();await load();render(v)}catch(e){b.disabled=false}});
+    host.querySelectorAll('[data-v13-set]').forEach(b=>b.onclick=async()=>{const id=b.dataset.v13Set,rp=host.querySelector(`[data-v13-reply="${id}"]`),st=host.querySelector(`[data-v13-status="${id}"]`);b.disabled=true;
+      try{await api('/api/admin/issues/'+id,{method:'PATCH',body:JSON.stringify({status:st?st.value:'open',reply:rp?rp.value:''})});const v=keep();await load();render(v)}catch(e){b.disabled=false}});
   }
   window.v13RenderIssues=async function(){S.sent=null;await load();render()};
+  const relabel=()=>{if(!staff())return;const nb=document.querySelector('#nav button[data-view="issues"] span:last-child');if(nb)nb.textContent='Reported Issues'};
   if(typeof showView==='function'){const sv=window.showView;window.showView=function(id){
+    relabel();
     if(id==='issues'){if(state.examLock)return sv.apply(this,arguments);
       if(state.currentView&&state.currentView!=='issues')S.last=state.currentView;
       state.currentView='issues';document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='issues'));
       document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view==='issues'));
-      const t=document.getElementById('pageTitle');if(t)t.textContent='Report an Issue';
+      const t=document.getElementById('pageTitle');if(t)t.textContent=staff()?'Reported Issues':'Report an Issue';
       try{if(typeof updateContentProtection==='function')updateContentProtection('issues')}catch(e){}
       window.scrollTo({top:0});window.v13RenderIssues();return}
     return sv.apply(this,arguments)}}

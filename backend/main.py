@@ -38,7 +38,7 @@ def _email_status():
     }
 
 
-def _send_email_via_apps_script(to_email: str, subject: str, body: str):
+def _send_email_via_apps_script(to_email: str, subject: str, body: str, attachments=None):
     url = os.getenv('GOOGLE_APPS_SCRIPT_MAIL_URL', '').strip()
     secret = os.getenv('GOOGLE_APPS_SCRIPT_MAIL_SECRET', '').strip()
     if not url:
@@ -52,7 +52,9 @@ def _send_email_via_apps_script(to_email: str, subject: str, body: str):
         'subject': subject,
         'body': body,
     }
-    with httpx.Client(timeout=20.0, follow_redirects=True) as client:
+    if attachments:
+        payload['attachments'] = attachments
+    with httpx.Client(timeout=30.0, follow_redirects=True) as client:
         response = client.post(url, json=payload)
     response.raise_for_status()
     try:
@@ -2740,10 +2742,22 @@ def _issue_out(r, staff=False):
 def _issue_notify_email():
     return (os.getenv('ISSUE_NOTIFY_EMAIL','').strip() or os.getenv('PROGRAM_REGISTRATION_NOTIFY_EMAIL','azi@azielon.com').strip())
 
-def _issue_mail(to_email, subject, body):
+import hmac as _hmac, hashlib as _hashlib, base64 as _b64
+from fastapi.responses import Response as _Resp
+_ISSUE_STATUSES=('open','in_progress','resolved')
+_ISSUE_LABEL={'open':'Open','in_progress':'In progress','resolved':'Resolved'}
+def _issue_key(issue_id: int) -> str:
+    from .security import APP_SECRET
+    return _hmac.new(APP_SECRET.encode(), f'issue-shot:{issue_id}'.encode(), _hashlib.sha256).hexdigest()[:32]
+def _issue_shot_parts(data_url: str):
+    head,b64=data_url.split(',',1)
+    mime=head[5:].split(';')[0] or 'image/jpeg'
+    return mime,b64
+
+def _issue_mail(to_email, subject, body, attachments=None):
     # Runs after the response is sent, so a mail problem never blocks the student.
     try:
-        _send_email_via_apps_script(to_email, subject, body)
+        _send_email_via_apps_script(to_email, subject, body, attachments)
     except Exception as exc:
         print(f'[issues] email to {to_email} failed: {str(exc)[:200]}', flush=True)
 
@@ -2766,12 +2780,13 @@ async def issue_create(request: Request, background: BackgroundTasks, user: User
              summary=summary,details=details,context=str(b.get('context') or '')[:1000],screenshot=shot,status='open')
     db.add(r); db.commit(); db.refresh(r)
     base=os.getenv('APP_BASE_URL','').strip().rstrip('/') or str(request.base_url).rstrip('/')
-    background.add_task(_issue_mail,_issue_notify_email(),f'PMP Coach issue #{r.id}: {r.summary}'[:150],'\n'.join([
+    background.add_task(_issue_mail,_issue_notify_email(),f'PMP Coach Issue #{r.id}: {r.summary}'[:150],'\n'.join([
         f'A student reported an issue in Azielon PMP Coach.','',
         f'Report: #{r.id}',f'Student: {user.name} <{user.email}>',f'Where: {r.area}',f'Kind: {r.kind}',f'Title: {r.summary}','',
         'What happened:',r.details,'',
-        f"Screenshot: {'yes, open the report in the app to view it' if r.screenshot else 'none'}",f'Device: {r.context}','',
-        f'Reply and mark it resolved here: {base}/ (sign in, then Report an Issue)']))
+        (f'Screenshot: {base}/api/issues/{r.id}/screenshot-file?k={_issue_key(r.id)}' if r.screenshot else 'Screenshot: none'),f'Device: {r.context}','',
+        f'To reply or change the status: sign in at {base}/ with the admin account, then open Report an Issue.']),
+        ([{'name':f'issue-{r.id}-screenshot.jpg','mimeType':_issue_shot_parts(r.screenshot)[0],'base64':_issue_shot_parts(r.screenshot)[1]}] if r.screenshot else None))
     return _issue_out(r)
 
 @app.get('/api/issues/mine')
@@ -2781,9 +2796,18 @@ def issue_mine(user: User = Depends(current_user), db: Session = Depends(get_db)
 @app.get('/api/admin/issues')
 def issue_admin_list(status: str = '', user: User = Depends(require_roles('admin','instructor')), db: Session = Depends(get_db)):
     q=db.query(_Issue)
-    if status in ('open','resolved'): q=q.filter(_Issue.status==status)
+    if status in _ISSUE_STATUSES: q=q.filter(_Issue.status==status)
     return {'items':[_issue_out(r,True) for r in q.order_by(_Issue.id.desc()).limit(300).all()],
-            'open':db.query(_Issue).filter(_Issue.status=='open').count()}
+            'open':db.query(_Issue).filter(_Issue.status=='open').count(),
+            'counts':{k:db.query(_Issue).filter(_Issue.status==k).count() for k in _ISSUE_STATUSES}}
+
+@app.get('/api/issues/{issue_id}/screenshot-file')
+def issue_screenshot_file(issue_id: int, k: str = '', db: Session = Depends(get_db)):
+    # Opened from the notification email: the link carries a private key, so no sign-in is needed.
+    r=db.get(_Issue,issue_id)
+    if not r or not r.screenshot or not _hmac.compare_digest(k,_issue_key(issue_id)): raise HTTPException(404,'Not found')
+    mime,b64=_issue_shot_parts(r.screenshot)
+    return _Resp(content=_b64.b64decode(b64),media_type=mime,headers={'Cache-Control':'private, no-store'})
 
 @app.get('/api/issues/{issue_id}/screenshot')
 def issue_screenshot(issue_id: int, user: User = Depends(current_user), db: Session = Depends(get_db)):
@@ -2797,12 +2821,16 @@ async def issue_admin_update(issue_id: int, request: Request, background: Backgr
     if not r: raise HTTPException(404,'Not found')
     b=await request.json()
     was=r.status
-    if b.get('status') in ('open','resolved'):
+    if b.get('status') in _ISSUE_STATUSES:
         r.status=b['status']; r.resolved_at=datetime.utcnow() if r.status=='resolved' else None
     if 'reply' in b: r.reply=str(b.get('reply') or '')[:2000]
     db.commit(); db.refresh(r)
+    if r.status=='in_progress' and was!='in_progress' and r.user and r.user.email:
+        background.add_task(_issue_mail,r.user.email,f'Your Azielon PMP Coach Issue #{r.id} is in progress','\n'.join([
+            f'Hello {r.user.name},','',f'We are working on the issue you reported, "{r.summary}".']+(['',f'Note from Azielon: {r.reply}'] if r.reply else [])+
+            ['','We will email you again when it is resolved.','','Thank you,','Azielon PMP Coach']))
     if r.status=='resolved' and was!='resolved' and r.user and r.user.email:
-        background.add_task(_issue_mail,r.user.email,f'Your Azielon PMP Coach report #{r.id} is resolved','\n'.join([
+        background.add_task(_issue_mail,r.user.email,f'Your Azielon PMP Coach Issue #{r.id} is resolved','\n'.join([
             f'Hello {r.user.name},','',f'The issue you reported, "{r.summary}", has been resolved.']+(['',f'Note from Azielon: {r.reply}'] if r.reply else [])+
             ['','If you still see the problem, please send a new report from the Report an Issue page.','','Thank you,','Azielon PMP Coach']))
     return _issue_out(r,True)
