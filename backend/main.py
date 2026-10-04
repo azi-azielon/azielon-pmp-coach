@@ -264,22 +264,22 @@ def _ensure_qa_accounts_from_env(db: Session):
         {
             'email': os.getenv('QA_STARTER_EMAIL', 'qa-starter@azielon.com').strip().lower(),
             'name': 'Azielon QA Starter',
-            'tier_code': 'drills',
-            'plan_code': 'drills_monthly',
+            'tier_code': 'full',
+            'plan_code': 'full_60',
             'order_id': 'qa-starter-access',
         },
         {
             'email': os.getenv('QA_STANDARD_EMAIL', 'qa-standard@azielon.com').strip().lower(),
             'name': 'Azielon QA Standard',
-            'tier_code': 'concept',
-            'plan_code': 'concept_monthly',
+            'tier_code': 'full',
+            'plan_code': 'full_60',
             'order_id': 'qa-standard-access',
         },
         {
             'email': os.getenv('QA_PREMIUM_EMAIL', 'qa-premium@azielon.com').strip().lower(),
             'name': 'Azielon QA Premium',
             'tier_code': 'full',
-            'plan_code': 'full_3month',
+            'plan_code': 'full_60',
             'order_id': 'qa-premium-access',
         },
     ]
@@ -291,10 +291,13 @@ def _ensure_qa_accounts_from_env(db: Session):
         if not spec['email']:
             continue
 
-        plan = db.get(BillingPlan, spec['plan_code'])
+        # v7.22: QA accounts use the current 60-day plan. If that row is missing,
+        # fall back to any active plan so the accounts are still created.
+        plan = db.get(BillingPlan, spec['plan_code']) or db.query(BillingPlan).filter(BillingPlan.active == True).first()
         if not plan:
             print(f"[startup] QA plan missing: {spec['plan_code']}", flush=True)
             continue
+        spec['plan_code'] = plan.code
 
         user = db.query(User).filter(User.email == spec['email']).first()
         if user:
