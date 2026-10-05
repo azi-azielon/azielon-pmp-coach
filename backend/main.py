@@ -2851,7 +2851,7 @@ from sqlalchemy import or_ as _or
 def _access_row(db, u):
     e=current_entitlement(db,u.id)
     return {'id':u.id,'name':u.name,'email':u.email,'role':u.role,'created_at':u.created_at.isoformat() if u.created_at else None,
-            'access':({'plan_code':e.plan_code,'provider':e.provider,'ends_at':e.ends_at.isoformat()} if e else None)}
+            'access':({'tier_code':e.tier_code,'plan_code':e.plan_code,'provider':e.provider,'ends_at':e.ends_at.isoformat()} if e else None)}
 
 @app.get('/api/admin/users')
 def admin_users(q: str = '', user: User = Depends(require_roles('admin')), db: Session = Depends(get_db)):
@@ -2876,14 +2876,19 @@ async def admin_grant_access(user_id: int, request: Request, user: User = Depend
     now=datetime.utcnow()
     cur=current_entitlement(db,target.id)
     before=_access_row(db,target)['access']
-    start=cur.ends_at if (cur and cur.ends_at and cur.ends_at>now) else now
+    # Days are added after current Premium access. An older limited plan is upgraded from today instead,
+    # and the learner never ends up with less time than they already had.
+    has_full=bool(cur and cur.tier_code==plan.tier_code and cur.ends_at and cur.ends_at>now)
+    start=cur.ends_at if has_full else now
+    ends=start+timedelta(days=days)
+    if cur and not has_full and cur.ends_at and cur.ends_at>ends: ends=cur.ends_at
     # A $0 order keeps the record of who gave the access, without counting as a sale.
     order=CheckoutOrder(id=str(_uuid.uuid4()),user_id=target.id,plan_code=plan.code,provider='admin',amount_cents=0,currency=plan.currency,
                         status='paid',entitlement_granted=True,paid_at=now,raw_json=json.dumps({'granted_by':user.email,'days':days,'note':str(b.get('note') or '')[:300]}))
     db.add(order); db.flush()
     for e in db.query(Entitlement).filter(Entitlement.user_id==target.id,Entitlement.status=='active').all(): e.status='superseded'
     db.add(Entitlement(user_id=target.id,tier_code=plan.tier_code,plan_code=plan.code,source_order_id=order.id,provider='admin',status='active',
-                       starts_at=(cur.starts_at if cur and start!=now else now),ends_at=start+timedelta(days=days)))
+                       starts_at=(cur.starts_at if has_full else now),ends_at=ends))
     db.commit()
     out=_access_row(db,target)
     db.add(AuditLog(actor_user_id=user.id,action='access.grant',entity_type='user',entity_id=str(target.id),before_json=json.dumps(before),after_json=json.dumps(out['access']))); db.commit()
