@@ -1681,3 +1681,46 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
       window.scrollTo({top:0});window.v13RenderIssues();return}
     return sv.apply(this,arguments)}}
 })();
+
+/* ---------- v7.25: admin gives or removes full access for a learner ---------- */
+(function(){
+  const esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const admin=()=>!!(state.user&&state.user.role==='admin');
+  const S={q:'',items:[],total:0,page:0,msg:'',err:''};const PER=7;
+  const day=v=>v?new Date(v+'Z').toLocaleDateString([], {year:'numeric',month:'short',day:'numeric'}):'';
+  async function load(){try{const r=await api('/api/admin/users?q='+encodeURIComponent(S.q));S.items=r.items||[];S.total=r.total||0;S.err=''}catch(e){S.items=[];S.err=e.message||'Could not load users'}}
+  function render(){
+    const host=document.getElementById('accessHost');if(!host)return;
+    const pages=Math.max(1,Math.ceil(S.items.length/PER));if(S.page>=pages)S.page=pages-1;
+    const rows=S.items.slice(S.page*PER,S.page*PER+PER).map(u=>{const a=u.access;
+      return `<tr><td><b>${esc(u.name)}</b><span>${esc(u.email)}${u.role!=='learner'?' · '+esc(u.role):''}</span></td>
+        <td>${a?`<span class="v14-on">Premium</span><span>until ${esc(day(a.ends_at))}${a.provider==='admin'?' · given by admin':''}</span>`:'<span class="v14-off">No access</span>'}</td>
+        <td class="v14-act"><select data-v14-days="${u.id}" aria-label="Days of access for ${esc(u.name)}"><option value="30">30 days</option><option value="60">60 days</option><option value="90">90 days</option><option value="365">1 year</option></select>
+          <button type="button" class="primary" data-v14-give="${u.id}">${a?'Add days':'Upgrade to Premium'}</button>${a?`<button type="button" class="ghost" data-v14-off="${u.id}">Remove</button>`:''}</td></tr>`}).join('');
+    const pager=pages>1?`<div class="v14-pager"><button type="button" data-v14-p="-1" ${S.page?'':'disabled'}>← Prev</button><span>${S.page+1} of ${pages}</span><button type="button" data-v14-p="1" ${S.page<pages-1?'':'disabled'}>Next →</button></div>`:'';
+    host.innerHTML=`<div class="v14-card"><form class="v14-search" id="v14Form"><input id="v14Q" type="search" placeholder="Search by name or email" value="${esc(S.q)}" autocomplete="off"><button class="primary">Search</button>
+      <span class="v14-note">${S.msg?esc(S.msg):`${S.total} registered user${S.total===1?'':'s'}. Showing the newest ${Math.min(50,S.items.length)}${S.q?' that match':''}.`}</span></form>
+      ${S.err?`<p class="v14-err">${esc(S.err)}</p>`:''}
+      <table class="v14-table"><thead><tr><th>User</th><th>Access</th><th>Change</th></tr></thead><tbody>${rows||'<tr><td colspan="3" class="v14-empty">No users match.</td></tr>'}</tbody></table>${pager}
+      <p class="v14-foot">Premium gives full access to everything. Giving days to someone who already has access adds them after the current end date. No payment is recorded.</p></div>`;
+    document.getElementById('v14Form').onsubmit=async e=>{e.preventDefault();S.q=document.getElementById('v14Q').value.trim();S.page=0;S.msg='';await load();render()};
+    host.querySelectorAll('[data-v14-p]').forEach(b=>b.onclick=()=>{S.page+=+b.dataset.v14P;render()});
+    const who=id=>S.items.find(u=>String(u.id)===String(id));
+    host.querySelectorAll('[data-v14-give]').forEach(b=>b.onclick=async()=>{const u=who(b.dataset.v14Give),d=+host.querySelector(`[data-v14-days="${u.id}"]`).value;
+      if(!confirm(`Give ${u.name} (${u.email}) ${d} days of Premium access?`))return;b.disabled=true;
+      try{const r=await api('/api/admin/users/'+u.id+'/grant',{method:'POST',body:JSON.stringify({days:d})});S.msg=`${u.name} has Premium until ${day(r.access.ends_at)}.`;await load();render()}catch(e){b.disabled=false;alert(e.message||'Could not give access')}});
+    host.querySelectorAll('[data-v14-off]').forEach(b=>b.onclick=async()=>{const u=who(b.dataset.v14Off);
+      if(!confirm(`Remove Premium access from ${u.name} (${u.email})? They lose access immediately.`))return;b.disabled=true;
+      try{await api('/api/admin/users/'+u.id+'/revoke',{method:'POST'});S.msg=`Access removed from ${u.name}.`;await load();render()}catch(e){b.disabled=false;alert(e.message||'Could not remove access')}});
+  }
+  const showNav=()=>{const nb=document.getElementById('navAccess');if(nb)nb.hidden=!admin()};
+  if(typeof showView==='function'){const sv=window.showView;window.showView=function(id){
+    showNav();
+    if(id==='access'){if(!admin()||state.examLock)return sv.call(this,'dashboard');
+      state.currentView='access';document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='access'));
+      document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view==='access'));
+      const t=document.getElementById('pageTitle');if(t)t.textContent='Users & Access';
+      try{if(typeof updateContentProtection==='function')updateContentProtection('access')}catch(e){}
+      window.scrollTo({top:0});S.msg='';load().then(render);return}
+    return sv.apply(this,arguments)}}
+})();

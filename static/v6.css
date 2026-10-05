@@ -1158,3 +1158,25 @@ body.v6 #issues .v13-own .v13-col{border:0;padding:10px 0 0}
 body.v6 #issues .v13-wrap.staff .v13-det{-webkit-line-clamp:4}
 
 body.v6 #issues .v13-act .v13-del{color:#A23B2A;border-color:#E3C5BF}
+
+/* v7.25 Users & Access (admin) */
+body.v6 #navAccess[hidden]{display:none}
+body.v6 #access .v14-card{background:#fff;border:1px solid #E6DFCF;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+body.v6 #access .v14-search{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+body.v6 #access .v14-search input{flex:0 1 320px;padding:8px 11px;border:1px solid #D9D2C0;border-radius:9px;font-size:14px}
+body.v6 #access .v14-note{font-size:13px;color:#5B6478}
+body.v6 #access .v14-table{width:100%;border-collapse:collapse;font-size:13.5px}
+body.v6 #access .v14-table th{text-align:left;font-size:12px;color:#5B6478;padding:0 10px 5px 0;border-bottom:1.5px solid #14213D}
+body.v6 #access .v14-table td{padding:7px 10px 7px 0;border-bottom:1px solid #EBE5D6;vertical-align:middle}
+body.v6 #access .v14-table td span{display:block;font-size:12.5px;color:#5B6478}
+body.v6 #access .v14-on{color:#1F7A4D!important;font-weight:700;font-size:13.5px!important}
+body.v6 #access .v14-off{color:#8A8F9C!important;font-size:13.5px!important}
+body.v6 #access .v14-act{white-space:nowrap}
+body.v6 #access .v14-act select{padding:6px 8px;border:1px solid #D9D2C0;border-radius:8px;font-size:13px;margin-right:6px}
+body.v6 #access .v14-act button{padding:6px 12px;font-size:13px;margin-right:4px}
+body.v6 #access .v14-pager{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#5B6478}
+body.v6 #access .v14-pager button{padding:5px 11px;font-size:12.5px;border:1px solid #D9D2C0;border-radius:99px;background:#fff;color:#14213D;cursor:pointer}
+body.v6 #access .v14-pager button[disabled]{opacity:.4;cursor:default}
+body.v6 #access .v14-foot,body.v6 #access .v14-empty{font-size:12.5px;color:#5B6478;margin:0}
+body.v6 #access .v14-err{color:#B3261E;font-size:13px;margin:0}
+@media (max-width:760px){body.v6 #access .v14-table td{display:block;border:0;padding:3px 0}body.v6 #access .v14-table tr{display:block;border-bottom:1px solid #EBE5D6;padding:8px 0}body.v6 #access .v14-table thead{display:none}body.v6 #access .v14-act{white-space:normal}}

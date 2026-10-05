@@ -2844,6 +2844,62 @@ async def issue_admin_update(issue_id: int, request: Request, background: Backgr
     return _issue_out(r,True)
 
 
+# ---------- v7.25: admin can find a learner and give or remove full access ----------
+import uuid as _uuid
+from sqlalchemy import or_ as _or
+
+def _access_row(db, u):
+    e=current_entitlement(db,u.id)
+    return {'id':u.id,'name':u.name,'email':u.email,'role':u.role,'created_at':u.created_at.isoformat() if u.created_at else None,
+            'access':({'plan_code':e.plan_code,'provider':e.provider,'ends_at':e.ends_at.isoformat()} if e else None)}
+
+@app.get('/api/admin/users')
+def admin_users(q: str = '', user: User = Depends(require_roles('admin')), db: Session = Depends(get_db)):
+    query=db.query(User)
+    t=q.strip().lower()
+    if t:
+        like=f'%{t}%'
+        query=query.filter(_or(func.lower(User.email).like(like),func.lower(User.name).like(like)))
+    rows=query.order_by(User.id.desc()).limit(50).all()
+    return {'items':[_access_row(db,u) for u in rows],'total':db.query(User).count()}
+
+@app.post('/api/admin/users/{user_id}/grant')
+async def admin_grant_access(user_id: int, request: Request, user: User = Depends(require_roles('admin')), db: Session = Depends(get_db)):
+    target=db.get(User,user_id)
+    if not target: raise HTTPException(404,'User not found')
+    b=await request.json()
+    try: days=int(b.get('days'))
+    except Exception: raise HTTPException(400,'Enter the number of days')
+    if days<1 or days>730: raise HTTPException(400,'Days must be between 1 and 730')
+    plan=db.get(BillingPlan,'full_60') or db.query(BillingPlan).filter(BillingPlan.tier_code=='full',BillingPlan.active==True).first()
+    if not plan: raise HTTPException(500,'No full-access plan is set up')
+    now=datetime.utcnow()
+    cur=current_entitlement(db,target.id)
+    before=_access_row(db,target)['access']
+    start=cur.ends_at if (cur and cur.ends_at and cur.ends_at>now) else now
+    # A $0 order keeps the record of who gave the access, without counting as a sale.
+    order=CheckoutOrder(id=str(_uuid.uuid4()),user_id=target.id,plan_code=plan.code,provider='admin',amount_cents=0,currency=plan.currency,
+                        status='paid',entitlement_granted=True,paid_at=now,raw_json=json.dumps({'granted_by':user.email,'days':days,'note':str(b.get('note') or '')[:300]}))
+    db.add(order); db.flush()
+    for e in db.query(Entitlement).filter(Entitlement.user_id==target.id,Entitlement.status=='active').all(): e.status='superseded'
+    db.add(Entitlement(user_id=target.id,tier_code=plan.tier_code,plan_code=plan.code,source_order_id=order.id,provider='admin',status='active',
+                       starts_at=(cur.starts_at if cur and start!=now else now),ends_at=start+timedelta(days=days)))
+    db.commit()
+    out=_access_row(db,target)
+    db.add(AuditLog(actor_user_id=user.id,action='access.grant',entity_type='user',entity_id=str(target.id),before_json=json.dumps(before),after_json=json.dumps(out['access']))); db.commit()
+    return out
+
+@app.post('/api/admin/users/{user_id}/revoke')
+def admin_revoke_access(user_id: int, user: User = Depends(require_roles('admin')), db: Session = Depends(get_db)):
+    target=db.get(User,user_id)
+    if not target: raise HTTPException(404,'User not found')
+    before=_access_row(db,target)['access']
+    n=0
+    for e in db.query(Entitlement).filter(Entitlement.user_id==target.id,Entitlement.status=='active').all(): e.status='revoked'; n+=1
+    db.add(AuditLog(actor_user_id=user.id,action='access.revoke',entity_type='user',entity_id=str(target.id),before_json=json.dumps(before),after_json=json.dumps(None)))
+    db.commit()
+    return {**_access_row(db,target),'revoked':n}
+
 @app.get('/{path:path}')
 def spa(path: str):
     candidate=STATIC/path
