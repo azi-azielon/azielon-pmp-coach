@@ -1160,7 +1160,7 @@ body.v6 #issues .v13-wrap.staff .v13-det{-webkit-line-clamp:4}
 body.v6 #issues .v13-act .v13-del{color:#A23B2A;border-color:#E3C5BF}
 
 /* v7.25 Users & Access (admin) */
-body.v6 #navAccess[hidden]{display:none}
+body.v6 #nav #navAccess[hidden],#navAccess[hidden]{display:none!important}
 body.v6 #access .v14-card{background:#fff;border:1px solid #E6DFCF;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:10px}
 body.v6 #access .v14-search{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 body.v6 #access .v14-search input{flex:0 1 320px;padding:8px 11px;border:1px solid #D9D2C0;border-radius:9px;font-size:14px}
@@ -1180,3 +1180,4 @@ body.v6 #access .v14-pager button[disabled]{opacity:.4;cursor:default}
 body.v6 #access .v14-foot,body.v6 #access .v14-empty{font-size:12.5px;color:#5B6478;margin:0}
 body.v6 #access .v14-err{color:#B3261E;font-size:13px;margin:0}
 @media (max-width:760px){body.v6 #access .v14-table td{display:block;border:0;padding:3px 0}body.v6 #access .v14-table tr{display:block;border-bottom:1px solid #EBE5D6;padding:8px 0}body.v6 #access .v14-table thead{display:none}body.v6 #access .v14-act{white-space:normal}}
+body.v6 #access .v14-lim{color:#B26A00!important;font-weight:700;font-size:13.5px!important}

@@ -679,7 +679,14 @@ def free_day_enabled():
     # v7.18: the free day is off unless FREE_DAY_ENABLED=true. Two paid plans only.
     return os.getenv('FREE_DAY_ENABLED','false').lower() in ('1','true','yes','on')
 
+def free_sample_enabled():
+    # v7.26: a permanent free sample (one of each kind, one 10-question practice set, the 20-question mini mock).
+    # It has no clock, so a new account gains nothing by re-registering. Turn off with FREE_SAMPLE_ENABLED=false.
+    return os.getenv('FREE_SAMPLE_ENABLED','true').lower() in ('1','true','yes','on')
+
 def trial_status(db: Session, user: User):
+    if free_sample_enabled():
+        return {'used':True,'active':True,'ends_at':None,'enabled':True,'sample':True}
     if not free_day_enabled():
         return {'used':True,'active':False,'ends_at':None,'enabled':False}
     row=_trial_row(db,user.id)

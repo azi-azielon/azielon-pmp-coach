@@ -778,7 +778,7 @@ def create_practice(data: PracticeCreateIn, user: User = Depends(current_user), 
     if _user_tier(user,db)=='trial':
         # Free Day 1 includes one practice set of 10 questions.
         if db.query(PracticeSession).filter(PracticeSession.user_id==user.id).count()>=1:
-            raise HTTPException(403,'Your free day includes one practice set of 10 questions. Choose a plan to keep practising.')
+            raise HTTPException(403,'The free sample includes one practice set of 10 questions. Choose a plan to keep practising.')
         data.count=min(int(data.count or TRIAL_PRACTICE_QUESTIONS),TRIAL_PRACTICE_QUESTIONS)
     query = db.query(Question).filter(Question.lifecycle_state.in_(['Published','published','Instructor-Approved','Instructor Approved','instructor_approved']), Question.instructor_approved == True)
     if not has_feature(user, db, 'visual_questions'):

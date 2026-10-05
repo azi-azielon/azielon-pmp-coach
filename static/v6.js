@@ -1428,7 +1428,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
   const SHEET=[['Earned value',['EV = % complete × BAC','CV = EV − AC','SV = EV − PV','CPI = EV ÷ AC','SPI = EV ÷ PV','Below 1 or negative = bad']],['Forecasts',['EAC = BAC ÷ CPI (trend continues)','EAC = AC + (BAC − EV) (one-time)','ETC = EAC − AC','VAC = BAC − EAC','TCPI = (BAC − EV) ÷ (BAC − AC)']],['Schedule and estimating',['PERT = (O + 4M + P) ÷ 6','Triangular = (O + M + P) ÷ 3','Std deviation = (P − O) ÷ 6','Float = LS − ES','Critical path = longest path']],['Risk, money, team',['EMV = Probability × Impact','Payback = Cost ÷ Yearly return','BCR = Benefits ÷ Costs','Higher NPV wins','Channels = n(n − 1) ÷ 2']]];
   const S={topic:'all',n:0,right:0,cur:null,done:false,sheet:false,last:-1};
   const host=()=>document.getElementById('formulaHost');
-  function next(){const pool=G.map((g,i)=>i).filter(i=>{if(S.topic==='all')return true;try{return G[i]().t===S.topic}catch(e){return false}});let i;do{i=pick(pool)}while(pool.length>1&&i===S.last);S.last=i;S.cur=G[i]();S.done=false;S.ok=null;S.given=''}
+  function next(){let pool=G.map((g,i)=>i).filter(i=>{if(S.topic==='all')return true;try{return G[i]().t===S.topic}catch(e){return false}});if(state.tierCode==='trial'){pool=[0];S.topic='all';S.sheet=false}let i;do{i=pick(pool)}while(pool.length>1&&i===S.last);S.last=i;S.cur=G[i]();S.done=false;S.ok=null;S.given=''}
   function parse(v){const s=String(v).replace(/[,$%\s]/g,'').replace('−','-');if(s===''||isNaN(Number(s)))return null;return Number(s)}
   function best(){try{return JSON.parse(localStorage.getItem('v7formula')||'{}')}catch(e){return {}}}
   function saveBest(){try{const b=best();if(S.n>=10&&(!b.n||S.right/S.n>=b.right/b.n))localStorage.setItem('v7formula',JSON.stringify({n:S.n,right:S.right}))}catch(e){}}
@@ -1441,7 +1441,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
         ${S.done?`<div class="v7-f-result ${S.ok?'ok':S.ok===false?'bad':''}"><b>${S.ok?'Correct ✓':S.ok===false?'Not quite':'Here is how'}</b><ol>${c.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><p>${esc(c.means)}</p></div>`:''}
       </div>`;
     h.innerHTML=`<div class="v7-f">
-      <div class="v7-f-top"><div class="v7-f-chips">${TOPICS.map(([k,t])=>`<button type="button" data-f-topic="${k}" class="${S.topic===k&&!S.sheet?'active':''}">${esc(t)}</button>`).join('')}<button type="button" data-f-sheet class="${S.sheet?'active':''}">Formula sheet</button></div>
+      <div class="v7-f-top">${state.tierCode==='trial'?'<div class="v7-f-chips"><span class="v7-f-score"><b>Free sample:</b> one formula drill with new numbers each time. A plan unlocks all 25 and the formula sheet.</span></div>':''}<div class="v7-f-chips" ${state.tierCode==='trial'?'hidden':''}>${TOPICS.map(([k,t])=>`<button type="button" data-f-topic="${k}" class="${S.topic===k&&!S.sheet?'active':''}">${esc(t)}</button>`).join('')}<button type="button" data-f-sheet class="${S.sheet?'active':''}">Formula sheet</button></div>
         <span class="v7-f-score">${S.n?`${S.right} of ${S.n} correct`:'Short calculations, one at a time'}${b.n?` · best ${Math.round(b.right/b.n*100)}%`:''}</span>
         ${S.done&&!S.sheet?'<button type="button" class="primary" data-f-next>Next question →</button>':''}</div>${body}</div>`;
     h.querySelectorAll('[data-f-topic]').forEach(x=>x.onclick=()=>{S.topic=x.dataset.fTopic;S.sheet=false;next();render()});
@@ -1580,8 +1580,8 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
     const old=document.getElementById('v11Banner');const t=state.billing&&state.billing.trial;
     if(!(state.tierCode==='trial'&&t&&t.active)){if(old)old.remove();return}
     const main=document.querySelector('#app main');if(!main)return;
-    const ends=new Date(t.ends_at+'Z').toLocaleString([], {weekday:'short',hour:'numeric',minute:'2-digit'});
-    const html=`<span><b>Free Day 1</b> · one of everything · ends ${esc(ends)}</span><button type="button" data-v11-plans>Choose a plan →</button>`;
+    const ends=t.ends_at?new Date(t.ends_at+'Z').toLocaleString([], {weekday:'short',hour:'numeric',minute:'2-digit'}):'';
+    const html=t.sample?`<span><b>Free sample</b> · one note, tricky word, diagram and match set, 10 practice questions and a 20-question mini mock</span><button type="button" data-v11-plans>Unlock everything →</button>`:`<span><b>Free Day 1</b> · one of everything · ends ${esc(ends)}</span><button type="button" data-v11-plans>Choose a plan →</button>`;
     let b=old;if(!b){b=document.createElement('div');b.id='v11Banner';b.className='v11-banner';main.insertBefore(b,main.firstChild)}
     if(b.dataset.h!==html){b.dataset.h=html;b.innerHTML=html;b.querySelector('[data-v11-plans]').onclick=()=>showView('billing')}
   }
@@ -1687,6 +1687,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
   const esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const admin=()=>!!(state.user&&state.user.role==='admin');
   const S={q:'',items:[],total:0,page:0,msg:'',err:''};const PER=7;
+  const TIER={drills:'Starter plan',concept:'Standard plan',trial:'Free day'},full=a=>a&&a.tier_code==='full';
   const day=v=>v?new Date(v+'Z').toLocaleDateString([], {year:'numeric',month:'short',day:'numeric'}):'';
   async function load(){try{const r=await api('/api/admin/users?q='+encodeURIComponent(S.q));S.items=r.items||[];S.total=r.total||0;S.err=''}catch(e){S.items=[];S.err=e.message||'Could not load users'}}
   function render(){
@@ -1694,20 +1695,20 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
     const pages=Math.max(1,Math.ceil(S.items.length/PER));if(S.page>=pages)S.page=pages-1;
     const rows=S.items.slice(S.page*PER,S.page*PER+PER).map(u=>{const a=u.access;
       return `<tr><td><b>${esc(u.name)}</b><span>${esc(u.email)}${u.role!=='learner'?' · '+esc(u.role):''}</span></td>
-        <td>${a?`<span class="v14-on">Premium</span><span>until ${esc(day(a.ends_at))}${a.provider==='admin'?' · given by admin':''}</span>`:'<span class="v14-off">No access</span>'}</td>
+        <td>${a?(full(a)?`<span class="v14-on">Premium</span>`:`<span class="v14-lim">${esc(TIER[a.tier_code]||a.tier_code)} · limited access</span>`)+`<span>until ${esc(day(a.ends_at))}${a.provider==='admin'?' · given by admin':''}</span>`:'<span class="v14-off">No plan</span>'}</td>
         <td class="v14-act"><select data-v14-days="${u.id}" aria-label="Days of access for ${esc(u.name)}"><option value="30">30 days</option><option value="60">60 days</option><option value="90">90 days</option><option value="365">1 year</option></select>
-          <button type="button" class="primary" data-v14-give="${u.id}">${a?'Add days':'Upgrade to Premium'}</button>${a?`<button type="button" class="ghost" data-v14-off="${u.id}">Remove</button>`:''}</td></tr>`}).join('');
+          <button type="button" class="primary" data-v14-give="${u.id}">${a&&full(a)?'Add days':'Upgrade to Premium'}</button>${a?`<button type="button" class="ghost" data-v14-off="${u.id}">Remove</button>`:''}</td></tr>`}).join('');
     const pager=pages>1?`<div class="v14-pager"><button type="button" data-v14-p="-1" ${S.page?'':'disabled'}>← Prev</button><span>${S.page+1} of ${pages}</span><button type="button" data-v14-p="1" ${S.page<pages-1?'':'disabled'}>Next →</button></div>`:'';
     host.innerHTML=`<div class="v14-card"><form class="v14-search" id="v14Form"><input id="v14Q" type="search" placeholder="Search by name or email" value="${esc(S.q)}" autocomplete="off"><button class="primary">Search</button>
       <span class="v14-note">${S.msg?esc(S.msg):`${S.total} registered user${S.total===1?'':'s'}. Showing the newest ${Math.min(50,S.items.length)}${S.q?' that match':''}.`}</span></form>
       ${S.err?`<p class="v14-err">${esc(S.err)}</p>`:''}
       <table class="v14-table"><thead><tr><th>User</th><th>Access</th><th>Change</th></tr></thead><tbody>${rows||'<tr><td colspan="3" class="v14-empty">No users match.</td></tr>'}</tbody></table>${pager}
-      <p class="v14-foot">Premium gives full access to everything. Giving days to someone who already has access adds them after the current end date. No payment is recorded.</p></div>`;
+      <p class="v14-foot">Premium gives full access to everything. Adding days to a Premium user extends their end date. A user on an older limited plan is upgraded from today and keeps any later end date. No payment is recorded.</p></div>`;
     document.getElementById('v14Form').onsubmit=async e=>{e.preventDefault();S.q=document.getElementById('v14Q').value.trim();S.page=0;S.msg='';await load();render()};
     host.querySelectorAll('[data-v14-p]').forEach(b=>b.onclick=()=>{S.page+=+b.dataset.v14P;render()});
     const who=id=>S.items.find(u=>String(u.id)===String(id));
     host.querySelectorAll('[data-v14-give]').forEach(b=>b.onclick=async()=>{const u=who(b.dataset.v14Give),d=+host.querySelector(`[data-v14-days="${u.id}"]`).value;
-      if(!confirm(`Give ${u.name} (${u.email}) ${d} days of Premium access?`))return;b.disabled=true;
+      if(!confirm(full(u.access)?`Add ${d} days of Premium access for ${u.name} (${u.email})?`:`Upgrade ${u.name} (${u.email}) to Premium for ${d} days?`))return;b.disabled=true;
       try{const r=await api('/api/admin/users/'+u.id+'/grant',{method:'POST',body:JSON.stringify({days:d})});S.msg=`${u.name} has Premium until ${day(r.access.ends_at)}.`;await load();render()}catch(e){b.disabled=false;alert(e.message||'Could not give access')}});
     host.querySelectorAll('[data-v14-off]').forEach(b=>b.onclick=async()=>{const u=who(b.dataset.v14Off);
       if(!confirm(`Remove Premium access from ${u.name} (${u.email})? They lose access immediately.`))return;b.disabled=true;
