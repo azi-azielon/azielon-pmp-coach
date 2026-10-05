@@ -1725,3 +1725,79 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
       window.scrollTo({top:0});S.msg='';load().then(render);return}
     return sv.apply(this,arguments)}}
 })();
+
+/* ---------- v7.27: promo code, Rate & Review, and the review ticker on the sign-in page ---------- */
+(function(){
+  const esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const stars=n=>'★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n);
+  /* Sign-in page ticker: learner reviews rotate in the testimonial card, newest first. */
+  (async function ticker(){
+    const fig=document.getElementById('v15Ticker');if(!fig)return;
+    const first={rating:5,comment:fig.querySelector('blockquote').textContent.replace(/[“”]/g,''),who:fig.querySelector('figcaption b').textContent.replace(/^—\s*/,'')};
+    let items=[];try{const r=await fetch('/api/public/feedback');if(r.ok)items=(await r.json()).items||[]}catch(e){}
+    if(!items.length)return;
+    const all=[...items.map(x=>({rating:x.rating,comment:x.comment,who:x.name+(x.organization?', '+x.organization:'')})),first];let i=0;
+    const show=()=>{const x=all[i%all.length];fig.classList.add('v15-out');setTimeout(()=>{
+      fig.querySelector('.testimonial-stars').textContent=stars(x.rating);fig.querySelector('.testimonial-stars').setAttribute('aria-label',x.rating+' of 5 stars');
+      fig.querySelector('blockquote').textContent='“'+x.comment+'”';fig.querySelector('figcaption b').textContent='— '+x.who;fig.classList.remove('v15-out')},250)};
+    show();if(all.length>1)setInterval(()=>{if(document.hidden||!fig.offsetParent)return;i++;show()},5000);
+  })();
+  /* Promo code on Plans & Pricing. */
+  const pf=document.getElementById('v15Promo');
+  if(pf)pf.onsubmit=async e=>{e.preventDefault();const m=document.getElementById('v15PromoMsg'),c=document.getElementById('v15Code'),b=pf.querySelector('button');
+    if(!c.value.trim()){m.className='bad';m.textContent='Enter your code.';return}
+    b.disabled=true;m.className='';m.textContent='Checking…';
+    try{const r=await api('/api/billing/promo',{method:'POST',body:JSON.stringify({code:c.value})});
+      m.className='ok';m.textContent=`Code applied. You have ${r.days} days of full access.`;c.value='';
+      if(typeof bootApp==='function')await bootApp();try{showView('billing')}catch(e){}const m2=document.getElementById('v15PromoMsg');if(m2){m2.className='ok';m2.innerHTML=`Code applied. You have ${r.days} days of full access. <button type="button" class="v15-link" id="v15ToFb">Tell us what you think →</button>`;const t=document.getElementById('v15ToFb');if(t)t.onclick=()=>showView('feedback')}}
+    catch(x){m.className='bad';m.textContent=x.message||'Could not apply that code.'}
+    b.disabled=false};
+  /* Rate & Review screen. */
+  const S={mine:null,rating:0,all:[],stat:null,promo:null,page:0,msg:'',err:''};const PER=6;
+  const staff=()=>typeof isStaff==='function'&&isStaff(),admin=()=>!!(state.user&&state.user.role==='admin');
+  async function load(){
+    try{S.mine=(await api('/api/feedback/mine')).item}catch(e){S.mine=null}
+    if(S.mine&&!S.rating)S.rating=S.mine.rating;
+    if(staff()){try{const r=await api('/api/admin/feedback');S.all=r.items||[];S.stat=r}catch(e){S.all=[]}try{S.promo=await api('/api/admin/promo')}catch(e){S.promo=null}}
+  }
+  function render(keep){
+    const host=document.getElementById('feedbackHost');if(!host)return;const m=S.mine||{};
+    const v=keep||{name:m.name||(state.user&&state.user.name)||'',org:m.organization||'',comment:m.comment||''};
+    const form=`<form class="v15-card" id="v15Form" novalidate><h3>${S.mine?'Update your review':'Rate PMP Coach'}</h3>
+      <div class="v15-stars" role="radiogroup" aria-label="Your rating">${[1,2,3,4,5].map(n=>`<button type="button" role="radio" aria-checked="${S.rating===n}" aria-label="${n} star${n>1?'s':''}" data-v15-star="${n}" class="${n<=S.rating?'on':''}">★</button>`).join('')}<span>${S.rating?S.rating+' of 5':'Choose a rating'}</span></div>
+      <div class="v15-two"><label>Your name<input id="v15Name" maxlength="60" value="${esc(v.name)}" autocomplete="name"></label>
+      <label><span>Organization <em>(optional)</em></span><input id="v15Org" maxlength="60" value="${esc(v.org)}" placeholder="Company or school" autocomplete="organization"></label></div>
+      <label>Comment<textarea id="v15Comment" rows="2" maxlength="100" placeholder="What helped you most, in a sentence">${esc(v.comment)}</textarea><span class="v15-count" id="v15Count"></span></label>
+      <p class="v15-note">Your rating, comment, name and organization are shown publicly on the sign-in page as soon as you submit.</p>
+      <div class="v15-send"><button class="primary" id="v15Send">${S.mine?'Update review':'Submit review'}</button><span class="${S.err?'v15-err':'v15-ok'}" role="status">${esc(S.err||S.msg)}</span></div></form>`;
+    let side='';
+    if(staff()){const pages=Math.max(1,Math.ceil(S.all.length/PER));if(S.page>=pages)S.page=pages-1;const P=S.promo;
+      const pl=P?`<p class="v15-promo-stat"><b>Promo ${esc(P.code)}:</b> ${P.used} of ${P.limit} used · ${({open:'open now',not_started:'not started yet',ended:'ended',full:'all claimed'})[P.status]} · ${new Date(P.starts_at+'Z').toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})} to ${new Date(P.ends_at+'Z').toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</p>`:'';
+      side=`<div class="v15-card"><h3>All reviews${S.stat&&S.stat.count?` · ${S.stat.count}, average ${S.stat.average}`:''}</h3>${pl}
+        ${S.all.slice(S.page*PER,S.page*PER+PER).map(r=>`<div class="v15-row ${r.visible?'':'off'}"><div><b>${stars(r.rating)}</b> ${esc(r.comment)}<span>${esc(r.name)}${r.organization?', '+esc(r.organization):''} · ${esc(r.email)}${r.visible?'':' · hidden'}</span></div>
+          ${admin()?`<div class="v15-act"><button type="button" class="ghost" data-v15-vis="${r.id}" data-v="${r.visible?0:1}">${r.visible?'Hide':'Show'}</button><button type="button" class="ghost" data-v15-del="${r.id}">Delete</button></div>`:''}</div>`).join('')||'<p class="v15-note">No reviews yet.</p>'}
+        ${pages>1?`<div class="v15-pager"><button type="button" data-v15-p="-1" ${S.page?'':'disabled'}>← Prev</button><span>${S.page+1} of ${pages}</span><button type="button" data-v15-p="1" ${S.page<pages-1?'':'disabled'}>Next →</button></div>`:''}</div>`}
+    host.innerHTML=`<div class="v15-wrap ${staff()?'two':''}">${form}${side}</div>`;
+    const g=id=>document.getElementById(id),cur=()=>({name:g('v15Name').value,org:g('v15Org').value,comment:g('v15Comment').value});
+    const cnt=()=>{g('v15Count').textContent=g('v15Comment').value.length+' / 100'};cnt();g('v15Comment').oninput=cnt;
+    host.querySelectorAll('[data-v15-star]').forEach(b=>b.onclick=()=>{S.rating=+b.dataset.v15Star;S.msg='';S.err='';render(cur())});
+    g('v15Form').onsubmit=async e=>{e.preventDefault();const c=cur();S.msg='';
+      if(!S.rating){S.err='Choose a star rating.';return render(c)}
+      if(c.name.trim().length<2){S.err='Enter your name.';return render(c)}
+      if(c.comment.trim().length<3){S.err='Write a short comment.';return render(c)}
+      g('v15Send').disabled=true;
+      try{S.mine=await api('/api/feedback',{method:'POST',body:JSON.stringify({rating:S.rating,name:c.name,organization:c.org,comment:c.comment})});S.err='';S.msg='Thank you. Your review is now showing on the sign-in page.';await load();render()}
+      catch(x){S.err=x.message||'Could not save your review.';render(c)}};
+    host.querySelectorAll('[data-v15-p]').forEach(b=>b.onclick=()=>{S.page+=+b.dataset.v15P;render(cur())});
+    host.querySelectorAll('[data-v15-vis]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{await api('/api/admin/feedback/'+b.dataset.v15Vis,{method:'PATCH',body:JSON.stringify({visible:b.dataset.v==='1'})});const c=cur();await load();render(c)}catch(e){b.disabled=false}});
+    host.querySelectorAll('[data-v15-del]').forEach(b=>b.onclick=async()=>{if(!confirm('Delete this review? This cannot be undone.'))return;b.disabled=true;try{await api('/api/admin/feedback/'+b.dataset.v15Del,{method:'DELETE'});const c=cur();await load();render(c)}catch(e){b.disabled=false}});
+  }
+  if(typeof showView==='function'){const sv=window.showView;window.showView=function(id){
+    if(id==='feedback'){if(state.examLock)return sv.apply(this,arguments);
+      state.currentView='feedback';document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='feedback'));
+      document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view==='feedback'));
+      const t=document.getElementById('pageTitle');if(t)t.textContent='Rate & Review';
+      try{if(typeof updateContentProtection==='function')updateContentProtection('feedback')}catch(e){}
+      window.scrollTo({top:0});S.msg='';S.err='';S.rating=0;load().then(()=>render());return}
+    return sv.apply(this,arguments)}}
+})();

@@ -2905,6 +2905,108 @@ def admin_revoke_access(user_id: int, user: User = Depends(require_roles('admin'
     db.commit()
     return {**_access_row(db,target),'revoked':n}
 
+# ---------- v7.27: launch promo code, and star ratings shown on the sign-in page ----------
+from .models import AppFeedback as _Fb
+
+def _promo_cfg():
+    # Defaults: RPMP100, 48 hours from midnight Eastern on Oct 6 2026 (times below are UTC), first 100 accounts, 30 days.
+    def _dt(name, default):
+        try: return datetime.fromisoformat(os.getenv(name, default).replace('Z',''))
+        except Exception: return datetime.fromisoformat(default)
+    return {'code':os.getenv('PROMO_CODE','RPMP100').strip().upper(),'start':_dt('PROMO_START_UTC','2026-10-06T04:00:00'),'end':_dt('PROMO_END_UTC','2026-10-08T04:00:00'),
+            'limit':int(os.getenv('PROMO_LIMIT','100') or 100),'days':int(os.getenv('PROMO_DAYS','30') or 30)}
+
+def _promo_used(db, code):
+    return db.query(CheckoutOrder).filter(CheckoutOrder.provider=='promo',CheckoutOrder.provider_order_id==code).count()
+
+def _promo_state(db):
+    c=_promo_cfg(); now=datetime.utcnow(); used=_promo_used(db,c['code'])
+    return {'code':c['code'],'starts_at':c['start'].isoformat(),'ends_at':c['end'].isoformat(),'limit':c['limit'],'used':used,'days':c['days'],
+            'status':'not_started' if now<c['start'] else 'ended' if now>=c['end'] else 'full' if used>=c['limit'] else 'open'}
+
+@app.get('/api/admin/promo')
+def admin_promo(user: User = Depends(require_roles('admin','instructor')), db: Session = Depends(get_db)):
+    return _promo_state(db)
+
+@app.post('/api/billing/promo')
+async def billing_promo(request: Request, user: User = Depends(current_user), db: Session = Depends(get_db)):
+    b=await request.json(); code=str(b.get('code') or '').strip().upper()
+    c=_promo_cfg(); st=_promo_state(db)
+    if not code or code!=c['code']: raise HTTPException(400,'That code is not valid.')
+    if st['status']=='not_started': raise HTTPException(400,'This code is not active yet.')
+    if st['status']=='ended': raise HTTPException(400,'This code has expired.')
+    if db.query(CheckoutOrder).filter(CheckoutOrder.provider=='promo',CheckoutOrder.user_id==user.id).first(): raise HTTPException(400,'You have already used a promo code.')
+    if st['status']=='full': raise HTTPException(400,'All passes for this code have been claimed.')
+    plan=db.get(BillingPlan,'full_30') or db.query(BillingPlan).filter(BillingPlan.tier_code=='full',BillingPlan.active==True).first()
+    if not plan: raise HTTPException(500,'No full-access plan is set up')
+    now=datetime.utcnow(); cur=current_entitlement(db,user.id)
+    has_full=bool(cur and cur.tier_code==plan.tier_code and cur.ends_at and cur.ends_at>now)
+    start=cur.ends_at if has_full else now; ends=start+timedelta(days=c['days'])
+    if cur and not has_full and cur.ends_at and cur.ends_at>ends: ends=cur.ends_at
+    order=CheckoutOrder(id=str(_uuid.uuid4()),user_id=user.id,plan_code=plan.code,provider='promo',provider_order_id=c['code'],amount_cents=0,currency=plan.currency,
+                        status='paid',entitlement_granted=True,paid_at=now,raw_json=json.dumps({'promo':c['code'],'days':c['days']}))
+    db.add(order); db.flush()
+    for e in db.query(Entitlement).filter(Entitlement.user_id==user.id,Entitlement.status=='active').all(): e.status='superseded'
+    db.add(Entitlement(user_id=user.id,tier_code=plan.tier_code,plan_code=plan.code,source_order_id=order.id,provider='promo',status='active',starts_at=(cur.starts_at if has_full else now),ends_at=ends))
+    db.commit()
+    return {'ok':True,'days':c['days'],'ends_at':ends.isoformat()}
+
+def _fb_out(r, staff=False):
+    d={'id':r.id,'name':r.name,'organization':r.organization or '','rating':r.rating,'comment':r.comment}
+    if staff: d.update({'visible':r.visible,'email':r.user.email if r.user else '','updated_at':r.updated_at.isoformat() if r.updated_at else None})
+    return d
+
+def _fb_clean(v, n):
+    return ' '.join(str(v or '').replace('<',' ').replace('>',' ').split())[:n]
+
+@app.get('/api/public/feedback')
+def public_feedback(db: Session = Depends(get_db)):
+    rows=db.query(_Fb).filter(_Fb.visible==True).order_by(_Fb.updated_at.desc(),_Fb.id.desc()).limit(20).all()
+    return {'items':[_fb_out(r) for r in rows]}
+
+@app.get('/api/feedback/mine')
+def feedback_mine(user: User = Depends(current_user), db: Session = Depends(get_db)):
+    r=db.query(_Fb).filter(_Fb.user_id==user.id).first()
+    return {'item':_fb_out(r,True) if r else None}
+
+@app.post('/api/feedback')
+async def feedback_save(request: Request, user: User = Depends(current_user), db: Session = Depends(get_db)):
+    b=await request.json()
+    try: rating=int(b.get('rating'))
+    except Exception: raise HTTPException(400,'Choose a star rating')
+    if rating<1 or rating>5: raise HTTPException(400,'Choose a star rating from 1 to 5')
+    name=_fb_clean(b.get('name'),60); org=_fb_clean(b.get('organization'),60); raw=' '.join(str(b.get('comment') or '').split())
+    if len(name)<2: raise HTTPException(400,'Enter your name')
+    if len(raw)>100: raise HTTPException(400,'Keep your comment to 100 characters')
+    comment=_fb_clean(raw,100)
+    if len(comment)<3: raise HTTPException(400,'Write a short comment')
+    r=db.query(_Fb).filter(_Fb.user_id==user.id).first()
+    if not r: r=_Fb(user_id=user.id,name=name,organization=org,rating=rating,comment=comment); db.add(r)
+    else: r.name=name; r.organization=org; r.rating=rating; r.comment=comment
+    r.updated_at=datetime.utcnow()
+    db.commit(); db.refresh(r)
+    return _fb_out(r,True)
+
+@app.get('/api/admin/feedback')
+def feedback_admin(user: User = Depends(require_roles('admin','instructor')), db: Session = Depends(get_db)):
+    rows=db.query(_Fb).order_by(_Fb.updated_at.desc()).limit(300).all()
+    n=len(rows)
+    return {'items':[_fb_out(r,True) for r in rows],'count':n,'average':round(sum(r.rating for r in rows)/n,2) if n else None}
+
+@app.patch('/api/admin/feedback/{fid}')
+async def feedback_admin_patch(fid: int, request: Request, user: User = Depends(require_roles('admin')), db: Session = Depends(get_db)):
+    r=db.get(_Fb,fid)
+    if not r: raise HTTPException(404,'Not found')
+    b=await request.json()
+    if 'visible' in b: r.visible=bool(b['visible'])
+    db.commit(); return _fb_out(r,True)
+
+@app.delete('/api/admin/feedback/{fid}')
+def feedback_admin_delete(fid: int, user: User = Depends(require_roles('admin')), db: Session = Depends(get_db)):
+    r=db.get(_Fb,fid)
+    if not r: raise HTTPException(404,'Not found')
+    db.delete(r); db.commit(); return {'deleted':fid}
+
 @app.get('/{path:path}')
 def spa(path: str):
     candidate=STATIC/path

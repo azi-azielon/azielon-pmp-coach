@@ -1181,3 +1181,49 @@ body.v6 #access .v14-foot,body.v6 #access .v14-empty{font-size:12.5px;color:#5B6
 body.v6 #access .v14-err{color:#B3261E;font-size:13px;margin:0}
 @media (max-width:760px){body.v6 #access .v14-table td{display:block;border:0;padding:3px 0}body.v6 #access .v14-table tr{display:block;border-bottom:1px solid #EBE5D6;padding:8px 0}body.v6 #access .v14-table thead{display:none}body.v6 #access .v14-act{white-space:normal}}
 body.v6 #access .v14-lim{color:#B26A00!important;font-weight:700;font-size:13.5px!important}
+
+/* v7.27 promo code, Rate & Review, sign-in ticker */
+#v15Ticker{transition:opacity .25s}#v15Ticker.v15-out{opacity:0}
+body.v6 .v15-promo{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 10px;font-size:13.5px;color:#14213D}
+body.v6 .v15-promo label{font-weight:600}
+body.v6 .v15-promo input{width:150px;padding:7px 10px;border:1px solid #D9D2C0;border-radius:8px;font-size:14px;text-transform:uppercase}
+body.v6 .v15-promo button.secondary{padding:7px 14px;font-size:13px}
+body.v6 .v15-promo span.ok{color:#1F7A4D;font-weight:600}body.v6 .v15-promo span.bad{color:#B3261E}
+body.v6 .v15-link{background:none;border:0;padding:0;color:#14213D;text-decoration:underline;cursor:pointer;font:inherit;font-weight:700}
+body.v6 #feedback .v15-wrap{display:grid;grid-template-columns:minmax(0,560px);gap:18px;align-items:start}
+body.v6 #feedback .v15-wrap.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+body.v6 #feedback .v15-card{background:#fff;border:1px solid #E6DFCF;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+body.v6 #feedback .v15-card h3{margin:0;font-size:17px}
+body.v6 #feedback label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:600;color:#14213D;position:relative}
+body.v6 #feedback label em{font-weight:400;font-style:normal;color:#5B6478}
+body.v6 #feedback input,body.v6 #feedback textarea{padding:8px 10px;border:1px solid #D9D2C0;border-radius:9px;font:inherit;font-size:14px;font-weight:400;resize:none}
+body.v6 #feedback .v15-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+body.v6 #feedback .v15-stars{display:flex;align-items:center;gap:2px}
+body.v6 #feedback .v15-stars button{background:none;border:0;padding:0 2px;font-size:30px;line-height:1;color:#D9D2C0;cursor:pointer}
+body.v6 #feedback .v15-stars button.on{color:#F0A500}
+body.v6 #feedback .v15-stars button:focus-visible{outline:2px solid #14213D;border-radius:4px}
+body.v6 #feedback .v15-stars span{margin-left:8px;font-size:13px;color:#5B6478}
+body.v6 #feedback .v15-count{position:absolute;right:8px;bottom:6px;font-size:11.5px;font-weight:400;color:#8A8F9C}
+body.v6 #feedback .v15-note,body.v6 #feedback .v15-promo-stat{font-size:12.5px;color:#5B6478;margin:0}
+body.v6 #feedback .v15-send{display:flex;align-items:center;gap:12px}
+body.v6 #feedback .v15-ok{color:#1F7A4D;font-size:13px;font-weight:600}body.v6 #feedback .v15-err{color:#B3261E;font-size:13px}
+body.v6 #feedback .v15-row{display:flex;justify-content:space-between;gap:10px;align-items:center;border-top:1px solid #EBE5D6;padding-top:8px;font-size:13.5px}
+body.v6 #feedback .v15-row b{color:#F0A500;letter-spacing:1px}
+body.v6 #feedback .v15-row span{display:block;font-size:12px;color:#5B6478}
+body.v6 #feedback .v15-row.off{opacity:.55}
+body.v6 #feedback .v15-act{display:flex;gap:4px;white-space:nowrap}
+body.v6 #feedback .v15-act button{padding:4px 10px;font-size:12.5px}
+body.v6 #feedback .v15-pager{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#5B6478}
+body.v6 #feedback .v15-pager button{padding:5px 11px;font-size:12.5px;border:1px solid #D9D2C0;border-radius:99px;background:#fff;color:#14213D;cursor:pointer}
+@media (max-width:900px){body.v6 #feedback .v15-wrap.two,body.v6 #feedback .v15-two{grid-template-columns:1fr}}
+/* v7.27: keep the sign-in page's left panel on one laptop screen with a two-line review showing */
+@media (min-width:901px) and (max-height:940px){
+  .sales-panel-v426 .sales-brand{margin-bottom:10px!important}
+  .sales-panel-v426 .sales-copy{margin-top:4px!important}
+  .sales-panel-v426 .sales-copy h1{font-size:36px!important;margin-bottom:8px!important}
+  .sales-panel-v426 .sales-lede{margin:4px 0 8px!important}
+  .sales-panel-v426 .sales-value-list{margin-bottom:8px!important;gap:4px!important}
+  .sales-panel-v426 .sales-cta{padding-top:9px!important;padding-bottom:9px!important}
+  .sales-panel-v426 #v15Ticker{margin-top:8px!important;padding-top:8px!important;min-height:86px}
+  .sales-panel-v426 .sales-footnote{margin-top:6px!important;padding-top:8px!important}
+}

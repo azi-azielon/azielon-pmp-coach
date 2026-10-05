@@ -310,3 +310,18 @@ class IssueReport(Base):
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     resolved_at = Column(DateTime)
     user = relationship('User')
+
+
+class AppFeedback(Base):
+    """v7.27: a star rating and short comment from a learner, shown on the sign-in page."""
+    __tablename__ = 'app_feedback'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'), unique=True, index=True, nullable=False)
+    name = Column(String(80), nullable=False)
+    organization = Column(String(80), nullable=False, default='')
+    rating = Column(Integer, nullable=False)
+    comment = Column(String(120), nullable=False)
+    visible = Column(Boolean, default=True, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    user = relationship('User')
