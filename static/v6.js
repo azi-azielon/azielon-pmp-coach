@@ -252,7 +252,7 @@ function v6GetScore(id){try{return localStorage.getItem('v6score:'+id)||''}catch
     catch(e){btn.disabled=false;btn.textContent='Mark as done';alert(e.message||'Could not save. Try again.');return}
     const item=(state[k.list]||[]).find(x=>String(x.id)===String(id));if(item)item.studyStatus='reviewed';
     curId[type]=id;btn.textContent='✓ Done';btn.classList.add('is-complete');
-    const art=btn.closest('article');const badge=art&&art.querySelector('.study-status-badge, .status-badge');if(badge){badge.textContent='Done';badge.className=badge.className.replace(/\bstatus-\S+/g,'')+' status-reviewed'}
+    const art=btn.closest('article');const badge=art&&art.querySelector('.study-status-badge, .status-badge');if(badge){badge.textContent='Done';badge.className='study-status-badge status-reviewed'}
     const nx=btn.parentElement.querySelector('.v6-study-next');if(nx){nx.classList.add('is-ready');nx.focus({preventScroll:true})}
     if(typeof loadStudySummary==='function')loadStudySummary().catch(()=>{});
   };
@@ -1802,27 +1802,37 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
     return sv.apply(this,arguments)}}
 })();
 
-/* ---------- v7.28: a pair, note or diagram marked Done stays in Study View for the rest of the visit ----------
-   Study View lists what is still to study. Before, an item marked Done dropped out at once, so the next item took its
-   place and number, and going back showed a different item as "Not Studied". Now it stays, showing Done, until the
-   learner leaves the page or switches tabs. */
+/* ---------- v7.28: Study View keeps every pair, note and diagram in place and shows its saved status ----------
+   Before, Study View listed only what was still to study. An item marked Done dropped out, the next item took its
+   place and its number, and the learner saw "slide 1" as Not Studied again, as if nothing had been saved.
+   Now the list and numbering never change: finished items stay where they are and show Done, including after a
+   refresh or a new sign-in. Opening the page starts at the first item still to study. */
 (function(){
-  const KEEP={note:new Set(),tricky:new Set(),diagram:new Set()};
-  const CFG={note:['noteRows','noteMode'],tricky:['trickyRows','trickyMode'],diagram:['diagramRows','diagramMode']};
   const OPEN=['not_started','needs_review'];
-  Object.keys(CFG).forEach(type=>{const [fn,modeKey]=CFG[type];if(typeof window[fn]!=='function')return;const o=window[fn];
-    window[fn]=function(){
-      if(state[modeKey]!=='study'||!KEEP[type].size)return o.apply(this,arguments);
-      let all;state[modeKey]='all';try{all=o.apply(this,arguments)}finally{state[modeKey]='study'}
-      return all.filter(x=>OPEN.includes(x.studyStatus||'not_started')||KEEP[type].has(String(x.id)));
-    }});
-  if(typeof window.setStudyStatus==='function'){const o=window.setStudyStatus;window.setStudyStatus=function(type,id,status){
-    if(status==='reviewed'&&KEEP[type])KEEP[type].add(String(id));return o.apply(this,arguments)}}
-  const clear=type=>{if(type)KEEP[type].clear();else Object.values(KEEP).forEach(s=>s.clear())};
-  // A fresh visit starts from the to-study list again.
+  const CFG={note:{rows:'noteRows',mode:'noteMode',idx:'noteIndex',render:'renderNotes',list:'notes',view:'notes',attr:'data-note-mode'},
+             tricky:{rows:'trickyRows',mode:'trickyMode',idx:'flashIndex',render:'renderTricky',list:'tricky',view:'tricky',attr:'data-tricky-mode'},
+             diagram:{rows:'diagramRows',mode:'diagramMode',idx:'diagramIndex',render:'renderDiagrams',list:'diagrams',view:'diagrams',attr:'data-diagram-mode'}};
+  const fresh={};   // set when the learner opens the page or its Study View tab; used once, then cleared
+  Object.keys(CFG).forEach(type=>{const c=CFG[type];
+    if(typeof window[c.rows]==='function'){const o=window[c.rows];
+      window[c.rows]=function(){
+        if(state[c.mode]!=='study')return o.apply(this,arguments);
+        state[c.mode]='all';try{return o.apply(this,arguments)}finally{state[c.mode]='study'}
+      }}
+    if(typeof window[c.render]==='function'){const o=window[c.render];
+      window[c.render]=function(){
+        try{if(fresh[type]&&state[c.mode]==='study'&&(state[c.list]||[]).length){
+          if(Date.now()-fresh[type]<8000){const rows=window[c.rows](),i=rows.findIndex(x=>OPEN.includes(x.studyStatus||'not_started'));state[c.idx]=i>=0?i:0}
+          fresh[type]=0}}catch(e){}
+        return o.apply(this,arguments);
+      }}
+  });
   document.addEventListener('click',e=>{
-    if(e.target.closest('#nav button')){clear();return}
+    const n=e.target.closest('#nav button[data-view]');
+    if(n){const t=Object.keys(CFG).find(k=>CFG[k].view===n.dataset.view);if(t){fresh[t]=Date.now();const c=CFG[t];
+      // The page may already be drawn from an earlier visit, so redraw it at the first item still to study.
+      setTimeout(()=>{try{if(fresh[t]&&state[c.mode]==='study'&&(state[c.list]||[]).length)window[c.render]()}catch(e){}},40)}return}
     const m=e.target.closest('[data-note-mode],[data-tricky-mode],[data-diagram-mode]');if(!m)return;
-    clear(m.hasAttribute('data-note-mode')?'note':m.hasAttribute('data-tricky-mode')?'tricky':'diagram');
+    const t=Object.keys(CFG).find(k=>m.hasAttribute(CFG[k].attr));if(t&&m.getAttribute(CFG[t].attr)==='study')fresh[t]=Date.now();
   },true);
 })();
