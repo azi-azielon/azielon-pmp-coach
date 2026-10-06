@@ -58,13 +58,13 @@ function generatedVisual(v){
 
 function setAuth(msg=''){ $('#authMessage').textContent=msg; }
 
-function storeAuth(data,opts={}){state.token=data.token;state.user=data.user;if(opts.pendingTrial)state.pendingTrial=true;localStorage.setItem('az_token',state.token);bootApp()}
+function storeAuth(data,opts={}){state.token=data.token;state.user=data.user;if(opts.pendingTrial)state.pendingTrial=true;state.justRegistered=!!opts.justRegistered;localStorage.setItem('az_token',state.token);bootApp()}
 
 $$('[data-auth-tab]').forEach(b=>b.onclick=()=>{$$('[data-auth-tab]').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#loginForm').classList.toggle('hidden',b.dataset.authTab!=='login');$('#registerForm').classList.toggle('hidden',b.dataset.authTab!=='register');setAuth('')});
 
 $('#loginForm').onsubmit=async e=>{e.preventDefault();try{storeAuth(await api('/api/auth/login',{method:'POST',body:JSON.stringify({email:$('#loginEmail').value,password:$('#loginPassword').value})}),{pendingTrial:state.pendingTrial})}catch(err){setAuth(err.message)}};
 
-$('#registerForm').onsubmit=async e=>{e.preventDefault();try{storeAuth(await api('/api/auth/register',{method:'POST',body:JSON.stringify({name:$('#regName').value,email:$('#regEmail').value,password:$('#regPassword').value})}),{pendingTrial:true})}catch(err){setAuth(err.message)}};
+$('#registerForm').onsubmit=async e=>{e.preventDefault();try{storeAuth(await api('/api/auth/register',{method:'POST',body:JSON.stringify({name:$('#regName').value,email:$('#regEmail').value,password:$('#regPassword').value})}),{pendingTrial:true,justRegistered:true})}catch(err){setAuth(err.message)}};
 
 function signOut(){localStorage.removeItem('az_token');location.reload()}
 $('#logoutBtn').onclick=signOut;
@@ -187,7 +187,9 @@ async function bootApp(){
 
     await Promise.all([hasFeature('notes')?loadNotes():Promise.resolve(),hasFeature('diagrams')?loadDiagrams():Promise.resolve(),hasFeature('tricky')?loadTricky():Promise.resolve(),hasFeature('progress')?loadProgress():Promise.resolve()]);await loadStudySummary();await loadPracticeAvailability();
 
-    showView(isStaff()?'admin':'dashboard');
+    /* v7.28: a new sign-up lands on Plans & Pricing; a sign-in lands on Today */
+    const firstView=isStaff()?'admin':(state.justRegistered?'billing':'dashboard');state.justRegistered=false;
+    showView(firstView);
 
   }else{
 
