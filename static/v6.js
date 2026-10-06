@@ -1697,13 +1697,13 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
       return `<tr><td><b>${esc(u.name)}</b><span>${esc(u.email)}${u.role!=='learner'?' · '+esc(u.role):''}</span></td>
         <td>${a?(full(a)?`<span class="v14-on">Premium</span>`:`<span class="v14-lim">${esc(TIER[a.tier_code]||a.tier_code)} · limited access</span>`)+`<span>until ${esc(day(a.ends_at))}${a.provider==='admin'?' · given by admin':''}</span>`:'<span class="v14-off">No plan</span>'}</td>
         <td class="v14-act"><select data-v14-days="${u.id}" aria-label="Days of access for ${esc(u.name)}"><option value="30">30 days</option><option value="60">60 days</option><option value="90">90 days</option><option value="365">1 year</option></select>
-          <button type="button" class="primary" data-v14-give="${u.id}">${a&&full(a)?'Add days':'Upgrade to Premium'}</button>${a?`<button type="button" class="ghost" data-v14-off="${u.id}">Remove</button>`:''}</td></tr>`}).join('');
+          <button type="button" class="primary" data-v14-give="${u.id}">${a&&full(a)?'Add days':'Upgrade to Premium'}</button>${a?`<button type="button" class="ghost" data-v14-off="${u.id}">Remove access</button>`:''}${u.can_delete&&String(u.id)!==String(state.user&&state.user.id)?`<button type="button" class="ghost v14-del" data-v14-del="${u.id}">Delete user</button>`:''}</td></tr>`}).join('');
     const pager=pages>1?`<div class="v14-pager"><button type="button" data-v14-p="-1" ${S.page?'':'disabled'}>← Prev</button><span>${S.page+1} of ${pages}</span><button type="button" data-v14-p="1" ${S.page<pages-1?'':'disabled'}>Next →</button></div>`:'';
     host.innerHTML=`<div class="v14-card"><form class="v14-search" id="v14Form"><input id="v14Q" type="search" placeholder="Search by name or email" value="${esc(S.q)}" autocomplete="off"><button class="primary">Search</button>
       <span class="v14-note">${S.msg?esc(S.msg):`${S.total} registered user${S.total===1?'':'s'}. Showing the newest ${Math.min(50,S.items.length)}${S.q?' that match':''}.`}</span></form>
       ${S.err?`<p class="v14-err">${esc(S.err)}</p>`:''}
       <table class="v14-table"><thead><tr><th>User</th><th>Access</th><th>Change</th></tr></thead><tbody>${rows||'<tr><td colspan="3" class="v14-empty">No users match.</td></tr>'}</tbody></table>${pager}
-      <p class="v14-foot">Premium gives full access to everything. Adding days to a Premium user extends their end date. A user on an older limited plan is upgraded from today and keeps any later end date. No payment is recorded.</p></div>`;
+      <p class="v14-foot">Premium gives full access to everything. Adding days to a Premium user extends their end date. A user on an older limited plan is upgraded from today and keeps any later end date. No payment is recorded. Remove access ends a user's plan but keeps the account. Delete user removes the account and its progress for good; accounts that have paid, and staff accounts, cannot be deleted.</p></div>`;
     document.getElementById('v14Form').onsubmit=async e=>{e.preventDefault();S.q=document.getElementById('v14Q').value.trim();S.page=0;S.msg='';await load();render()};
     host.querySelectorAll('[data-v14-p]').forEach(b=>b.onclick=()=>{S.page+=+b.dataset.v14P;render()});
     const who=id=>S.items.find(u=>String(u.id)===String(id));
@@ -1713,6 +1713,9 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
     host.querySelectorAll('[data-v14-off]').forEach(b=>b.onclick=async()=>{const u=who(b.dataset.v14Off);
       if(!confirm(`Remove Premium access from ${u.name} (${u.email})? They lose access immediately.`))return;b.disabled=true;
       try{await api('/api/admin/users/'+u.id+'/revoke',{method:'POST'});S.msg=`Access removed from ${u.name}.`;await load();render()}catch(e){b.disabled=false;alert(e.message||'Could not remove access')}});
+    host.querySelectorAll('[data-v14-del]').forEach(b=>b.onclick=async()=>{const u=who(b.dataset.v14Del);
+      if(!confirm(`Delete ${u.name} (${u.email})?\n\nThis permanently removes the account and all of its study progress, exam results and reports. It cannot be undone.`))return;b.disabled=true;
+      try{await api('/api/admin/users/'+u.id,{method:'DELETE'});S.msg=`${u.name} (${u.email}) was deleted.`;await load();render()}catch(e){b.disabled=false;alert(e.message||'Could not delete this user')}});
   }
   const showNav=()=>{const nb=document.getElementById('navAccess');if(nb)nb.hidden=!admin()};
   if(typeof showView==='function'){const sv=window.showView;window.showView=function(id){

@@ -2866,7 +2866,8 @@ from sqlalchemy import or_ as _or
 def _access_row(db, u):
     e=current_entitlement(db,u.id)
     return {'id':u.id,'name':u.name,'email':u.email,'role':u.role,'created_at':u.created_at.isoformat() if u.created_at else None,
-            'access':({'tier_code':e.tier_code,'plan_code':e.plan_code,'provider':e.provider,'ends_at':e.ends_at.isoformat()} if e else None)}
+            'access':({'tier_code':e.tier_code,'plan_code':e.plan_code,'provider':e.provider,'ends_at':e.ends_at.isoformat()} if e else None),
+            'can_delete':(u.role or 'learner')=='learner'}
 
 @app.get('/api/admin/users')
 def admin_users(q: str = '', user: User = Depends(require_roles('admin')), db: Session = Depends(get_db)):
@@ -2919,6 +2920,38 @@ def admin_revoke_access(user_id: int, user: User = Depends(require_roles('admin'
     db.add(AuditLog(actor_user_id=user.id,action='access.revoke',entity_type='user',entity_id=str(target.id),before_json=json.dumps(before),after_json=json.dumps(None)))
     db.commit()
     return {**_access_row(db,target),'revoked':n}
+
+# ---------- v7.28.1: an admin can delete a learner's account from Users & Access ----------
+def _user_real_payments(db, user_id):
+    """Paid orders that came from a payment provider. Admin grants, promo codes and test orders do not count."""
+    return db.query(CheckoutOrder).filter(CheckoutOrder.user_id==user_id,CheckoutOrder.status=='paid',CheckoutOrder.amount_cents>0,
+                                          ~CheckoutOrder.provider.in_(['admin','promo','test'])).count()
+
+def _delete_user_records(db, user_id):
+    """Removes everything that belongs to one user, children before parents, then the user."""
+    from .models import IssueReport as _IR, AppFeedback as _AF
+    for model in (ExamAttempt,ExamSession,Attempt,PracticeSession,Bookmark,StudyItemState,DailyStudyTask,DailyStudyPlan,StudyPlanProfile,
+                  PasswordResetToken,_IR,_AF,Entitlement,CheckoutOrder):
+        db.query(model).filter(model.user_id==user_id).delete(synchronize_session=False)
+    db.query(AuditLog).filter(AuditLog.actor_user_id==user_id).update({AuditLog.actor_user_id:None},synchronize_session=False)
+    db.query(PmpClassRegistrationPayment).filter(PmpClassRegistrationPayment.marked_by_user_id==user_id).update({PmpClassRegistrationPayment.marked_by_user_id:None},synchronize_session=False)
+    db.query(User).filter(User.id==user_id).delete(synchronize_session=False)
+
+@app.delete('/api/admin/users/{user_id}')
+def admin_delete_user(user_id: int, user: User = Depends(require_roles('admin')), db: Session = Depends(get_db)):
+    target=db.get(User,user_id)
+    if not target: raise HTTPException(404,'User not found')
+    if target.id==user.id: raise HTTPException(400,'You cannot delete your own account.')
+    if (target.role or 'learner')!='learner': raise HTTPException(400,'Staff accounts cannot be deleted here.')
+    if _user_real_payments(db,target.id): raise HTTPException(400,'This user has paid for a plan, so the account is kept for your payment records. Use Remove to end their access instead.')
+    snap={'name':target.name,'email':target.email}
+    try:
+        _delete_user_records(db,target.id)
+        db.add(AuditLog(actor_user_id=user.id,action='user.delete',entity_type='user',entity_id=str(user_id),before_json=json.dumps(snap),after_json=json.dumps(None)))
+        db.commit()
+    except Exception:
+        db.rollback(); raise HTTPException(500,'Could not delete this user. Nothing was removed.')
+    return {'deleted':True,'id':user_id,**snap}
 
 # ---------- v7.27: launch promo code, and star ratings shown on the sign-in page ----------
 from .models import AppFeedback as _Fb
