@@ -294,7 +294,7 @@ async function loadNotes(){
   renderNotes();
 }
 
-function statusLabel(s){return ({not_started:'Not Studied',reviewed:'Reviewed',needs_review:'Needs Review',mastered:'Mastered'})[s]||'Not Studied'}
+function statusLabel(s){return ({not_started:'Not Studied',reviewed:'Done',needs_review:'Needs Review',mastered:'Mastered'})[s]||'Not Studied'}
 
 async function setStudyStatus(type,id,status){await api(`/api/study/items/${type}/${encodeURIComponent(id)}`,{method:'PUT',body:JSON.stringify({status})});await loadStudySummary();if(type==='note')await loadNotes();if(type==='diagram')await loadDiagrams();if(type==='tricky')await loadTricky()}
 

@@ -1801,3 +1801,28 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
       window.scrollTo({top:0});S.msg='';S.err='';S.rating=0;load().then(()=>render());return}
     return sv.apply(this,arguments)}}
 })();
+
+/* ---------- v7.28: a pair, note or diagram marked Done stays in Study View for the rest of the visit ----------
+   Study View lists what is still to study. Before, an item marked Done dropped out at once, so the next item took its
+   place and number, and going back showed a different item as "Not Studied". Now it stays, showing Done, until the
+   learner leaves the page or switches tabs. */
+(function(){
+  const KEEP={note:new Set(),tricky:new Set(),diagram:new Set()};
+  const CFG={note:['noteRows','noteMode'],tricky:['trickyRows','trickyMode'],diagram:['diagramRows','diagramMode']};
+  const OPEN=['not_started','needs_review'];
+  Object.keys(CFG).forEach(type=>{const [fn,modeKey]=CFG[type];if(typeof window[fn]!=='function')return;const o=window[fn];
+    window[fn]=function(){
+      if(state[modeKey]!=='study'||!KEEP[type].size)return o.apply(this,arguments);
+      let all;state[modeKey]='all';try{all=o.apply(this,arguments)}finally{state[modeKey]='study'}
+      return all.filter(x=>OPEN.includes(x.studyStatus||'not_started')||KEEP[type].has(String(x.id)));
+    }});
+  if(typeof window.setStudyStatus==='function'){const o=window.setStudyStatus;window.setStudyStatus=function(type,id,status){
+    if(status==='reviewed'&&KEEP[type])KEEP[type].add(String(id));return o.apply(this,arguments)}}
+  const clear=type=>{if(type)KEEP[type].clear();else Object.values(KEEP).forEach(s=>s.clear())};
+  // A fresh visit starts from the to-study list again.
+  document.addEventListener('click',e=>{
+    if(e.target.closest('#nav button')){clear();return}
+    const m=e.target.closest('[data-note-mode],[data-tricky-mode],[data-diagram-mode]');if(!m)return;
+    clear(m.hasAttribute('data-note-mode')?'note':m.hasAttribute('data-tricky-mode')?'tricky':'diagram');
+  },true);
+})();

@@ -6,6 +6,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from sqlalchemy import func
+from sqlalchemy.exc import IntegrityError as _IntegrityError
 import httpx
 
 from .db import Base, engine, get_db, SessionLocal
@@ -1662,8 +1663,15 @@ def _daily_native_done(db: Session,user_id:int,task_type:str,content_id:str|None
 def _daily_get_or_create_plan(db: Session,user_id:int,plan_date:str,exam_date:str|None=None,days_remaining:int|None=None):
     row=db.query(DailyStudyPlan).filter(DailyStudyPlan.user_id==user_id,DailyStudyPlan.plan_date==plan_date).first()
     if not row:
-        row=DailyStudyPlan(user_id=user_id,plan_date=plan_date,exam_date=exam_date,days_remaining=days_remaining,status='active')
-        db.add(row);db.flush()
+        # v7.28: two requests can arrive together on a new day and both try to create today's plan.
+        # The second one now picks up the row the first one created, where it used to fail with a server error.
+        try:
+            with db.begin_nested():
+                row=DailyStudyPlan(user_id=user_id,plan_date=plan_date,exam_date=exam_date,days_remaining=days_remaining,status='active')
+                db.add(row);db.flush()
+        except _IntegrityError:
+            row=db.query(DailyStudyPlan).filter(DailyStudyPlan.user_id==user_id,DailyStudyPlan.plan_date==plan_date).first()
+            if not row: raise
     else:
         if exam_date is not None: row.exam_date=exam_date
         if days_remaining is not None: row.days_remaining=days_remaining
@@ -1695,7 +1703,14 @@ def _daily_add_task(db:Session,plan:DailyStudyPlan,user_id:int,raw:dict,sort_ord
     )
     if row.status in {'in_progress','done'}: row.started_at=datetime.utcnow()
     if row.status=='done': row.completed_at=datetime.utcnow()
-    db.add(row);db.flush();return row
+    try:
+        with db.begin_nested():
+            db.add(row);db.flush()
+    except _IntegrityError:
+        # v7.28: the same task was added by a request that arrived at the same moment; use that one.
+        row=db.query(DailyStudyTask).filter(DailyStudyTask.plan_id==plan.id,DailyStudyTask.task_key==key).first()
+        if not row: raise
+    return row
 
 @app.post('/api/study/daily-plan/import-local')
 def import_local_daily_plan(payload:dict,user:User=Depends(current_user),db:Session=Depends(get_db)):
