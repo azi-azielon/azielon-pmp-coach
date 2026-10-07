@@ -1839,3 +1839,12 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
     const t=Object.keys(CFG).find(k=>m.hasAttribute(CFG[k].attr));if(t&&m.getAttribute(CFG[t].attr)==='study')fresh[t]=Date.now();
   },true);
 })();
+
+/* ---------- v7.28.3: rotate the second line of the sign-in headline every 3 seconds ---------- */
+(function(){
+  const box=document.getElementById('v16Rot');if(!box)return;
+  const lines=[...box.children];if(lines.length<2)return;
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return; // keeps the first line showing
+  let i=0;
+  setInterval(()=>{if(document.hidden)return;lines[i].classList.remove('on');i=(i+1)%lines.length;lines[i].classList.add('on')},3000);
+})();
