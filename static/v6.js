@@ -1840,21 +1840,17 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go-ready]'
   },true);
 })();
 
-/* ---------- v7.28.8: feature showcase on the sign-in page ----------
-   Six feature cards around a screen. The highlight moves to the next card every 4 seconds and the screen shows
-   that feature. Hovering or clicking a card selects it, and the rotation waits while the visitor is on the block. */
+/* ---------- v7.28.9: sign-in page, the changing line and the screen ----------
+   One timer moves the screen to the next screenshot every 3.5 seconds, and the large line changes to the one that
+   describes it. It runs by itself; hovering or clicking does nothing. */
 (function(){
-  const box=document.getElementById('v19Show');if(!box)return;
-  const cards=[...box.querySelectorAll('[data-v19]')].sort((a,b)=>a.dataset.v19-b.dataset.v19),shots=[...box.querySelectorAll('[data-v19-s]')];if(cards.length<2)return;
-  let i=0,paused=false,timer=null;
-  function show(n){i=(n+cards.length)%cards.length;
-    cards.forEach((c,k)=>{c.classList.toggle('on',k===i);c.setAttribute('aria-pressed',k===i?'true':'false')});
-    shots.forEach((s,k)=>{if(k===i)s.loading='eager';s.classList.toggle('on',k===i)})}
-  const still=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function start(){if(still||timer)return;timer=setInterval(()=>{if(!paused&&!document.hidden)show(i+1)},4000)}
-  function restart(){if(timer){clearInterval(timer);timer=null}start()}
-  cards.forEach((c,k)=>{c.addEventListener('click',()=>{show(k);restart()});c.addEventListener('mouseenter',()=>show(k));c.addEventListener('focus',()=>show(k))});
-  box.addEventListener('mouseenter',()=>{paused=true});box.addEventListener('mouseleave',()=>{paused=false});
-  box.addEventListener('focusin',()=>{paused=true});box.addEventListener('focusout',()=>{paused=false});
-  start();
+  const screen=document.getElementById('v20Screen'),rot=document.getElementById('v20Rot');if(!screen||!rot)return;
+  const shots=[...screen.querySelectorAll('[data-v20-s]')],lines=[...rot.querySelectorAll('[data-v20-t]')];if(shots.length<2)return;
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return; // keeps the first line and screen
+  let i=0;
+  setInterval(()=>{if(document.hidden)return;i=(i+1)%shots.length;
+    shots.forEach((s,k)=>{if(k===i)s.loading='eager';s.classList.toggle('on',k===i)});
+    const t=+shots[i].dataset.v20Line;lines.forEach((l,k)=>l.classList.toggle('on',k===t))},3500);
+  // fetch the other screenshots shortly after load so each change is instant
+  setTimeout(()=>shots.forEach(s=>{s.loading='eager'}),1500);
 })();
